@@ -1,0 +1,22 @@
+{
+  "name": "fulcrum",
+  "version": "0.0.0",
+  "description": "Fulcrum API",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Fulcrum"
+  ],
+  "author": "Jason Sanford",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "~3.8.5",
+    "gulp-coffee": "~2.0.1",
+    "gulp-util": "~2.2.19"
+  },
+  "dependencies": {
+    "request": "~2.37.0"
+  }
+}
