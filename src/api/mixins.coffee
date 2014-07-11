@@ -1,15 +1,27 @@
+async = require 'async'
+
 findable =
   find: (id, cb) ->
-    @get id, (error, response, body) =>
-      if error
-        cb error, body
-      else
-        @process_http_errors response, (error) =>
-          if error
-            cb error
-          else
-            @process_object body, (error, object) ->
-              cb error, object
+    do_get = (callback) =>
+      @get id, (error, response, body) =>
+        if error
+          callback error
+        else
+          callback null, response, body
+    do_process_http_errors = (response, body, callback) =>
+      @process_http_errors response, (error) =>
+        if error
+          callback error
+        else
+          callback null, body
+    do_process_object = (body, callback) =>
+      @process_object body, (error, object) ->
+        if error
+          callback error
+        else
+          callback null, object
+    tasks = [do_get, do_process_http_errors, do_process_object]
+    async.waterfall tasks, cb
 
 searchable =
   search: (opts, cb) ->
@@ -17,12 +29,20 @@ searchable =
 
 deletable =
   delete: (id, cb) ->
-    @del id, (error, response, body) =>
-      if error
-        cb error
-      else
-        @process_http_errors response, (error) ->
-          cb error
+    do_delete = (callback) =>
+      @del id, (error, response, body) =>
+        if error
+          callback error
+        else
+          callback null, response, body
+    do_process_http_errors = (response, body, callback) =>
+      @process_http_errors response, (error) ->
+        if error
+          callback error
+        else
+          callback null
+    tasks = [do_delete, do_process_http_errors]
+    async.waterfall tasks, cb
 
 module.exports =
   findable    : findable
