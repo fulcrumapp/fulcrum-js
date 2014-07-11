@@ -4,8 +4,12 @@ findable =
       if error
         cb error, body
       else
-        @process_http_errors response, (error) ->
-          cb error, body
+        @process_http_errors response, (error) =>
+          if error
+            cb error
+          else
+            @process_object body, (error, object) ->
+              cb error, object
 
 searchable =
   search: (opts, cb) ->

@@ -32,6 +32,9 @@ class Base extends Extendable
 
     @base + path
 
+  singular_resource: ->
+    @resource.slice(0, @resource.length - 1)
+
   request: (method, url, cb, data) ->
     headers =
       'X-ApiToken'  : @client.api_token
@@ -52,7 +55,6 @@ class Base extends Extendable
 
   process_http_errors: (response, cb) ->
     status_code = response.statusCode
-    console.log 'Status: ', status_code
     if 299 >= status_code >= 200
       cb null
     else
@@ -61,5 +63,20 @@ class Base extends Extendable
       else
         message = 'Unknown Error'
       cb(new Error(message))
+
+  process_object: (object, cb) ->
+    try
+      obj = object[@singular_resource()]
+      inflated = @inflate obj
+    catch e
+      cb e
+      return
+    cb null, inflated
+
+  inflate: (obj) ->
+    obj.geometry =
+      type: 'Point'
+      coordinates: [obj.longitude, obj.latitude]
+    obj
 
 module.exports = Base
