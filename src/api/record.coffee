@@ -7,6 +7,7 @@ class Record extends Base
   @include mixins.searchable
   @include mixins.deletable
   @include mixins.creatable
+  @include mixins.updatable
 
   process_object: (object, cb) ->
     try

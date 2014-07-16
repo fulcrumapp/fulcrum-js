@@ -67,6 +67,11 @@ class Base extends Extendable
       data: data
     @request 'post', @url(), options, cb
 
+  put: (id, data, cb) ->
+    options =
+      data: data
+    @request 'put', @url(id), options, cb
+
   process_http_errors: (response, cb) ->
     status_code = response.statusCode
     if 299 >= status_code >= 200
