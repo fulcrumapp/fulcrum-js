@@ -46,15 +46,26 @@ class Base extends Extendable
       'url'         : url
       'json'        : true
 
-    options.qs = opts if opts
+    options.qs    = opts.qs   if opts and opts.qs
+    options.json  = opts.data if opts and opts.data
 
     request options, cb
 
-  get: (id, options, cb) ->
+  get: (id, qs, cb) ->
+    if qs
+      options =
+        qs: qs
+    else
+      options = null
     @request 'get', @url(id), options, cb
 
   del: (id, cb) ->
     @request 'delete', @url(id), null, cb
+
+  post: (data, cb) ->
+    options =
+      data: data
+    @request 'post', @url(), options, cb
 
   process_http_errors: (response, cb) ->
     status_code = response.statusCode

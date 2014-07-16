@@ -1,9 +1,9 @@
-async = require 'async'
+async = require('async')
 
-searchable =
-  search: (qs, cb) ->
-    do_get = (callback) =>
-      @get null, qs, (error, response, body) =>
+creatable =
+  create: (data, cb) ->
+    do_post = (callback) =>
+      @post data, (error, response, body) =>
         if error
           callback error
         else
@@ -14,13 +14,13 @@ searchable =
           callback error
         else
           callback null, body
-    do_process_objects = (body, callback) =>
-      @process_objects body, (error, objects) ->
+    do_process_object = (body, callback) =>
+      @process_object body, (error, object) ->
         if error
           callback error
         else
-          callback null, objects
-    tasks = [do_get, do_process_http_errors, do_process_objects]
+          callback null, object
+    tasks = [do_post, do_process_http_errors, do_process_object]
     async.waterfall tasks, cb
 
-module.exports = searchable
+module.exports = creatable
