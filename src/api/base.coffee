@@ -1,4 +1,5 @@
 request = require 'request'
+
 errors = require './errors'
 
 moduleKeywords = ['extended', 'included']
@@ -35,7 +36,7 @@ class Base extends Extendable
   singular_resource: ->
     @resource.slice(0, @resource.length - 1)
 
-  request: (method, url, cb, data) ->
+  request: (method, url, opts, cb) ->
     headers =
       'X-ApiToken'  : @client.api_token
       'Accept'      : 'application/json'
@@ -45,13 +46,15 @@ class Base extends Extendable
       'url'         : url
       'json'        : true
 
+    options.qs = opts if opts
+
     request options, cb
 
-  get: (id, cb) ->
-    @request 'get', @url(id), cb
+  get: (id, options, cb) ->
+    @request 'get', @url(id), options, cb
 
   del: (id, cb) ->
-    @request 'delete', @url(id), cb
+    @request 'delete', @url(id), null, cb
 
   process_http_errors: (response, cb) ->
     status_code = response.statusCode
@@ -67,16 +70,17 @@ class Base extends Extendable
   process_object: (object, cb) ->
     try
       obj = object[@singular_resource()]
-      inflated = @inflate obj
     catch e
       cb e
       return
-    cb null, inflated
+    cb null, obj
 
-  inflate: (obj) ->
-    obj.geometry =
-      type: 'Point'
-      coordinates: [obj.longitude, obj.latitude]
-    obj
+  process_objects: (objects, cb) ->
+    try
+      objs = objects[@resource]
+    catch e
+      cb e
+      return
+    cb null, objs
 
 module.exports = Base
