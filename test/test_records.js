@@ -17,4 +17,16 @@ describe('Record', function(){
       });
     });
   });
+
+  describe('#delete()', function(){
+    it('should not return an error if deleted.', function(done){
+      var records = nock('https://api.fulcrumapp.com')
+                    .delete('/api/v2/records/916474a7-b995-4b36-81db-8eda97f93a73')
+                    .reply(204);
+      client.record.delete('916474a7-b995-4b36-81db-8eda97f93a73', function(error) {
+        assert.ifError(error);
+        done();
+      });
+    });
+  });
 });
