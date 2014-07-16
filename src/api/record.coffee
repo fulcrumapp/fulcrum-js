@@ -1,4 +1,4 @@
-mixins = require './mixins'
+mixins = require './mixins/'
 Base = require './base'
 
 class Record extends Base

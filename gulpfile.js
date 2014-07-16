@@ -18,7 +18,7 @@ gulp.task('mocha', function () {
 });
 
 gulp.task('watch', function() {
-  gulp.watch(['./src/*.coffee', './src/**/*.coffee'], ['compile', 'mocha']);
+  gulp.watch(['./src/*.coffee', './src/**/*.coffee', './src/../../*.coffee'], ['compile', 'mocha']);
   gulp.watch(['./test/*.js'], ['mocha']);
 });
 
