@@ -11,7 +11,7 @@ describe('Record', function(){
       var nocker = nock('https://api.fulcrumapp.com')
                    .get('/api/v2/records/916474a7-b995-4b36-81db-8eda97f93a73')
                    .replyWithFile(200, __dirname + '/objects/record.json');
-      client.record.find('916474a7-b995-4b36-81db-8eda97f93a73', function(error, record) {
+      client.records.find('916474a7-b995-4b36-81db-8eda97f93a73', function(error, record) {
         assert.ifError(error);
         assert.equal(record.record.id, '916474a7-b995-4b36-81db-8eda97f93a73', 'record.id is incorrect.');
         assert.equal(record.record.longitude, -100, 'geometry.coordinates[0] is incorrect.');
@@ -26,7 +26,7 @@ describe('Record', function(){
       var nocker = nock('https://api.fulcrumapp.com')
                    .delete('/api/v2/records/916474a7-b995-4b36-81db-8eda97f93a73')
                    .reply(204);
-      client.record.delete('916474a7-b995-4b36-81db-8eda97f93a73', function(error) {
+      client.records.delete('916474a7-b995-4b36-81db-8eda97f93a73', function(error) {
         assert.ifError(error);
         done();
       });
@@ -36,7 +36,7 @@ describe('Record', function(){
       var nocker = nock('https://api.fulcrumapp.com')
                    .delete('/api/v2/records/916474a7-b995-4b36-81db-8eda97f93a73')
                    .reply(404);
-      client.record.delete('916474a7-b995-4b36-81db-8eda97f93a73', function(error) {
+      client.records.delete('916474a7-b995-4b36-81db-8eda97f93a73', function(error) {
         assert(error, 'error is not an error.');
         done();
       });
@@ -48,7 +48,7 @@ describe('Record', function(){
       var nocker = nock('https://api.fulcrumapp.com')
                    .get('/api/v2/records?form_id=512342b0-2bce-4e31-9d4a-8f29e929f7ac')
                    .replyWithFile(200, __dirname + '/objects/records.json');
-      client.record.search({form_id: '512342b0-2bce-4e31-9d4a-8f29e929f7ac'}, function(error, records) {
+      client.records.search({form_id: '512342b0-2bce-4e31-9d4a-8f29e929f7ac'}, function(error, records) {
         assert.ifError(error);
         assert(records.records instanceof Array, 'records is not an array.');
         done();
@@ -62,7 +62,7 @@ describe('Record', function(){
       var nocker = nock('https://api.fulcrumapp.com')
                    .post('/api/v2/records', record_to_post)
                    .replyWithFile(201, __dirname + '/objects/record.json');
-      client.record.create(record_to_post, function(error, record) {
+      client.records.create(record_to_post, function(error, record) {
         assert.ifError(error);
         assert.equal(record.record.id, '916474a7-b995-4b36-81db-8eda97f93a73', 'record.id is incorrect.');
         done();
@@ -76,7 +76,7 @@ describe('Record', function(){
       var nocker = nock('https://api.fulcrumapp.com')
                    .put('/api/v2/records/916474a7-b995-4b36-81db-8eda97f93a73', record_to_put)
                    .replyWithFile(200, __dirname + '/objects/record.json');
-      client.record.update('916474a7-b995-4b36-81db-8eda97f93a73', record_to_put, function(error, record) {
+      client.records.update('916474a7-b995-4b36-81db-8eda97f93a73', record_to_put, function(error, record) {
         assert.ifError(error);
         assert.equal(record.record.id, '916474a7-b995-4b36-81db-8eda97f93a73', 'record.id is incorrect.');
         done();

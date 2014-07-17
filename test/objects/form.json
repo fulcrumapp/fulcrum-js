@@ -1,0 +1,80 @@
+{
+  "form": {
+    "name": "Hurst Estate",
+    "description": null,
+    "bounding_box": [
+      35.2081725,
+      -81.637493,
+      35.212297,
+      -81.6342866
+    ],
+    "record_title_key": "e659",
+    "status_field": {},
+    "auto_assign": false,
+    "id": "512342b0-2bce-4e31-9d4a-8f29e929f7ac",
+    "record_count": 11,
+    "created_at": "2014-06-15T13:12:49Z",
+    "updated_at": "2014-06-19T20:47:48Z",
+    "elements": [
+      {
+        "type": "ChoiceField",
+        "key": "e659",
+        "label": "Feature Type",
+        "description": null,
+        "required": false,
+        "disabled": false,
+        "hidden": false,
+        "data_name": "feature_type",
+        "default_value": null,
+        "visible_conditions_type": null,
+        "visible_conditions": null,
+        "required_conditions_type": null,
+        "required_conditions": null,
+        "multiple": false,
+        "allow_other": true,
+      "choices": [
+          {
+            "label": "Tree",
+            "value": "Tree"
+          },
+          {
+            "label": "Deer Stand",
+            "value": "Deer Stand"
+          }
+        ]
+      },
+      {
+        "type": "PhotoField",
+        "key": "b799",
+        "label": "Photos",
+        "description": null,
+        "required": false,
+        "disabled": false,
+        "hidden": false,
+        "data_name": "photos",
+        "default_value": null,
+        "visible_conditions_type": null,
+        "visible_conditions": null,
+        "required_conditions_type": null,
+        "required_conditions": null
+      },
+      {
+        "type": "VideoField",
+        "key": "9bda",
+        "label": "Videos",
+        "description": null,
+        "required": false,
+        "disabled": false,
+        "hidden": false,
+        "data_name": "videos",
+        "default_value": null,
+        "visible_conditions_type": null,
+        "visible_conditions": null,
+        "required_conditions_type": null,
+        "required_conditions": null,
+        "track_enabled": true,
+        "audio_enabled": true
+      }
+    ]
+  }
+}

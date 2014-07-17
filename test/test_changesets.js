@@ -11,7 +11,7 @@ describe('Changeset', function(){
       var nocker = nock('https://api.fulcrumapp.com')
                    .get('/api/v2/changesets/e56594c5-22e3-4d15-8dd6-f0fc02280ec7')
                    .replyWithFile(200, __dirname + '/objects/changeset.json');
-      client.changeset.find('e56594c5-22e3-4d15-8dd6-f0fc02280ec7', function(error, changeset) {
+      client.changesets.find('e56594c5-22e3-4d15-8dd6-f0fc02280ec7', function(error, changeset) {
         assert.ifError(error);
         assert.equal(changeset.changeset.id, 'e56594c5-22e3-4d15-8dd6-f0fc02280ec7', 'changeset.id is incorrect.');
         assert.equal(changeset.changeset.metadata.comment, 'My First API created Changeset', 'changeset.metadata.comment is incorrect.');
@@ -25,7 +25,7 @@ describe('Changeset', function(){
       var nocker = nock('https://api.fulcrumapp.com')
                    .put('/api/v2/changesets/e56594c5-22e3-4d15-8dd6-f0fc02280ec7/close')
                    .reply(200);
-      client.changeset.close('e56594c5-22e3-4d15-8dd6-f0fc02280ec7', function(error) {
+      client.changesets.close('e56594c5-22e3-4d15-8dd6-f0fc02280ec7', function(error) {
         assert.ifError(error);
         done();
       });
@@ -37,7 +37,7 @@ describe('Changeset', function(){
       var nocker = nock('https://api.fulcrumapp.com')
                    .get('/api/v2/changesets')
                    .replyWithFile(200, __dirname + '/objects/changesets.json');
-      client.changeset.search(null, function(error, changesets) {
+      client.changesets.search(null, function(error, changesets) {
         assert.ifError(error);
         assert(changesets.changesets instanceof Array, 'changesets is not an array.');
         done();
@@ -51,7 +51,7 @@ describe('Changeset', function(){
       var nocker = nock('https://api.fulcrumapp.com')
                    .post('/api/v2/changesets', changeset_to_post)
                    .replyWithFile(201, __dirname + '/objects/changeset.json');
-      client.changeset.create(changeset_to_post, function(error, changeset) {
+      client.changesets.create(changeset_to_post, function(error, changeset) {
         assert.ifError(error);
         assert.equal(changeset.changeset.id, 'e56594c5-22e3-4d15-8dd6-f0fc02280ec7', 'changeset.id is incorrect.');
         done();
@@ -65,7 +65,7 @@ describe('Changeset', function(){
       var nocker = nock('https://api.fulcrumapp.com')
                    .put('/api/v2/changesets/e56594c5-22e3-4d15-8dd6-f0fc02280ec7', changeset_to_put)
                    .replyWithFile(200, __dirname + '/objects/changeset.json');
-      client.changeset.update('e56594c5-22e3-4d15-8dd6-f0fc02280ec7', changeset_to_put, function(error, changeset) {
+      client.changesets.update('e56594c5-22e3-4d15-8dd6-f0fc02280ec7', changeset_to_put, function(error, changeset) {
         assert.ifError(error);
         assert.equal(changeset.changeset.id, 'e56594c5-22e3-4d15-8dd6-f0fc02280ec7', 'changeset.id is incorrect.');
         done();

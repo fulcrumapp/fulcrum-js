@@ -9,7 +9,7 @@ gulp.task('compile', function() {
     .pipe(gulp.dest('./lib/'));
   });
 
-gulp.task('mocha', ['compile'], function () {
+gulp.task('mocha', function () {
   gulp.src('./test/*.js')
     .pipe(
       mocha({ reporter: 'list' })

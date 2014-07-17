@@ -3,7 +3,7 @@ async = require 'async'
 mixins = require './mixins/'
 Base = require './base'
 
-class Changeset extends Base
+class Changesets extends Base
   resource: 'changesets'
   @include mixins.creatable
   @include mixins.findable
@@ -27,4 +27,4 @@ class Changeset extends Base
     tasks = [do_put, do_process_http_errors]
     async.waterfall tasks, cb
 
-module.exports = Changeset
+module.exports = Changesets

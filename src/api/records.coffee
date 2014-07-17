@@ -1,7 +1,7 @@
 mixins = require './mixins/'
 Base = require './base'
 
-class Record extends Base
+class Records extends Base
   resource: 'records'
   @include mixins.findable
   @include mixins.searchable
@@ -9,4 +9,4 @@ class Record extends Base
   @include mixins.creatable
   @include mixins.updatable
 
-module.exports = Record
+module.exports = Records
