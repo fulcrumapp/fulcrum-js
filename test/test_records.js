@@ -13,9 +13,9 @@ describe('Record', function(){
                    .replyWithFile(200, __dirname + '/objects/record.json');
       client.record.find('916474a7-b995-4b36-81db-8eda97f93a73', function(error, record) {
         assert.ifError(error);
-        assert.equal(record.id, '916474a7-b995-4b36-81db-8eda97f93a73', 'record.id is incorrect.');
-        assert.equal(record.longitude, -100, 'geometry.coordinates[0] is incorrect.');
-        assert.equal(record.latitude, 40, 'geometry.coordinates[1] is incorrect.');
+        assert.equal(record.record.id, '916474a7-b995-4b36-81db-8eda97f93a73', 'record.id is incorrect.');
+        assert.equal(record.record.longitude, -100, 'geometry.coordinates[0] is incorrect.');
+        assert.equal(record.record.latitude, 40, 'geometry.coordinates[1] is incorrect.');
         done();
       });
     });
@@ -50,7 +50,7 @@ describe('Record', function(){
                    .replyWithFile(200, __dirname + '/objects/records.json');
       client.record.search({form_id: '512342b0-2bce-4e31-9d4a-8f29e929f7ac'}, function(error, records) {
         assert.ifError(error);
-        assert(records instanceof Array, 'records is not an array.');
+        assert(records.records instanceof Array, 'records is not an array.');
         done();
       });
     });
@@ -64,7 +64,7 @@ describe('Record', function(){
                    .replyWithFile(201, __dirname + '/objects/record.json');
       client.record.create(record_to_post, function(error, record) {
         assert.ifError(error);
-        assert.equal(record.id, '916474a7-b995-4b36-81db-8eda97f93a73', 'record.id is incorrect.');
+        assert.equal(record.record.id, '916474a7-b995-4b36-81db-8eda97f93a73', 'record.id is incorrect.');
         done();
       });
     });
@@ -78,7 +78,7 @@ describe('Record', function(){
                    .replyWithFile(200, __dirname + '/objects/record.json');
       client.record.update('916474a7-b995-4b36-81db-8eda97f93a73', record_to_put, function(error, record) {
         assert.ifError(error);
-        assert.equal(record.id, '916474a7-b995-4b36-81db-8eda97f93a73', 'record.id is incorrect.');
+        assert.equal(record.record.id, '916474a7-b995-4b36-81db-8eda97f93a73', 'record.id is incorrect.');
         done();
       });
     });

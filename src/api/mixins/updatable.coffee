@@ -14,13 +14,7 @@ updatable =
           callback error
         else
           callback null, body
-    do_process_object = (body, callback) =>
-      @process_object body, (error, object) ->
-        if error
-          callback error
-        else
-          callback null, object
-    tasks = [do_put, do_process_http_errors, do_process_object]
+    tasks = [do_put, do_process_http_errors]
     async.waterfall tasks, cb
 
 module.exports = updatable

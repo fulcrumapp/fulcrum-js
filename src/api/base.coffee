@@ -83,20 +83,4 @@ class Base extends Extendable
         message = 'Unknown Error'
       cb(new Error(message))
 
-  process_object: (object, cb) ->
-    try
-      obj = object[@singular_resource()]
-    catch e
-      cb e
-      return
-    cb null, obj
-
-  process_objects: (objects, cb) ->
-    try
-      objs = objects[@resource]
-    catch e
-      cb e
-      return
-    cb null, objs
-
 module.exports = Base

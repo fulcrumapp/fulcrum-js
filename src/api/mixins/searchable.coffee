@@ -14,13 +14,7 @@ searchable =
           callback error
         else
           callback null, body
-    do_process_objects = (body, callback) =>
-      @process_objects body, (error, objects) ->
-        if error
-          callback error
-        else
-          callback null, objects
-    tasks = [do_get, do_process_http_errors, do_process_objects]
+    tasks = [do_get, do_process_http_errors]
     async.waterfall tasks, cb
 
 module.exports = searchable
