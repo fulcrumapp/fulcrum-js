@@ -4,7 +4,7 @@ var nock = require('nock');
 
 var client = require('./client');
 
-describe('Form', function(){
+describe('Forms', function(){
 
   describe('#find()', function(){
     it('should return a form.', function(done){

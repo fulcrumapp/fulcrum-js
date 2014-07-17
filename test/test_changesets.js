@@ -4,7 +4,7 @@ var nock = require('nock');
 
 var client = require('./client');
 
-describe('Changeset', function(){
+describe('Changesets', function(){
 
   describe('#find()', function(){
     it('should return a changeset.', function(done){

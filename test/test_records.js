@@ -4,7 +4,7 @@ var nock = require('nock');
 
 var client = require('./client');
 
-describe('Record', function(){
+describe('Records', function(){
 
   describe('#find()', function(){
     it('should return a record.', function(done){
