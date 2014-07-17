@@ -3,6 +3,7 @@ resources =
   changesets : require './api/changesets'
   forms      : require './api/forms'
   projects   : require './api/projects'
+  webhooks   : require './api/webhooks'
 
 class Fulcrum
   constructor: (options)->

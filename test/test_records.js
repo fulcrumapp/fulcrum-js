@@ -14,8 +14,8 @@ describe('Records', function(){
       client.records.find('916474a7-b995-4b36-81db-8eda97f93a73', function(error, record) {
         assert.ifError(error);
         assert.equal(record.record.id, '916474a7-b995-4b36-81db-8eda97f93a73', 'record.id is incorrect.');
-        assert.equal(record.record.longitude, -100, 'geometry.coordinates[0] is incorrect.');
-        assert.equal(record.record.latitude, 40, 'geometry.coordinates[1] is incorrect.');
+        assert.equal(record.record.longitude, -100, 'record.longitude is incorrect.');
+        assert.equal(record.record.latitude, 40, 'record.latitude is incorrect.');
         done();
       });
     });
