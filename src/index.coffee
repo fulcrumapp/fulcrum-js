@@ -1,10 +1,11 @@
 resources =
-  records       : require './api/records'
-  changesets    : require './api/changesets'
-  forms         : require './api/forms'
-  projects      : require './api/projects'
-  webhooks      : require './api/webhooks'
-  choice_lists  : require './api/choice_lists'
+  records             : require './api/records'
+  changesets          : require './api/changesets'
+  forms               : require './api/forms'
+  projects            : require './api/projects'
+  webhooks            : require './api/webhooks'
+  choice_lists        : require './api/choice_lists'
+  classification_sets : require './api/classification_sets'
 
 class Fulcrum
   constructor: (options)->
