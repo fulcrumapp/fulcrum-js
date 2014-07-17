@@ -1,0 +1,66 @@
+{
+  "photo": {
+    "access_key": "da82cce3-1d14-48ca-bf51-8add7458685f",
+    "uploaded": true,
+    "stored": true,
+    "processed": true,
+    "record_id": "02a92f81-afa8-42b4-877f-5ebe9d1eb94a",
+    "form_id": "512342b0-2bce-4e31-9d4a-8f29e929f7ac",
+    "latitude": 35.20829,
+    "longitude": -81.63631,
+    "created_at": "2014-06-28T19:27:42Z",
+    "updated_at": "2014-06-28T19:28:42Z",
+    "created_by": "Jason Sanford",
+    "created_by_id": "4f1efa091441405373000445",
+    "updated_by": "Jason Sanford",
+    "updated_by_id": "4f1efa091441405373000445",
+    "exif": {
+      "make": "LGE",
+      "model": "Nexus 5",
+      "x_resolution": "72.0",
+      "y_resolution": "72.0",
+      "resolution_unit": 2,
+      "ycb_cr_positioning": 1,
+      "exposure_time": "0.008333333333333333",
+      "f_number": "2.4",
+      "iso_speed_ratings": 335,
+      "date_time_original": "2014-06-28T14:42:57+00:00",
+      "date_time_digitized": "2014-06-28T14:42:57+00:00",
+      "shutter_speed_value": "0.008403361344537815",
+      "aperture_value": "2.4",
+      "exposure_bias_value": "0.0",
+      "flash": 0,
+      "focal_length": "3.97",
+      "color_space": 1,
+      "pixel_x_dimension": 3264,
+      "pixel_y_dimension": 2448,
+      "gps_latitude_ref": "N",
+      "gps_latitude": [
+        "35.0",
+        "12.0",
+        "29.858"
+      ],
+      "gps_longitude_ref": "W",
+      "gps_longitude": [
+        "81.0",
+        "38.0",
+        "10.7043"
+      ],
+      "gps_altitude_ref": "\u0000",
+      "gps_altitude": "197.0",
+      "gps_time_stamp": [
+        "18.0",
+        "42.0",
+        "56.0"
+      ],
+      "gps_processing_method": "ASCII\u0000\u0000\u0000FUSED",
+      "gps_date_stamp": "2014:06:28"
+    },
+    "content_type": "image/jpeg",
+    "file_size": 3403818,
+    "url": "https://api.fulcrumapp.com/api/v2/photos/da82cce3-1d14-48ca-bf51-8add7458685f",
+    "thumbnail": "https://fulcrumapp.s3.amazonaws.com/photos/thumb_b691687f-a228-4168-870a-612825f7ce80-da82cce3-1d14-48ca-bf51-8add7458685f.jpg?AWSAccessKeyId=AKIAINLD3OFR6WK7JO3Q&Signature=DEJD57ZzgrIP4Imb5gkE7%2BPA2h4%3D&Expires=1405717062",
+    "large": "https://fulcrumapp.s3.amazonaws.com/photos/large_b691687f-a228-4168-870a-612825f7ce80-da82cce3-1d14-48ca-bf51-8add7458685f.jpg?AWSAccessKeyId=AKIAINLD3OFR6WK7JO3Q&Signature=IsyZq3ETvf9X1oo9C9mSdyG68AM%3D&Expires=1405717062",
+    "original": "https://fulcrumapp.s3.amazonaws.com/photos/b691687f-a228-4168-870a-612825f7ce80-da82cce3-1d14-48ca-bf51-8add7458685f.jpg?AWSAccessKeyId=AKIAINLD3OFR6WK7JO3Q&Signature=/T/ssD32AtqaafDEaizhmQyyimI%3D&Expires=1405717062"
+  }
+}

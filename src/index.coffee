@@ -6,6 +6,7 @@ resources =
   webhooks            : require './api/webhooks'
   choice_lists        : require './api/choice_lists'
   classification_sets : require './api/classification_sets'
+  photos              : require './api/photos'
 
 class Fulcrum
   constructor: (options)->
