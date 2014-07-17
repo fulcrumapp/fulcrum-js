@@ -1,5 +1,6 @@
 resources =
-  record  : require './api/record'
+  record    : require './api/record'
+  changeset : require './api/changeset'
 
 class Fulcrum
   constructor: (options)->

@@ -1,0 +1,27 @@
+{
+  "changeset": {
+    "metadata": {
+      "comment": "My First API created Changeset",
+      "app_created_by": "fulcrum-node",
+      "app_name": "Fulcrum Node",
+      "app_version": "0.0.0",
+      "app_build": "",
+      "user_agent": "request"
+    },
+    "min_lat": null,
+    "max_lat": null,
+    "min_lon": null,
+    "max_lon": null,
+    "number_of_changes": 0,
+    "id": "e56594c5-22e3-4d15-8dd6-f0fc02280ec7",
+    "created_at": "2014-07-16T20:28:25Z",
+    "updated_at": "2014-07-16T20:28:25Z",
+    "closed_at": null,
+    "created_by": "Jason Sanford",
+    "created_by_id": "4f1efa091441405373000445",
+    "updated_by": "Jason Sanford",
+    "updated_by_id": "4f1efa091441405373000445",
+    "closed_by": null,
+    "closed_by_id": null
+  }
+}
