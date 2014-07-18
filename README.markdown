@@ -23,7 +23,7 @@ Various methods are available for each of the resources. Check the chart below f
 
 #### find
 
-Finds a single resource. Parameters are a resource id and callback. The callback should accept an error and resource object, representing a form, record, changeset, etc.
+Finds a single resource. Parameters are a resource id and a callback. The callback should accept an error and resource object, representing a form, record, changeset, etc.
 
 ```javascript
 var formFound = function (error, form) {
@@ -36,11 +36,11 @@ var formFound = function (error, form) {
 fulcrum.forms.find('916474a7-b995-4b36-81db-8eda97f93a73', formFound);
 ```
 
-Check the [Fulcrum API Docs](http://fulcrumapp.com/developers/api/) for an example of a returned objects.
+Check the [Fulcrum API Docs](http://fulcrumapp.com/developers/api/) for an example of returned objects.
 
 #### search
 
-Search for resources. Parameters are an options object and a callback. The options object will be converted to query string parameters and property url encoded. The options will vary depending on the resource, but [pagination parameters](http://fulcrumapp.com/developers/api/#pagination) are always accepted.
+Search for resources. Parameters are an options object and a callback. The options object will be converted to query string parameters and properly url encoded. The options will vary depending on the resource, but [pagination parameters](http://fulcrumapp.com/developers/api/#pagination) are always accepted.
 
 The callback should accept an error and an object representing a set of resources as well as pagination information. For example, a set of records will look like:
 
@@ -107,7 +107,7 @@ var recordsFound = function (error, records) {
     console.log('Location is: ', record.latitude, record.longitude);
   });
 };
-fulcrum.records.search({form_id: '916474a7-b995-4b36-81db-8eda97f93a73'}, formsFound);
+fulcrum.records.search({form_id: '916474a7-b995-4b36-81db-8eda97f93a73'}, recordsFound);
 ```
 
 #### create
@@ -136,7 +136,7 @@ fulcrum.webhooks.create(webhook_to_create, webhookCreated);
 
 #### update
 
-Update an object. Parameters are an id, object and a callback.
+Update an object. Parameters are an id, an object and a callback.
 
 The id is the unique id for the resource to be updated.
 
@@ -154,7 +154,7 @@ var webhookUpdated = function (error, webhook) {
 };
 var webhook_to_update = {
   "webhook": {
-    "name": "My First Webhook",
+    "name": "The Best Webhook",
     "url": "http://foo.com/fulcrum_webhook",
     "active": false
   }
@@ -164,7 +164,7 @@ fulcrum.webhooks.update('bc53d884-a7a8-4697-9e35-e26192be724e', webhook_to_updat
 
 #### delete
 
-Delete an object. Paramaters are an id and a callback.
+Delete an object. Parameters are an id and a callback.
 
 The id is the unique id for the resource to be deleted.
 
@@ -181,7 +181,7 @@ var recordDeleted = function (error) {
 fulcrum.records.delete('916474a7-b995-4b36-81db-8eda97f93a73', recordDeleted);
 ```
 
-### Supported Resources and Methods
+#### Supported Resources and Methods
 
 | Resource            | Methods                              |
 |---------------------|--------------------------------------|
@@ -218,7 +218,7 @@ gulp watch
 
 ### Tests
 
-Be sure you've compiled to javascript and then
+Be sure you've compiled to javascript and then:
 
 ```
 npm test
