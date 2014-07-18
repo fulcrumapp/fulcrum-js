@@ -1,5 +1,7 @@
 ## fulcrum-node
 
+[![Build Status](https://api.travis-ci.org/JasonSanford/fulcrum-node.png?branch=master)](https://travis-ci.org/JasonSanford/fulcrum-node)
+
 A JavaScript library for the Fulcrum API.
 
 ### Installation
