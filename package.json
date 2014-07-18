@@ -1,10 +1,10 @@
 {
-  "name": "fulcrum",
+  "name": "fulcrum-app",
   "version": "0.0.0",
-  "description": "Fulcrum API",
+  "description": "JavaScript wrapper for the Fulcrum API",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -R spec"
   },
   "keywords": [
     "Fulcrum"
