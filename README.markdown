@@ -10,6 +10,12 @@ A JavaScript library for the Fulcrum API.
 npm install --save fulcrum-app
 ```
 
+There is also a [browserified](http://browserify.org/) version of this package available at `fulcrum.js` in the root of this repo. Just add this in a script tag on your page.
+
+```html
+<script src="/lib/fulcrum.js"></script>
+```
+
 ### Usage
 
 Create a fulcrum client with your API token.
@@ -216,6 +222,13 @@ Or have gulp watch the src directory and compile when changes are made:
 
 ```
 gulp watch
+```
+### Building for the Browser
+
+Use [browserify](http://browserify.org/) to package all dependencies out output the built `fulcrum.js`.
+
+```
+browserify lib/index.js > fulcrum.js
 ```
 
 ### Tests
