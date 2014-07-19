@@ -228,7 +228,7 @@ gulp watch
 Use [browserify](http://browserify.org/) to package all dependencies out output the built `fulcrum.js`.
 
 ```
-browserify lib/index.js > fulcrum.js
+browserify lib/index.js -s Fulcrum > fulcrum.js
 ```
 
 ### Tests
