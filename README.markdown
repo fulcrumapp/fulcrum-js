@@ -17,7 +17,7 @@ Create a fulcrum client with your API token.
 ```javascript
 var Fulcrum = require('fulcrum-app');
 var fulcrum = new Fulcrum({
-  api_token: 'abc123'
+  api_key: 'abc123'
 });
 ```
 

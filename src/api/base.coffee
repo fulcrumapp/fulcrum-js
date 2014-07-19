@@ -38,7 +38,7 @@ class Base extends Extendable
 
   request: (method, url, opts, cb) ->
     headers =
-      'X-ApiToken'  : @client.api_token
+      'X-ApiToken'  : @client.api_key
       'Accept'      : 'application/json'
     options =
       'headers'     : headers

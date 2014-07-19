@@ -10,7 +10,7 @@ resources =
 
 class Fulcrum
   constructor: (options)->
-    {@api_token} = options
+    {@api_key} = options
     for name, klass of resources
       @[name] = new klass(@)
 
