@@ -231,6 +231,27 @@ Use [browserify](http://browserify.org/) to package all dependencies out output 
 browserify lib/index.js -s Fulcrum > fulcrum.js
 ```
 
+### Usage in the browser
+
+In the example below our script src is set to the built file above and can be used as such:
+
+```html
+<html>
+  <head></head>
+  <body>
+    <div id="forms"></div>
+    <script src="fulcrum.js"></script>
+    <script>
+      var fulcrum = new Fulcrum({api_key: 'abc123'});
+      var formsFound = function(errors, forms) {
+        console.log(forms);
+      };
+      fulcrum.forms.search(null, formsFound);
+    </script>
+  </body>
+</html>
+```
+
 ### Tests
 
 Be sure you've compiled to javascript and then:
