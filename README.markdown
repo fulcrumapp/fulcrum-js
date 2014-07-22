@@ -191,16 +191,16 @@ fulcrum.records.delete('916474a7-b995-4b36-81db-8eda97f93a73', recordDeleted);
 
 #### Supported Resources and Methods
 
-| Resource            | Methods                              |
-|---------------------|--------------------------------------|
-| Forms               | find, search, create, update, delete |
-| Records             | find, search, create, update, delete |
-| Photos              | find, search                         |
-| Projects            | search                               |
-| Changesets          | find, search, create, update, close  |
-| Choice Lists        | find, search, create, update, delete |
-| Classification Sets | find, search, create, update, delete |
-| Webhooks            | find, search, create, update, delete |
+| Resource            | Methods                                       |
+|---------------------|-----------------------------------------------|
+| Forms               | find, search, create, update, delete          |
+| Records             | find, search, create, update, delete, history |
+| Photos              | find, search                                  |
+| Projects            | search                                        |
+| Changesets          | find, search, create, update, close           |
+| Choice Lists        | find, search, create, update, delete          |
+| Classification Sets | find, search, create, update, delete          |
+| Webhooks            | find, search, create, update, delete          |
 
 ### Development
 

@@ -21,6 +21,19 @@ describe('Records', function(){
     });
   });
 
+  describe('#history()', function(){
+    it('should return records.', function(done){
+      var nocker = nock('https://api.fulcrumapp.com')
+                   .get('/api/v2/records/916474a7-b995-4b36-81db-8eda97f93a73/history')
+                   .replyWithFile(200, __dirname + '/objects/record_history.json');
+      client.records.history('916474a7-b995-4b36-81db-8eda97f93a73', function(error, history) {
+        assert.ifError(error);
+        assert(history.records instanceof Array, 'records is not an array.');
+        done();
+      });
+    });
+  });
+
   describe('#delete()', function(){
     it('should not return an error if deleted.', function(done){
       var nocker = nock('https://api.fulcrumapp.com')
