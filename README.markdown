@@ -16,6 +16,19 @@ There is also a [browserified](http://browserify.org/) version of this package a
 <script src="/lib/fulcrum.js"></script>
 ```
 
+### Supported Resources and Methods
+
+| Resource            | Methods                                       |
+|---------------------|-----------------------------------------------|
+| Forms               | find, search, create, update, delete          |
+| Records             | find, search, create, update, delete, history |
+| Photos              | find, search                                  |
+| Projects            | search                                        |
+| Changesets          | find, search, create, update, close           |
+| Choice Lists        | find, search, create, update, delete          |
+| Classification Sets | find, search, create, update, delete          |
+| Webhooks            | find, search, create, update, delete          |
+
 ### Usage
 
 Create a fulcrum client with your API token.
@@ -188,19 +201,6 @@ var recordDeleted = function (error) {
 };
 fulcrum.records.delete('916474a7-b995-4b36-81db-8eda97f93a73', recordDeleted);
 ```
-
-#### Supported Resources and Methods
-
-| Resource            | Methods                                       |
-|---------------------|-----------------------------------------------|
-| Forms               | find, search, create, update, delete          |
-| Records             | find, search, create, update, delete, history |
-| Photos              | find, search                                  |
-| Projects            | search                                        |
-| Changesets          | find, search, create, update, close           |
-| Choice Lists        | find, search, create, update, delete          |
-| Classification Sets | find, search, create, update, delete          |
-| Webhooks            | find, search, create, update, delete          |
 
 ### Development
 
