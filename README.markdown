@@ -211,21 +211,21 @@ cd fulcrum-node
 npm install
 ```
 
-Fulcrum Node is written in CoffeeScript. Use gulp to compile to JavaScript:
+Fulcrum Node is written in CoffeeScript. Use scripts to compile to JavaScript:
 
 ```
 vim src/index.coffee
-gulp compile
+npm run build
 ```
 
-Or have gulp watch the src directory and compile when changes are made:
+Or watch the src directory and compile when changes are made:
 
 ```
-gulp watch
+npm run watch
 ```
 ### Building for the Browser
 
-Use [browserify](http://browserify.org/) to package all dependencies and output the built `fulcrum.js`.
+Use [browserify](http://browserify.org/) to package all dependencies and output the built `fulcrum.js`. The `npm run build` script already runs this command, but to run by itself:
 
 ```
 browserify lib/index.js -s Fulcrum > fulcrum.js
