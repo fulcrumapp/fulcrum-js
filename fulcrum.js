@@ -48,10 +48,9 @@ Extendable = (function() {
 Base = (function(_super) {
   __extends(Base, _super);
 
-  Base.prototype.base = 'https://api.fulcrumapp.com/api/v2/';
-
   function Base(client) {
     this.client = client;
+    this.base = this.client.url;
   }
 
   Base.prototype.url = function(id) {
@@ -728,6 +727,7 @@ Fulcrum = (function() {
   function Fulcrum(options) {
     var klass, name;
     this.api_key = options.api_key;
+    this.url = options.url || 'https://api.fulcrumapp.com/api/v2/';
     for (name in resources) {
       klass = resources[name];
       this[name] = new klass(this);

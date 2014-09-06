@@ -21,9 +21,8 @@ class Extendable
     this
 
 class Base extends Extendable
-  base: 'https://api.fulcrumapp.com/api/v2/'
-
   constructor: (@client) ->
+    @base = @client.url
 
   url: (id) ->
     path = if id
