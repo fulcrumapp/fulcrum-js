@@ -137,7 +137,7 @@ Base = (function(_super) {
 
 module.exports = Base;
 
-},{"./errors":5,"request":19}],2:[function(_dereq_,module,exports){
+},{"./errors":5,"request":20}],2:[function(_dereq_,module,exports){
 var Base, Changesets, async, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -199,7 +199,7 @@ Changesets = (function(_super) {
 
 module.exports = Changesets;
 
-},{"./base":1,"./mixins/":10,"async":18}],3:[function(_dereq_,module,exports){
+},{"./base":1,"./mixins/":10,"async":19}],3:[function(_dereq_,module,exports){
 var Base, ChoiceLists, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -388,7 +388,7 @@ creatable = {
 
 module.exports = creatable;
 
-},{"async":18}],8:[function(_dereq_,module,exports){
+},{"async":19}],8:[function(_dereq_,module,exports){
 var async, deletable;
 
 async = _dereq_('async');
@@ -425,7 +425,7 @@ deletable = {
 
 module.exports = deletable;
 
-},{"async":18}],9:[function(_dereq_,module,exports){
+},{"async":19}],9:[function(_dereq_,module,exports){
 var async, findable;
 
 async = _dereq_('async');
@@ -462,7 +462,7 @@ findable = {
 
 module.exports = findable;
 
-},{"async":18}],10:[function(_dereq_,module,exports){
+},{"async":19}],10:[function(_dereq_,module,exports){
 var creatable, deletable, findable, searchable, updatable;
 
 searchable = _dereq_('./searchable');
@@ -520,7 +520,7 @@ searchable = {
 
 module.exports = searchable;
 
-},{"async":18}],12:[function(_dereq_,module,exports){
+},{"async":19}],12:[function(_dereq_,module,exports){
 var async, updatable;
 
 async = _dereq_('async');
@@ -557,7 +557,7 @@ updatable = {
 
 module.exports = updatable;
 
-},{"async":18}],13:[function(_dereq_,module,exports){
+},{"async":19}],13:[function(_dereq_,module,exports){
 var Base, Photos, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -675,7 +675,35 @@ Records = (function(_super) {
 
 module.exports = Records;
 
-},{"./base":1,"./mixins/":10,"async":18}],16:[function(_dereq_,module,exports){
+},{"./base":1,"./mixins/":10,"async":19}],16:[function(_dereq_,module,exports){
+var Base, Videos, mixins,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+mixins = _dereq_('./mixins/');
+
+Base = _dereq_('./base');
+
+Videos = (function(_super) {
+  __extends(Videos, _super);
+
+  function Videos() {
+    return Videos.__super__.constructor.apply(this, arguments);
+  }
+
+  Videos.prototype.resource = 'videos';
+
+  Videos.include(mixins.findable);
+
+  Videos.include(mixins.searchable);
+
+  return Videos;
+
+})(Base);
+
+module.exports = Videos;
+
+},{"./base":1,"./mixins/":10}],17:[function(_dereq_,module,exports){
 var Base, Webhooks, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -709,7 +737,7 @@ Webhooks = (function(_super) {
 
 module.exports = Webhooks;
 
-},{"./base":1,"./mixins/":10}],17:[function(_dereq_,module,exports){
+},{"./base":1,"./mixins/":10}],18:[function(_dereq_,module,exports){
 var Fulcrum, resources;
 
 resources = {
@@ -720,7 +748,8 @@ resources = {
   webhooks: _dereq_('./api/webhooks'),
   choice_lists: _dereq_('./api/choice_lists'),
   classification_sets: _dereq_('./api/classification_sets'),
-  photos: _dereq_('./api/photos')
+  photos: _dereq_('./api/photos'),
+  videos: _dereq_('./api/videos')
 };
 
 Fulcrum = (function() {
@@ -740,7 +769,7 @@ Fulcrum = (function() {
 
 module.exports = Fulcrum;
 
-},{"./api/changesets":2,"./api/choice_lists":3,"./api/classification_sets":4,"./api/forms":6,"./api/photos":13,"./api/projects":14,"./api/records":15,"./api/webhooks":16}],18:[function(_dereq_,module,exports){
+},{"./api/changesets":2,"./api/choice_lists":3,"./api/classification_sets":4,"./api/forms":6,"./api/photos":13,"./api/projects":14,"./api/records":15,"./api/videos":16,"./api/webhooks":17}],19:[function(_dereq_,module,exports){
 (function (process){
 /*!
  * async
@@ -1867,7 +1896,7 @@ module.exports = Fulcrum;
 }());
 
 }).call(this,_dereq_("UPikzY"))
-},{"UPikzY":22}],19:[function(_dereq_,module,exports){
+},{"UPikzY":23}],20:[function(_dereq_,module,exports){
 var window = _dereq_("global/window")
 var once = _dereq_("once")
 
@@ -2006,7 +2035,7 @@ function createXHR(options, callback) {
 
 function noop() {}
 
-},{"global/window":20,"once":21}],20:[function(_dereq_,module,exports){
+},{"global/window":21,"once":22}],21:[function(_dereq_,module,exports){
 (function (global){
 if (typeof window !== "undefined") {
     module.exports = window
@@ -2017,7 +2046,7 @@ if (typeof window !== "undefined") {
 }
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],21:[function(_dereq_,module,exports){
+},{}],22:[function(_dereq_,module,exports){
 module.exports = once
 
 once.proto = once(function () {
@@ -2038,7 +2067,7 @@ function once (fn) {
   }
 }
 
-},{}],22:[function(_dereq_,module,exports){
+},{}],23:[function(_dereq_,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2103,6 +2132,6 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}]},{},[17])
-(17)
+},{}]},{},[18])
+(18)
 });
