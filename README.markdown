@@ -28,6 +28,8 @@ There is also a [browserified](http://browserify.org/) version of this package a
 | Choice Lists        | find, search, create, update, delete          |
 | Classification Sets | find, search, create, update, delete          |
 | Webhooks            | find, search, create, update, delete          |
+| Videos              | find, search                                  |
+| Memberships         | search                                        |
 
 ### Usage
 
