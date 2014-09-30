@@ -30,6 +30,7 @@ There is also a [browserified](http://browserify.org/) version of this package a
 | Webhooks            | find, search, create, update, delete          |
 | Videos              | find, search                                  |
 | Memberships         | search                                        |
+| Roles               | search                                        |
 
 ### Usage
 
