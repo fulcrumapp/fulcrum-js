@@ -1,12 +1,12 @@
-!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.Fulcrum=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.Fulcrum=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var Base, Extendable, errors, moduleKeywords, request,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-request = _dereq_('request');
+request = require('request');
 
-errors = _dereq_('./errors');
+errors = require('./errors');
 
 moduleKeywords = ['extended', 'included'];
 
@@ -137,16 +137,16 @@ Base = (function(_super) {
 
 module.exports = Base;
 
-},{"./errors":5,"request":20}],2:[function(_dereq_,module,exports){
+},{"./errors":5,"request":21}],2:[function(require,module,exports){
 var Base, Changesets, async, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-async = _dereq_('async');
+async = require('async');
 
-mixins = _dereq_('./mixins/');
+mixins = require('./mixins/');
 
-Base = _dereq_('./base');
+Base = require('./base');
 
 Changesets = (function(_super) {
   __extends(Changesets, _super);
@@ -199,14 +199,14 @@ Changesets = (function(_super) {
 
 module.exports = Changesets;
 
-},{"./base":1,"./mixins/":10,"async":19}],3:[function(_dereq_,module,exports){
+},{"./base":1,"./mixins/":11,"async":20}],3:[function(require,module,exports){
 var Base, ChoiceLists, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-mixins = _dereq_('./mixins/');
+mixins = require('./mixins/');
 
-Base = _dereq_('./base');
+Base = require('./base');
 
 ChoiceLists = (function(_super) {
   __extends(ChoiceLists, _super);
@@ -233,14 +233,14 @@ ChoiceLists = (function(_super) {
 
 module.exports = ChoiceLists;
 
-},{"./base":1,"./mixins/":10}],4:[function(_dereq_,module,exports){
+},{"./base":1,"./mixins/":11}],4:[function(require,module,exports){
 var Base, ClassificationSets, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-mixins = _dereq_('./mixins/');
+mixins = require('./mixins/');
 
-Base = _dereq_('./base');
+Base = require('./base');
 
 ClassificationSets = (function(_super) {
   __extends(ClassificationSets, _super);
@@ -267,7 +267,7 @@ ClassificationSets = (function(_super) {
 
 module.exports = ClassificationSets;
 
-},{"./base":1,"./mixins/":10}],5:[function(_dereq_,module,exports){
+},{"./base":1,"./mixins/":11}],5:[function(require,module,exports){
 var status_codes;
 
 status_codes = {
@@ -317,14 +317,14 @@ status_codes = {
 
 module.exports = status_codes;
 
-},{}],6:[function(_dereq_,module,exports){
+},{}],6:[function(require,module,exports){
 var Base, Forms, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-mixins = _dereq_('./mixins/');
+mixins = require('./mixins/');
 
-Base = _dereq_('./base');
+Base = require('./base');
 
 Forms = (function(_super) {
   __extends(Forms, _super);
@@ -351,10 +351,36 @@ Forms = (function(_super) {
 
 module.exports = Forms;
 
-},{"./base":1,"./mixins/":10}],7:[function(_dereq_,module,exports){
+},{"./base":1,"./mixins/":11}],7:[function(require,module,exports){
+var Base, Memberships, mixins,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+mixins = require('./mixins/');
+
+Base = require('./base');
+
+Memberships = (function(_super) {
+  __extends(Memberships, _super);
+
+  function Memberships() {
+    return Memberships.__super__.constructor.apply(this, arguments);
+  }
+
+  Memberships.prototype.resource = 'memberships';
+
+  Memberships.include(mixins.searchable);
+
+  return Memberships;
+
+})(Base);
+
+module.exports = Memberships;
+
+},{"./base":1,"./mixins/":11}],8:[function(require,module,exports){
 var async, creatable;
 
-async = _dereq_('async');
+async = require('async');
 
 creatable = {
   create: function(data, cb) {
@@ -388,10 +414,10 @@ creatable = {
 
 module.exports = creatable;
 
-},{"async":19}],8:[function(_dereq_,module,exports){
+},{"async":20}],9:[function(require,module,exports){
 var async, deletable;
 
-async = _dereq_('async');
+async = require('async');
 
 deletable = {
   "delete": function(id, cb) {
@@ -425,10 +451,10 @@ deletable = {
 
 module.exports = deletable;
 
-},{"async":19}],9:[function(_dereq_,module,exports){
+},{"async":20}],10:[function(require,module,exports){
 var async, findable;
 
-async = _dereq_('async');
+async = require('async');
 
 findable = {
   find: function(id, cb) {
@@ -462,18 +488,18 @@ findable = {
 
 module.exports = findable;
 
-},{"async":19}],10:[function(_dereq_,module,exports){
+},{"async":20}],11:[function(require,module,exports){
 var creatable, deletable, findable, searchable, updatable;
 
-searchable = _dereq_('./searchable');
+searchable = require('./searchable');
 
-findable = _dereq_('./findable');
+findable = require('./findable');
 
-deletable = _dereq_('./deletable');
+deletable = require('./deletable');
 
-creatable = _dereq_('./creatable');
+creatable = require('./creatable');
 
-updatable = _dereq_('./updatable');
+updatable = require('./updatable');
 
 module.exports = {
   searchable: searchable,
@@ -483,10 +509,10 @@ module.exports = {
   updatable: updatable
 };
 
-},{"./creatable":7,"./deletable":8,"./findable":9,"./searchable":11,"./updatable":12}],11:[function(_dereq_,module,exports){
+},{"./creatable":8,"./deletable":9,"./findable":10,"./searchable":12,"./updatable":13}],12:[function(require,module,exports){
 var async, searchable;
 
-async = _dereq_('async');
+async = require('async');
 
 searchable = {
   search: function(qs, cb) {
@@ -520,10 +546,10 @@ searchable = {
 
 module.exports = searchable;
 
-},{"async":19}],12:[function(_dereq_,module,exports){
+},{"async":20}],13:[function(require,module,exports){
 var async, updatable;
 
-async = _dereq_('async');
+async = require('async');
 
 updatable = {
   update: function(id, data, cb) {
@@ -557,14 +583,14 @@ updatable = {
 
 module.exports = updatable;
 
-},{"async":19}],13:[function(_dereq_,module,exports){
+},{"async":20}],14:[function(require,module,exports){
 var Base, Photos, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-mixins = _dereq_('./mixins/');
+mixins = require('./mixins/');
 
-Base = _dereq_('./base');
+Base = require('./base');
 
 Photos = (function(_super) {
   __extends(Photos, _super);
@@ -585,14 +611,14 @@ Photos = (function(_super) {
 
 module.exports = Photos;
 
-},{"./base":1,"./mixins/":10}],14:[function(_dereq_,module,exports){
+},{"./base":1,"./mixins/":11}],15:[function(require,module,exports){
 var Base, Projects, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-mixins = _dereq_('./mixins/');
+mixins = require('./mixins/');
 
-Base = _dereq_('./base');
+Base = require('./base');
 
 Projects = (function(_super) {
   __extends(Projects, _super);
@@ -611,16 +637,16 @@ Projects = (function(_super) {
 
 module.exports = Projects;
 
-},{"./base":1,"./mixins/":10}],15:[function(_dereq_,module,exports){
+},{"./base":1,"./mixins/":11}],16:[function(require,module,exports){
 var Base, Records, async, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-async = _dereq_('async');
+async = require('async');
 
-mixins = _dereq_('./mixins/');
+mixins = require('./mixins/');
 
-Base = _dereq_('./base');
+Base = require('./base');
 
 Records = (function(_super) {
   __extends(Records, _super);
@@ -675,14 +701,14 @@ Records = (function(_super) {
 
 module.exports = Records;
 
-},{"./base":1,"./mixins/":10,"async":19}],16:[function(_dereq_,module,exports){
+},{"./base":1,"./mixins/":11,"async":20}],17:[function(require,module,exports){
 var Base, Videos, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-mixins = _dereq_('./mixins/');
+mixins = require('./mixins/');
 
-Base = _dereq_('./base');
+Base = require('./base');
 
 Videos = (function(_super) {
   __extends(Videos, _super);
@@ -703,14 +729,14 @@ Videos = (function(_super) {
 
 module.exports = Videos;
 
-},{"./base":1,"./mixins/":10}],17:[function(_dereq_,module,exports){
+},{"./base":1,"./mixins/":11}],18:[function(require,module,exports){
 var Base, Webhooks, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-mixins = _dereq_('./mixins/');
+mixins = require('./mixins/');
 
-Base = _dereq_('./base');
+Base = require('./base');
 
 Webhooks = (function(_super) {
   __extends(Webhooks, _super);
@@ -737,19 +763,20 @@ Webhooks = (function(_super) {
 
 module.exports = Webhooks;
 
-},{"./base":1,"./mixins/":10}],18:[function(_dereq_,module,exports){
+},{"./base":1,"./mixins/":11}],19:[function(require,module,exports){
 var Fulcrum, resources;
 
 resources = {
-  records: _dereq_('./api/records'),
-  changesets: _dereq_('./api/changesets'),
-  forms: _dereq_('./api/forms'),
-  projects: _dereq_('./api/projects'),
-  webhooks: _dereq_('./api/webhooks'),
-  choice_lists: _dereq_('./api/choice_lists'),
-  classification_sets: _dereq_('./api/classification_sets'),
-  photos: _dereq_('./api/photos'),
-  videos: _dereq_('./api/videos')
+  records: require('./api/records'),
+  changesets: require('./api/changesets'),
+  forms: require('./api/forms'),
+  projects: require('./api/projects'),
+  webhooks: require('./api/webhooks'),
+  choice_lists: require('./api/choice_lists'),
+  classification_sets: require('./api/classification_sets'),
+  photos: require('./api/photos'),
+  videos: require('./api/videos'),
+  memberships: require('./api/memberships')
 };
 
 Fulcrum = (function() {
@@ -769,7 +796,7 @@ Fulcrum = (function() {
 
 module.exports = Fulcrum;
 
-},{"./api/changesets":2,"./api/choice_lists":3,"./api/classification_sets":4,"./api/forms":6,"./api/photos":13,"./api/projects":14,"./api/records":15,"./api/videos":16,"./api/webhooks":17}],19:[function(_dereq_,module,exports){
+},{"./api/changesets":2,"./api/choice_lists":3,"./api/classification_sets":4,"./api/forms":6,"./api/memberships":7,"./api/photos":14,"./api/projects":15,"./api/records":16,"./api/videos":17,"./api/webhooks":18}],20:[function(require,module,exports){
 (function (process){
 /*!
  * async
@@ -1895,10 +1922,10 @@ module.exports = Fulcrum;
 
 }());
 
-}).call(this,_dereq_("UPikzY"))
-},{"UPikzY":23}],20:[function(_dereq_,module,exports){
-var window = _dereq_("global/window")
-var once = _dereq_("once")
+}).call(this,require('_process'))
+},{"_process":24}],21:[function(require,module,exports){
+var window = require("global/window")
+var once = require("once")
 
 var messages = {
     "0": "Internal XMLHttpRequest Error",
@@ -2035,7 +2062,7 @@ function createXHR(options, callback) {
 
 function noop() {}
 
-},{"global/window":21,"once":22}],21:[function(_dereq_,module,exports){
+},{"global/window":22,"once":23}],22:[function(require,module,exports){
 (function (global){
 if (typeof window !== "undefined") {
     module.exports = window
@@ -2045,8 +2072,8 @@ if (typeof window !== "undefined") {
     module.exports = {}
 }
 
-}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],22:[function(_dereq_,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],23:[function(require,module,exports){
 module.exports = once
 
 once.proto = once(function () {
@@ -2067,7 +2094,7 @@ function once (fn) {
   }
 }
 
-},{}],23:[function(_dereq_,module,exports){
+},{}],24:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2132,6 +2159,5 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}]},{},[18])
-(18)
+},{}]},{},[19])(19)
 });

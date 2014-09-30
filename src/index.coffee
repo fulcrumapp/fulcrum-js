@@ -8,6 +8,7 @@ resources =
   classification_sets : require './api/classification_sets'
   photos              : require './api/photos'
   videos              : require './api/videos'
+  memberships         : require './api/memberships'
 
 class Fulcrum
   constructor: (options)->
