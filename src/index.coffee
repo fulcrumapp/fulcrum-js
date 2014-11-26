@@ -10,6 +10,7 @@ resources =
   videos              : require './api/videos'
   memberships         : require './api/memberships'
   roles               : require './api/roles'
+  child_records       : require './api/child_records'
 
 class Fulcrum
   constructor: (options)->

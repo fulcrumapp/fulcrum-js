@@ -137,7 +137,7 @@ Base = (function(_super) {
 
 module.exports = Base;
 
-},{"./errors":5,"request":22}],2:[function(require,module,exports){
+},{"./errors":6,"request":23}],2:[function(require,module,exports){
 var Base, Changesets, async, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -199,7 +199,35 @@ Changesets = (function(_super) {
 
 module.exports = Changesets;
 
-},{"./base":1,"./mixins/":11,"async":21}],3:[function(require,module,exports){
+},{"./base":1,"./mixins/":12,"async":22}],3:[function(require,module,exports){
+var Base, ChildRecords, async, mixins,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+async = require('async');
+
+mixins = require('./mixins/');
+
+Base = require('./base');
+
+ChildRecords = (function(_super) {
+  __extends(ChildRecords, _super);
+
+  function ChildRecords() {
+    return ChildRecords.__super__.constructor.apply(this, arguments);
+  }
+
+  ChildRecords.prototype.resource = 'child_records';
+
+  ChildRecords.include(mixins.searchable);
+
+  return ChildRecords;
+
+})(Base);
+
+module.exports = ChildRecords;
+
+},{"./base":1,"./mixins/":12,"async":22}],4:[function(require,module,exports){
 var Base, ChoiceLists, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -233,7 +261,7 @@ ChoiceLists = (function(_super) {
 
 module.exports = ChoiceLists;
 
-},{"./base":1,"./mixins/":11}],4:[function(require,module,exports){
+},{"./base":1,"./mixins/":12}],5:[function(require,module,exports){
 var Base, ClassificationSets, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -267,7 +295,7 @@ ClassificationSets = (function(_super) {
 
 module.exports = ClassificationSets;
 
-},{"./base":1,"./mixins/":11}],5:[function(require,module,exports){
+},{"./base":1,"./mixins/":12}],6:[function(require,module,exports){
 var status_codes;
 
 status_codes = {
@@ -317,7 +345,7 @@ status_codes = {
 
 module.exports = status_codes;
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var Base, Forms, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -351,7 +379,7 @@ Forms = (function(_super) {
 
 module.exports = Forms;
 
-},{"./base":1,"./mixins/":11}],7:[function(require,module,exports){
+},{"./base":1,"./mixins/":12}],8:[function(require,module,exports){
 var Base, Memberships, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -377,7 +405,7 @@ Memberships = (function(_super) {
 
 module.exports = Memberships;
 
-},{"./base":1,"./mixins/":11}],8:[function(require,module,exports){
+},{"./base":1,"./mixins/":12}],9:[function(require,module,exports){
 var async, creatable;
 
 async = require('async');
@@ -414,7 +442,7 @@ creatable = {
 
 module.exports = creatable;
 
-},{"async":21}],9:[function(require,module,exports){
+},{"async":22}],10:[function(require,module,exports){
 var async, deletable;
 
 async = require('async');
@@ -451,7 +479,7 @@ deletable = {
 
 module.exports = deletable;
 
-},{"async":21}],10:[function(require,module,exports){
+},{"async":22}],11:[function(require,module,exports){
 var async, findable;
 
 async = require('async');
@@ -488,7 +516,7 @@ findable = {
 
 module.exports = findable;
 
-},{"async":21}],11:[function(require,module,exports){
+},{"async":22}],12:[function(require,module,exports){
 var creatable, deletable, findable, searchable, updatable;
 
 searchable = require('./searchable');
@@ -509,7 +537,7 @@ module.exports = {
   updatable: updatable
 };
 
-},{"./creatable":8,"./deletable":9,"./findable":10,"./searchable":12,"./updatable":13}],12:[function(require,module,exports){
+},{"./creatable":9,"./deletable":10,"./findable":11,"./searchable":13,"./updatable":14}],13:[function(require,module,exports){
 var async, searchable;
 
 async = require('async');
@@ -546,7 +574,7 @@ searchable = {
 
 module.exports = searchable;
 
-},{"async":21}],13:[function(require,module,exports){
+},{"async":22}],14:[function(require,module,exports){
 var async, updatable;
 
 async = require('async');
@@ -583,7 +611,7 @@ updatable = {
 
 module.exports = updatable;
 
-},{"async":21}],14:[function(require,module,exports){
+},{"async":22}],15:[function(require,module,exports){
 var Base, Photos, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -611,7 +639,7 @@ Photos = (function(_super) {
 
 module.exports = Photos;
 
-},{"./base":1,"./mixins/":11}],15:[function(require,module,exports){
+},{"./base":1,"./mixins/":12}],16:[function(require,module,exports){
 var Base, Projects, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -637,7 +665,7 @@ Projects = (function(_super) {
 
 module.exports = Projects;
 
-},{"./base":1,"./mixins/":11}],16:[function(require,module,exports){
+},{"./base":1,"./mixins/":12}],17:[function(require,module,exports){
 var Base, Records, async, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -701,7 +729,7 @@ Records = (function(_super) {
 
 module.exports = Records;
 
-},{"./base":1,"./mixins/":11,"async":21}],17:[function(require,module,exports){
+},{"./base":1,"./mixins/":12,"async":22}],18:[function(require,module,exports){
 var Base, Roles, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -727,7 +755,7 @@ Roles = (function(_super) {
 
 module.exports = Roles;
 
-},{"./base":1,"./mixins/":11}],18:[function(require,module,exports){
+},{"./base":1,"./mixins/":12}],19:[function(require,module,exports){
 var Base, Videos, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -755,7 +783,7 @@ Videos = (function(_super) {
 
 module.exports = Videos;
 
-},{"./base":1,"./mixins/":11}],19:[function(require,module,exports){
+},{"./base":1,"./mixins/":12}],20:[function(require,module,exports){
 var Base, Webhooks, mixins,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -789,7 +817,7 @@ Webhooks = (function(_super) {
 
 module.exports = Webhooks;
 
-},{"./base":1,"./mixins/":11}],20:[function(require,module,exports){
+},{"./base":1,"./mixins/":12}],21:[function(require,module,exports){
 var Fulcrum, resources;
 
 resources = {
@@ -803,7 +831,8 @@ resources = {
   photos: require('./api/photos'),
   videos: require('./api/videos'),
   memberships: require('./api/memberships'),
-  roles: require('./api/roles')
+  roles: require('./api/roles'),
+  child_records: require('./api/child_records')
 };
 
 Fulcrum = (function() {
@@ -823,7 +852,7 @@ Fulcrum = (function() {
 
 module.exports = Fulcrum;
 
-},{"./api/changesets":2,"./api/choice_lists":3,"./api/classification_sets":4,"./api/forms":6,"./api/memberships":7,"./api/photos":14,"./api/projects":15,"./api/records":16,"./api/roles":17,"./api/videos":18,"./api/webhooks":19}],21:[function(require,module,exports){
+},{"./api/changesets":2,"./api/child_records":3,"./api/choice_lists":4,"./api/classification_sets":5,"./api/forms":7,"./api/memberships":8,"./api/photos":15,"./api/projects":16,"./api/records":17,"./api/roles":18,"./api/videos":19,"./api/webhooks":20}],22:[function(require,module,exports){
 (function (process){
 /*!
  * async
@@ -1950,7 +1979,7 @@ module.exports = Fulcrum;
 }());
 
 }).call(this,require('_process'))
-},{"_process":25}],22:[function(require,module,exports){
+},{"_process":26}],23:[function(require,module,exports){
 var window = require("global/window")
 var once = require("once")
 
@@ -2089,7 +2118,7 @@ function createXHR(options, callback) {
 
 function noop() {}
 
-},{"global/window":23,"once":24}],23:[function(require,module,exports){
+},{"global/window":24,"once":25}],24:[function(require,module,exports){
 (function (global){
 if (typeof window !== "undefined") {
     module.exports = window
@@ -2100,7 +2129,7 @@ if (typeof window !== "undefined") {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 module.exports = once
 
 once.proto = once(function () {
@@ -2121,7 +2150,7 @@ function once (fn) {
   }
 }
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2186,5 +2215,5 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}]},{},[20])(20)
+},{}]},{},[21])(21)
 });

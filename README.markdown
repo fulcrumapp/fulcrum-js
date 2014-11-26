@@ -31,6 +31,7 @@ There is also a [browserified](http://browserify.org/) version of this package a
 | Videos              | find, search                                  |
 | Memberships         | search                                        |
 | Roles               | search                                        |
+| Child Records       | search                                        |
 
 ### Usage
 
