@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/JasonSanford/fulcrum-node.git"
+    "url": "git://github.com/fulcrumapp/fulcrum-node.git"
   },
   "scripts": {
     "test": "mocha -R spec",
