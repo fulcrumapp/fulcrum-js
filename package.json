@@ -9,9 +9,6 @@
   },
   "scripts": {
     "test": "mocha -R spec",
-    "watch": "coffee -w -c -b --no-header -o lib src",
-    "build": "npm run build-node && npm run build-browser",
-    "build-node": "coffee -c -b --no-header -o lib src",
     "build-browser": "browserify lib/index.js -s Fulcrum > fulcrum.js"
   },
   "keywords": [
