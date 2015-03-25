@@ -246,8 +246,6 @@ In the example below our script src is set to the built file above and can be us
 
 ### Tests
 
-Be sure you've compiled to javascript and then:
-
 ```
 npm test
 ```
