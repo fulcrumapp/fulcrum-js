@@ -23,7 +23,7 @@ There is also a [browserified](http://browserify.org/) version of this package a
 | Forms               | find, search, create, update, delete          |
 | Records             | find, search, create, update, delete, history |
 | Photos              | find, search                                  |
-| Projects            | search                                        |
+| Projects            | find, search, create, update, delete          |
 | Changesets          | find, search, create, update, close           |
 | Choice Lists        | find, search, create, update, delete          |
 | Classification Sets | find, search, create, update, delete          |
