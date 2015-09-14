@@ -1,6 +1,6 @@
 ## fulcrum-node
 
-[![Build Status](https://api.travis-ci.org/fulcrumapp/fulcrum-node.png?branch=master)](https://travis-ci.org/fulcrumapp/fulcrum-node)
+[![Build Status](https://api.travis-ci.org/fulcrumapp/fulcrum-node.png?branch=master)](https://travis-ci.org/fulcrumapp/fulcrum-node)&nbsp;[![npm Version](https://img.shields.io/npm/v/fulcrum-app.svg)](https://www.npmjs.com/package/fulcrum-app)
 
 A JavaScript library for the Fulcrum API.
 
