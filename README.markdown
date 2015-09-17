@@ -44,7 +44,7 @@ var fulcrum = new Fulcrum({
 });
 ```
 
-Various methods are available for each of the resources. Check the chart below for details.
+Various methods are available for each of the resources. Check the chart above for details.
 
 #### find
 
