@@ -61,11 +61,11 @@ var formFound = function (error, form) {
 fulcrum.forms.find('916474a7-b995-4b36-81db-8eda97f93a73', formFound);
 ```
 
-Check the [Fulcrum API Docs](http://fulcrumapp.com/developers/api/) for an example of returned objects.
+Check the [Fulcrum API Docs](http://www.fulcrumapp.com/developers/api/) for an example of returned objects.
 
 #### search
 
-Search for resources. Parameters are an options object and a callback. The options object will be converted to query string parameters and properly url encoded. The options will vary depending on the resource, but [pagination parameters](http://fulcrumapp.com/developers/api/#pagination) are always accepted.
+Search for resources. Parameters are an options object and a callback. The options object will be converted to query string parameters and properly url encoded. The options will vary depending on the resource, but [pagination parameters](http://www.fulcrumapp.com/developers/api/introduction/#notes) are always accepted.
 
 The callback should accept an error and an object representing a set of resources as well as pagination information. For example, a set of records will look like:
 
@@ -137,7 +137,7 @@ fulcrum.records.search({form_id: '916474a7-b995-4b36-81db-8eda97f93a73'}, record
 
 #### create
 
-Create an object. Parameters are an object and a callback. The object should represent the resource you are creating. Check the [Fulcrum API Docs](http://fulcrumapp.com/developers/api/) for examples of resource objects.
+Create an object. Parameters are an object and a callback. The object should represent the resource you are creating. Check the [Fulcrum API Docs](http://www.fulcrumapp.com/developers/api/) for examples of resource objects.
 
 The callback should accept an error and an object representing the created resource.
 
