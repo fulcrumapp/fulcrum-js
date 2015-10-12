@@ -19,7 +19,7 @@ describe('memberships', function(){
     });
   });
 
-  describe('#changePermissions()', function(){
+  describe('#change_permissions()', function(){
     it('should change permissions.', function(done){
       var permissions = {
         "change":{
@@ -33,7 +33,7 @@ describe('memberships', function(){
       var nocker = nock('https://api.fulcrumapp.com')
                    .post('/api/v2/memberships/change_permissions')
                    .replyWithFile(200, __dirname + '/objects/memberships.json');
-      client.memberships.changePermissions(permissions, function(error, memberships) {
+      client.memberships.change_permissions(permissions, function(error, memberships) {
         assert.ifError(error);
         assert(memberships.memberships instanceof Array, 'memberships is not an array.');
         done();

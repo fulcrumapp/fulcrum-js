@@ -29,7 +29,7 @@ There is also a [browserified](http://browserify.org/) version of this package a
 | Classification Sets | find, search, create, update, delete          |
 | Webhooks            | find, search, create, update, delete          |
 | Videos              | find, search                                  |
-| Memberships         | search                                        |
+| Memberships         | search, change_permissions                    |
 | Roles               | search                                        |
 | Child Records       | search                                        |
 
