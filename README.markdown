@@ -32,6 +32,7 @@ There is also a [browserified](http://browserify.org/) version of this package a
 | Memberships         | search, change_permissions                    |
 | Roles               | search                                        |
 | Child Records       | search                                        |
+| Signatures          | find, search                                  |
 
 ### Usage
 
