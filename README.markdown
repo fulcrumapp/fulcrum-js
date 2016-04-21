@@ -10,12 +10,6 @@ A JavaScript library for the Fulcrum API.
 npm install --save fulcrum-app
 ```
 
-There is also a [browserified](http://browserify.org/) version of this package available at `fulcrum.js` in the root of this repo. Just add this in a script tag on your page.
-
-```html
-<script src="/lib/fulcrum.js"></script>
-```
-
 ### Supported Resources and Methods
 
 | Resource            | Methods                                       |
@@ -214,35 +208,6 @@ Install dependencies:
 ```
 cd fulcrum-node
 npm install
-```
-
-### Building for the Browser
-
-Use [browserify](http://browserify.org/) to package all dependencies and output the built `fulcrum.js`. The `npm run build-browser` script already runs this command, but to run by itself:
-
-```
-browserify lib/index.js -s Fulcrum > fulcrum.js
-```
-
-### Usage in the browser
-
-In the example below our script src is set to the built file above and can be used as such:
-
-```html
-<html>
-  <head></head>
-  <body>
-    <div id="forms"></div>
-    <script src="fulcrum.js"></script>
-    <script>
-      var fulcrum = new Fulcrum({api_key: 'abc123'});
-      var formsFound = function(errors, forms) {
-        console.log(forms);
-      };
-      fulcrum.forms.search(null, formsFound);
-    </script>
-  </body>
-</html>
 ```
 
 ### Tests
