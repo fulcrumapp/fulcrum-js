@@ -27,6 +27,7 @@ npm install --save fulcrum-app
 | Roles               | search                                        |
 | Child Records       | search                                        |
 | Signatures          | find, search                                  |
+| Layers              | find, search, create, update, delete          |
 
 ### Usage
 
