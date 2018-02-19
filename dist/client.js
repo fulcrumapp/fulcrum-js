@@ -70,17 +70,24 @@ var _role2 = _interopRequireDefault(_role);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var VERSION = require('../package.json').version;
+
+var BASE_URL = 'https://api.fulcrumapp.com/api/v2';
+
 var Client = function () {
-  function Client(token, base) {
+  function Client(token, opts) {
     (0, _classCallCheck3.default)(this, Client);
 
-    this.base = base || 'https://api.fulcrumapp.com/api/v2';
+    var _opts = opts || {};
+
+    this.baseUrl = _opts.baseUrl || BASE_URL;
 
     var options = {
-      baseURI: this.base,
+      baseURI: this.baseUrl,
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'User-Agent': _opts.userAgent || 'fulcrum-js version ' + VERSION
       }
     };
 
@@ -95,7 +102,7 @@ var Client = function () {
   (0, _createClass3.default)(Client, [{
     key: 'urlFromPath',
     value: function urlFromPath(path, base) {
-      return (base || this.base) + '/' + path;
+      return (base || this.baseUrl) + '/' + path;
     }
   }, {
     key: 'url',
