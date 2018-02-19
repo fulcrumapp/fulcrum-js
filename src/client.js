@@ -14,15 +14,22 @@ import Video from './resources/video';
 import Audio from './resources/audio';
 import Role from './resources/role';
 
+const VERSION = require('../package.json').version;
+
+const BASE_URL = 'https://api.fulcrumapp.com/api/v2';
+
 export default class Client {
-  constructor(token, base) {
-    this.base = base || 'https://api.fulcrumapp.com/api/v2';
+  constructor(token, opts) {
+    const _opts = opts || {};
+
+    this.baseUrl = _opts.baseUrl || BASE_URL;
 
     const options = {
-      baseURI: this.base,
+      baseURI: this.baseUrl,
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'User-Agent': _opts.userAgent || `fulcrum-js version ${VERSION}`
       }
     };
 
@@ -35,7 +42,7 @@ export default class Client {
   }
 
   urlFromPath(path, base) {
-    return (base || this.base) + '/' + path;
+    return (base || this.baseUrl) + '/' + path;
   }
 
   url(path, base) {

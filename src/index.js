@@ -7,7 +7,6 @@ export { Page };
 
 const api = new Frisbee({
   baseURI: 'https://api.fulcrumapp.com/api/v2',
-  // baseURI: 'http://localhost:3000/api/v2',
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
