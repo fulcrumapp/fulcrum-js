@@ -68,6 +68,10 @@ var _role = require('./resources/role');
 
 var _role2 = _interopRequireDefault(_role);
 
+var _webhook = require('./resources/webhook');
+
+var _webhook2 = _interopRequireDefault(_webhook);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var VERSION = require('../package.json').version;
@@ -215,6 +219,15 @@ var Client = function () {
       }
 
       return this._roles;
+    }
+  }, {
+    key: 'webhooks',
+    get: function get() {
+      if (!this._webhooks) {
+        this._webhooks = new _webhook2.default(this);
+      }
+
+      return this._webhooks;
     }
   }]);
   return Client;
