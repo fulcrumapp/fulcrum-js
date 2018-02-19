@@ -13,6 +13,7 @@ import Photo from './resources/photo';
 import Video from './resources/video';
 import Audio from './resources/audio';
 import Role from './resources/role';
+import Webhook from './resources/webhook';
 
 const VERSION = require('../package.json').version;
 
@@ -141,5 +142,13 @@ export default class Client {
     }
 
     return this._roles;
+  }
+
+  get webhooks() {
+    if (!this._webhooks) {
+      this._webhooks = new Webhook(this);
+    }
+
+    return this._webhooks;
   }
 }
