@@ -20,7 +20,18 @@ export async function getUser(email, password) {
     throw resp.err;
   }
 
-  return resp.body.user;
+  const user = resp.body.user;
+
+  user.contexts = user.contexts.map((context) => {
+    // To avoid confusion remove the old API tokens. These will
+    // be deprecated eventually, and authorizations have been
+    // the way to create tokens for a while now.
+    delete context.api_token;
+
+    return context;
+  });
+
+  return user;
 }
 
 export async function createAuthorization(email, password, organizationId, note, timeout) {
