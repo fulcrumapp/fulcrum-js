@@ -1,205 +1,220 @@
-## fulcrum-node
+# fulcrum-js
 
-[![Build Status](https://api.travis-ci.org/fulcrumapp/fulcrum-node.png?branch=master)](https://travis-ci.org/fulcrumapp/fulcrum-node)&nbsp;[![npm Version](https://img.shields.io/npm/v/fulcrum-app.svg)](https://www.npmjs.com/package/fulcrum-app)
+[![Build Status](https://api.travis-ci.org/fulcrumapp/fulcrum-js.png?branch=master)](https://travis-ci.org/fulcrumapp/fulcrum-js)&nbsp;[![npm Version](https://img.shields.io/npm/v/fulcrum-app.svg)](https://www.npmjs.com/package/fulcrum-app)
 
 A JavaScript library for the Fulcrum API.
 
-### Installation
+## Installation
 
 ```
 npm install --save fulcrum-app
 ```
 
-### Supported Resources and Methods
+## Usage
 
-| Resource            | Methods                                       |
-|---------------------|-----------------------------------------------|
-| Forms               | find, search, create, update, delete          |
-| Records             | find, search, create, update, delete, history |
-| Photos              | find, search                                  |
-| Projects            | find, search, create, update, delete          |
-| Changesets          | find, search, create, update, close           |
-| Choice Lists        | find, search, create, update, delete          |
-| Classification Sets | find, search, create, update, delete          |
-| Webhooks            | find, search, create, update, delete          |
-| Videos              | find, search                                  |
-| Memberships         | search, change_permissions                    |
-| Roles               | search                                        |
-| Child Records       | search                                        |
-| Signatures          | find, search                                  |
-| Layers              | find, search, create, update, delete          |
+There are three main exports from this module: `Client`, `getUser`, and `createAuthorization`.
 
-### Usage
+### Client
 
-Create a fulcrum client with your API token.
+API calls are made using a client. Let's assume you already have an API token and you want to make some calls to the API. If you need an API token, see the [getUser](#getuser) and [createAuthorization](#createauthorization) functions.
 
 ```javascript
-var Fulcrum = require('fulcrum-app');
-var fulcrum = new Fulcrum({
-  api_key: 'abc123'
-});
+import { Client } from 'fulcrum-app';
+// or
+// const fulcrum = require('fulcrum-app');
+// const Client = fulcrum.Client;
+
+const client = new Client('your-api-token');
+
+client.forms.all({schema: false})
+  .then((page) => {
+    console.log(`I got you ${page.objects.length} forms.`);
+  })
+  .catch((error) => {
+    console.log('Error getting your forms.', error.message);
+  });
 ```
 
-Various methods are available for each of the resources. Check the chart above for details.
+Various methods are available for each of the resources. Check the chart below for details.
+
+#### Client Resources and Methods
+
+| Resource            | Methods                                    |
+|---------------------|--------------------------------------------|
+| Forms               | find, all, create, update, delete          |
+| Records             | find, all, create, update, delete, history |
+| Projects            | find, all, create, update, delete          |
+| Changesets          | find, all, create, update, close           |
+| Choice Lists        | find, all, create, update, delete          |
+| Classification Sets | find, all, create, update, delete          |
+| Webhooks            | find, all, create, update, delete          |
+| Photos              | find, all                                  |
+| Signatures          | find, all                                  |
+| Videos              | find, all                                  |
+| Audio               | find, all                                  |
+| Memberships         | all, change                                |
+| Roles               | all                                        |
+| Child Records       | all                                        |
+| Layers              | find, all, create, update, delete          |
 
 #### find
 
-Finds a single resource. Parameters are a resource id and a callback. The callback should accept an error and resource object, representing a form, record, changeset, etc.
+Finds a single resource. The single parameter is a resource id.
+
+This method returns a Promise containing the resource.
 
 ```javascript
-var formFound = function (error, form) {
-  if (error) {
-    console.log('Error: ', error);
-    return;
-  }
-  console.log('Found a form!', form);
-};
-fulcrum.forms.find('916474a7-b995-4b36-81db-8eda97f93a73', formFound);
+client.forms.find('abc-123')
+  .then((form) => {
+    console.log('success', form);
+  })
+  .catch((error) => {
+    // There was a problem with the request. Is the API token correct?
+    console.log(error.message);
+  });
 ```
 
 Check the [Fulcrum API Docs](http://www.fulcrumapp.com/developers/api/) for an example of returned objects.
 
-#### search
+#### all
 
-Search for resources. Parameters are an options object and a callback. The options object will be converted to query string parameters and properly url encoded. The options will vary depending on the resource, but [pagination parameters](http://www.fulcrumapp.com/developers/api/introduction/#notes) are always accepted.
+Search for resources. The single parameter is an options object. The options object will be converted to query string parameters and properly url encoded. The options will vary depending on the resource, but the pagination options, `page` and `per_page`, are always accepted.
 
-The callback should accept an error and an object representing a set of resources as well as pagination information. For example, a set of records will look like:
+This method returns a Promise containing a page. The page object has 5 properties.
 
-```json
-{
-  "current_page": 1,
-  "total_pages": 1,
-  "total_count": 2,
-  "per_page": 20000,
-  "records": [
-    {
-      "status": null,
-      "version": 1,
-      "id": "c05ee229-5d91-4ac5-b3e4-00c5cc063f3f",
-      "form_id": "512342b0-2bce-4e31-9d4a-8f29e929f7ac",
-      "form_values": {
-        "b799": [
-          {
-            "photo_id": "e5e4cd83-10cb-462f-91ea-9fee48f15d33"
-          }
-        ],
-        "e659": {
-          "choice_values": [
-            "Deer Stand"
-          ],
-          "other_values": []
-        }
-      },
-      "latitude": 35.2116941,
-      "longitude": -81.6359073
-    },
-    {
-      "status": null,
-      "version": 1,
-      "id": "42ec66d0-1c4b-4fef-aeea-ac96130f86a7",
-      "form_id": "512342b0-2bce-4e31-9d4a-8f29e929f7ac",
-      "form_values": {
-        "b799": [
-          {
-            "photo_id": "71b64b8e-800a-40cd-a8ae-ae31a583171b"
-          }
-        ],
-        "e659": {
-          "choice_values": [
-            "Deer Stand"
-          ],
-          "other_values": []
-        }
-      },
-      "latitude": 35.2091085,
-      "longitude": -81.636208
-    }
-  ]
-}
-```
+|property|description|
+|-|-|
+| `objects` | An array of the resources requested |
+| `currentPage` | The current page |
+| `perPage` | The number of resources returned per page |
+| `totalPages` | The total number of pages required to return all resources |
+| `totalCount` | The total count of all resources with respect to current query parameters |
 
 ```javascript
-var recordsFound = function (error, records) {
-  if (error) {
-    console.log('Error: ', error);
-    return;
-  }
-  records.records.forEach(function(record) {
-    console.log('Location is: ', record.latitude, record.longitude);
+const options = {
+  form_id: '043d36a5-d144-4bca-b6ce-be210476e913',
+  page: 1,
+  per_page: 2
+}
+
+client.records.all(options)
+  .then((page) => {
+    console.log(
+      `Got page ${page.currentPage} of ${page.totalPages} containing ${page.objects.length} of ${page.totalCount} total resources.`
+    );
+    // Got page 1 of 5 containing 2 of 10 total resources.
+  })
+  .catch((error) => {
+    console.log(error.message);
   });
-};
-fulcrum.records.search({form_id: '916474a7-b995-4b36-81db-8eda97f93a73'}, recordsFound);
 ```
 
 #### create
 
-Create an object. Parameters are an object and a callback. The object should represent the resource you are creating. Check the [Fulcrum API Docs](http://www.fulcrumapp.com/developers/api/) for examples of resource objects.
+Create a resource. The single parameter is an object. The object should represent the resource you are creating. Check the [Fulcrum API Docs](http://developer.fulcrumapp.com/api/intro/) for examples of resource objects.
 
-The callback should accept an error and an object representing the created resource.
+This method returns a Promise containing the created resource.
 
 ```javascript
-var webhookCreated = function (error, webhook) {
-  if (error) {
-    console.log('Error: ', error);
-    return;
-  }
-  console.log('I created a webhook and its id is', webhook.webhook.id);
+const obj = {
+  name: 'My Awesome Webhook',
+  url: 'http://foo.com/fulcrum_webhook',
+  active: true
 };
-var webhook_to_create = {
-  "webhook": {
-    "name": "My First Webhook",
-    "url": "http://foo.com/fulcrum_webhook",
-    "active": true
-  }
-};
-fulcrum.webhooks.create(webhook_to_create, webhookCreated);
+
+client.webhooks.create(obj)
+  .then((webhook) => {
+    console.log('success', webhook);
+  })
+  .catch((error) => {
+    console.log(error.message);
+  });
 ```
 
 #### update
 
-Update an object. Parameters are an id, an object and a callback.
+Update an object. Parameters are a resource id and an object. The id is the unique id for the resource to be updated. The object should represent the resource you are updating.
 
-The id is the unique id for the resource to be updated.
-
-The object should represent the resource you are updating.
-
-The callback should accept an error and an object representing the updated resource.
+This method returns a promise containing the updated resource.
 
 ```javascript
-var webhookUpdated = function (error, webhook) {
-  if (error) {
-    console.log('Error: ', error);
-    return;
-  }
-  console.log("My webhook's new name is", webhook.webhook.name);
+const obj = {
+  name: 'My Awesome Webhook',
+  url: 'http://foo.com/fulcrum_webhook',
+  active: false,
+  id: '139c8c99-d4e4-4bf0-a0c5-ed6b6e2e5605'
 };
-var webhook_to_update = {
-  "webhook": {
-    "name": "The Best Webhook",
-    "url": "http://foo.com/fulcrum_webhook",
-    "active": false
-  }
-};
-fulcrum.webhooks.update('bc53d884-a7a8-4697-9e35-e26192be724e', webhook_to_update, webhookUpdated);
+
+client.webhooks.update(obj.id, obj)
+  .then((webhook) => {
+    console.log('success', webhook);
+  })
+  .catch((error) => {
+    console.log(error.message);
+  });
 ```
 
 #### delete
 
-Delete an object. Parameters are an id and a callback.
+Delete a resource. The single parameter is a resource id.
 
-The id is the unique id for the resource to be deleted.
-
-The callback should accept an error. If there is no error the resource was deleted.
+This method returns a promise containing the resource that was deleted.
 
 ```javascript
-var recordDeleted = function (error) {
-  if (error) {
-    console.log('There was a problem deleting the record.');
-  } else {
-    console.log('The record was deleted.');
-  }
-};
-fulcrum.records.delete('916474a7-b995-4b36-81db-8eda97f93a73', recordDeleted);
+client.forms.delete('6fc7d1dc-62a4-4c81-a857-6b9660f18b55')
+  .then((form) => {
+    console.log('success', form);
+  })
+  .catch((error) => {
+    console.log(error.message);
+  });
+```
+
+### getUser
+
+This is a helper function to get user data including organizations you belong to. Use this in conjunction with [createAuthorization](#createauthorization) to create an API token.
+
+```javascript
+import { getUser } from 'fulcrum-app';
+// or
+// const fulcrum = require('fulcrum-app');
+// const getUser = fulcrum.getUser;
+
+getUser('name@email.com', 'password')
+  .then((user) => {
+    console.log(user);
+    // user.contexts is an array of the organizations you belong to. Use These
+    // ids with createAuthorization to create API tokens.
+  })
+  .catch((error) => {
+    console.log(error.message);
+  });
+```
+
+### createAuthorization
+
+This is a helper function to create [authorizations](http://developer.fulcrumapp.com/endpoints/authorizations/) (API tokens) associated with a user and organization (a membership).
+
+```javascript
+import { createAuthorization } from 'fulcrum-app';
+// or
+// const fulcrum = require('fulcrum-app');
+// const createAuthorization = fulcrum.createAuthorization;
+
+const email = 'name@email.com';
+const password = 'password';
+const organizationId = 'organization-id-from-getUser';
+const note = 'My awesome app version 4.20';
+const timeout = 60 * 60 * 24;
+
+createAuthorization(email, password, organizationId, note, timeout)
+  .then((authorization) => {
+    console.log(authorization);
+    // authorization.token is your API token to use with the rest of the API.
+  })
+  .catch((error) => {
+    console.log(error.message);
+  });
 ```
 
 ### Development
@@ -207,7 +222,7 @@ fulcrum.records.delete('916474a7-b995-4b36-81db-8eda97f93a73', recordDeleted);
 Install dependencies:
 
 ```
-cd fulcrum-node
+cd fulcrum-js
 npm install
 ```
 
