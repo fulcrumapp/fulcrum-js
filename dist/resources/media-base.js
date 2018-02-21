@@ -96,9 +96,18 @@ var MediaResource = function (_Resource) {
 
               case 3:
                 resp = _context.sent;
+
+                if (!resp.error) {
+                  _context.next = 6;
+                  break;
+                }
+
+                throw resp.error;
+
+              case 6:
                 return _context.abrupt('return', resp.body[this.resourceName]);
 
-              case 5:
+              case 7:
               case 'end':
                 return _context.stop();
             }
