@@ -27,6 +27,11 @@ export default class MediaResource extends Resource {
   async create(file, attributes) {
     const options = this.optionsForUpload(file, attributes);
     const resp = await this.client.api.post(this.createAction, options);
+
+    if (resp.error) {
+      throw resp.error;
+    }
+
     return resp.body[this.resourceName];
   }
 
