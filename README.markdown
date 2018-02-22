@@ -10,6 +10,10 @@ A JavaScript library for the Fulcrum API.
 npm install --save fulcrum-app
 ```
 
+## Version 2 Changes
+
+Version 1 of this library used callbacks for API responses. Version 2 uses [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). Promises offer some advantages over the callback pattern used previously. You can read more about them in the [Promises](#promises) section.
+
 ## Usage
 
 There are three main exports from this module: `Client`, `getUser`, and `createAuthorization`.
@@ -217,7 +221,93 @@ createAuthorization(email, password, organizationId, note, timeout)
   });
 ```
 
-### Development
+## Promises
+
+Using Promises, we have more options for flow control and handling errors. In some JavaScript environments we can use the [await operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await).
+
+> The await expression causes async function execution to pause until  a Promise is fulfilled, that is resolved or rejected, and to resume execution of the async function after fulfillment. When resumed, the value of the await expression is that of the fulfilled Promise.
+
+In other words, they let us write asynchronous code, where we usually have nested callbacks, in a more sequential pattern. Below is an example of how we would have made two sequential API calls with version 1.
+
+```javascript
+function getFormAndRecord(callback) {
+  client.forms.find('abc-123', (error, form) => {
+    if (error) {
+      callback(error);
+      return
+    }
+
+    client.records.find('def-456', (error, record) => {
+      if (error) {
+        callback(error);
+      } else {
+        callback(null, [form, record]);
+      }
+    })
+  });
+}
+
+getFormAndRecord((error, results) => {
+  if (error) {
+    return console.log(error);
+  }
+
+  return console.log(results);
+});
+```
+
+And here's an example of using the await keyword to pause execution until the promises (API calls) are resolved.
+
+```javascript
+async function getFormAndRecord() {
+  try {
+    const form = await client.forms.find('abc-123');
+    const record = await client.records.find('def-456');
+    console.log(form, record);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+getFormAndRecord();
+```
+
+If either the `client.forms.find` or `client.records.find` methods fail, they will be picked up in the `catch`, allowing us to log errors from a single place and have a much cleaner way of making multiple API calls.
+
+Below is a real world example where we 1) create a changeset, 2) delete a record associated with that changeset, 3) close the changeset. This is similar to how the mobile apps work where all adds, updates, and deletes are associated with changesets.
+
+```javascript
+async function deleteRecord(formId, recordId) {
+  try {
+    // metadata is an arbitrary object describing the
+    // app/environment that the changeset was performed in
+    const changesetObj = {
+      form_id: formId,
+      metadata: {
+        app: 'fulcrum-js',
+        version: 99.78
+      }
+    };
+
+    console.log('Creating changeset ...');
+    const changeset = await client.changesets.create(changesetObj);
+
+    console.log('Deleting record ...');
+    await client.records.delete(recordId, changeset.id);
+
+    console.log('Closing changeset ...');
+    await client.changesets.close(changeset.id);
+
+    console.log(`Deleted record ${recordId} in changeset ${changeset.id}.`);
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+deleteRecord('abc-123', 'def-456');
+```
+
+## Development
 
 Install dependencies:
 
@@ -226,7 +316,7 @@ cd fulcrum-js
 npm install
 ```
 
-### Tests
+## Tests
 
 ```
 npm test
