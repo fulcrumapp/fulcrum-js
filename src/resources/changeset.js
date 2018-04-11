@@ -14,13 +14,9 @@ export default class Changeset extends Resource {
   }
 
   async close(id) {
-    const resp = await this.client.api.put(this.memberActionPath(id, 'close'));
+    const body = await this.client.api.put(this.memberActionPath(id, 'close'));
 
-    if (resp.err) {
-      throw resp.err;
-    }
-
-    return resp.body[this.resourceName];
+    return body[this.resourceName];
   }
 }
 

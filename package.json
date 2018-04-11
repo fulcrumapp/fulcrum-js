@@ -13,7 +13,10 @@
   "author": "Jason Sanford (jasonsanford@gmail.com)",
   "license": "BSD-2-Clause",
   "eslintConfig": {
-    "extends": "fulcrum"
+    "extends": "fulcrum",
+    "globals": {
+      "fetch": true
+    }
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

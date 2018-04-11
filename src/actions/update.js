@@ -6,12 +6,8 @@ export default class Update extends Mixin {
       body: this.attributesForObject(object)
     };
 
-    const resp = await this.client.api.put(this.memberPath(id), options);
+    const body = await this.client.api.put(this.memberPath(id), options);
 
-    if (resp.err) {
-      throw resp.err;
-    }
-
-    return resp.body[this.resourceName];
+    return body[this.resourceName];
   }
 }

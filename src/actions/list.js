@@ -10,14 +10,10 @@ export default class List extends Mixin {
 
   async all(params) {
     const options = {
-      body: params || this.defaultListParams
+      qs: params || this.defaultListParams
     };
 
-    const resp = await this.client.api.get(this.collectionPath(), options);
-    if (resp.err) {
-      throw resp.err;
-    }
-
-    return new Page(resp.body, this.resourcesName);
+    const body = await this.client.api.get(this.collectionPath(), options);
+    return new Page(body, this.resourcesName);
   }
 }

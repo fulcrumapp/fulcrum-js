@@ -1,4 +1,5 @@
 import Frisbee from 'frisbee';
+import Fetcher from './fetcher';
 
 import Form from './resources/form';
 import Record from './resources/record';
@@ -38,7 +39,7 @@ export default class Client {
     tokenOptions.headers['X-ApiToken'] = token;
     const noTokenOptions = Object.assign({}, options);
 
-    this.api = new Frisbee(tokenOptions);
+    this.api = new Fetcher(tokenOptions);
     this.noTokenApi = new Frisbee(noTokenOptions);
   }
 

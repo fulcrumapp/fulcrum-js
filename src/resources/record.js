@@ -14,7 +14,7 @@ export default class Record extends Resource {
     return 'records';
   }
 
-  async delete(id, changesetID) {
+  delete(id, changesetID) {
     const options = {};
 
     if (changesetID != null) {
@@ -25,11 +25,7 @@ export default class Record extends Resource {
       };
     }
 
-    const resp = await this.client.api.del(this.memberPath(id), options);
-
-    if (resp.err) {
-      throw resp.err;
-    }
+    return this.client.api.del(this.memberPath(id), options);
   }
 }
 

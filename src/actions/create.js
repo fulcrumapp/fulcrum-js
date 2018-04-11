@@ -10,12 +10,8 @@ export default class Create extends Mixin {
       body: this.attributesForObject(object)
     };
 
-    const resp = await this.client.api.post(this.createAction, options);
+    const body = await this.client.api.post(this.createAction, options);
 
-    if (resp.err) {
-      throw resp.err;
-    }
-
-    return resp.body[this.resourceName];
+    return body[this.resourceName];
   }
 }
