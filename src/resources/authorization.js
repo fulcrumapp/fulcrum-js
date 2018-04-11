@@ -1,3 +1,5 @@
+import base64 from 'base-64';
+
 import List from '../actions/list';
 import Find from '../actions/find';
 import Update from '../actions/update';
@@ -18,19 +20,20 @@ export default class Authorization extends Resource {
   }
 
   async create(object, email, password) {
+    const encoded = base64.encode(`${email}:${password}`);
     const options = {
-      body: this.attributesForObject(object)
+      body: this.attributesForObject(object),
+      headers: {
+        'Authorization': `Basic ${encoded}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
     };
 
-    const resp = await this.client.noTokenApi
-      .auth(email, password)
+    const body = await this.client.noTokenApi
       .post(this.createAction, options);
 
-    if (resp.err) {
-      throw resp.err;
-    }
-
-    return resp.body[this.resourceName];
+    return body[this.resourceName];
   }
 }
 

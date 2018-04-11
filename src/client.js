@@ -1,4 +1,3 @@
-import Frisbee from 'frisbee';
 import Fetcher from './fetcher';
 
 import Form from './resources/form';
@@ -40,7 +39,7 @@ export default class Client {
     const noTokenOptions = Object.assign({}, options);
 
     this.api = new Fetcher(tokenOptions);
-    this.noTokenApi = new Frisbee(noTokenOptions);
+    this.noTokenApi = new Fetcher(noTokenOptions);
   }
 
   urlFromPath(path, base) {

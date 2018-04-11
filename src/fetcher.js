@@ -37,6 +37,10 @@ export default class Fetcher {
     const options = Object.assign({}, this.options, optionObjects);
 
     delete options.baseURI;
+
+    // The fetch library will automatically add the multipart/form-data
+    // Content-Type including the generated boundaries.
+    // https://github.com/github/fetch/issues/505#issuecomment-293064470
     delete options.headers['Content-Type'];
 
     return options;

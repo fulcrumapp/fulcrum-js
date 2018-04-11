@@ -36,8 +36,8 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "^6.26.0",
+    "base-64": "^0.1.0",
     "form-data": "^2.3.1",
-    "frisbee": "^1.6.4",
     "mixmatch": "0.0.2",
     "portable-fetch": "^3.0.0",
     "uuid": "^3.1.0"

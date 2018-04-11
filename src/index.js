@@ -1,26 +1,34 @@
-import Frisbee from 'frisbee';
+import base64 from 'base-64';
+
+import Fetcher from './fetcher';
 import Client from './client';
 import Page from './page';
 
 export { Client };
 export { Page };
 
-const api = new Frisbee({
-  baseURI: 'https://api.fulcrumapp.com/api/v2',
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  }
+const api = new Fetcher({
+  baseURI: 'https://api.fulcrumapp.com/api/v2'
 });
 
+function generateAuthOptions(email, password) {
+  const encoded = base64.encode(`${email}:${password}`);
+
+  return {
+    headers: {
+      'Authorization': `Basic ${encoded}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  };
+}
+
 export async function getUser(email, password) {
-  const resp = await api.auth(email, password).get('/users');
+  const options = generateAuthOptions(email, password);
 
-  if (resp.err) {
-    throw resp.err;
-  }
+  const body = await api.get('/users', options);
 
-  const user = resp.body.user;
+  const { user } = body;
 
   user.contexts = user.contexts.map((context) => {
     // To avoid confusion remove the old API tokens. These will
@@ -43,13 +51,11 @@ export async function createAuthorization(email, password, organizationId, note,
     }
   };
 
-  const resp = await api.auth(email, password).post('/authorizations', {
-    body: authorizationObj
-  });
+  const options = generateAuthOptions(email, password);
 
-  if (resp.err) {
-    throw resp.err;
-  }
+  options.body = authorizationObj;
 
-  return resp.body.authorization;
+  const body = await api.post('/authorizations', options);
+
+  return body.authorization;
 }
