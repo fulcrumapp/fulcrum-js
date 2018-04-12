@@ -26,13 +26,9 @@ export default class Membership extends Resource {
       }
     };
 
-    const resp = await this.client.api.post(this.actionPath('change_permissions'), options);
+    const body = await this.client.api.post(this.actionPath('change_permissions'), options);
 
-    if (resp.err) {
-      throw resp.err;
-    }
-
-    return resp.body[this.resourcesName];
+    return body[this.resourcesName];
   }
 }
 

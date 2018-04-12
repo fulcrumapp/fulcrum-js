@@ -20,12 +20,9 @@ export default class Track extends Mixin {
   }
 
   async track(id) {
-    const resp = await this.client.api.get(this.trackPath(id, 'json'));
+    const body = await this.client.api.get(this.trackPath(id, 'json'));
 
-    if (resp.err) {
-      throw resp.err;
-    }
-    return resp.body.tracks;
+    return body.tracks;
   }
 
   trackPath(id, format) {
