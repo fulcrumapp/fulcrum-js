@@ -92,7 +92,7 @@ var Track = function (_Mixin) {
     key: 'track',
     value: function () {
       var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(id) {
-        var resp;
+        var body;
         return _regenerator2.default.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -101,19 +101,10 @@ var Track = function (_Mixin) {
                 return this.client.api.get(this.trackPath(id, 'json'));
 
               case 2:
-                resp = _context2.sent;
+                body = _context2.sent;
+                return _context2.abrupt('return', body.tracks);
 
-                if (!resp.err) {
-                  _context2.next = 5;
-                  break;
-                }
-
-                throw resp.err;
-
-              case 5:
-                return _context2.abrupt('return', resp.body.tracks);
-
-              case 6:
+              case 4:
               case 'end':
                 return _context2.stop();
             }

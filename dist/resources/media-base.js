@@ -75,39 +75,31 @@ var MediaResource = function (_Resource) {
       formData.append(this.resourceName + '[file]', file);
 
       return {
-        body: formData,
-        headers: {
-          'Content-Type': null
-        }
+        body: formData
       };
     }
   }, {
     key: 'create',
     value: function () {
       var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(file, attributes) {
-        var options, resp;
+        var options, body;
         return _regenerator2.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 options = this.optionsForUpload(file, attributes);
-                _context.next = 3;
-                return this.client.api.post(this.createAction, options);
 
-              case 3:
-                resp = _context.sent;
 
-                if (!resp.error) {
-                  _context.next = 6;
-                  break;
-                }
+                Object.assign(options, this.client.api.options);
 
-                throw resp.error;
+                _context.next = 4;
+                return this.client.api.postMedia(this.createAction, options);
+
+              case 4:
+                body = _context.sent;
+                return _context.abrupt('return', body[this.resourceName]);
 
               case 6:
-                return _context.abrupt('return', resp.body[this.resourceName]);
-
-              case 7:
               case 'end':
                 return _context.stop();
             }

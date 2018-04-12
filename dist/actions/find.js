@@ -46,7 +46,7 @@ var Find = function (_Mixin) {
     key: 'find',
     value: function () {
       var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(id) {
-        var resp;
+        var body;
         return _regenerator2.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -55,19 +55,10 @@ var Find = function (_Mixin) {
                 return this.client.api.get(this.memberPath(id));
 
               case 2:
-                resp = _context.sent;
+                body = _context.sent;
+                return _context.abrupt('return', body[this.resourceName]);
 
-                if (!resp.err) {
-                  _context.next = 5;
-                  break;
-                }
-
-                throw resp.err;
-
-              case 5:
-                return _context.abrupt('return', resp.body[this.resourceName]);
-
-              case 6:
+              case 4:
               case 'end':
                 return _context.stop();
             }

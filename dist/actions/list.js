@@ -52,31 +52,22 @@ var List = function (_Mixin) {
     key: 'all',
     value: function () {
       var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(params) {
-        var options, resp;
+        var options, body;
         return _regenerator2.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 options = {
-                  body: params || this.defaultListParams
+                  qs: params || this.defaultListParams
                 };
                 _context.next = 3;
                 return this.client.api.get(this.collectionPath(), options);
 
               case 3:
-                resp = _context.sent;
+                body = _context.sent;
+                return _context.abrupt('return', new _page2.default(body, this.resourcesName));
 
-                if (!resp.err) {
-                  _context.next = 6;
-                  break;
-                }
-
-                throw resp.err;
-
-              case 6:
-                return _context.abrupt('return', new _page2.default(resp.body, this.resourcesName));
-
-              case 7:
+              case 5:
               case 'end':
                 return _context.stop();
             }

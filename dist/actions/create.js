@@ -46,7 +46,7 @@ var Create = function (_Mixin) {
     key: 'create',
     value: function () {
       var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(object) {
-        var options, resp;
+        var options, body;
         return _regenerator2.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -58,19 +58,10 @@ var Create = function (_Mixin) {
                 return this.client.api.post(this.createAction, options);
 
               case 3:
-                resp = _context.sent;
+                body = _context.sent;
+                return _context.abrupt('return', body[this.resourceName]);
 
-                if (!resp.err) {
-                  _context.next = 6;
-                  break;
-                }
-
-                throw resp.err;
-
-              case 6:
-                return _context.abrupt('return', resp.body[this.resourceName]);
-
-              case 7:
+              case 5:
               case 'end':
                 return _context.stop();
             }

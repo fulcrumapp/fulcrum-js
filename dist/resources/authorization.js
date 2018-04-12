@@ -28,6 +28,10 @@ var _inherits2 = require('babel-runtime/helpers/inherits');
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
+var _base = require('base-64');
+
+var _base2 = _interopRequireDefault(_base);
+
 var _list = require('../actions/list');
 
 var _list2 = _interopRequireDefault(_list);
@@ -44,9 +48,9 @@ var _delete = require('../actions/delete');
 
 var _delete2 = _interopRequireDefault(_delete);
 
-var _base = require('./base');
+var _base3 = require('./base');
 
-var _base2 = _interopRequireDefault(_base);
+var _base4 = _interopRequireDefault(_base3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -62,31 +66,28 @@ var Authorization = function (_Resource) {
     key: 'create',
     value: function () {
       var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(object, email, password) {
-        var options, resp;
+        var encoded, options, body;
         return _regenerator2.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                encoded = _base2.default.encode(email + ':' + password);
                 options = {
-                  body: this.attributesForObject(object)
+                  body: this.attributesForObject(object),
+                  headers: {
+                    'Authorization': 'Basic ' + encoded,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  }
                 };
-                _context.next = 3;
-                return this.client.noTokenApi.auth(email, password).post(this.createAction, options);
+                _context.next = 4;
+                return this.client.noTokenApi.post(this.createAction, options);
 
-              case 3:
-                resp = _context.sent;
-
-                if (!resp.err) {
-                  _context.next = 6;
-                  break;
-                }
-
-                throw resp.err;
+              case 4:
+                body = _context.sent;
+                return _context.abrupt('return', body[this.resourceName]);
 
               case 6:
-                return _context.abrupt('return', resp.body[this.resourceName]);
-
-              case 7:
               case 'end':
                 return _context.stop();
             }
@@ -117,7 +118,7 @@ var Authorization = function (_Resource) {
     }
   }]);
   return Authorization;
-}(_base2.default);
+}(_base4.default);
 
 exports.default = Authorization;
 

@@ -54,7 +54,7 @@ var Membership = function (_Resource) {
     key: 'change',
     value: function () {
       var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(resourceType, id, action, userIds) {
-        var change, options, resp;
+        var change, options, body;
         return _regenerator2.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -77,19 +77,10 @@ var Membership = function (_Resource) {
                 return this.client.api.post(this.actionPath('change_permissions'), options);
 
               case 6:
-                resp = _context.sent;
+                body = _context.sent;
+                return _context.abrupt('return', body[this.resourcesName]);
 
-                if (!resp.err) {
-                  _context.next = 9;
-                  break;
-                }
-
-                throw resp.err;
-
-              case 9:
-                return _context.abrupt('return', resp.body[this.resourcesName]);
-
-              case 10:
+              case 8:
               case 'end':
                 return _context.stop();
             }

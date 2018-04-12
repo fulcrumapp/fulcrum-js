@@ -15,26 +15,18 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var getUser = exports.getUser = function () {
   var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(email, password) {
-    var resp, user;
+    var options, body, user;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.next = 2;
-            return api.auth(email, password).get('/users');
+            options = generateAuthOptions(email, password);
+            _context.next = 3;
+            return api.get('/users', options);
 
-          case 2:
-            resp = _context.sent;
-
-            if (!resp.err) {
-              _context.next = 5;
-              break;
-            }
-
-            throw resp.err;
-
-          case 5:
-            user = resp.body.user;
+          case 3:
+            body = _context.sent;
+            user = body.user;
 
 
             user.contexts = user.contexts.map(function (context) {
@@ -48,7 +40,7 @@ var getUser = exports.getUser = function () {
 
             return _context.abrupt('return', user);
 
-          case 8:
+          case 7:
           case 'end':
             return _context.stop();
         }
@@ -63,7 +55,7 @@ var getUser = exports.getUser = function () {
 
 var createAuthorization = exports.createAuthorization = function () {
   var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(email, password, organizationId, note, timeout) {
-    var authorizationObj, resp;
+    var authorizationObj, options, body;
     return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -75,23 +67,17 @@ var createAuthorization = exports.createAuthorization = function () {
                 timeout: timeout
               }
             };
-            _context2.next = 3;
-            return api.auth(email, password).post('/authorizations', {
-              body: authorizationObj
-            });
+            options = generateAuthOptions(email, password);
 
-          case 3:
-            resp = _context2.sent;
 
-            if (!resp.err) {
-              _context2.next = 6;
-              break;
-            }
+            options.body = authorizationObj;
 
-            throw resp.err;
+            _context2.next = 5;
+            return api.post('/authorizations', options);
 
-          case 6:
-            return _context2.abrupt('return', resp.body.authorization);
+          case 5:
+            body = _context2.sent;
+            return _context2.abrupt('return', body.authorization);
 
           case 7:
           case 'end':
@@ -106,9 +92,13 @@ var createAuthorization = exports.createAuthorization = function () {
   };
 }();
 
-var _frisbee = require('frisbee');
+var _base = require('base-64');
 
-var _frisbee2 = _interopRequireDefault(_frisbee);
+var _base2 = _interopRequireDefault(_base);
+
+var _fetcher = require('./fetcher');
+
+var _fetcher2 = _interopRequireDefault(_fetcher);
 
 var _client = require('./client');
 
@@ -124,11 +114,19 @@ exports.Client = _client2.default;
 exports.Page = _page2.default;
 
 
-var api = new _frisbee2.default({
-  baseURI: 'https://api.fulcrumapp.com/api/v2',
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  }
+var api = new _fetcher2.default({
+  baseURI: 'https://api.fulcrumapp.com/api/v2'
 });
+
+function generateAuthOptions(email, password) {
+  var encoded = _base2.default.encode(email + ':' + password);
+
+  return {
+    headers: {
+      'Authorization': 'Basic ' + encoded,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  };
+}
 //# sourceMappingURL=index.js.map

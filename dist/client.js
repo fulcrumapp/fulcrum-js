@@ -12,9 +12,9 @@ var _createClass2 = require('babel-runtime/helpers/createClass');
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _frisbee = require('frisbee');
+var _fetcher = require('./fetcher');
 
-var _frisbee2 = _interopRequireDefault(_frisbee);
+var _fetcher2 = _interopRequireDefault(_fetcher);
 
 var _form = require('./resources/form');
 
@@ -99,8 +99,8 @@ var Client = function () {
     tokenOptions.headers['X-ApiToken'] = token;
     var noTokenOptions = Object.assign({}, options);
 
-    this.api = new _frisbee2.default(tokenOptions);
-    this.noTokenApi = new _frisbee2.default(noTokenOptions);
+    this.api = new _fetcher2.default(tokenOptions);
+    this.noTokenApi = new _fetcher2.default(noTokenOptions);
   }
 
   (0, _createClass3.default)(Client, [{
