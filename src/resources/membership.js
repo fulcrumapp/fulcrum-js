@@ -11,14 +11,14 @@ export default class Membership extends Resource {
     return 'memberships';
   }
 
-  async change(resourceType, id, action, userIds) {
+  async change(resourceType, id, action, membershipIds) {
     const change = {
       type: `${resourceType}_members`
     };
 
     change[`${resourceType}_id`] = id;
 
-    change[action] = userIds;
+    change[action] = membershipIds;
 
     const options = {
       body: {

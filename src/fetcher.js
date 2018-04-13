@@ -19,29 +19,35 @@ function errorMessageForStatus(status) {
 export default class Fetcher {
   constructor(options) {
     this.options = options;
+
+    this.headers = options.headers;
   }
 
-  _processOptions(optionObjects) {
-    const options = Object.assign({}, this.options, optionObjects);
+  _processOptions(opts) {
+    const options = {
+      ...opts,
+      headers: {
+        ...this.headers,
+        ...opts.headers
+      }
+    };
+
+    // remove any nil or blank headers
+    // (e.g. to automatically set Content-Type with `FormData` boundary)
+    Object.keys(options.headers).forEach(key => {
+      if (typeof options.headers[key] === 'undefined' ||
+          options.headers[key] === null ||
+          options.headers[key] === '') {
+        delete options.headers[key];
+      }
+    });
 
     delete options.baseURI;
 
-    if (options && options.hasOwnProperty('body')) {
+    if (options && options.hasOwnProperty('body') &&
+        options.hasOwnProperty('headers') && options.headers['Content-Type'] === 'application/json') {
       options.body = JSON.stringify(options.body);
     }
-
-    return options;
-  }
-
-  _processOptionsMedia(optionObjects) {
-    const options = Object.assign({}, this.options, optionObjects);
-
-    delete options.baseURI;
-
-    // The fetch library will automatically add the multipart/form-data
-    // Content-Type including the generated boundaries.
-    // https://github.com/github/fetch/issues/505#issuecomment-293064470
-    delete options.headers['Content-Type'];
 
     return options;
   }
@@ -71,14 +77,6 @@ export default class Fetcher {
     }
 
     const options = this._processOptions(Object.assign({method: 'GET'}, opts));
-
-    return this._fetch(url, options);
-  }
-
-  postMedia(path, opts) {
-    const url = this.options.baseURI + '/' + path;
-
-    const options = this._processOptionsMedia(Object.assign({method: 'POST'}, opts));
 
     return this._fetch(url, options);
   }

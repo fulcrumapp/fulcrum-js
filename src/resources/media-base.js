@@ -17,16 +17,17 @@ export default class MediaResource extends Resource {
     formData.append(`${this.resourceName}[file]`, file);
 
     return {
-      body: formData
+      body: formData,
+      headers: {
+        'Content-Type': null
+      }
     };
   }
 
   async create(file, attributes) {
     const options = this.optionsForUpload(file, attributes);
 
-    Object.assign(options, this.client.api.options);
-
-    const body = await this.client.api.postMedia(this.createAction, options);
+    const body = await this.client.api.post(this.createAction, options);
 
     return body[this.resourceName];
   }
