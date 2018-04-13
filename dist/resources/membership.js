@@ -53,7 +53,7 @@ var Membership = function (_Resource) {
   (0, _createClass3.default)(Membership, [{
     key: 'change',
     value: function () {
-      var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(resourceType, id, action, userIds) {
+      var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(resourceType, id, action, membershipIds) {
         var change, options, body;
         return _regenerator2.default.wrap(function _callee$(_context) {
           while (1) {
@@ -66,7 +66,7 @@ var Membership = function (_Resource) {
 
                 change[resourceType + '_id'] = id;
 
-                change[action] = userIds;
+                change[action] = membershipIds;
 
                 options = {
                   body: {

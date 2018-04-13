@@ -75,7 +75,10 @@ var MediaResource = function (_Resource) {
       formData.append(this.resourceName + '[file]', file);
 
       return {
-        body: formData
+        body: formData,
+        headers: {
+          'Content-Type': null
+        }
       };
     }
   }, {
@@ -88,18 +91,14 @@ var MediaResource = function (_Resource) {
             switch (_context.prev = _context.next) {
               case 0:
                 options = this.optionsForUpload(file, attributes);
+                _context.next = 3;
+                return this.client.api.post(this.createAction, options);
 
-
-                Object.assign(options, this.client.api.options);
-
-                _context.next = 4;
-                return this.client.api.postMedia(this.createAction, options);
-
-              case 4:
+              case 3:
                 body = _context.sent;
                 return _context.abrupt('return', body[this.resourceName]);
 
-              case 6:
+              case 5:
               case 'end':
                 return _context.stop();
             }

@@ -12,6 +12,10 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
+var _extends2 = require('babel-runtime/helpers/extends');
+
+var _extends3 = _interopRequireDefault(_extends2);
+
 var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
@@ -45,32 +49,30 @@ var Fetcher = function () {
     (0, _classCallCheck3.default)(this, Fetcher);
 
     this.options = options;
+
+    this.headers = options.headers;
   }
 
   (0, _createClass3.default)(Fetcher, [{
     key: '_processOptions',
-    value: function _processOptions(optionObjects) {
-      var options = Object.assign({}, this.options, optionObjects);
+    value: function _processOptions(opts) {
+      var options = (0, _extends3.default)({}, opts, {
+        headers: (0, _extends3.default)({}, this.headers, opts.headers)
+      });
+
+      // remove any nil or blank headers
+      // (e.g. to automatically set Content-Type with `FormData` boundary)
+      Object.keys(options.headers).forEach(function (key) {
+        if (typeof options.headers[key] === 'undefined' || options.headers[key] === null || options.headers[key] === '') {
+          delete options.headers[key];
+        }
+      });
 
       delete options.baseURI;
 
-      if (options && options.hasOwnProperty('body')) {
+      if (options && options.hasOwnProperty('body') && options.hasOwnProperty('headers') && options.headers['Content-Type'] === 'application/json') {
         options.body = JSON.stringify(options.body);
       }
-
-      return options;
-    }
-  }, {
-    key: '_processOptionsMedia',
-    value: function _processOptionsMedia(optionObjects) {
-      var options = Object.assign({}, this.options, optionObjects);
-
-      delete options.baseURI;
-
-      // The fetch library will automatically add the multipart/form-data
-      // Content-Type including the generated boundaries.
-      // https://github.com/github/fetch/issues/505#issuecomment-293064470
-      delete options.headers['Content-Type'];
 
       return options;
     }
@@ -135,15 +137,6 @@ var Fetcher = function () {
       }
 
       var options = this._processOptions(Object.assign({ method: 'GET' }, opts));
-
-      return this._fetch(url, options);
-    }
-  }, {
-    key: 'postMedia',
-    value: function postMedia(path, opts) {
-      var url = this.options.baseURI + '/' + path;
-
-      var options = this._processOptionsMedia(Object.assign({ method: 'POST' }, opts));
 
       return this._fetch(url, options);
     }
