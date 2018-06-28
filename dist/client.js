@@ -86,6 +86,8 @@ var Client = function () {
 
     this.baseUrl = _opts.baseUrl || BASE_URL;
 
+    this.version = VERSION;
+
     var options = {
       baseURI: this.baseUrl,
       headers: {

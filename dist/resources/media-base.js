@@ -71,8 +71,23 @@ var MediaResource = function (_Resource) {
       var attrs = attributes || {};
       var formData = new _formData2.default();
 
-      formData.append(this.resourceName + '[access_key]', attrs.access_key || _uuid2.default.v4());
-      formData.append(this.resourceName + '[file]', file);
+      var accessKey = attrs.hasOwnProperty('accessKey') ? attrs.accessKey : _uuid2.default.v4();
+
+      formData.append(this.resourceName + '[access_key]', accessKey);
+
+      var fileOptions = null;
+
+      // File names from media streams like
+      // fs.createReadStream('photo.jpg')
+      // are automatically added. When reading from buffers like
+      // fs.readFileSync('photo.jpg)
+      // the file name can't be inferred so it must be supplied like
+      // photos.create(fs.readFileSync('photo.jpg'), {fileName: 'photo.jpg'})
+      if (attrs.hasOwnProperty('fileName')) {
+        fileOptions = { filename: attrs.fileName };
+      }
+
+      formData.append(this.resourceName + '[file]', file, fileOptions);
 
       return {
         body: formData,
