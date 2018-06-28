@@ -25,6 +25,8 @@ export default class Client {
 
     this.baseUrl = _opts.baseUrl || BASE_URL;
 
+    this.version = VERSION;
+
     const options = {
       baseURI: this.baseUrl,
       headers: {

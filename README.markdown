@@ -307,6 +307,54 @@ async function deleteRecord(formId, recordId) {
 deleteRecord('abc-123', 'def-456');
 ```
 
+## Media
+
+This library supports creating all media types supported by the Fulcrum API - photos, videos, signatures, and audio. The `create` method for each of these resource type accepts a [Readable Stream](https://nodejs.org/api/stream.html) and an optional object containing the unique access key for the media.
+
+```javascript
+import fs from 'fs';
+
+const photo = fs.createReadStream('photo.jpg');
+
+client.photos.create(photo)
+  .then(created => console.log(created))
+  .catch(error => console.log(error));
+```
+
+To specifiy your own access key (unique id) for a piece of media, pass it along in an options object. Otherwise we'll create one for you using the [uuid package](https://www.npmjs.com/package/uuid).
+
+```javascript
+import fs from 'fs';
+import uuid from 'uuid';
+
+const photo = fs.createReadStream('photo.jpg');
+const key = uuid.v4();
+
+client.photos.create(photo, {accessKey: key})
+  .then(created => console.log(created))
+  .catch(error => console.log(error));
+```
+
+Since the `create` method accepts a Readable Stream we can pipe that stream directly from an http request, keeping us from downloading a file and saving it to a temporary file, then deleting it after a successful create.
+
+```javascript
+import request from 'request';
+
+client.photos.create(request('https://nodejs.org/static/legacy/images/logo.png'))
+  .then(created => console.log(created))
+  .catch(error => console.log(error));
+```
+
+Sometimes you might not have access to a media stream, but will have a [Buffer](https://nodejs.org/api/buffer.html) of the entire resource. The library won't be able to infer the file name so you'll need to supply a `fileName` option.
+
+```javascript
+const photo = fs.readFileSync('photo.jpg');
+
+client.photos.create(photo, {fileName: 'photo.jpg'})
+  .then(created => console.log(created))
+  .catch(error => console.log(error));
+```
+
 ## Development
 
 Install dependencies:

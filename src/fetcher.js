@@ -61,6 +61,7 @@ export default class Fetcher {
     }
 
     const contentType = resp.headers.get('Content-Type');
+
     if (contentType && contentType.split(';')[0] === 'application/json') {
       return resp.json();
     }
