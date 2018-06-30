@@ -58,6 +58,11 @@ var Audio = function (_MediaResource) {
     get: function get() {
       return 'audio/upload';
     }
+  }, {
+    key: 'versions',
+    get: function get() {
+      return ['original'];
+    }
   }]);
   return Audio;
 }(_mediaBase2.default);

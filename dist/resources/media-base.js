@@ -128,9 +128,10 @@ var MediaResource = function (_Resource) {
       return create;
     }()
   }, {
-    key: 'streamVersion',
+    key: 'media',
     value: function () {
-      var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(accessKey, version) {
+      var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(accessKey) {
+        var version = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'original';
         var media;
         return _regenerator2.default.wrap(function _callee2$(_context2) {
           while (1) {
@@ -141,11 +142,20 @@ var MediaResource = function (_Resource) {
 
               case 2:
                 media = _context2.sent;
+
+                if (this.versions.includes(version)) {
+                  _context2.next = 5;
+                  break;
+                }
+
+                throw new Error('Version must be one of ' + this.versions.join(', ') + '.');
+
+              case 5:
                 return _context2.abrupt('return', fetch(media[version]).then(function (resp) {
                   return resp.body;
                 }));
 
-              case 4:
+              case 6:
               case 'end':
                 return _context2.stop();
             }
@@ -153,17 +163,12 @@ var MediaResource = function (_Resource) {
         }, _callee2, this);
       }));
 
-      function streamVersion(_x3, _x4) {
+      function media(_x3) {
         return _ref2.apply(this, arguments);
       }
 
-      return streamVersion;
+      return media;
     }()
-  }, {
-    key: 'streamOriginal',
-    value: function streamOriginal(accessKey, callback) {
-      return this.streamVersion(accessKey, 'original');
-    }
   }]);
   return MediaResource;
 }(_base2.default);

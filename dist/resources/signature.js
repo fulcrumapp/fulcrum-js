@@ -20,56 +20,44 @@ var _inherits2 = require('babel-runtime/helpers/inherits');
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _track = require('../actions/track');
-
-var _track2 = _interopRequireDefault(_track);
-
 var _mediaBase = require('./media-base');
 
 var _mediaBase2 = _interopRequireDefault(_mediaBase);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Video = function (_MediaResource) {
-  (0, _inherits3.default)(Video, _MediaResource);
+var Signature = function (_MediaResource) {
+  (0, _inherits3.default)(Signature, _MediaResource);
 
-  function Video() {
-    (0, _classCallCheck3.default)(this, Video);
-    return (0, _possibleConstructorReturn3.default)(this, (Video.__proto__ || Object.getPrototypeOf(Video)).apply(this, arguments));
+  function Signature() {
+    (0, _classCallCheck3.default)(this, Signature);
+    return (0, _possibleConstructorReturn3.default)(this, (Signature.__proto__ || Object.getPrototypeOf(Signature)).apply(this, arguments));
   }
 
-  (0, _createClass3.default)(Video, [{
+  (0, _createClass3.default)(Signature, [{
     key: 'defaultContentType',
     get: function get() {
-      return 'video/mp4';
+      return 'image/png';
     }
   }, {
     key: 'resourceName',
     get: function get() {
-      return 'video';
+      return 'signature';
     }
   }, {
     key: 'resourcesName',
     get: function get() {
-      return 'videos';
-    }
-  }, {
-    key: 'createAction',
-    get: function get() {
-      return 'videos/upload';
+      return 'signatures';
     }
   }, {
     key: 'versions',
     get: function get() {
-      return ['original', 'small', 'medium'];
+      return ['original', 'thumbnail', 'large'];
     }
   }]);
-  return Video;
+  return Signature;
 }(_mediaBase2.default);
 
-exports.default = Video;
-
-
-_track2.default.includeInto(Video);
+exports.default = Signature;
 module.exports = exports['default'];
-//# sourceMappingURL=video.js.map
+//# sourceMappingURL=signature.js.map

@@ -35,26 +35,6 @@ var Photo = function (_MediaResource) {
   }
 
   (0, _createClass3.default)(Photo, [{
-    key: 'large',
-    value: function large(id) {
-      return this.streamVersion(id, 'large');
-    }
-  }, {
-    key: 'largeURL',
-    value: function largeURL(id) {
-      return this.client.url(this.memberActionPath(id, 'large', 'jpg'));
-    }
-  }, {
-    key: 'thumbnail',
-    value: function thumbnail(id) {
-      return this.streamVersion(id, 'thumbnail');
-    }
-  }, {
-    key: 'thumbnailURL',
-    value: function thumbnailURL(id) {
-      return this.client.url(this.memberActionPath(id, 'thumbnail', 'jpg'));
-    }
-  }, {
     key: 'defaultContentType',
     get: function get() {
       return 'image/jpeg';
@@ -68,6 +48,11 @@ var Photo = function (_MediaResource) {
     key: 'resourcesName',
     get: function get() {
       return 'photos';
+    }
+  }, {
+    key: 'versions',
+    get: function get() {
+      return ['original', 'thumbnail', 'large'];
     }
   }]);
   return Photo;
