@@ -1,16 +1,16 @@
 import MediaResource from './media-base';
 
-export default class Photo extends MediaResource {
+export default class Signature extends MediaResource {
   get defaultContentType() {
-    return 'image/jpeg';
+    return 'image/png';
   }
 
   get resourceName() {
-    return 'photo';
+    return 'signature';
   }
 
   get resourcesName() {
-    return 'photos';
+    return 'signatures';
   }
 
   get versions() {

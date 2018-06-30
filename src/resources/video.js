@@ -17,6 +17,10 @@ export default class Video extends MediaResource {
   get createAction() {
     return 'videos/upload';
   }
+
+  get versions() {
+    return [ 'original', 'small', 'medium' ];
+  }
 }
 
 Track.includeInto(Video);

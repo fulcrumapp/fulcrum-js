@@ -355,6 +355,35 @@ client.photos.create(photo, {fileName: 'photo.jpg'})
   .catch(error => console.log(error));
 ```
 
+Use the `media` method to get photos, signatures, audio, and video in multiple sizes. The parameters passed to this method are `id` (also referred to as access key), and size. The default size is `original`. The sizes available for each media type are:
+
+| Resource            | Sizes                                |
+|---------------------|--------------------------------------|
+| Photos              | 'original', 'thumbnail', and 'large' |
+| Signatures          | 'original', 'thumbnail', and 'large' |
+| Videos              | 'original', 'small', and 'medium'    |
+| Audio               | 'original'                           |
+
+Get the original photo size.
+
+```javascript
+const writeStream = fs.createWriteStream('original.jpg');
+
+client.photos.media('4352ac45-8527-43ac-819f-0bc735119767')
+  .then(photo => photo.pipe(writeStream))
+  .catch(error => console.log(error));
+```
+
+Get the small version of a video.
+
+```javascript
+const writeStream = fs.createWriteStream('vid.mp4');
+
+client.videos.media('5b9b6c9c-2a79-4f69-9539-9c0cb958f0a0')
+  .then(video => video.pipe(writeStream))
+  .catch(error => console.log(error));
+```
+
 ## Development
 
 Install dependencies:

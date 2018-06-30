@@ -17,6 +17,10 @@ export default class Audio extends MediaResource {
   get createAction() {
     return 'audio/upload';
   }
+
+  get versions() {
+    return [ 'original' ];
+  }
 }
 
 Track.includeInto(Audio);

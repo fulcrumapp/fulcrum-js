@@ -47,14 +47,15 @@ export default class MediaResource extends Resource {
     return body[this.resourceName];
   }
 
-  async streamVersion(accessKey, version) {
+  async media(accessKey, version = 'original') {
     const media = await this.find(accessKey);
+
+    if (!this.versions.includes(version)) {
+      throw new Error(`Version must be one of ${this.versions.join(', ')}.`);
+    }
+
     return fetch(media[version])
       .then(resp => resp.body);
-  }
-
-  streamOriginal(accessKey, callback) {
-    return this.streamVersion(accessKey, 'original');
   }
 }
 
