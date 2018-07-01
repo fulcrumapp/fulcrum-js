@@ -52,10 +52,10 @@ Various methods are available for each of the resources. Check the chart below f
 | Choice Lists        | find, all, create, update, delete          |
 | Classification Sets | find, all, create, update, delete          |
 | Webhooks            | find, all, create, update, delete          |
-| Photos              | find, all                                  |
-| Signatures          | find, all                                  |
-| Videos              | find, all                                  |
-| Audio               | find, all                                  |
+| Photos              | find, all, media                           |
+| Signatures          | find, all, media                           |
+| Videos              | find, all, media                           |
+| Audio               | find, all, media                           |
 | Memberships         | all, change                                |
 | Roles               | all                                        |
 | Child Records       | all                                        |
