@@ -1,5 +1,5 @@
-var Fulcrum = require('../');
+import { Client } from '../dist';
 
-var fulcrum = new Fulcrum({api_key: 'whatever'});
+const client = new Client('fake');
 
-module.exports = fulcrum;
+export default client;
