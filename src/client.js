@@ -153,4 +153,8 @@ export default class Client {
 
     return this._webhooks;
   }
+
+  registerAuthenticationErrorHandler(func) {
+    this.api.registerAuthenticationErrorHandler(func);
+  }
 }

@@ -57,6 +57,11 @@ export default class Fetcher {
 
     if (!resp.ok) {
       const errorMessage = errorMessageForStatus(resp.status) || 'Unknown Error';
+
+      if (errorMessage === 'Unauthorized' && this.authenticationErrorHandler) {
+        this.authenticationErrorHandler();
+      }
+
       throw new Error(errorMessage);
     }
 
@@ -104,5 +109,9 @@ export default class Fetcher {
     const options = this._processOptions(Object.assign({method: 'DELETE'}, opts));
 
     return this._fetch(url, options);
+  }
+
+  registerAuthenticationErrorHandler(func) {
+    this.authenticationErrorHandler = func;
   }
 }
