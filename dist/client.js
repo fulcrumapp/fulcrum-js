@@ -116,6 +116,11 @@ var Client = function () {
       return this.urlFromPath(path, base);
     }
   }, {
+    key: 'registerAuthenticationErrorHandler',
+    value: function registerAuthenticationErrorHandler(func) {
+      this.api.registerAuthenticationErrorHandler(func);
+    }
+  }, {
     key: 'forms',
     get: function get() {
       if (!this._forms) {

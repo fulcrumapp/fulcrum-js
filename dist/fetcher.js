@@ -92,27 +92,33 @@ var Fetcher = function () {
                 resp = _context.sent;
 
                 if (resp.ok) {
-                  _context.next = 6;
+                  _context.next = 7;
                   break;
                 }
 
                 errorMessage = errorMessageForStatus(resp.status) || 'Unknown Error';
+
+
+                if (errorMessage === 'Unauthorized' && this.authenticationErrorHandler) {
+                  this.authenticationErrorHandler();
+                }
+
                 throw new Error(errorMessage);
 
-              case 6:
+              case 7:
                 contentType = resp.headers.get('Content-Type');
 
                 if (!(contentType && contentType.split(';')[0] === 'application/json')) {
-                  _context.next = 9;
+                  _context.next = 10;
                   break;
                 }
 
                 return _context.abrupt('return', resp.json());
 
-              case 9:
+              case 10:
                 return _context.abrupt('return', resp.text());
 
-              case 10:
+              case 11:
               case 'end':
                 return _context.stop();
             }
@@ -166,6 +172,11 @@ var Fetcher = function () {
       var options = this._processOptions(Object.assign({ method: 'DELETE' }, opts));
 
       return this._fetch(url, options);
+    }
+  }, {
+    key: 'registerAuthenticationErrorHandler',
+    value: function registerAuthenticationErrorHandler(func) {
+      this.authenticationErrorHandler = func;
     }
   }]);
   return Fetcher;
