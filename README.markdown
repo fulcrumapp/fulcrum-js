@@ -174,6 +174,24 @@ client.forms.delete('6fc7d1dc-62a4-4c81-a857-6b9660f18b55')
   });
 ```
 
+#### Handling Authentication Errors
+
+The client also provides a `registerAuthenticationErrorHandler` method which accepts a single parameter, a function to handle authentication errors. Authentication errors will still be thrown but all authentication errors will be sent to the function passed into this method. This is helpful if you've built a client application where a user "logs in" using the `getUser` and `createAuthorization` methods (documented below), and for some reason the authorization token has been deleted. This can tell your application to reset the current session and prompt the user to "log in" again. Using this method is optional.
+
+```javascript
+import { Client } from 'fulcrum-app';
+
+const handleAuthError = () {
+  console.log('The authorization token is no longer valid');
+  destroySession();
+  promptLogIn();
+};
+
+const client = new Client('your-api-token');
+
+client.registerAuthenticationErrorHandler(handleAuthError);
+```
+
 ### getUser
 
 This is a helper function to get user data including organizations you belong to. Use this in conjunction with [createAuthorization](#createauthorization) to create an API token.
