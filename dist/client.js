@@ -72,6 +72,10 @@ var _webhook = require('./resources/webhook');
 
 var _webhook2 = _interopRequireDefault(_webhook);
 
+var _query = require('./resources/query');
+
+var _query2 = _interopRequireDefault(_query);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var VERSION = require('../package.json').version;
@@ -235,6 +239,15 @@ var Client = function () {
       }
 
       return this._webhooks;
+    }
+  }, {
+    key: 'query',
+    get: function get() {
+      if (!this._query) {
+        this._query = (0, _query2.default)(this);
+      }
+
+      return this._query;
     }
   }]);
   return Client;
