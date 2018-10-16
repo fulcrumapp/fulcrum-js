@@ -14,6 +14,7 @@ import Video from './resources/video';
 import Audio from './resources/audio';
 import Role from './resources/role';
 import Webhook from './resources/webhook';
+import query from './resources/query';
 
 const VERSION = require('../package.json').version;
 
@@ -152,6 +153,14 @@ export default class Client {
     }
 
     return this._webhooks;
+  }
+
+  get query() {
+    if (!this._query) {
+      this._query = query(this);
+    }
+
+    return this._query;
   }
 
   registerAuthenticationErrorHandler(func) {
