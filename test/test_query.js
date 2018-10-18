@@ -1,9 +1,6 @@
 import assert from 'assert';
 import nock from 'nock';
 import path from 'path';
-import fs from 'fs';
-
-import { Page } from '../';
 
 const client = require('./client');
 
