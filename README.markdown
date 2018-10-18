@@ -52,10 +52,10 @@ Various methods are available for each of the resources. Check the chart below f
 | Choice Lists        | find, all, create, update, delete          |
 | Classification Sets | find, all, create, update, delete          |
 | Webhooks            | find, all, create, update, delete          |
-| Photos              | find, all, media                           |
-| Signatures          | find, all, media                           |
-| Videos              | find, all, media                           |
-| Audio               | find, all, media                           |
+| Photos              | find, all, create, media                   |
+| Signatures          | find, all, create, media                   |
+| Videos              | find, all, create, media                   |
+| Audio               | find, all, create, media                   |
 | Memberships         | all, change                                |
 | Roles               | all                                        |
 | Child Records       | all                                        |
@@ -78,7 +78,7 @@ client.forms.find('abc-123')
   });
 ```
 
-Check the [Fulcrum API Docs](http://www.fulcrumapp.com/developers/api/) for an example of returned objects.
+Check the [Fulcrum API Docs](https://www.fulcrumapp.com/developers/api/) for an example of returned objects.
 
 #### all
 
@@ -192,6 +192,25 @@ const client = new Client('your-api-token');
 client.registerAuthenticationErrorHandler(handleAuthError);
 ```
 
+#### query
+
+The `Client` object has a `query` method that can be used to access the [Query API](https://developer.fulcrumapp.com/query-api/intro/). The arguments are a SQL string, and an optional format. The default format is `'json'`. Other formats are `'csv'` or `'geojson'`.
+
+```javascript
+import { Client } from 'fulcrum-app';
+
+const client = new Client('your-api-token');
+
+client.query('SELECT * FROM "Manhole Inspections" LIMIT 1;')
+  .then(result => console.log(result))
+  .catch(error => console.log(error));
+
+// or to get GeoJSON
+client.query('SELECT * FROM "Manhole Inspections" LIMIT 1;', 'geojson')
+  .then(geojson => console.log(geojson.features[0].geometry.coordinates[0]))
+  .catch(error => console.log(error));
+```
+
 ### getUser
 
 This is a helper function to get user data including organizations you belong to. Use this in conjunction with [createAuthorization](#createauthorization) to create an API token.
@@ -215,7 +234,7 @@ getUser('name@email.com', 'password')
 
 ### createAuthorization
 
-This is a helper function to create [authorizations](http://developer.fulcrumapp.com/endpoints/authorizations/) (API tokens) associated with a user and organization (a membership).
+This is a helper function to create [authorizations](https://developer.fulcrumapp.com/endpoints/authorizations/) (API tokens) associated with a user and organization (a membership).
 
 ```javascript
 import { createAuthorization } from 'fulcrum-app';
