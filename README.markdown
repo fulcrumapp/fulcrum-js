@@ -60,6 +60,7 @@ Various methods are available for each of the resources. Check the chart below f
 | Roles               | all                                        |
 | Child Records       | all                                        |
 | Layers              | find, all, create, update, delete          |
+| Audit Logs          | find, all                                  |
 
 #### find
 
