@@ -1,0 +1,24 @@
+{
+  "audit_log": {
+      "source_type": "audit_log",
+      "source_id": "51c6ed58-778a-4218-91e6-24ad7e1de048",
+      "action": "download",
+      "description": "Maryam Larson downloaded the audit logs for Baumbach, Donnelly and Emard.",
+      "data": null,
+      "ip": "172.19.0.1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36",
+      "location": null,
+      "latitude": null,
+      "longitude": null,
+      "admin_area": null,
+      "country": null,
+      "locality": null,
+      "postal_code": null,
+      "id": "aaa058ef-d7e5-44df-a3df-8fc53ffab3e0",
+      "created_at": "2018-12-06T16:59:21Z",
+      "updated_at": "2018-12-06T16:59:21Z",
+      "actor": "Maryam Larson",
+      "actor_id": "a427fd47-dda7-4806-9683-cf279eecd204",
+      "time": "2018-12-06T16:59:21Z"
+  }
+}

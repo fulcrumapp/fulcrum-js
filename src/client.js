@@ -14,6 +14,7 @@ import Video from './resources/video';
 import Audio from './resources/audio';
 import Role from './resources/role';
 import Webhook from './resources/webhook';
+import AuditLog from './resources/auditlog';
 import query from './resources/query';
 
 const VERSION = require('../package.json').version;
@@ -161,6 +162,14 @@ export default class Client {
     }
 
     return this._query;
+  }
+
+  get auditLogs() {
+    if (!this._auditLogs) {
+      this._auditLogs = new AuditLog(this);
+    }
+
+    return this._auditLogs;
   }
 
   registerAuthenticationErrorHandler(func) {

@@ -72,6 +72,10 @@ var _webhook = require('./resources/webhook');
 
 var _webhook2 = _interopRequireDefault(_webhook);
 
+var _auditlog = require('./resources/auditlog');
+
+var _auditlog2 = _interopRequireDefault(_auditlog);
+
 var _query = require('./resources/query');
 
 var _query2 = _interopRequireDefault(_query);
@@ -248,6 +252,15 @@ var Client = function () {
       }
 
       return this._query;
+    }
+  }, {
+    key: 'auditLogs',
+    get: function get() {
+      if (!this._auditLogs) {
+        this._auditLogs = new _auditlog2.default(this);
+      }
+
+      return this._auditLogs;
     }
   }]);
   return Client;

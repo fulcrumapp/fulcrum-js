@@ -1,0 +1,52 @@
+{
+  "current_page": 1,
+  "total_pages": 1,
+  "total_count": 2,
+  "per_page": 20000,
+  "audit_logs": [
+    {
+      "source_type": "form",
+      "source_id": "47659f4a-2ce6-4c28-b7ec-b3602754f2d6",
+      "action": "create",
+      "description": "Maryam Larson created app Audit Log Test App",
+      "data": null,
+      "ip": "172.18.0.1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36",
+      "location": null,
+      "latitude": null,
+      "longitude": null,
+      "admin_area": null,
+      "country": null,
+      "locality": null,
+      "postal_code": null,
+      "id": "d7690247-75f4-4db0-b7e7-f9bdfc0a55c2",
+      "created_at": "2018-10-03T14:53:11Z",
+      "updated_at": "2018-10-03T14:53:11Z",
+      "actor": "Maryam Larson",
+      "actor_id": "a427fd47-dda7-4806-9683-cf279eecd204",
+      "time": "2018-10-03T14:53:11Z"
+    },
+    {
+      "source_type": "data_share",
+      "source_id": "0865cf33-0781-45cc-a48d-174a4b6a58a9",
+      "action": "share_enabled",
+      "description": "Maryam Larson enabled data share on app Audit Log Test App",
+      "data": null,
+      "ip": "172.18.0.1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36",
+      "location": null,
+      "latitude": null,
+      "longitude": null,
+      "admin_area": null,
+      "country": null,
+      "locality": null,
+      "postal_code": null,
+      "id": "dca53ddc-3d6a-432d-b96b-0cd27f4078b5",
+      "created_at": "2018-10-03T14:53:21Z",
+      "updated_at": "2018-10-03T14:53:21Z",
+      "actor": "Maryam Larson",
+      "actor_id": "a427fd47-dda7-4806-9683-cf279eecd204",
+      "time": "2018-10-03T14:53:21Z"
+    }
+  ]
+}
