@@ -72,9 +72,9 @@ var _webhook = require('./resources/webhook');
 
 var _webhook2 = _interopRequireDefault(_webhook);
 
-var _auditlog = require('./resources/auditlog');
+var _auditLog = require('./resources/audit-log');
 
-var _auditlog2 = _interopRequireDefault(_auditlog);
+var _auditLog2 = _interopRequireDefault(_auditLog);
 
 var _query = require('./resources/query');
 
@@ -257,7 +257,7 @@ var Client = function () {
     key: 'auditLogs',
     get: function get() {
       if (!this._auditLogs) {
-        this._auditLogs = new _auditlog2.default(this);
+        this._auditLogs = new _auditLog2.default(this);
       }
 
       return this._auditLogs;
