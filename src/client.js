@@ -14,7 +14,7 @@ import Video from './resources/video';
 import Audio from './resources/audio';
 import Role from './resources/role';
 import Webhook from './resources/webhook';
-import AuditLog from './resources/auditlog';
+import AuditLog from './resources/audit-log';
 import query from './resources/query';
 
 const VERSION = require('../package.json').version;

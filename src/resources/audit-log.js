@@ -10,10 +10,6 @@ export default class AuditLog extends Resource {
   get resourcesName() {
     return 'audit_logs';
   }
-
-  get statement() {
-    console.log('Statement from the Audit Log object');
-  }
 }
 
 List.includeInto(AuditLog);
