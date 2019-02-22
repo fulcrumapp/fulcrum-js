@@ -27,6 +27,10 @@ export default class Record extends Resource {
 
     return this.client.api.del(this.memberPath(id), options);
   }
+
+  history(id) {
+    return this.client.api.get(this.memberActionPath(id, 'history'));
+  }
 }
 
 List.includeInto(Record);
