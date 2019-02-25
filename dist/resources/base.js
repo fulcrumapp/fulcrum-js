@@ -24,7 +24,7 @@ var Base = function () {
   (0, _createClass3.default)(Base, [{
     key: "collectionPath",
     value: function collectionPath() {
-      return "" + this.resourcesName;
+      return this.resourcesName;
     }
   }, {
     key: "actionPath",

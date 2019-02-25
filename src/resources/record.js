@@ -4,6 +4,7 @@ import Create from '../actions/create';
 import Update from '../actions/update';
 import Delete from '../actions/delete';
 import Resource from './base';
+import Page from '../page';
 
 export default class Record extends Resource {
   get resourceName() {
@@ -28,8 +29,9 @@ export default class Record extends Resource {
     return this.client.api.del(this.memberPath(id), options);
   }
 
-  history(id) {
-    return this.client.api.get(this.memberActionPath(id, 'history'));
+  async history(id) {
+    const body = await this.client.api.get(this.memberActionPath(id, 'history'));
+    return new Page(body, this.resourcesName);
   }
 }
 

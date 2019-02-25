@@ -4,7 +4,7 @@ export default class Base {
   }
 
   collectionPath() {
-    return `${this.resourcesName}`;
+    return this.resourcesName;
   }
 
   actionPath(action) {
