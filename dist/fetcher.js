@@ -24,6 +24,12 @@ var _createClass2 = require('babel-runtime/helpers/createClass');
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
+require('portable-fetch');
+
+var _pQueue = require('p-queue');
+
+var _pQueue2 = _interopRequireDefault(_pQueue);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getQueryString(params) {
@@ -49,7 +55,7 @@ var Fetcher = function () {
     (0, _classCallCheck3.default)(this, Fetcher);
 
     this.options = options;
-
+    this.queue = new _pQueue2.default({ concurrency: 1 });
     this.headers = options.headers;
   }
 
@@ -133,6 +139,15 @@ var Fetcher = function () {
       return _fetch;
     }()
   }, {
+    key: '_queue',
+    value: function _queue(url, options) {
+      var _this = this;
+
+      return this.queue.add(function () {
+        return _this._fetch(url, options);
+      });
+    }
+  }, {
     key: 'get',
     value: function get(path, opts) {
       var url = this.options.baseURI + '/' + path;
@@ -144,7 +159,7 @@ var Fetcher = function () {
 
       var options = this._processOptions(Object.assign({ method: 'GET' }, opts));
 
-      return this._fetch(url, options);
+      return this._queue(url, options);
     }
   }, {
     key: 'post',
@@ -153,7 +168,7 @@ var Fetcher = function () {
 
       var options = this._processOptions(Object.assign({ method: 'POST' }, opts));
 
-      return this._fetch(url, options);
+      return this._queue(url, options);
     }
   }, {
     key: 'put',
@@ -162,7 +177,7 @@ var Fetcher = function () {
 
       var options = this._processOptions(Object.assign({ method: 'PUT' }, opts));
 
-      return this._fetch(url, options);
+      return this._queue(url, options);
     }
   }, {
     key: 'del',
@@ -171,7 +186,7 @@ var Fetcher = function () {
 
       var options = this._processOptions(Object.assign({ method: 'DELETE' }, opts));
 
-      return this._fetch(url, options);
+      return this._queue(url, options);
     }
   }, {
     key: 'registerAuthenticationErrorHandler',
