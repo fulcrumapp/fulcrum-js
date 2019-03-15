@@ -22,7 +22,7 @@ function errorMessageForStatus(status) {
 export default class Fetcher {
   constructor(options) {
     this.options = options;
-    this.queue = new Queue({concurrency: 1});
+    this.queue = new Queue({concurrency: 3});
     this.headers = options.headers;
   }
 

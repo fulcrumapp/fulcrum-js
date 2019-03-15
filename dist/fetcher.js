@@ -55,7 +55,7 @@ var Fetcher = function () {
     (0, _classCallCheck3.default)(this, Fetcher);
 
     this.options = options;
-    this.queue = new _pQueue2.default({ concurrency: 1 });
+    this.queue = new _pQueue2.default({ concurrency: 3 });
     this.headers = options.headers;
   }
 
