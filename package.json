@@ -40,6 +40,7 @@
     "base-64": "^0.1.0",
     "form-data": "^2.3.1",
     "mixmatch": "0.0.2",
+    "p-queue": "^4.0.0",
     "portable-fetch": "^3.0.0",
     "uuid": "^3.1.0"
   }

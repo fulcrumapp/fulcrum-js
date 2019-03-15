@@ -1,7 +1,5 @@
 import uuid from 'uuid';
 import FormData from 'form-data';
-// import fetch from 'isomorphic-fetch';
-require('portable-fetch');
 
 import List from '../actions/list';
 import Find from '../actions/find';
