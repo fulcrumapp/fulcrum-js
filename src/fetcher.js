@@ -1,3 +1,6 @@
+import 'portable-fetch';
+import Queue from 'p-queue';
+
 function getQueryString(params) {
   return Object.keys(params)
     .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
@@ -19,7 +22,7 @@ function errorMessageForStatus(status) {
 export default class Fetcher {
   constructor(options) {
     this.options = options;
-
+    this.queue = new Queue({concurrency: 3});
     this.headers = options.headers;
   }
 
@@ -74,6 +77,10 @@ export default class Fetcher {
     return resp.text();
   }
 
+  _queue(url, options) {
+    return this.queue.add(() => this._fetch(url, options));
+  }
+
   get(path, opts) {
     let url = this.options.baseURI + '/' + path;
 
@@ -84,7 +91,7 @@ export default class Fetcher {
 
     const options = this._processOptions(Object.assign({method: 'GET'}, opts));
 
-    return this._fetch(url, options);
+    return this._queue(url, options);
   }
 
   post(path, opts) {
@@ -92,7 +99,7 @@ export default class Fetcher {
 
     const options = this._processOptions(Object.assign({method: 'POST'}, opts));
 
-    return this._fetch(url, options);
+    return this._queue(url, options);
   }
 
   put(path, opts) {
@@ -100,7 +107,7 @@ export default class Fetcher {
 
     const options = this._processOptions(Object.assign({method: 'PUT'}, opts));
 
-    return this._fetch(url, options);
+    return this._queue(url, options);
   }
 
   del(path, opts) {
@@ -108,7 +115,7 @@ export default class Fetcher {
 
     const options = this._processOptions(Object.assign({method: 'DELETE'}, opts));
 
-    return this._fetch(url, options);
+    return this._queue(url, options);
   }
 
   registerAuthenticationErrorHandler(func) {

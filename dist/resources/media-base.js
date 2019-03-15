@@ -54,9 +54,6 @@ var _base2 = _interopRequireDefault(_base);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import fetch from 'isomorphic-fetch';
-require('portable-fetch');
-
 var MediaResource = function (_Resource) {
   (0, _inherits3.default)(MediaResource, _Resource);
 
