@@ -64,6 +64,10 @@ var _audio = require('./resources/audio');
 
 var _audio2 = _interopRequireDefault(_audio);
 
+var _signature = require('./resources/signature');
+
+var _signature2 = _interopRequireDefault(_signature);
+
 var _role = require('./resources/role');
 
 var _role2 = _interopRequireDefault(_role);
@@ -225,6 +229,15 @@ var Client = function () {
       }
 
       return this._audio;
+    }
+  }, {
+    key: 'signatures',
+    get: function get() {
+      if (!this._signatures) {
+        this._signatures = new _signature2.default(this);
+      }
+
+      return this._signatures;
     }
   }, {
     key: 'roles',
