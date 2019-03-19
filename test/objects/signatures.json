@@ -1,0 +1,21 @@
+{
+  "current_page": 1,
+  "total_pages": 1,
+  "total_count": 446,
+  "per_page": 1000,
+  "signatures": [
+    {
+      "access_key": "9855e3f2-85a5-4b9f-9e62-0b1bbcfef091",
+      "created_at": "2015-07-09T14:54:32Z",
+      "updated_at": "2015-07-09T14:54:32Z",
+      "uploaded": true,
+      "stored": true,
+      "processed": true,
+      "record_id": "215f4147-51b5-42bb-84af-06b8112d9ecf",
+      "form_id": "f99c0c14-7861-40b5-882c-d33fe2bcdeb2",
+      "file_size": 22826,
+      "content_type": "image/png",
+      "url": "https://api.fulcrumapp.com/api/v2/signatures/9855e3f2-85a5-4b9f-9e62-0b1bbcfef091"
+    }
+  ]
+}
