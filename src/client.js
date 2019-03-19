@@ -12,6 +12,7 @@ import Layer from './resources/layer';
 import Photo from './resources/photo';
 import Video from './resources/video';
 import Audio from './resources/audio';
+import Signature from './resources/signature';
 import Role from './resources/role';
 import Webhook from './resources/webhook';
 import AuditLog from './resources/audit-log';
@@ -138,6 +139,14 @@ export default class Client {
     }
 
     return this._audio;
+  }
+
+  get signatures() {
+    if (!this._signatures) {
+      this._signatures = new Signature(this);
+    }
+
+    return this._signatures;
   }
 
   get roles() {
