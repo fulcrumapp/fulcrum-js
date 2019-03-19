@@ -44,10 +44,6 @@ var _update = require('../actions/update');
 
 var _update2 = _interopRequireDefault(_update);
 
-var _delete2 = require('../actions/delete');
-
-var _delete3 = _interopRequireDefault(_delete2);
-
 var _base = require('./base');
 
 var _base2 = _interopRequireDefault(_base);
@@ -132,6 +128,5 @@ _list2.default.includeInto(Record);
 _find2.default.includeInto(Record);
 _create2.default.includeInto(Record);
 _update2.default.includeInto(Record);
-_delete3.default.includeInto(Record);
 module.exports = exports['default'];
 //# sourceMappingURL=record.js.map
