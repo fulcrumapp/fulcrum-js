@@ -2,7 +2,6 @@ import List from '../actions/list';
 import Find from '../actions/find';
 import Create from '../actions/create';
 import Update from '../actions/update';
-import Delete from '../actions/delete';
 import Resource from './base';
 import Page from '../page';
 
@@ -39,4 +38,3 @@ List.includeInto(Record);
 Find.includeInto(Record);
 Create.includeInto(Record);
 Update.includeInto(Record);
-Delete.includeInto(Record);
