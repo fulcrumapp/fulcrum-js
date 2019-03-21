@@ -43,9 +43,14 @@ export async function getUser(email, password) {
 }
 
 export async function createAuthorization(email, password, organizationId, note, timeout) {
+  if (arguments.length === 1) {
+    ({ email, password, organizationId, note, timeout, userId } = email);
+  }
+
   const authorizationObj = {
     authorization: {
       organization_id: organizationId,
+      user_id: userId,
       note: note,
       timeout: timeout
     }

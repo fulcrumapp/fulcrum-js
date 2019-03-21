@@ -55,14 +55,30 @@ var getUser = exports.getUser = function () {
 
 var createAuthorization = exports.createAuthorization = function () {
   var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(email, password, organizationId, note, timeout) {
-    var authorizationObj, options, body;
+    var _email,
+        authorizationObj,
+        options,
+        body,
+        _args2 = arguments;
+
     return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
+            if (_args2.length === 1) {
+              _email = email;
+              email = _email.email;
+              password = _email.password;
+              organizationId = _email.organizationId;
+              note = _email.note;
+              timeout = _email.timeout;
+              userId = _email.userId;
+            }
+
             authorizationObj = {
               authorization: {
                 organization_id: organizationId,
+                user_id: userId,
                 note: note,
                 timeout: timeout
               }
@@ -72,14 +88,14 @@ var createAuthorization = exports.createAuthorization = function () {
 
             options.body = authorizationObj;
 
-            _context2.next = 5;
+            _context2.next = 6;
             return api.post('/authorizations', options);
 
-          case 5:
+          case 6:
             body = _context2.sent;
             return _context2.abrupt('return', body.authorization);
 
-          case 7:
+          case 8:
           case 'end':
             return _context2.stop();
         }
