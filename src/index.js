@@ -42,11 +42,7 @@ export async function getUser(email, password) {
   return user;
 }
 
-export async function createAuthorization(email, password, organizationId, note, timeout) {
-  if (arguments.length === 1) {
-    ({ email, password, organizationId, note, timeout, userId } = email);
-  }
-
+export async function createAuthorization(email, password, organizationId, note, timeout, userId) {
   const authorizationObj = {
     authorization: {
       organization_id: organizationId,

@@ -243,16 +243,14 @@ import { createAuthorization } from 'fulcrum-app';
 // const fulcrum = require('fulcrum-app');
 // const createAuthorization = fulcrum.createAuthorization;
 
-const params = {
-  email: 'name@email.com',
-  password: 'password',
-  organizationId: 'organization-id-from-getUser',
-  userId: 'optional user id',
-  note: 'My awesome app version 4.20',
-  timeout: 60 * 60 * 24
-};
+const email = 'name@email.com';
+const password = 'password';
+const organizationId = 'organization-id-from-getUser';
+const userId = 'optional user id';
+const note = 'My awesome app version 4.20';
+const timeout = 60 * 60 * 24;
 
-createAuthorization(params)
+createAuthorization(email, password, organizationId, note, timeout, userId)
   .then((authorization) => {
     console.log(authorization);
     // authorization.token is your API token to use with the rest of the API.
