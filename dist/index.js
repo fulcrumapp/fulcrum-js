@@ -54,27 +54,12 @@ var getUser = exports.getUser = function () {
 }();
 
 var createAuthorization = exports.createAuthorization = function () {
-  var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(email, password, organizationId, note, timeout) {
-    var _email,
-        authorizationObj,
-        options,
-        body,
-        _args2 = arguments;
-
+  var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(email, password, organizationId, note, timeout, userId) {
+    var authorizationObj, options, body;
     return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            if (_args2.length === 1) {
-              _email = email;
-              email = _email.email;
-              password = _email.password;
-              organizationId = _email.organizationId;
-              note = _email.note;
-              timeout = _email.timeout;
-              userId = _email.userId;
-            }
-
             authorizationObj = {
               authorization: {
                 organization_id: organizationId,
@@ -88,14 +73,14 @@ var createAuthorization = exports.createAuthorization = function () {
 
             options.body = authorizationObj;
 
-            _context2.next = 6;
+            _context2.next = 5;
             return api.post('/authorizations', options);
 
-          case 6:
+          case 5:
             body = _context2.sent;
             return _context2.abrupt('return', body.authorization);
 
-          case 8:
+          case 7:
           case 'end':
             return _context2.stop();
         }
@@ -103,7 +88,7 @@ var createAuthorization = exports.createAuthorization = function () {
     }, _callee2, this);
   }));
 
-  return function createAuthorization(_x3, _x4, _x5, _x6, _x7) {
+  return function createAuthorization(_x3, _x4, _x5, _x6, _x7, _x8) {
     return _ref2.apply(this, arguments);
   };
 }();
