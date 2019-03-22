@@ -43,24 +43,25 @@ Various methods are available for each of the resources. Check the chart below f
 
 #### Client Resources and Methods
 
-| Resource            | Methods                                    |
-|---------------------|--------------------------------------------|
-| Forms               | find, all, create, update, delete          |
-| Records             | find, all, create, update, delete, history |
-| Projects            | find, all, create, update, delete          |
-| Changesets          | find, all, create, update, close           |
-| Choice Lists        | find, all, create, update, delete          |
-| Classification Sets | find, all, create, update, delete          |
-| Webhooks            | find, all, create, update, delete          |
-| Photos              | find, all, create, media                   |
-| Signatures          | find, all, create, media                   |
-| Videos              | find, all, create, media                   |
-| Audio               | find, all, create, media                   |
-| Memberships         | all, change                                |
-| Roles               | all                                        |
-| Child Records       | all                                        |
-| Layers              | find, all, create, update, delete          |
-| Audit Logs          | find, all                                  |
+| Resource            | Methods                                       |
+|---------------------|-----------------------------------------------|
+| Forms               | find, all, create, update, delete             |
+| Records             | find, all, create, update, delete, history    |
+| Projects            | find, all, create, update, delete             |
+| Changesets          | find, all, create, update, close              |
+| Choice Lists        | find, all, create, update, delete             |
+| Classification Sets | find, all, create, update, delete             |
+| Webhooks            | find, all, create, update, delete             |
+| Photos              | find, all, create, media                      |
+| Signatures          | find, all, create, media                      |
+| Videos              | find, all, create, media                      |
+| Audio               | find, all, create, media                      |
+| Memberships         | all, change                                   |
+| Roles               | all                                           |
+| Child Records       | all                                           |
+| Layers              | find, all, create, update, delete             |
+| Audit Logs          | find, all                                     |
+| Authorizations      | find, all, create, update, delete, regenerate |
 
 #### find
 
