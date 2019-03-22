@@ -74,6 +74,7 @@ describe('Client', () => {
       assert('create' in client.authorizations);
       assert('update' in client.authorizations);
       assert('delete' in client.authorizations);
+      assert('regenerate' in client.authorizations);
     });
   });
 
