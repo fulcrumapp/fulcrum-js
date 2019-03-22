@@ -35,6 +35,12 @@ export default class Authorization extends Resource {
 
     return body[this.resourceName];
   }
+
+  async regenerate(id) {
+    const body = await this.client.api.post(this.memberActionPath(id, 'regenerate'));
+
+    return body[this.resourceName];
+  }
 }
 
 List.includeInto(Authorization);
