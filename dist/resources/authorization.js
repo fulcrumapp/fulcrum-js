@@ -102,6 +102,36 @@ var Authorization = function (_Resource) {
       return create;
     }()
   }, {
+    key: 'regenerate',
+    value: function () {
+      var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(id) {
+        var body;
+        return _regenerator2.default.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return this.client.api.post(this.memberActionPath(id, 'regenerate'));
+
+              case 2:
+                body = _context2.sent;
+                return _context2.abrupt('return', body[this.resourceName]);
+
+              case 4:
+              case 'end':
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function regenerate(_x4) {
+        return _ref2.apply(this, arguments);
+      }
+
+      return regenerate;
+    }()
+  }, {
     key: 'resourceName',
     get: function get() {
       return 'authorization';
