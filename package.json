@@ -1,6 +1,6 @@
 {
   "name": "fulcrum-app",
-  "version": "2.3.2",
+  "version": "2.4.0",
   "description": "JavaScript wrapper for the Fulcrum API",
   "main": "dist/index.js",
   "scripts": {
