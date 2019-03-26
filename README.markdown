@@ -54,8 +54,8 @@ Various methods are available for each of the resources. Check the chart below f
 | Webhooks            | find, all, create, update, delete             |
 | Photos              | find, all, create, media                      |
 | Signatures          | find, all, create, media                      |
-| Videos              | find, all, create, media                      |
-| Audio               | find, all, create, media                      |
+| Videos              | find, all, create, media, track               |
+| Audio               | find, all, create, media, track               |
 | Memberships         | all, change                                   |
 | Roles               | all                                           |
 | Child Records       | all                                           |
@@ -422,6 +422,30 @@ const writeStream = fs.createWriteStream('vid.mp4');
 client.videos.media('5b9b6c9c-2a79-4f69-9539-9c0cb958f0a0')
   .then(video => video.pipe(writeStream))
   .catch(error => console.log(error));
+```
+
+## Tracks
+
+Use the `track` method to get audio and video tracks in multiple formats. The parameters passed to this method are `id` (also referred to as access key), and format. The default format is `json`. The other available formats are `geojson`, `kml`, and `gpx`.
+
+Download the track for a video in `json` format.
+
+```javascript
+client.videos.track('ccf931bd-4e0f-4562-8c00-3a57f8a62589')
+  .then(track => {
+    fs.writeFileSync('track.json', JSON.stringify(track));
+  })
+  .catch(err => console.log(err));
+```
+
+Download the track for an audio in `gpx` format.
+
+```javascript
+client.audio.track('ccf931bd-4e0f-4562-8c00-3a57f8a62589', 'gpx')
+  .then(track => {
+    fs.writeFileSync('track.gpx', track);
+  })
+  .catch(err => console.log(err));
 ```
 
 ## Development
