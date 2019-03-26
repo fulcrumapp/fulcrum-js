@@ -92,19 +92,29 @@ var Track = function (_Mixin) {
     key: 'track',
     value: function () {
       var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(id) {
+        var format = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'json';
         var body;
         return _regenerator2.default.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return this.client.api.get(this.trackPath(id, 'json'));
+                return this.client.api.get(this.trackPath(id, format));
 
               case 2:
                 body = _context2.sent;
+
+                if (!(format === 'json')) {
+                  _context2.next = 5;
+                  break;
+                }
+
                 return _context2.abrupt('return', body.tracks);
 
-              case 4:
+              case 5:
+                return _context2.abrupt('return', body);
+
+              case 6:
               case 'end':
                 return _context2.stop();
             }
@@ -121,7 +131,7 @@ var Track = function (_Mixin) {
   }, {
     key: 'trackPath',
     value: function trackPath(id, format) {
-      return this.memberActionPath(id, 'track', format);
+      return this.resourcesName + '/' + id + '/track.' + format;
     }
   }]);
   return Track;
