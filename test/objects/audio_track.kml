@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2"><Document><Style id="line">
+  <LineStyle>
+    <color>c000ffff</color>
+    <width>4</width>
+  </LineStyle>
+</Style>
+<Placemark>
+<name>2015-04-28T16:02:44Z</name>
+<styleUrl>#line</styleUrl>
+<MultiGeometry><LineString><extrude>1</extrude><gx:altitudeMode>clampToGround</gx:altitudeMode><coordinates>-80.8902617,35.6419702,225.0 -80.8902617,35.6419701,225.0 -80.8902617,35.6419701,225.0 -80.8902616,35.6419701,225.0 -80.8902616,35.6419701,225.0 -80.8902616,35.6419701,225.0 -80.8902616,35.6419701,225.0 -80.8902616,35.6419701,225.0 -80.8902615,35.6419701,225.0 -80.8902615,35.6419701,225.0 -80.8902615,35.6419701,225.0 -80.8902615,35.64197,225.0 -80.8902615,35.64197,225.0 -80.8902615,35.6419699,225.0 -80.8902615,35.6419699,225.0 -80.8902633,35.641965,225.0 -80.8902633,35.641965,225.0 -80.8902647,35.6419618,225.0 -80.8903118,35.64193,222.0 -80.890328,35.6419363,222.0 -80.8903283,35.6419456,223.0</coordinates></LineString>
+<LineString><extrude>1</extrude><gx:altitudeMode>clampToGround</gx:altitudeMode><coordinates></coordinates></LineString></MultiGeometry>
+<ExtendedData>
+<Data name="Date"><value>2015-04-28T16:02:44Z</value></Data>
+<Data name="Name"><value><![CDATA[ddcb934e-54d5-4476-acf5-750e32f4863f]]></value></Data>
+<Data name="Link"><value><![CDATA[<a href="javascript:window.open('about:blank');" onclick="window.open('https://web.fulcrumapp.com/videos/ddcb934e-54d5-4476-acf5-750e32f4863f')" target="_new">View Video</a>]]></value></Data>
+</ExtendedData>
+</Placemark></Document></kml>

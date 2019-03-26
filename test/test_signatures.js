@@ -5,7 +5,7 @@ import path from 'path';
 import client from './client';
 import { Page } from '../';
 
-describe('signatures', () => {
+describe('Signatures', () => {
   describe('#find()', () => {
     it('should return a signature.', async () => {
       nock('https://api.fulcrumapp.com')

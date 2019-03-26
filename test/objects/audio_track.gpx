@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" creator="Fulcrum" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd">
+  <metadata>
+    <link href="http://fulcrumapp.com">
+      <text>Fulcrum</text>
+    </link>
+  </metadata>
+
+  <trk>
+    <name>ddcb934e-54d5-4476-acf5-750e32f4863f</name>
+
+    <trkseg>
+
+<trkpt lat="35.6419702" lon="-80.8902617">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:44Z</time>
+</trkpt>
+
+<trkpt lat="35.6419701" lon="-80.8902617">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:45Z</time>
+</trkpt>
+
+<trkpt lat="35.6419701" lon="-80.8902617">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:46Z</time>
+</trkpt>
+
+<trkpt lat="35.6419701" lon="-80.8902616">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:47Z</time>
+</trkpt>
+
+<trkpt lat="35.6419701" lon="-80.8902616">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:47Z</time>
+</trkpt>
+
+<trkpt lat="35.6419701" lon="-80.8902616">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:48Z</time>
+</trkpt>
+
+<trkpt lat="35.6419701" lon="-80.8902616">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:49Z</time>
+</trkpt>
+
+<trkpt lat="35.6419701" lon="-80.8902616">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:50Z</time>
+</trkpt>
+
+<trkpt lat="35.6419701" lon="-80.8902615">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:51Z</time>
+</trkpt>
+
+<trkpt lat="35.6419701" lon="-80.8902615">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:52Z</time>
+</trkpt>
+
+<trkpt lat="35.6419701" lon="-80.8902615">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:52Z</time>
+</trkpt>
+
+<trkpt lat="35.64197" lon="-80.8902615">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:53Z</time>
+</trkpt>
+
+<trkpt lat="35.64197" lon="-80.8902615">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:54Z</time>
+</trkpt>
+
+<trkpt lat="35.6419699" lon="-80.8902615">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:55Z</time>
+</trkpt>
+
+<trkpt lat="35.6419699" lon="-80.8902615">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:56Z</time>
+</trkpt>
+
+<trkpt lat="35.641965" lon="-80.8902633">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:57Z</time>
+</trkpt>
+
+<trkpt lat="35.641965" lon="-80.8902633">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:57Z</time>
+</trkpt>
+
+<trkpt lat="35.6419618" lon="-80.8902647">
+  <ele>225.0</ele>
+  <time>2015-04-28T16:02:58Z</time>
+</trkpt>
+
+<trkpt lat="35.64193" lon="-80.8903118">
+  <ele>222.0</ele>
+  <time>2015-04-28T16:02:59Z</time>
+</trkpt>
+
+<trkpt lat="35.6419363" lon="-80.890328">
+  <ele>222.0</ele>
+  <time>2015-04-28T16:03:00Z</time>
+</trkpt>
+
+<trkpt lat="35.6419456" lon="-80.8903283">
+  <ele>223.0</ele>
+  <time>2015-04-28T16:03:01Z</time>
+</trkpt>
+
+    </trkseg>
+
+    <trkseg>
+
+
+    </trkseg>
+
+  </trk>
+
+</gpx>
