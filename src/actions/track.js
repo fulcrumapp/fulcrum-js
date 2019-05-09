@@ -1,11 +1,13 @@
 import FormData from 'form-data';
 import Mixin from 'mixmatch';
+import uuid from 'uuid';
 
 export default class Track extends Mixin {
-  async uploadTrack(file, attributes) {
+  async uploadTrack(file, id = null) {
     const formData = new FormData();
+    const accessKey = id || uuid.v4();
 
-    formData.append(`${this.resourceName}[access_key]`, attributes.access_key);
+    formData.append(`${this.resourceName}[access_key]`, accessKey);
     formData.append(`${this.resourceName}[track]`, file);
 
     const options = {
@@ -16,7 +18,7 @@ export default class Track extends Mixin {
     };
 
     const resp = await this.client.api.post(this.createAction, options);
-    return resp.body[this.resourceName];
+    return resp[this.resourceName];
   }
 
   async track(id, format = 'json') {
