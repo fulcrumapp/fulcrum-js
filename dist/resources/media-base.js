@@ -72,6 +72,10 @@ var MediaResource = function (_Resource) {
 
       formData.append(this.resourceName + '[access_key]', accessKey);
 
+      if (attrs.hasOwnProperty('track')) {
+        formData.append(this.resourceName + '[track]', attrs.track);
+      }
+
       var fileOptions = null;
 
       // File names from media streams like

@@ -36,6 +36,10 @@ var _mixmatch = require('mixmatch');
 
 var _mixmatch2 = _interopRequireDefault(_mixmatch);
 
+var _uuid = require('uuid');
+
+var _uuid2 = _interopRequireDefault(_uuid);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Track = function (_Mixin) {
@@ -49,16 +53,18 @@ var Track = function (_Mixin) {
   (0, _createClass3.default)(Track, [{
     key: 'uploadTrack',
     value: function () {
-      var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(file, attributes) {
-        var formData, options, resp;
+      var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(file) {
+        var id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+        var formData, accessKey, options, resp;
         return _regenerator2.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 formData = new _formData2.default();
+                accessKey = id || _uuid2.default.v4();
 
 
-                formData.append(this.resourceName + '[access_key]', attributes.access_key);
+                formData.append(this.resourceName + '[access_key]', accessKey);
                 formData.append(this.resourceName + '[track]', file);
 
                 options = {
@@ -67,14 +73,14 @@ var Track = function (_Mixin) {
                     'Content-Type': null
                   }
                 };
-                _context.next = 6;
+                _context.next = 7;
                 return this.client.api.post(this.createAction, options);
 
-              case 6:
+              case 7:
                 resp = _context.sent;
-                return _context.abrupt('return', resp.body[this.resourceName]);
+                return _context.abrupt('return', resp[this.resourceName]);
 
-              case 8:
+              case 9:
               case 'end':
                 return _context.stop();
             }
@@ -82,7 +88,7 @@ var Track = function (_Mixin) {
         }, _callee, this);
       }));
 
-      function uploadTrack(_x, _x2) {
+      function uploadTrack(_x) {
         return _ref.apply(this, arguments);
       }
 

@@ -15,6 +15,10 @@ export default class MediaResource extends Resource {
 
     formData.append(`${this.resourceName}[access_key]`, accessKey);
 
+    if (attrs.hasOwnProperty('track')) {
+      formData.append(`${this.resourceName}[track]`, attrs.track);
+    }
+
     let fileOptions = null;
 
     // File names from media streams like

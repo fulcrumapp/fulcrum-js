@@ -54,8 +54,8 @@ Various methods are available for each of the resources. Check the chart below f
 | Webhooks            | find, all, create, update, delete             |
 | Photos              | find, all, create, media                      |
 | Signatures          | find, all, create, media                      |
-| Videos              | find, all, create, media, track               |
-| Audio               | find, all, create, media, track               |
+| Videos              | find, all, create, media, track, uploadTrack  |
+| Audio               | find, all, create, media, track, uploadTrack  |
 | Memberships         | all, change                                   |
 | Roles               | all                                           |
 | Child Records       | all                                           |
