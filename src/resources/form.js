@@ -13,6 +13,12 @@ export default class Form extends Resource {
   get resourcesName() {
     return 'forms';
   }
+
+  async history(id) {
+    const body = await this.client.api.get(this.memberActionPath(id, 'history'));
+    return new Page(body, this.resourcesName);
+  }
+
 }
 
 List.includeInto(Form);

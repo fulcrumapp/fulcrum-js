@@ -18,6 +18,7 @@ describe('Client', () => {
       assert('create' in client.forms);
       assert('update' in client.forms);
       assert('delete' in client.forms);
+      assert('history' in client.forms);
     });
   });
 

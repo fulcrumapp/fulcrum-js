@@ -7,7 +7,7 @@ import client from './client';
 
 describe('Record History', () => {
   describe('#history()', () => {
-    it('should return form history.', async () => {
+    it('should return record history.', async () => {
       nock('https://api.fulcrumapp.com')
         .get('/api/v2/records/beef678b-fb89-4b15-9ee7-1f8be3e2abe7/history')
         .replyWithFile(201,
