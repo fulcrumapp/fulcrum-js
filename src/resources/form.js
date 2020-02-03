@@ -4,6 +4,7 @@ import Create from '../actions/create';
 import Update from '../actions/update';
 import Delete from '../actions/delete';
 import Resource from './base';
+import Page from '../page';
 
 export default class Form extends Resource {
   get resourceName() {

@@ -14,13 +14,12 @@ describe('Form History', () => {
                        path.join(__dirname, 'objects/form_history.json'),
                        {'Content-Type': 'application/json'});
 
-      console.log(client.forms)  
       const formHistory = await client.forms.history(
         '58ae9115-0430-459e-a1b7-7ac46011e0ce');
 
       assert(formHistory instanceof Page, 'formHistory is not a Page.');
-      assert.equal(formHistory.objects[0].history_change_type, 'c');
-      assert.equal(formHistory.objects[1].history_change_type, 'u');
+      assert.equal(formHistory.objects[0].version, 1);
+      assert.equal(formHistory.objects[1].version, 2);
     });
   });
 });

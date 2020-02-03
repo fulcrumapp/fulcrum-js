@@ -4,6 +4,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _regenerator = require('babel-runtime/regenerator');
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
 var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
@@ -44,6 +52,10 @@ var _base = require('./base');
 
 var _base2 = _interopRequireDefault(_base);
 
+var _page = require('../page');
+
+var _page2 = _interopRequireDefault(_page);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Form = function (_Resource) {
@@ -55,6 +67,36 @@ var Form = function (_Resource) {
   }
 
   (0, _createClass3.default)(Form, [{
+    key: 'history',
+    value: function () {
+      var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(id) {
+        var body;
+        return _regenerator2.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return this.client.api.get(this.memberActionPath(id, 'history'));
+
+              case 2:
+                body = _context.sent;
+                return _context.abrupt('return', new _page2.default(body, this.resourcesName));
+
+              case 4:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function history(_x) {
+        return _ref.apply(this, arguments);
+      }
+
+      return history;
+    }()
+  }, {
     key: 'resourceName',
     get: function get() {
       return 'form';
