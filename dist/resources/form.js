@@ -70,19 +70,27 @@ var Form = function (_Resource) {
     key: 'history',
     value: function () {
       var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(id) {
-        var body;
+        var version = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+        var options, body;
         return _regenerator2.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
-                return this.client.api.get(this.memberActionPath(id, 'history'));
+                options = null;
 
-              case 2:
+
+                if (version != null) {
+                  options = { qs: { version: version } };
+                }
+
+                _context.next = 4;
+                return this.client.api.get(this.memberActionPath(id, 'history'), options);
+
+              case 4:
                 body = _context.sent;
                 return _context.abrupt('return', new _page2.default(body, this.resourcesName));
 
-              case 4:
+              case 6:
               case 'end':
                 return _context.stop();
             }
