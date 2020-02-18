@@ -15,11 +15,16 @@ export default class Form extends Resource {
     return 'forms';
   }
 
-  async history(id) {
-    const body = await this.client.api.get(this.memberActionPath(id, 'history'));
+  async history(id, version = null) {
+    let options = null;
+
+    if (version != null) {
+      options = { qs: { version: version } };
+    }
+
+    const body = await this.client.api.get(this.memberActionPath(id, 'history'), options);
     return new Page(body, this.resourcesName);
   }
-
 }
 
 List.includeInto(Form);
