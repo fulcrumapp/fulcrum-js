@@ -21,5 +21,19 @@ describe('Form History', () => {
       assert.equal(formHistory.objects[0].version, 1);
       assert.equal(formHistory.objects[1].version, 2);
     });
+
+    it('should return a single form history.', async () => {
+      nock('https://api.fulcrumapp.com')
+        .get('/api/v2/forms/58ae9115-0430-459e-a1b7-7ac46011e0ce/history?version=1')
+        .replyWithFile(201,
+                       path.join(__dirname, 'objects/form_history_single_version.json'),
+                       {'Content-Type': 'application/json'});
+
+      const formHistory = await client.forms.history(
+        '58ae9115-0430-459e-a1b7-7ac46011e0ce', 1);
+
+      assert.equal(formHistory.objects[0].version, 1);
+      assert.equal(formHistory.objects.length, 1);
+    });
   });
 });

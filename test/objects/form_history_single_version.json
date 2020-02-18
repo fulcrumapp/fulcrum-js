@@ -1,0 +1,74 @@
+{
+  "current_page": 1,
+  "total_pages": 1,
+  "total_count": 1,
+  "per_page": 20000,
+  "forms": [
+      {
+          "id": "58ae9115-0430-459e-a1b7-7ac46011e0ce",
+          "name": "Davey Form Test",
+          "description": null,
+          "version": 1,
+          "bounding_box": null,
+          "record_title_key": "570c",
+          "title_field_keys": [
+              "570c"
+          ],
+          "status_field": {
+              "type": "StatusField",
+              "label": "Status",
+              "key": "@status",
+              "data_name": "status",
+              "default_value": "",
+              "enabled": false,
+              "read_only": false,
+              "hidden": false,
+              "description": "",
+              "choices": [],
+              "required": false,
+              "disabled": false,
+              "default_previous_value": false
+          },
+          "auto_assign": false,
+          "hidden_on_dashboard": false,
+          "record_count": 0,
+          "geometry_types": [
+              "Point"
+          ],
+          "geometry_required": false,
+          "script": null,
+          "projects_enabled": null,
+          "assignment_enabled": null,
+          "created_by": "David McNight",
+          "created_by_id": "6df3ac95-7307-4b46-9b4e-23e50ca45858",
+          "updated_by": "David McNight",
+          "updated_by_id": "6df3ac95-7307-4b46-9b4e-23e50ca45858",
+          "elements": [
+              {
+                  "type": "TextField",
+                  "key": "570c",
+                  "label": "What is a form?",
+                  "description": null,
+                  "required": false,
+                  "disabled": false,
+                  "hidden": false,
+                  "data_name": "what_is_a_form",
+                  "default_value": null,
+                  "visible_conditions_type": null,
+                  "visible_conditions_behavior": "clear",
+                  "visible_conditions": null,
+                  "required_conditions_type": null,
+                  "required_conditions": null,
+                  "numeric": false,
+                  "pattern": null,
+                  "pattern_description": null,
+                  "min_length": null,
+                  "max_length": null,
+                  "default_previous_value": false
+              }
+          ],
+          "created_at": "2020-02-03T15:56:01Z",
+          "updated_at": "2020-02-03T15:56:01Z"
+      }
+  ]
+}
