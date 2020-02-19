@@ -45,7 +45,7 @@ Various methods are available for each of the resources. Check the chart below f
 
 | Resource            | Methods                                       |
 |---------------------|-----------------------------------------------|
-| Forms               | find, all, create, update, delete             |
+| Forms               | find, all, create, update, delete, history    |
 | Records             | find, all, create, update, delete, history    |
 | Projects            | find, all, create, update, delete             |
 | Changesets          | find, all, create, update, close              |
