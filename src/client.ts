@@ -1,57 +1,80 @@
-import Fetcher from './fetcher';
+import Fetcher from "./fetcher";
+import FetchOptions, { Headers } from "./types/FetchOptions";
+import { BASE_URL } from "./constants";
 
-import Form from './resources/form';
-import Record from './resources/record';
-import Changeset from './resources/changeset';
-import ChoiceList from './resources/choice-list';
-import ClassificationSet from './resources/classification-set';
-import Authorization from './resources/authorization';
-import Membership from './resources/membership';
-import Project from './resources/project';
-import Layer from './resources/layer';
-import Photo from './resources/photo';
-import Video from './resources/video';
-import Audio from './resources/audio';
-import Signature from './resources/signature';
-import Role from './resources/role';
-import Webhook from './resources/webhook';
-import AuditLog from './resources/audit-log';
-import query from './resources/query';
+import Audio from "./resources/audio";
+import AuditLog from "./resources/audit-log";
+import Authorization from "./resources/authorization";
+import Changeset from "./resources/changeset";
+import ChoiceList from "./resources/choice-list";
+import ClassificationSet from "./resources/classification-set";
+import Form from "./resources/form";
+import Layer from "./resources/layer";
+import Membership from "./resources/membership";
+import Photo from "./resources/photo";
+import Project from "./resources/project";
+import query from "./resources/query";
+import Record from "./resources/record";
+import Role from "./resources/role";
+import Signature from "./resources/signature";
+import Video from "./resources/video";
+import Webhook from "./resources/webhook";
 
-const VERSION = require('../package.json').version;
-
-const BASE_URL = 'https://api.fulcrumapp.com/api/v2';
+const VERSION = require("../package.json").version;
 
 export default class Client {
-  constructor(token, opts) {
-    const _opts = opts || {};
+  baseUrl: string;
+  version: string;
+
+  api: Fetcher;
+  noTokenApi: Fetcher;
+
+  _audio?: Audio;
+  _auditLogs?: AuditLog;
+  _authorizations?: Authorization;
+  _changesets?: Changeset;
+  _choiceLists?: ChoiceList;
+  _classificationSets?: ClassificationSet;
+  _forms?: Form;
+  _layers?: Layer;
+  _memberships?: Membership;
+  _photos?: Photo;
+  _projects?: Project;
+  _query?: Function;
+  _records?: Record;
+  _roles?: Role;
+  _signatures?: Signature;
+  _videos?: Video;
+  _webhooks?: Webhook;
+
+  constructor(token: string, opts: FetchOptions) {
+    const _opts: FetchOptions = opts || {};
 
     this.baseUrl = _opts.baseUrl || BASE_URL;
-
     this.version = VERSION;
 
-    const options = {
-      baseURI: this.baseUrl,
+    const options: FetchOptions = {
+      baseUrl: this.baseUrl,
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'User-Agent': _opts.userAgent || `fulcrum-js version ${VERSION}`
-      }
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "User-Agent": _opts.userAgent || `fulcrum-js version ${VERSION}`,
+      },
     };
 
     const tokenOptions = Object.assign({}, options);
-    tokenOptions.headers['X-ApiToken'] = token;
+    (tokenOptions.headers as Headers)["X-ApiToken"] = token;
     const noTokenOptions = Object.assign({}, options);
 
     this.api = new Fetcher(tokenOptions);
     this.noTokenApi = new Fetcher(noTokenOptions);
   }
 
-  urlFromPath(path, base) {
-    return (base || this.baseUrl) + '/' + path;
+  urlFromPath(path: string, base: string) {
+    return (base ?? this.baseUrl) + "/" + path;
   }
 
-  url(path, base) {
+  url(path: string, base: string) {
     return this.urlFromPath(path, base);
   }
 
@@ -181,7 +204,7 @@ export default class Client {
     return this._auditLogs;
   }
 
-  registerAuthenticationErrorHandler(func) {
+  registerAuthenticationErrorHandler(func: Function) {
     this.api.registerAuthenticationErrorHandler(func);
   }
 }

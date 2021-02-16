@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "outDir": "./tsDist",
+    "allowJs": true,
+    "target": "es5",
+    "strict": true,
+    "sourceMap": true,
+  },
+  "include": ["./src/**/*"]
+}

@@ -1,3 +1,4 @@
+//TODO: types
 export default class Page {
   constructor(object, resourcesName) {
     this.objects = object[resourcesName];
