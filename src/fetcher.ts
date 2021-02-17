@@ -95,7 +95,7 @@ export default class Fetcher {
     return this.queue.add(() => this._fetch(url, opts));
   }
 
-  get(path: string, opts: FetchOptions) {
+  get(path: string, opts?: FetchOptions) {
     let url = this.options.baseUrl + "/" + path;
 
     if (opts && opts.hasOwnProperty("qs")) {
@@ -110,7 +110,7 @@ export default class Fetcher {
     return this._queue(url, options);
   }
 
-  post(path: string, opts: FetchOptions) {
+  post(path: string, opts?: FetchOptions) {
     const url = this.options.baseUrl + "/" + path;
 
     const options = this._processOptions(
@@ -120,7 +120,7 @@ export default class Fetcher {
     return this._queue(url, options);
   }
 
-  put(path: string, opts: FetchOptions) {
+  put(path: string, opts?: FetchOptions) {
     const url = this.options.baseUrl + "/" + path;
 
     const options = this._processOptions(
@@ -130,7 +130,7 @@ export default class Fetcher {
     return this._queue(url, options);
   }
 
-  del(path: string, opts: FetchOptions) {
+  del(path: string, opts?: FetchOptions) {
     const url = this.options.baseUrl + "/" + path;
 
     const options = this._processOptions(

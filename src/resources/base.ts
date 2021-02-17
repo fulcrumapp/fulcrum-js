@@ -3,6 +3,9 @@ import Client from "../client";
 export default abstract class Base {
   client: Client;
 
+  abstract get resourcesName(): string;
+  abstract get resourceName(): string;
+
   constructor(client: Client) {
     this.client = client;
   }
@@ -31,7 +34,4 @@ export default abstract class Base {
     attributes[this.resourceName] = object;
     return attributes;
   }
-
-  abstract get resourcesName(): string;
-  abstract get resourceName(): string;
 }

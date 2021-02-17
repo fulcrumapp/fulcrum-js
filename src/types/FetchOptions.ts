@@ -1,5 +1,5 @@
 export interface Headers {
-  [key: string]: string;
+  [key: string]: string | null;
 }
 export default interface FetchOptions {
   baseUrl?: string;

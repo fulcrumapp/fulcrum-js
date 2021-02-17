@@ -1,9 +1,13 @@
-import FormData from 'form-data';
-import Mixin from 'mixmatch';
-import uuid from 'uuid';
+import * as FormData from "form-data";
+import Mixin from "mixmatch";
+import * as uuid from "uuid";
 
-export default class Track extends Mixin {
-  async uploadTrack(file, id = null) {
+import Base from "../resources/base";
+
+export default abstract class Track extends Mixin {
+  abstract get createAction(): string;
+
+  async uploadTrack(file: File, id = null) {
     const formData = new FormData();
     const accessKey = id || uuid.v4();
 
@@ -13,25 +17,27 @@ export default class Track extends Mixin {
     const options = {
       body: formData,
       headers: {
-        'Content-Type': null
-      }
+        "Content-Type": null,
+      },
     };
 
     const resp = await this.client.api.post(this.createAction, options);
     return resp[this.resourceName];
   }
 
-  async track(id, format = 'json') {
+  async track(id: string, format: string = "json") {
     const body = await this.client.api.get(this.trackPath(id, format));
 
-    if (format === 'json') {
+    if (format === "json") {
       return body.tracks;
     }
 
     return body;
   }
 
-  trackPath(id, format) {
+  trackPath(id: string, format: string): string {
     return `${this.resourcesName}/${id}/track.${format}`;
   }
 }
+
+export default interface Track extends Mixin, Base {}
