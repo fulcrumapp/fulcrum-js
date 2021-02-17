@@ -17,14 +17,10 @@ export default class Form extends Resource {
     return "forms";
   }
 
-  async history(id: string, version: string | null = null): Promise<Page> {
-    let options: FetchOptions =
-      version === null ? {} : { qs: { version: version } };
+  async history(id: string, version: Nullable<string> = null): Promise<Page> {
+    let options: FetchOptions = version === null ? {} : { qs: { version: version } };
 
-    const body = await this.client.api.get(
-      this.memberActionPath(id, "history"),
-      options
-    );
+    const body = await this.client.api.get(this.memberActionPath(id, "history"), options);
 
     return new Page(body, this.resourcesName);
   }

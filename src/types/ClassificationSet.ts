@@ -1,21 +1,21 @@
-import { DataContainer } from "./DataContainer"
+import { DataContainer } from "./DataContainer";
 
 export interface ClassificationSetItem {
-	label: string
-	value?: string | null
-	child_classifications?: ClassificationSetItem[]
+  label: string;
+  value?: Nullable<string>;
+  child_classifications?: ClassificationSetItem[];
 }
 
 export interface ClassificationSet {
-	name: string
-	description?: string | null
-	version?: number | null
-	id?: string | null
-	created_at?: string | null
-	updated_at?: string | null
-	items: ClassificationSetItem[]
+  name: string;
+  description?: Nullable<string>;
+  version?: Nullable<number>;
+  id?: Nullable<string>;
+  created_at?: Nullable<string>;
+  updated_at?: Nullable<string>;
+  items: ClassificationSetItem[];
 }
 
 export interface ClassificationSetContainer extends DataContainer<ClassificationSet> {
-	objects: ClassificationSet[]
+  objects: ClassificationSet[];
 }

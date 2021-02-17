@@ -1,20 +1,20 @@
-import { DataContainer } from "./DataContainer"
+import { DataContainer } from "./DataContainer";
 
 export interface Choice {
-	label: string
-	value?: string | null
+  label: string;
+  value?: Nullable<string>;
 }
 
 export interface ChoiceList {
-	name: string
-	description?: string | null
-	version?: number | null
-	id?: string | null
-	created_at?: string | null
-	updated_at?: string | null
-	choices: Choice[]
+  name: string;
+  description?: Nullable<string>;
+  version?: Nullable<number>;
+  id?: Nullable<string>;
+  created_at?: Nullable<string>;
+  updated_at?: Nullable<string>;
+  choices: Choice[];
 }
 
 export interface ChoiceListContainer extends DataContainer<ChoiceList> {
-	objects: ChoiceList[]
+  objects: ChoiceList[];
 }

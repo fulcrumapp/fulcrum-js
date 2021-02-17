@@ -1,73 +1,73 @@
-import { DataContainer } from "./DataContainer"
+import { DataContainer } from "./DataContainer";
 
-type MinLat = number
-type MinLong = number
-type MaxLat = number
-type MaxLong = number
-export type BoundingBox = [MinLat, MinLong, MaxLat, MaxLong]
+type MinLat = number;
+type MinLong = number;
+type MaxLat = number;
+type MaxLong = number;
+export type BoundingBox = [MinLat, MinLong, MaxLat, MaxLong];
 
 export interface StatusFieldChoice {
-	label: string
-	value: string
-	color: string
+  label: string;
+  value: string;
+  color: string;
 }
 
 export interface StatusField {
-	type: string
-	label: string
-	key: string
-	data_name: string
-	default_value: string
-	enabled: boolean
-	read_only: boolean
-	hidden: boolean
-	description: string
-	choices: StatusFieldChoice[]
-	required: boolean
-	disabled: boolean
-	default_previous_value: boolean
+  type: string;
+  label: string;
+  key: string;
+  data_name: string;
+  default_value: string;
+  enabled: boolean;
+  read_only: boolean;
+  hidden: boolean;
+  description: string;
+  choices: StatusFieldChoice[];
+  required: boolean;
+  disabled: boolean;
+  default_previous_value: boolean;
 }
 
 export interface Element {
-	temporary_place_holder: string
-	// TODO: Define props of Element
+  temporary_place_holder: string;
+  // TODO: Define props of Element
 }
 
 export interface Form {
-	name: string
-	description?: string | null
-	version?: number | null
-	bounding_box?: BoundingBox | null
-	record_title_key: string
-	title_field_keys?: string[] | null
-	status_field?: StatusField | null
-	auto_assign?: boolean | null
-	hidden_on_dashboard?: boolean | null
-	record_count?: number | null
-	geometry_types?: ["Point"] | [] | null
-	geometry_required?: boolean | null
-	script?: string | null
-	projects_enabled?: boolean | null
-	assignment_enabled?: boolean | null
-	id?: string | null
-	created_at?: string | null
-	updated_at?: string | null
-	image?: string | null
-	image_thumbnail?: string | null
-	image_small?: string | null
-	image_large?: string | null
-	elements: Element[]
+  name: string;
+  description?: Nullable<string>;
+  version?: Nullable<number>;
+  bounding_box?: Nullable<BoundingBox>;
+  record_title_key: string;
+  title_field_keys?: Nullable<string[]>;
+  status_field?: Nullable<StatusField>;
+  auto_assign?: Nullable<boolean>;
+  hidden_on_dashboard?: Nullable<boolean>;
+  record_count?: Nullable<number>;
+  geometry_types?: ["Point"] | [] | null;
+  geometry_required?: Nullable<boolean>;
+  script?: Nullable<string>;
+  projects_enabled?: Nullable<boolean>;
+  assignment_enabled?: Nullable<boolean>;
+  id?: Nullable<string>;
+  created_at?: Nullable<string>;
+  updated_at?: Nullable<string>;
+  image?: Nullable<string>;
+  image_thumbnail?: Nullable<string>;
+  image_small?: Nullable<string>;
+  image_large?: Nullable<string>;
+  elements: Element[];
 }
 
 export interface FormContainer extends DataContainer<Form> {
-	objects: Form[]
+  objects: Form[];
 }
 
 export interface ShallowForm {
-	// TODO: Further define props of ShallowForm
-	id?: string | null
+  // TODO: Further define props of ShallowForm
+  id?: Nullable<string>;
 }
 
 export interface ShallowFormContainer extends DataContainer<ShallowForm> {
-	objects: ShallowForm[]
+  objects: ShallowForm[];
 }
