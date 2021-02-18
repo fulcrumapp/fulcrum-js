@@ -1,13 +1,52 @@
 import * as base64 from "base-64";
 
+import { BASE_URL } from "./constants";
 import Fetcher from "./fetcher";
 import Client from "./client";
-import Page from "./page";
-
-import { BASE_URL } from "./constants";
-
 export { Client };
+import Page from "./page";
 export { Page };
+
+//type exports
+import { ChoiceList, Choice, ChoiceListContainer } from "./types/ChoiceList";
+export { ChoiceList, Choice, ChoiceListContainer };
+import { ClassificationSet, ClassificationSetContainer, ClassificationSetItem } from "./types/ClassificationSet";
+export { ClassificationSet, ClassificationSetContainer, ClassificationSetItem };
+import DataContainer from "./types/DataContainer";
+export { DataContainer };
+import FileOptions from "./types/FileOptions";
+export { FileOptions };
+import {
+  BoundingBox,
+  StatusFieldChoice,
+  StatusField,
+  Element,
+  Form,
+  FormContainer,
+  ShallowForm,
+  ShallowFormContainer,
+} from "./types/Form";
+export { BoundingBox, StatusFieldChoice, StatusField, Element, Form, FormContainer, ShallowForm, ShallowFormContainer };
+import { MediaIdKey } from "./types/Media";
+export { MediaIdKey };
+
+import { ExifData, PhotoMetadata, Photo, PhotoContainer } from "./types/Photo";
+export { ExifData, PhotoMetadata, Photo, PhotoContainer };
+import {
+  RecordPhotoField,
+  RecordChoiceListField,
+  LocationAttributes,
+  FormValue,
+  Record,
+  RecordContainer,
+} from "./types/Record";
+export { RecordPhotoField, RecordChoiceListField, LocationAttributes, FormValue, Record, RecordContainer };
+import { FulcrumSearchKeyValuePairHandler } from "./types/Search";
+export { FulcrumSearchKeyValuePairHandler };
+import User, { UserContext } from "./types/User";
+export { User, UserContext };
+import { WebHookDataType } from "./types/WebHook";
+export { WebHookDataType };
 
 export interface AuthOptions {
   headers: {
@@ -20,8 +59,7 @@ export interface AuthOptions {
       organization_id: string;
       user_id: string;
       note: string;
-      //TODO: types
-      timeout: any;
+      timeout: number;
     };
   };
 }
@@ -46,12 +84,11 @@ function generateAuthOptions(email: string, password: string): AuthOptions {
 export async function getUser(email: string, password: string) {
   const options = generateAuthOptions(email, password);
 
-  const body = await api.get("/users", options);
+  const {
+    body: { user },
+  }: { body: { user: User } } = await api.get("/users", options);
 
-  const { user } = body;
-
-  //TODO: types
-  user.contexts = user.contexts.map((context: any) => {
+  user.contexts = user.contexts.map(context => {
     // To avoid confusion remove the old API tokens. These will
     // be deprecated eventually, and authorizations have been
     // the way to create tokens for a while now.
@@ -68,8 +105,7 @@ export async function createAuthorization(
   password: string,
   organizationId: string,
   note: string,
-  //TODO: types
-  timeout: any,
+  timeout: number,
   userId: string
 ) {
   const authorizationObj = {

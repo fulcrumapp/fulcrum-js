@@ -26,6 +26,8 @@ export default class Form extends Resource {
   }
 }
 
+export default interface Form extends Resource, List, Find, Create, Update, Delete {}
+
 List.includeInto(Form);
 Find.includeInto(Form);
 Create.includeInto(Form);

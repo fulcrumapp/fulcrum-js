@@ -36,13 +36,13 @@ export default class Authorization extends Resource {
   }
 
   async regenerate(id: string) {
-    const body = await this.client.api.post(
-      this.memberActionPath(id, "regenerate")
-    );
+    const body = await this.client.api.post(this.memberActionPath(id, "regenerate"));
 
     return body[this.resourceName];
   }
 }
+
+export default interface Authorization extends Resource, List, Find, Update, Delete {}
 
 List.includeInto(Authorization);
 Find.includeInto(Authorization);

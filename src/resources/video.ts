@@ -1,26 +1,28 @@
-import Track from '../actions/track';
-import MediaResource from './media-base';
+import Track from "../actions/track";
+import MediaResource from "./media-base";
 
 export default class Video extends MediaResource {
   get defaultContentType() {
-    return 'video/mp4';
+    return "video/mp4";
   }
 
   get resourceName() {
-    return 'video';
+    return "video";
   }
 
   get resourcesName() {
-    return 'videos';
+    return "videos";
   }
 
   get createAction() {
-    return 'videos/upload';
+    return "videos/upload";
   }
 
   get versions() {
-    return [ 'original', 'small', 'medium' ];
+    return ["original", "small", "medium"];
   }
 }
+
+export default interface Video extends MediaResource, Track {}
 
 Track.includeInto(Video);

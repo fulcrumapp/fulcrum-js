@@ -1,4 +1,4 @@
-import { DataContainer } from "./DataContainer";
+import DataContainer from "./DataContainer";
 
 export interface Choice {
   label: string;
@@ -6,13 +6,13 @@ export interface Choice {
 }
 
 export interface ChoiceList {
-  name: string;
-  description?: Nullable<string>;
-  version?: Nullable<number>;
-  id?: Nullable<string>;
-  created_at?: Nullable<string>;
-  updated_at?: Nullable<string>;
   choices: Choice[];
+  created_at?: Nullable<string>;
+  description?: Nullable<string>;
+  id?: Nullable<string>;
+  name: string;
+  updated_at?: Nullable<string>;
+  version?: Nullable<number>;
 }
 
 export interface ChoiceListContainer extends DataContainer<ChoiceList> {

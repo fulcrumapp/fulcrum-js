@@ -7,7 +7,6 @@ export default class Create extends Mixin {
     return this.collectionPath();
   }
 
-  //TODO: types
   async create(object: any) {
     const options = {
       body: this.attributesForObject(object),

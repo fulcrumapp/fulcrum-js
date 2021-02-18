@@ -1,19 +1,24 @@
-import MediaResource from './media-base';
+import MediaResource from "./media-base";
 
 export default class Signature extends MediaResource {
   get defaultContentType() {
-    return 'image/png';
+    return "image/png";
   }
 
   get resourceName() {
-    return 'signature';
+    return "signature";
   }
 
   get resourcesName() {
-    return 'signatures';
+    return "signatures";
   }
 
   get versions() {
-    return [ 'original', 'thumbnail', 'large' ];
+    return ["original", "thumbnail", "large"];
+  }
+
+  //default implementation from Create
+  get createAction() {
+    return this.collectionPath();
   }
 }

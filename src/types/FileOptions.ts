@@ -1,8 +1,8 @@
-//TODO: this is from FormData.AppendOptions
+//this is from FormData.AppendOptions
 export default interface FileOptions {
-  header?: string | Headers;
-  knownLength?: number;
+  contentType?: string;
   filename?: string;
   filepath?: string;
-  contentType?: string;
+  header?: string | Headers;
+  knownLength?: number;
 }

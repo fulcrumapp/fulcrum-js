@@ -9,15 +9,15 @@ import Create from "../actions/create";
 import Resource from "./base";
 import FetchOptions from "../types/FetchOptions";
 
-export default class MediaResource extends Resource {
-  //TODO: types
-  optionsForUpload(file: File, attributes: any) {
+export default abstract class MediaResource extends Resource {
+  abstract get createAction(): string;
+  abstract get versions(): string[];
+
+  optionsForUpload(file: File, attributes: { [key: string]: string }) {
     const attrs = attributes || {};
     const formData = new FormData();
 
-    const accessKey = attrs.hasOwnProperty("accessKey")
-      ? attrs.accessKey
-      : uuid.v4();
+    const accessKey = attrs.hasOwnProperty("accessKey") ? attrs.accessKey : uuid.v4();
 
     formData.append(`${this.resourceName}[access_key]`, accessKey);
 
@@ -31,9 +31,7 @@ export default class MediaResource extends Resource {
     // fs.readFileSync('photo.jpg)
     // the file name can't be inferred so it must be supplied like
     // photos.create(fs.readFileSync('photo.jpg'), {fileName: 'photo.jpg'})
-    const fileOptions: FileOptions = attrs.hasOwnProperty("fileName")
-      ? { filename: attrs.fileName }
-      : {};
+    const fileOptions: FileOptions = attrs.hasOwnProperty("fileName") ? { filename: attrs.fileName } : {};
 
     formData.append(`${this.resourceName}[file]`, file, fileOptions);
 
@@ -45,27 +43,28 @@ export default class MediaResource extends Resource {
     };
   }
 
-  //TODO: types
-  async create(file: File, attributes: any) {
+  async create(file: File, attributes: { [key: string]: string }) {
     const options: FetchOptions = this.optionsForUpload(file, attributes);
 
-    //TODO: where does this even exist??
     const body = await this.client.api.post(this.createAction, options);
 
     return body[this.resourceName];
   }
 
   async media(accessKey: string, version = "original") {
-    //TODO: where does this even exist??
     const media = await this.find(accessKey);
 
     if (!this.versions.includes(version)) {
       throw new Error(`Version must be one of ${this.versions.join(", ")}.`);
     }
 
-    return fetch(media[version]).then((resp) => resp.body);
+    return fetch(media[version]).then(resp => resp.body);
   }
 }
+
+//TS doesn't understand the mixmatch variant of mixins
+//so we exclude Create even though it should technically be added
+export default interface MediaResource extends Resource, List, Find /*, Create*/ {}
 
 List.includeInto(MediaResource);
 Find.includeInto(MediaResource);

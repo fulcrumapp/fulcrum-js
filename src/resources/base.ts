@@ -14,8 +14,7 @@ export default abstract class Base {
     return this.resourcesName;
   }
 
-  //TODO: types
-  actionPath(action: any): string {
+  actionPath(action: string): string {
     return `${this.resourcesName}/${action}`;
   }
 
@@ -23,12 +22,10 @@ export default abstract class Base {
     return `${this.resourcesName}/${id}`;
   }
 
-  //TODO: types
-  memberActionPath(id: string, action: any): string {
+  memberActionPath(id: string, action: string): string {
     return `${this.resourcesName}/${id}/${action}`;
   }
 
-  //TODO: types
   attributesForObject(object: any) {
     const attributes: any = {};
     attributes[this.resourceName] = object;

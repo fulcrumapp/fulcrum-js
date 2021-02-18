@@ -32,12 +32,12 @@ export default class Record extends Resource {
   }
 
   async history(id: string) {
-    const body = await this.client.api.get(
-      this.memberActionPath(id, "history")
-    );
+    const body = await this.client.api.get(this.memberActionPath(id, "history"));
     return new Page(body, this.resourcesName);
   }
 }
+
+export default interface Record extends Resource, List, Find, Create, Update {}
 
 List.includeInto(Record);
 Find.includeInto(Record);

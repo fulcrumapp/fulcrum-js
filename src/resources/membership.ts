@@ -11,7 +11,6 @@ export default class Membership extends Resource {
     return "memberships";
   }
 
-  //TODO: types
   async change(resourceType: string, id: string, action: string, membershipIds: string[]) {
     const change: { [key: string]: string | string[] } = {
       type: `${resourceType}_members`,
@@ -32,6 +31,8 @@ export default class Membership extends Resource {
     return body[this.resourcesName];
   }
 }
+
+export default interface Membership extends Resource, List, Find {}
 
 List.includeInto(Membership);
 Find.includeInto(Membership);

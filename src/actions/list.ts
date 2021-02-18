@@ -4,6 +4,7 @@ import Base from "../resources/base";
 import FetchOptions from "../types/FetchOptions";
 
 import { DEFAULT_PER_PAGE } from "../constants";
+import DataContainer from "../types/DataContainer";
 
 export default class List extends Mixin {
   get defaultListParams() {
@@ -15,7 +16,7 @@ export default class List extends Mixin {
       qs: params || this.defaultListParams,
     };
 
-    const body = await this.client.api.get(this.collectionPath(), options);
+    const body: DataContainer<any> = await this.client.api.get(this.collectionPath(), options);
     return new Page(body, this.resourcesName);
   }
 }
