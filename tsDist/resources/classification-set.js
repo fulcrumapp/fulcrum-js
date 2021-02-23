@@ -26,14 +26,14 @@ var ClassificationSet = /** @class */ (function (_super) {
     }
     Object.defineProperty(ClassificationSet.prototype, "resourceName", {
         get: function () {
-            return 'classification_set';
+            return "classification_set";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(ClassificationSet.prototype, "resourcesName", {
         get: function () {
-            return 'classification_sets';
+            return "classification_sets";
         },
         enumerable: false,
         configurable: true

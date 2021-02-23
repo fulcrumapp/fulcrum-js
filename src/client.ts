@@ -1,5 +1,5 @@
 import Fetcher from "./fetcher";
-import FetchOptions, { Headers } from "./types/FetchOptions";
+import FetchOptions from "./types/FetchOptions";
 import { BASE_URL } from "./constants";
 
 import Audio from "./resources/audio";
@@ -63,7 +63,7 @@ export default class Client {
     };
 
     const tokenOptions = Object.assign({}, options);
-    (tokenOptions.headers as Headers)["X-ApiToken"] = token;
+    (tokenOptions.headers as any)["X-ApiToken"] = token;
     const noTokenOptions = Object.assign({}, options);
 
     this.api = new Fetcher(tokenOptions);

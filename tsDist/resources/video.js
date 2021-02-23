@@ -22,35 +22,35 @@ var Video = /** @class */ (function (_super) {
     }
     Object.defineProperty(Video.prototype, "defaultContentType", {
         get: function () {
-            return 'video/mp4';
+            return "video/mp4";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Video.prototype, "resourceName", {
         get: function () {
-            return 'video';
+            return "video";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Video.prototype, "resourcesName", {
         get: function () {
-            return 'videos';
+            return "videos";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Video.prototype, "createAction", {
         get: function () {
-            return 'videos/upload';
+            return "videos/upload";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Video.prototype, "versions", {
         get: function () {
-            return ['original', 'small', 'medium'];
+            return ["original", "small", "medium"];
         },
         enumerable: false,
         configurable: true

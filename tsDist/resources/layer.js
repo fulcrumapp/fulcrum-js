@@ -26,14 +26,14 @@ var Layer = /** @class */ (function (_super) {
     }
     Object.defineProperty(Layer.prototype, "resourceName", {
         get: function () {
-            return 'layer';
+            return "layer";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Layer.prototype, "resourcesName", {
         get: function () {
-            return 'layers';
+            return "layers";
         },
         enumerable: false,
         configurable: true

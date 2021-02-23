@@ -49,9 +49,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var form_data_1 = require("form-data");
+var FormData = require("form-data");
 var mixmatch_1 = require("mixmatch");
-var uuid_1 = require("uuid");
+var uuid = require("uuid");
 var Track = /** @class */ (function (_super) {
     __extends(Track, _super);
     function Track() {
@@ -64,15 +64,13 @@ var Track = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        formData = new form_data_1.default();
-                        accessKey = id || uuid_1.default.v4();
+                        formData = new FormData();
+                        accessKey = id || uuid.v4();
                         formData.append(this.resourceName + "[access_key]", accessKey);
                         formData.append(this.resourceName + "[track]", file);
                         options = {
                             body: formData,
-                            headers: {
-                                'Content-Type': null
-                            }
+                            headers: {},
                         };
                         return [4 /*yield*/, this.client.api.post(this.createAction, options)];
                     case 1:
@@ -83,7 +81,7 @@ var Track = /** @class */ (function (_super) {
         });
     };
     Track.prototype.track = function (id, format) {
-        if (format === void 0) { format = 'json'; }
+        if (format === void 0) { format = "json"; }
         return __awaiter(this, void 0, void 0, function () {
             var body;
             return __generator(this, function (_a) {
@@ -91,7 +89,7 @@ var Track = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, this.client.api.get(this.trackPath(id, format))];
                     case 1:
                         body = _a.sent();
-                        if (format === 'json') {
+                        if (format === "json") {
                             return [2 /*return*/, body.tracks];
                         }
                         return [2 /*return*/, body];

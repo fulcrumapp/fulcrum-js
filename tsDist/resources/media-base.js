@@ -49,8 +49,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var uuid_1 = require("uuid");
-var form_data_1 = require("form-data");
+var uuid = require("uuid");
+var FormData = require("form-data");
 var list_1 = require("../actions/list");
 var find_1 = require("../actions/find");
 var create_1 = require("../actions/create");
@@ -62,28 +62,23 @@ var MediaResource = /** @class */ (function (_super) {
     }
     MediaResource.prototype.optionsForUpload = function (file, attributes) {
         var attrs = attributes || {};
-        var formData = new form_data_1.default();
-        var accessKey = attrs.hasOwnProperty('accessKey') ? attrs.accessKey : uuid_1.default.v4();
+        var formData = new FormData();
+        var accessKey = attrs.hasOwnProperty("accessKey") ? attrs.accessKey : uuid.v4();
         formData.append(this.resourceName + "[access_key]", accessKey);
-        if (attrs.hasOwnProperty('track')) {
+        if (attrs.hasOwnProperty("track")) {
             formData.append(this.resourceName + "[track]", attrs.track);
         }
-        var fileOptions = null;
         // File names from media streams like
         // fs.createReadStream('photo.jpg')
         // are automatically added. When reading from buffers like
         // fs.readFileSync('photo.jpg)
         // the file name can't be inferred so it must be supplied like
         // photos.create(fs.readFileSync('photo.jpg'), {fileName: 'photo.jpg'})
-        if (attrs.hasOwnProperty('fileName')) {
-            fileOptions = { filename: attrs.fileName };
-        }
+        var fileOptions = attrs.hasOwnProperty("fileName") ? { filename: attrs.fileName } : {};
         formData.append(this.resourceName + "[file]", file, fileOptions);
         return {
             body: formData,
-            headers: {
-                'Content-Type': null
-            }
+            headers: {},
         };
     };
     MediaResource.prototype.create = function (file, attributes) {
@@ -102,7 +97,7 @@ var MediaResource = /** @class */ (function (_super) {
         });
     };
     MediaResource.prototype.media = function (accessKey, version) {
-        if (version === void 0) { version = 'original'; }
+        if (version === void 0) { version = "original"; }
         return __awaiter(this, void 0, void 0, function () {
             var media;
             return __generator(this, function (_a) {
@@ -111,10 +106,9 @@ var MediaResource = /** @class */ (function (_super) {
                     case 1:
                         media = _a.sent();
                         if (!this.versions.includes(version)) {
-                            throw new Error("Version must be one of " + this.versions.join(', ') + ".");
+                            throw new Error("Version must be one of " + this.versions.join(", ") + ".");
                         }
-                        return [2 /*return*/, fetch(media[version])
-                                .then(function (resp) { return resp.body; })];
+                        return [2 /*return*/, fetch(media[version]).then(function (resp) { return resp.body; })];
                 }
             });
         });

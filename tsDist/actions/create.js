@@ -69,7 +69,7 @@ var Create = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         options = {
-                            body: this.attributesForObject(object)
+                            body: this.attributesForObject(object),
                         };
                         return [4 /*yield*/, this.client.api.post(this.createAction, options)];
                     case 1:

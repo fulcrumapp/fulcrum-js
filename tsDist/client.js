@@ -1,46 +1,46 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var fetcher_1 = require("./fetcher");
-var form_1 = require("./resources/form");
-var record_1 = require("./resources/record");
+var constants_1 = require("./constants");
+var audio_1 = require("./resources/audio");
+var audit_log_1 = require("./resources/audit-log");
+var authorization_1 = require("./resources/authorization");
 var changeset_1 = require("./resources/changeset");
 var choice_list_1 = require("./resources/choice-list");
 var classification_set_1 = require("./resources/classification-set");
-var authorization_1 = require("./resources/authorization");
-var membership_1 = require("./resources/membership");
-var project_1 = require("./resources/project");
+var form_1 = require("./resources/form");
 var layer_1 = require("./resources/layer");
+var membership_1 = require("./resources/membership");
 var photo_1 = require("./resources/photo");
-var video_1 = require("./resources/video");
-var audio_1 = require("./resources/audio");
-var signature_1 = require("./resources/signature");
-var role_1 = require("./resources/role");
-var webhook_1 = require("./resources/webhook");
-var audit_log_1 = require("./resources/audit-log");
+var project_1 = require("./resources/project");
 var query_1 = require("./resources/query");
-var VERSION = require('../package.json').version;
-var BASE_URL = 'https://api.fulcrumapp.com/api/v2';
+var record_1 = require("./resources/record");
+var role_1 = require("./resources/role");
+var signature_1 = require("./resources/signature");
+var video_1 = require("./resources/video");
+var webhook_1 = require("./resources/webhook");
+var VERSION = require("../package.json").version;
 var Client = /** @class */ (function () {
     function Client(token, opts) {
         var _opts = opts || {};
-        this.baseUrl = _opts.baseUrl || BASE_URL;
+        this.baseUrl = _opts.baseUrl || constants_1.BASE_URL;
         this.version = VERSION;
         var options = {
-            baseURI: this.baseUrl,
+            baseUrl: this.baseUrl,
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'User-Agent': _opts.userAgent || "fulcrum-js version " + VERSION
-            }
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "User-Agent": _opts.userAgent || "fulcrum-js version " + VERSION,
+            },
         };
         var tokenOptions = Object.assign({}, options);
-        tokenOptions.headers['X-ApiToken'] = token;
+        tokenOptions.headers["X-ApiToken"] = token;
         var noTokenOptions = Object.assign({}, options);
         this.api = new fetcher_1.default(tokenOptions);
         this.noTokenApi = new fetcher_1.default(noTokenOptions);
     }
     Client.prototype.urlFromPath = function (path, base) {
-        return (base || this.baseUrl) + '/' + path;
+        return (base !== null && base !== void 0 ? base : this.baseUrl) + "/" + path;
     };
     Client.prototype.url = function (path, base) {
         return this.urlFromPath(path, base);

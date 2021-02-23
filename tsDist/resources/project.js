@@ -26,14 +26,14 @@ var Project = /** @class */ (function (_super) {
     }
     Object.defineProperty(Project.prototype, "resourceName", {
         get: function () {
-            return 'project';
+            return "project";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Project.prototype, "resourcesName", {
         get: function () {
-            return 'projects';
+            return "projects";
         },
         enumerable: false,
         configurable: true

@@ -26,14 +26,14 @@ var Webhook = /** @class */ (function (_super) {
     }
     Object.defineProperty(Webhook.prototype, "resourceName", {
         get: function () {
-            return 'webhook';
+            return "webhook";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Webhook.prototype, "resourcesName", {
         get: function () {
-            return 'webhooks';
+            return "webhooks";
         },
         enumerable: false,
         configurable: true

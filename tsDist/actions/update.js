@@ -62,7 +62,7 @@ var Update = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         options = {
-                            body: this.attributesForObject(object)
+                            body: this.attributesForObject(object),
                         };
                         return [4 /*yield*/, this.client.api.put(this.memberPath(id), options)];
                     case 1:

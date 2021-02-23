@@ -37,9 +37,7 @@ export default abstract class MediaResource extends Resource {
 
     return {
       body: formData,
-      headers: {
-        "Content-Type": null,
-      },
+      headers: {},
     };
   }
 

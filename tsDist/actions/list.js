@@ -51,7 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var mixmatch_1 = require("mixmatch");
 var page_1 = require("../page");
-var DEFAULT_PER_PAGE = 1000;
+var constants_1 = require("../constants");
 var List = /** @class */ (function (_super) {
     __extends(List, _super);
     function List() {
@@ -59,7 +59,7 @@ var List = /** @class */ (function (_super) {
     }
     Object.defineProperty(List.prototype, "defaultListParams", {
         get: function () {
-            return { per_page: DEFAULT_PER_PAGE };
+            return { per_page: constants_1.DEFAULT_PER_PAGE };
         },
         enumerable: false,
         configurable: true
@@ -71,7 +71,7 @@ var List = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         options = {
-                            qs: params || this.defaultListParams
+                            qs: params || this.defaultListParams,
                         };
                         return [4 /*yield*/, this.client.api.get(this.collectionPath(), options)];
                     case 1:

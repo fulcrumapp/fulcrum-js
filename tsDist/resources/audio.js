@@ -22,35 +22,35 @@ var Audio = /** @class */ (function (_super) {
     }
     Object.defineProperty(Audio.prototype, "defaultContentType", {
         get: function () {
-            return 'audio/x-m4a';
+            return "audio/x-m4a";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Audio.prototype, "resourceName", {
         get: function () {
-            return 'audio';
+            return "audio";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Audio.prototype, "resourcesName", {
         get: function () {
-            return 'audio';
+            return "audio";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Audio.prototype, "createAction", {
         get: function () {
-            return 'audio/upload';
+            return "audio/upload";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Audio.prototype, "versions", {
         get: function () {
-            return ['original'];
+            return ["original"];
         },
         enumerable: false,
         configurable: true

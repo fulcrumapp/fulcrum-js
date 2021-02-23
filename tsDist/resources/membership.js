@@ -59,14 +59,14 @@ var Membership = /** @class */ (function (_super) {
     }
     Object.defineProperty(Membership.prototype, "resourceName", {
         get: function () {
-            return 'membership';
+            return "membership";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Membership.prototype, "resourcesName", {
         get: function () {
-            return 'memberships';
+            return "memberships";
         },
         enumerable: false,
         configurable: true
@@ -78,16 +78,16 @@ var Membership = /** @class */ (function (_super) {
                 switch (_a.label) {
                     case 0:
                         change = {
-                            type: resourceType + "_members"
+                            type: resourceType + "_members",
                         };
                         change[resourceType + "_id"] = id;
                         change[action] = membershipIds;
                         options = {
                             body: {
-                                change: change
-                            }
+                                change: change,
+                            },
                         };
-                        return [4 /*yield*/, this.client.api.post(this.actionPath('change_permissions'), options)];
+                        return [4 /*yield*/, this.client.api.post(this.actionPath("change_permissions"), options)];
                     case 1:
                         body = _a.sent();
                         return [2 /*return*/, body[this.resourcesName]];

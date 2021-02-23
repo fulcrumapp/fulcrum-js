@@ -1,9 +1,5 @@
-export interface Headers {
-  [key: string]: Nullable<string>;
-}
-export default interface FetchOptions {
+export default interface FetchOptions extends RequestInit {
   baseUrl?: string;
-  headers?: Headers;
   body?: any;
   qs?: { [key: string]: string };
   userAgent?: string;

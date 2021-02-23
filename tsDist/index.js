@@ -36,37 +36,42 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createAuthorization = exports.getUser = exports.Page = exports.Client = void 0;
-var base_64_1 = require("base-64");
+exports.createAuthorization = exports.getUser = exports.WebHookDataType = exports.MediaIdKey = exports.Page = exports.Client = void 0;
+var base64 = require("base-64");
+var constants_1 = require("./constants");
 var fetcher_1 = require("./fetcher");
 var client_1 = require("./client");
 exports.Client = client_1.default;
 var page_1 = require("./page");
 exports.Page = page_1.default;
+var Media_1 = require("./types/Media");
+Object.defineProperty(exports, "MediaIdKey", { enumerable: true, get: function () { return Media_1.MediaIdKey; } });
+var WebHook_1 = require("./types/WebHook");
+Object.defineProperty(exports, "WebHookDataType", { enumerable: true, get: function () { return WebHook_1.WebHookDataType; } });
 var api = new fetcher_1.default({
-    baseURI: 'https://api.fulcrumapp.com/api/v2'
+    baseUrl: constants_1.BASE_URL,
+    headers: {},
 });
 function generateAuthOptions(email, password) {
-    var encoded = base_64_1.default.encode(email + ":" + password);
+    var encoded = base64.encode(email + ":" + password);
     return {
         headers: {
-            'Authorization': "Basic " + encoded,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
+            Authorization: "Basic " + encoded,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
     };
 }
 function getUser(email, password) {
     return __awaiter(this, void 0, void 0, function () {
-        var options, body, user;
+        var options, user;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     options = generateAuthOptions(email, password);
-                    return [4 /*yield*/, api.get('/users', options)];
+                    return [4 /*yield*/, api.get("/users", options)];
                 case 1:
-                    body = _a.sent();
-                    user = body.user;
+                    user = (_a.sent()).body.user;
                     user.contexts = user.contexts.map(function (context) {
                         // To avoid confusion remove the old API tokens. These will
                         // be deprecated eventually, and authorizations have been
@@ -91,12 +96,12 @@ function createAuthorization(email, password, organizationId, note, timeout, use
                             organization_id: organizationId,
                             user_id: userId,
                             note: note,
-                            timeout: timeout
-                        }
+                            timeout: timeout,
+                        },
                     };
                     options = generateAuthOptions(email, password);
                     options.body = authorizationObj;
-                    return [4 /*yield*/, api.post('/authorizations', options)];
+                    return [4 /*yield*/, api.post("/authorizations", options)];
                 case 1:
                     body = _a.sent();
                     return [2 /*return*/, body.authorization];

@@ -22,14 +22,14 @@ var Role = /** @class */ (function (_super) {
     }
     Object.defineProperty(Role.prototype, "resourceName", {
         get: function () {
-            return 'role';
+            return "role";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Role.prototype, "resourcesName", {
         get: function () {
-            return 'roles';
+            return "roles";
         },
         enumerable: false,
         configurable: true

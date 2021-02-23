@@ -63,14 +63,14 @@ var Form = /** @class */ (function (_super) {
     }
     Object.defineProperty(Form.prototype, "resourceName", {
         get: function () {
-            return 'form';
+            return "form";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Form.prototype, "resourcesName", {
         get: function () {
-            return 'forms';
+            return "forms";
         },
         enumerable: false,
         configurable: true
@@ -82,11 +82,8 @@ var Form = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        options = null;
-                        if (version != null) {
-                            options = { qs: { version: version } };
-                        }
-                        return [4 /*yield*/, this.client.api.get(this.memberActionPath(id, 'history'), options)];
+                        options = version === null ? {} : { qs: { version: version } };
+                        return [4 /*yield*/, this.client.api.get(this.memberActionPath(id, "history"), options)];
                     case 1:
                         body = _a.sent();
                         return [2 /*return*/, new page_1.default(body, this.resourcesName)];

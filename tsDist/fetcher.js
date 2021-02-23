@@ -51,60 +51,61 @@ require("portable-fetch");
 var p_queue_1 = require("p-queue");
 function getQueryString(params) {
     return Object.keys(params)
-        .map(function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]); })
-        .join('&');
+        .map(function (k) { return encodeURIComponent(k) + "=" + encodeURIComponent(params[k]); })
+        .join("&");
 }
 function errorMessageForStatus(status) {
     var messages = {
-        400: 'Bad Request',
-        401: 'Unauthorized',
-        402: 'Payment Required',
-        403: 'Forbidden',
-        404: 'Not Found'
+        400: "Bad Request",
+        401: "Unauthorized",
+        402: "Payment Required",
+        403: "Forbidden",
+        404: "Not Found",
     };
     return messages[status] || "HTTP " + status;
 }
 var Fetcher = /** @class */ (function () {
     function Fetcher(options) {
+        var _a;
         this.options = options;
         this.queue = new p_queue_1.default({ concurrency: 3 });
-        this.headers = options.headers;
+        this.headers = (_a = options.headers) !== null && _a !== void 0 ? _a : {};
     }
     Fetcher.prototype._processOptions = function (opts) {
         var options = __assign(__assign({}, opts), { headers: __assign(__assign({}, this.headers), opts.headers) });
         // remove any nil or blank headers
         // (e.g. to automatically set Content-Type with `FormData` boundary)
         Object.keys(options.headers).forEach(function (key) {
-            if (typeof options.headers[key] === 'undefined' ||
-                options.headers[key] === null ||
-                options.headers[key] === '') {
+            if (options.headers[key] === undefined || options.headers[key] === null || options.headers[key] === "") {
                 delete options.headers[key];
             }
         });
-        delete options.baseURI;
-        if (options && options.hasOwnProperty('body') &&
-            options.hasOwnProperty('headers') && options.headers['Content-Type'] === 'application/json') {
+        delete options.baseUrl;
+        if (options &&
+            options.hasOwnProperty("body") &&
+            options.hasOwnProperty("headers") &&
+            options.headers["Content-Type"] === "application/json") {
             options.body = JSON.stringify(options.body);
         }
         return options;
     };
-    Fetcher.prototype._fetch = function (url, options) {
+    Fetcher.prototype._fetch = function (url, opts) {
         return __awaiter(this, void 0, void 0, function () {
             var resp, errorMessage, contentType;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, fetch(url, options)];
+                    case 0: return [4 /*yield*/, fetch(url, opts)];
                     case 1:
                         resp = _a.sent();
                         if (!resp.ok) {
-                            errorMessage = errorMessageForStatus(resp.status) || 'Unknown Error';
-                            if (errorMessage === 'Unauthorized' && this.authenticationErrorHandler) {
+                            errorMessage = errorMessageForStatus(resp.status) || "Unknown Error";
+                            if (errorMessage === "Unauthorized" && this.authenticationErrorHandler) {
                                 this.authenticationErrorHandler();
                             }
                             throw new Error(errorMessage);
                         }
-                        contentType = resp.headers.get('Content-Type');
-                        if (contentType && contentType.split(';')[0] === 'application/json') {
+                        contentType = resp.headers.get("Content-Type");
+                        if (contentType && contentType.split(";")[0] === "application/json") {
                             return [2 /*return*/, resp.json()];
                         }
                         return [2 /*return*/, resp.text()];
@@ -112,32 +113,32 @@ var Fetcher = /** @class */ (function () {
             });
         });
     };
-    Fetcher.prototype._queue = function (url, options) {
+    Fetcher.prototype._queue = function (url, opts) {
         var _this = this;
-        return this.queue.add(function () { return _this._fetch(url, options); });
+        return this.queue.add(function () { return _this._fetch(url, opts); });
     };
     Fetcher.prototype.get = function (path, opts) {
-        var url = this.options.baseURI + '/' + path;
-        if (opts && opts.hasOwnProperty('qs')) {
-            url += '?' + getQueryString(opts.qs);
+        var url = this.options.baseUrl + "/" + path;
+        if (opts && opts.hasOwnProperty("qs")) {
+            url += "?" + getQueryString(opts.qs);
             delete opts.qs;
         }
-        var options = this._processOptions(Object.assign({ method: 'GET' }, opts));
+        var options = this._processOptions(Object.assign({ method: "GET" }, opts));
         return this._queue(url, options);
     };
     Fetcher.prototype.post = function (path, opts) {
-        var url = this.options.baseURI + '/' + path;
-        var options = this._processOptions(Object.assign({ method: 'POST' }, opts));
+        var url = this.options.baseUrl + "/" + path;
+        var options = this._processOptions(Object.assign({ method: "POST" }, opts));
         return this._queue(url, options);
     };
     Fetcher.prototype.put = function (path, opts) {
-        var url = this.options.baseURI + '/' + path;
-        var options = this._processOptions(Object.assign({ method: 'PUT' }, opts));
+        var url = this.options.baseUrl + "/" + path;
+        var options = this._processOptions(Object.assign({ method: "PUT" }, opts));
         return this._queue(url, options);
     };
     Fetcher.prototype.del = function (path, opts) {
-        var url = this.options.baseURI + '/' + path;
-        var options = this._processOptions(Object.assign({ method: 'DELETE' }, opts));
+        var url = this.options.baseUrl + "/" + path;
+        var options = this._processOptions(Object.assign({ method: "DELETE" }, opts));
         return this._queue(url, options);
     };
     Fetcher.prototype.registerAuthenticationErrorHandler = function (func) {

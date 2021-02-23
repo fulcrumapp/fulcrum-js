@@ -21,28 +21,36 @@ var Photo = /** @class */ (function (_super) {
     }
     Object.defineProperty(Photo.prototype, "defaultContentType", {
         get: function () {
-            return 'image/jpeg';
+            return "image/jpeg";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Photo.prototype, "resourceName", {
         get: function () {
-            return 'photo';
+            return "photo";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Photo.prototype, "resourcesName", {
         get: function () {
-            return 'photos';
+            return "photos";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Photo.prototype, "versions", {
         get: function () {
-            return ['original', 'thumbnail', 'large'];
+            return ["original", "thumbnail", "large"];
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Photo.prototype, "createAction", {
+        //default implementation from Create
+        get: function () {
+            return this.collectionPath();
         },
         enumerable: false,
         configurable: true

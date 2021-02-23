@@ -26,14 +26,14 @@ var ChoiceList = /** @class */ (function (_super) {
     }
     Object.defineProperty(ChoiceList.prototype, "resourceName", {
         get: function () {
-            return 'choice_list';
+            return "choice_list";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(ChoiceList.prototype, "resourcesName", {
         get: function () {
-            return 'choice_lists';
+            return "choice_lists";
         },
         enumerable: false,
         configurable: true

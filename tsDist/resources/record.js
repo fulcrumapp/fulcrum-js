@@ -49,11 +49,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var base_1 = require("./base");
 var list_1 = require("../actions/list");
 var find_1 = require("../actions/find");
 var create_1 = require("../actions/create");
 var update_1 = require("../actions/update");
-var base_1 = require("./base");
 var page_1 = require("../page");
 var Record = /** @class */ (function (_super) {
     __extends(Record, _super);
@@ -62,14 +62,14 @@ var Record = /** @class */ (function (_super) {
     }
     Object.defineProperty(Record.prototype, "resourceName", {
         get: function () {
-            return 'record';
+            return "record";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Record.prototype, "resourcesName", {
         get: function () {
-            return 'records';
+            return "records";
         },
         enumerable: false,
         configurable: true
@@ -79,8 +79,8 @@ var Record = /** @class */ (function (_super) {
         if (changesetID != null) {
             options.body = {
                 record: {
-                    changeset_id: changesetID
-                }
+                    changeset_id: changesetID,
+                },
             };
         }
         return this.client.api.del(this.memberPath(id), options);
@@ -90,7 +90,7 @@ var Record = /** @class */ (function (_super) {
             var body;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.client.api.get(this.memberActionPath(id, 'history'))];
+                    case 0: return [4 /*yield*/, this.client.api.get(this.memberActionPath(id, "history"))];
                     case 1:
                         body = _a.sent();
                         return [2 /*return*/, new page_1.default(body, this.resourcesName)];

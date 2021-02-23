@@ -49,7 +49,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var base_64_1 = require("base-64");
+var base64 = require("base-64");
 var list_1 = require("../actions/list");
 var find_1 = require("../actions/find");
 var update_1 = require("../actions/update");
@@ -62,14 +62,14 @@ var Authorization = /** @class */ (function (_super) {
     }
     Object.defineProperty(Authorization.prototype, "resourceName", {
         get: function () {
-            return 'authorization';
+            return "authorization";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Authorization.prototype, "resourcesName", {
         get: function () {
-            return 'authorizations';
+            return "authorizations";
         },
         enumerable: false,
         configurable: true
@@ -87,17 +87,16 @@ var Authorization = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        encoded = base_64_1.default.encode(email + ":" + password);
+                        encoded = base64.encode(email + ":" + password);
                         options = {
                             body: this.attributesForObject(object),
                             headers: {
-                                'Authorization': "Basic " + encoded,
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            }
+                                Authorization: "Basic " + encoded,
+                                Accept: "application/json",
+                                "Content-Type": "application/json",
+                            },
                         };
-                        return [4 /*yield*/, this.client.noTokenApi
-                                .post(this.createAction, options)];
+                        return [4 /*yield*/, this.client.noTokenApi.post(this.createAction, options)];
                     case 1:
                         body = _a.sent();
                         return [2 /*return*/, body[this.resourceName]];
@@ -110,7 +109,7 @@ var Authorization = /** @class */ (function (_super) {
             var body;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.client.api.post(this.memberActionPath(id, 'regenerate'))];
+                    case 0: return [4 /*yield*/, this.client.api.post(this.memberActionPath(id, "regenerate"))];
                     case 1:
                         body = _a.sent();
                         return [2 /*return*/, body[this.resourceName]];

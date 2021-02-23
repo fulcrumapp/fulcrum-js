@@ -8,47 +8,62 @@ import Page from "./page";
 export { Page };
 
 //type exports
-import { ChoiceList, Choice, ChoiceListContainer } from "./types/ChoiceList";
-export { ChoiceList, Choice, ChoiceListContainer };
+import { Choice, ChoiceList, ChoiceListContainer } from "./types/ChoiceList";
+export { Choice, ChoiceList, ChoiceListContainer };
+
 import { ClassificationSet, ClassificationSetContainer, ClassificationSetItem } from "./types/ClassificationSet";
 export { ClassificationSet, ClassificationSetContainer, ClassificationSetItem };
+
 import DataContainer from "./types/DataContainer";
 export { DataContainer };
+
 import FileOptions from "./types/FileOptions";
 export { FileOptions };
-import {
-  BoundingBox,
-  StatusFieldChoice,
-  StatusField,
-  Element,
-  Form,
-  FormContainer,
-  ShallowForm,
-  ShallowFormContainer,
-} from "./types/Form";
-export { BoundingBox, StatusFieldChoice, StatusField, Element, Form, FormContainer, ShallowForm, ShallowFormContainer };
+
+import { BoundingBox, Element, Form, FormContainer, ShallowForm, StatusField, StatusFieldChoice } from "./types/Form";
+export { BoundingBox, Element, Form, FormContainer, ShallowForm, StatusField, StatusFieldChoice };
+
 import { MediaIdKey } from "./types/Media";
 export { MediaIdKey };
 
-import { ExifData, PhotoMetadata, Photo, PhotoContainer } from "./types/Photo";
-export { ExifData, PhotoMetadata, Photo, PhotoContainer };
+import { ExifData, Photo, PhotoContainer, PhotoMetadata } from "./types/Photo";
+export { ExifData, Photo, PhotoContainer, PhotoMetadata };
+
 import {
-  RecordPhotoField,
-  RecordChoiceListField,
-  LocationAttributes,
-  FormValue,
+  FormValueAddress,
+  FormValueField,
+  FormValueRecordLink,
+  FormValueSignature,
+  LocationAttributesField,
   Record,
+  RecordChoiceListField,
   RecordContainer,
+  RecordMediaField,
+  Repeatable,
 } from "./types/Record";
-export { RecordPhotoField, RecordChoiceListField, LocationAttributes, FormValue, Record, RecordContainer };
+export {
+  FormValueAddress,
+  FormValueField,
+  FormValueRecordLink,
+  FormValueSignature,
+  LocationAttributesField,
+  Record,
+  RecordChoiceListField,
+  RecordContainer,
+  RecordMediaField,
+  Repeatable,
+};
+
 import { FulcrumSearchKeyValuePairHandler } from "./types/Search";
 export { FulcrumSearchKeyValuePairHandler };
-import User, { UserContext } from "./types/User";
-export { User, UserContext };
+
+import User, { UserContext, UserContextRole, UserContextPlan } from "./types/User";
+export { User, UserContext, UserContextRole, UserContextPlan };
+
 import { WebHookDataType } from "./types/WebHook";
 export { WebHookDataType };
 
-export interface AuthOptions {
+interface AuthOptions {
   headers: {
     Authorization: string;
     Accept: string;

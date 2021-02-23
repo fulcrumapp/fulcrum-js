@@ -5,7 +5,7 @@ import FetchOptions from "./types/FetchOptions";
 
 function getQueryString(params: { [key: string]: string }) {
   return Object.keys(params)
-    .map((k) => encodeURIComponent(k) + "=" + encodeURIComponent(params[k]))
+    .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(params[k]))
     .join("&");
 }
 
@@ -24,7 +24,7 @@ function errorMessageForStatus(status: number): string {
 export default class Fetcher {
   options: FetchOptions;
   queue: Queue;
-  headers: { [key: string]: string };
+  headers: any;
   authenticationErrorHandler?: Function;
 
   constructor(options: FetchOptions) {
@@ -44,12 +44,8 @@ export default class Fetcher {
 
     // remove any nil or blank headers
     // (e.g. to automatically set Content-Type with `FormData` boundary)
-    Object.keys(options.headers).forEach((key) => {
-      if (
-        options.headers[key] === undefined ||
-        options.headers[key] === null ||
-        options.headers[key] === ""
-      ) {
+    Object.keys(options.headers).forEach(key => {
+      if (options.headers[key] === undefined || options.headers[key] === null || options.headers[key] === "") {
         delete options.headers[key];
       }
     });
@@ -72,8 +68,7 @@ export default class Fetcher {
     const resp = await fetch(url, opts);
 
     if (!resp.ok) {
-      const errorMessage =
-        errorMessageForStatus(resp.status) || "Unknown Error";
+      const errorMessage = errorMessageForStatus(resp.status) || "Unknown Error";
 
       if (errorMessage === "Unauthorized" && this.authenticationErrorHandler) {
         this.authenticationErrorHandler();
@@ -103,9 +98,7 @@ export default class Fetcher {
       delete opts.qs;
     }
 
-    const options = this._processOptions(
-      Object.assign({ method: "GET" }, opts)
-    );
+    const options = this._processOptions(Object.assign({ method: "GET" }, opts));
 
     return this._queue(url, options);
   }
@@ -113,9 +106,7 @@ export default class Fetcher {
   post(path: string, opts?: FetchOptions) {
     const url = this.options.baseUrl + "/" + path;
 
-    const options = this._processOptions(
-      Object.assign({ method: "POST" }, opts)
-    );
+    const options = this._processOptions(Object.assign({ method: "POST" }, opts));
 
     return this._queue(url, options);
   }
@@ -123,9 +114,7 @@ export default class Fetcher {
   put(path: string, opts?: FetchOptions) {
     const url = this.options.baseUrl + "/" + path;
 
-    const options = this._processOptions(
-      Object.assign({ method: "PUT" }, opts)
-    );
+    const options = this._processOptions(Object.assign({ method: "PUT" }, opts));
 
     return this._queue(url, options);
   }
@@ -133,9 +122,7 @@ export default class Fetcher {
   del(path: string, opts?: FetchOptions) {
     const url = this.options.baseUrl + "/" + path;
 
-    const options = this._processOptions(
-      Object.assign({ method: "DELETE" }, opts)
-    );
+    const options = this._processOptions(Object.assign({ method: "DELETE" }, opts));
 
     return this._queue(url, options);
   }

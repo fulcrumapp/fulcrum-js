@@ -23,14 +23,14 @@ var AuditLog = /** @class */ (function (_super) {
     }
     Object.defineProperty(AuditLog.prototype, "resourceName", {
         get: function () {
-            return 'audit_log';
+            return "audit_log";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(AuditLog.prototype, "resourcesName", {
         get: function () {
-            return 'audit_logs';
+            return "audit_logs";
         },
         enumerable: false,
         configurable: true

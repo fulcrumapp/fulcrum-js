@@ -21,28 +21,36 @@ var Signature = /** @class */ (function (_super) {
     }
     Object.defineProperty(Signature.prototype, "defaultContentType", {
         get: function () {
-            return 'image/png';
+            return "image/png";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Signature.prototype, "resourceName", {
         get: function () {
-            return 'signature';
+            return "signature";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Signature.prototype, "resourcesName", {
         get: function () {
-            return 'signatures';
+            return "signatures";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Signature.prototype, "versions", {
         get: function () {
-            return ['original', 'thumbnail', 'large'];
+            return ["original", "thumbnail", "large"];
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Signature.prototype, "createAction", {
+        //default implementation from Create
+        get: function () {
+            return this.collectionPath();
         },
         enumerable: false,
         configurable: true

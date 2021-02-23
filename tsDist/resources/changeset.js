@@ -61,14 +61,14 @@ var Changeset = /** @class */ (function (_super) {
     }
     Object.defineProperty(Changeset.prototype, "resourceName", {
         get: function () {
-            return 'changeset';
+            return "changeset";
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(Changeset.prototype, "resourcesName", {
         get: function () {
-            return 'changesets';
+            return "changesets";
         },
         enumerable: false,
         configurable: true
@@ -78,7 +78,7 @@ var Changeset = /** @class */ (function (_super) {
             var body;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.client.api.put(this.memberActionPath(id, 'close'))];
+                    case 0: return [4 /*yield*/, this.client.api.put(this.memberActionPath(id, "close"))];
                     case 1:
                         body = _a.sent();
                         return [2 /*return*/, body[this.resourceName]];

@@ -3,6 +3,7 @@ import Mixin from "mixmatch";
 import * as uuid from "uuid";
 
 import Base from "../resources/base";
+import FetchOptions from "../types/FetchOptions";
 
 export default abstract class Track extends Mixin {
   abstract get createAction(): string;
@@ -14,11 +15,9 @@ export default abstract class Track extends Mixin {
     formData.append(`${this.resourceName}[access_key]`, accessKey);
     formData.append(`${this.resourceName}[track]`, file);
 
-    const options = {
+    const options: FetchOptions = {
       body: formData,
-      headers: {
-        "Content-Type": null,
-      },
+      headers: {},
     };
 
     const resp = await this.client.api.post(this.createAction, options);
