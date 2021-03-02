@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "outDir": "./tsDist",
+    "outDir": "./dist",
     "allowJs": true,
     "target": "es5",
     "strict": true,
     "sourceMap": true,
+    "module": "commonjs"
   },
   "include": [
     "src",

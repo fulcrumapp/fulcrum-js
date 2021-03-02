@@ -1,75 +1,62 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = require('babel-runtime/helpers/createClass');
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = require('babel-runtime/helpers/inherits');
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _track = require('../actions/track');
-
-var _track2 = _interopRequireDefault(_track);
-
-var _mediaBase = require('./media-base');
-
-var _mediaBase2 = _interopRequireDefault(_mediaBase);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Audio = function (_MediaResource) {
-  (0, _inherits3.default)(Audio, _MediaResource);
-
-  function Audio() {
-    (0, _classCallCheck3.default)(this, Audio);
-    return (0, _possibleConstructorReturn3.default)(this, (Audio.__proto__ || Object.getPrototypeOf(Audio)).apply(this, arguments));
-  }
-
-  (0, _createClass3.default)(Audio, [{
-    key: 'defaultContentType',
-    get: function get() {
-      return 'audio/x-m4a';
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var track_1 = require("../actions/track");
+var media_base_1 = require("./media-base");
+var Audio = /** @class */ (function (_super) {
+    __extends(Audio, _super);
+    function Audio() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-  }, {
-    key: 'resourceName',
-    get: function get() {
-      return 'audio';
-    }
-  }, {
-    key: 'resourcesName',
-    get: function get() {
-      return 'audio';
-    }
-  }, {
-    key: 'createAction',
-    get: function get() {
-      return 'audio/upload';
-    }
-  }, {
-    key: 'versions',
-    get: function get() {
-      return ['original'];
-    }
-  }]);
-  return Audio;
-}(_mediaBase2.default);
-
+    Object.defineProperty(Audio.prototype, "defaultContentType", {
+        get: function () {
+            return "audio/x-m4a";
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "resourceName", {
+        get: function () {
+            return "audio";
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "resourcesName", {
+        get: function () {
+            return "audio";
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "createAction", {
+        get: function () {
+            return "audio/upload";
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Audio.prototype, "versions", {
+        get: function () {
+            return ["original"];
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return Audio;
+}(media_base_1.default));
 exports.default = Audio;
-
-
-_track2.default.includeInto(Audio);
-module.exports = exports['default'];
+track_1.default.includeInto(Audio);
 //# sourceMappingURL=audio.js.map

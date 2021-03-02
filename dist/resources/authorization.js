@@ -1,161 +1,127 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _regenerator = require('babel-runtime/regenerator');
-
-var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
-
-var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
-var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = require('babel-runtime/helpers/createClass');
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = require('babel-runtime/helpers/inherits');
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _base = require('base-64');
-
-var _base2 = _interopRequireDefault(_base);
-
-var _list = require('../actions/list');
-
-var _list2 = _interopRequireDefault(_list);
-
-var _find = require('../actions/find');
-
-var _find2 = _interopRequireDefault(_find);
-
-var _update = require('../actions/update');
-
-var _update2 = _interopRequireDefault(_update);
-
-var _delete = require('../actions/delete');
-
-var _delete2 = _interopRequireDefault(_delete);
-
-var _base3 = require('./base');
-
-var _base4 = _interopRequireDefault(_base3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Authorization = function (_Resource) {
-  (0, _inherits3.default)(Authorization, _Resource);
-
-  function Authorization() {
-    (0, _classCallCheck3.default)(this, Authorization);
-    return (0, _possibleConstructorReturn3.default)(this, (Authorization.__proto__ || Object.getPrototypeOf(Authorization)).apply(this, arguments));
-  }
-
-  (0, _createClass3.default)(Authorization, [{
-    key: 'create',
-    value: function () {
-      var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(object, email, password) {
-        var encoded, options, body;
-        return _regenerator2.default.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                encoded = _base2.default.encode(email + ':' + password);
-                options = {
-                  body: this.attributesForObject(object),
-                  headers: {
-                    'Authorization': 'Basic ' + encoded,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                  }
-                };
-                _context.next = 4;
-                return this.client.noTokenApi.post(this.createAction, options);
-
-              case 4:
-                body = _context.sent;
-                return _context.abrupt('return', body[this.resourceName]);
-
-              case 6:
-              case 'end':
-                return _context.stop();
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
             }
-          }
-        }, _callee, this);
-      }));
-
-      function create(_x, _x2, _x3) {
-        return _ref.apply(this, arguments);
-      }
-
-      return create;
-    }()
-  }, {
-    key: 'regenerate',
-    value: function () {
-      var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(id) {
-        var body;
-        return _regenerator2.default.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return this.client.api.post(this.memberActionPath(id, 'regenerate'));
-
-              case 2:
-                body = _context2.sent;
-                return _context2.abrupt('return', body[this.resourceName]);
-
-              case 4:
-              case 'end':
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-
-      function regenerate(_x4) {
-        return _ref2.apply(this, arguments);
-      }
-
-      return regenerate;
-    }()
-  }, {
-    key: 'resourceName',
-    get: function get() {
-      return 'authorization';
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
-  }, {
-    key: 'resourcesName',
-    get: function get() {
-      return 'authorizations';
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var base64 = require("base-64");
+var list_1 = require("../actions/list");
+var find_1 = require("../actions/find");
+var update_1 = require("../actions/update");
+var delete_1 = require("../actions/delete");
+var base_1 = require("./base");
+var Authorization = /** @class */ (function (_super) {
+    __extends(Authorization, _super);
+    function Authorization() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-  }, {
-    key: 'createAction',
-    get: function get() {
-      return this.collectionPath();
-    }
-  }]);
-  return Authorization;
-}(_base4.default);
-
+    Object.defineProperty(Authorization.prototype, "resourceName", {
+        get: function () {
+            return "authorization";
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Authorization.prototype, "resourcesName", {
+        get: function () {
+            return "authorizations";
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Authorization.prototype, "createAction", {
+        get: function () {
+            return this.collectionPath();
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Authorization.prototype.create = function (object, email, password) {
+        return __awaiter(this, void 0, void 0, function () {
+            var encoded, options, body;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        encoded = base64.encode(email + ":" + password);
+                        options = {
+                            body: this.attributesForObject(object),
+                            headers: {
+                                Authorization: "Basic " + encoded,
+                                Accept: "application/json",
+                                "Content-Type": "application/json",
+                            },
+                        };
+                        return [4 /*yield*/, this.client.noTokenApi.post(this.createAction, options)];
+                    case 1:
+                        body = _a.sent();
+                        return [2 /*return*/, body[this.resourceName]];
+                }
+            });
+        });
+    };
+    Authorization.prototype.regenerate = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var body;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.client.api.post(this.memberActionPath(id, "regenerate"))];
+                    case 1:
+                        body = _a.sent();
+                        return [2 /*return*/, body[this.resourceName]];
+                }
+            });
+        });
+    };
+    return Authorization;
+}(base_1.default));
 exports.default = Authorization;
-
-
-_list2.default.includeInto(Authorization);
-_find2.default.includeInto(Authorization);
-_update2.default.includeInto(Authorization);
-_delete2.default.includeInto(Authorization);
-module.exports = exports['default'];
+list_1.default.includeInto(Authorization);
+find_1.default.includeInto(Authorization);
+update_1.default.includeInto(Authorization);
+delete_1.default.includeInto(Authorization);
 //# sourceMappingURL=authorization.js.map
