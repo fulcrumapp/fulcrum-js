@@ -3,6 +3,7 @@
   "version": "2.5.0",
   "description": "JavaScript wrapper for the Fulcrum API",
   "main": "dist/index.js",
+  "private":true,
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
