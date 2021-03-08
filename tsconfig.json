@@ -5,7 +5,8 @@
     "target": "es5",
     "strict": true,
     "sourceMap": true,
-    "module": "commonjs"
+    "module": "commonjs",
+    "declaration": true
   },
   "include": [
     "src",
