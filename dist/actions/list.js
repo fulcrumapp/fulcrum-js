@@ -65,13 +65,14 @@ var List = /** @class */ (function (_super) {
         configurable: true
     });
     List.prototype.all = function (params) {
+        if (params === void 0) { params = this.defaultListParams; }
         return __awaiter(this, void 0, void 0, function () {
             var options, body;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         options = {
-                            qs: params || this.defaultListParams,
+                            qs: params,
                         };
                         return [4 /*yield*/, this.client.api.get(this.collectionPath(), options)];
                     case 1:

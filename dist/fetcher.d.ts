@@ -12,7 +12,7 @@ export default class Fetcher {
         baseUrl?: string | undefined;
         body?: any;
         qs?: {
-            [key: string]: string;
+            [key: string]: string | number;
         } | undefined;
         userAgent?: string | undefined;
         cache?: "default" | "force-cache" | "no-cache" | "no-store" | "only-if-cached" | "reload" | undefined;

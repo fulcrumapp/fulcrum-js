@@ -6,14 +6,18 @@ import FetchOptions from "../types/FetchOptions";
 import { DEFAULT_PER_PAGE } from "../constants";
 import DataContainer from "../types/DataContainer";
 
+interface ListParam {
+  [key: string]: string | number;
+}
+
 export default class List extends Mixin {
-  get defaultListParams() {
+  get defaultListParams(): ListParam {
     return { per_page: DEFAULT_PER_PAGE };
   }
 
-  async all(params: { [key: string]: string }) {
+  async all(params: ListParam = this.defaultListParams) {
     const options: FetchOptions = {
-      qs: params || this.defaultListParams,
+      qs: params,
     };
 
     const body: DataContainer<any> = await this.client.api.get(this.collectionPath(), options);
