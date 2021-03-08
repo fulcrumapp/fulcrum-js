@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createAuthorization = exports.getUser = exports.WebHookDataType = exports.MediaIdKey = exports.Page = exports.Client = void 0;
+exports.createAuthorization = exports.getUser = exports.WebHookDataType = exports.MediaIdKey = exports.FormType = exports.Page = exports.Client = void 0;
 var base64 = require("base-64");
 var constants_1 = require("./constants");
 var fetcher_1 = require("./fetcher");
@@ -44,6 +44,8 @@ var client_1 = require("./client");
 exports.Client = client_1.default;
 var page_1 = require("./page");
 exports.Page = page_1.default;
+var Form_1 = require("./types/Form");
+Object.defineProperty(exports, "FormType", { enumerable: true, get: function () { return Form_1.FormType; } });
 var Media_1 = require("./types/Media");
 Object.defineProperty(exports, "MediaIdKey", { enumerable: true, get: function () { return Media_1.MediaIdKey; } });
 var WebHook_1 = require("./types/WebHook");

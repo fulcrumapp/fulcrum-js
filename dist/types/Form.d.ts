@@ -5,6 +5,10 @@ declare type MinLong = number;
 declare type MaxLat = number;
 declare type MaxLong = number;
 export declare type BoundingBox = [MinLat, MinLong, MaxLat, MaxLong];
+export declare enum FormType {
+    Shallow = "shallow",
+    Deep = "deep"
+}
 export interface StatusFieldChoice {
     label: string;
     value: string;

@@ -7,6 +7,10 @@ type MaxLat = number;
 type MaxLong = number;
 export type BoundingBox = [MinLat, MinLong, MaxLat, MaxLong];
 
+export enum FormType {
+  Shallow = "shallow",
+  Deep = "deep",
+}
 export interface StatusFieldChoice {
   label: string;
   value: string;

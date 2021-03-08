@@ -20,8 +20,17 @@ export { DataContainer };
 import FileOptions from "./types/FileOptions";
 export { FileOptions };
 
-import { BoundingBox, Element, Form, FormContainer, ShallowForm, StatusField, StatusFieldChoice } from "./types/Form";
-export { BoundingBox, Element, Form, FormContainer, ShallowForm, StatusField, StatusFieldChoice };
+import {
+  BoundingBox,
+  Element,
+  Form,
+  FormContainer,
+  FormType,
+  ShallowForm,
+  StatusField,
+  StatusFieldChoice,
+} from "./types/Form";
+export { BoundingBox, Element, Form, FormContainer, FormType, ShallowForm, StatusField, StatusFieldChoice };
 
 import { MediaIdKey } from "./types/Media";
 export { MediaIdKey };
