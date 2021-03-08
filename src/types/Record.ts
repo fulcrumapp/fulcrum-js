@@ -1,4 +1,5 @@
 import DataContainer from "./DataContainer";
+import Nullable from "./Nullable";
 
 /**
  * Record Photo Field

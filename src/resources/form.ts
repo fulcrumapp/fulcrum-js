@@ -1,4 +1,5 @@
 import FetchOptions from "../types/FetchOptions";
+import Nullable from "../types/Nullable";
 
 import List from "../actions/list";
 import Find from "../actions/find";

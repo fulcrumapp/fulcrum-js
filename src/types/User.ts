@@ -1,3 +1,5 @@
+import Nullable from "./Nullable";
+
 //No idea if this is complete, so we'll use string[] instead of ExportFormats[] for context.plan.export_formats at the moment
 type ExportFormats = "csv" | "xlsx" | "filegdb" | "shp" | "spatialite" | "sqlite" | "postgres" | "kml" | "geojson";
 

@@ -1,4 +1,5 @@
 import DataContainer from "./DataContainer";
+import Nullable from "./Nullable";
 
 export interface ExifData {
   aperture_value?: Nullable<number>;
