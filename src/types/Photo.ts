@@ -95,6 +95,4 @@ export interface Photo {
   url?: Nullable<string>;
 }
 
-export interface PhotoContainer extends DataContainer<Photo> {
-  objects: Photo[];
-}
+export type PhotoContainer = DataContainer<Photo>;

@@ -16,6 +16,4 @@ export interface ClassificationSet {
   version?: Nullable<number>;
 }
 
-export interface ClassificationSetContainer extends DataContainer<ClassificationSet> {
-  objects: ClassificationSet[];
-}
+export type ClassificationSetContainer = DataContainer<ClassificationSet>;

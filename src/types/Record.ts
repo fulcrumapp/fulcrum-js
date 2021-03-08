@@ -122,6 +122,4 @@ export interface Record extends RecordBase {
   vertical_accuracy?: Nullable<number>;
 }
 
-export interface RecordContainer extends DataContainer<Record> {
-  objects: Record[];
-}
+export type RecordContainer = DataContainer<Record>;

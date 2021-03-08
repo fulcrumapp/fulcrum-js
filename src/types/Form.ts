@@ -55,6 +55,4 @@ export interface Form extends ShallowForm {
   elements: Element[];
 }
 
-export interface FormContainer extends DataContainer<ShallowForm> {
-  objects: ShallowForm[];
-}
+export type FormContainer = DataContainer<ShallowForm>;
