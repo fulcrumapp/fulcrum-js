@@ -7,7 +7,7 @@ import { DEFAULT_PER_PAGE } from "../constants";
 import DataContainer from "../types/DataContainer";
 
 interface ListParam {
-  [key: string]: string | number;
+  [key: string]: string | number | boolean;
 }
 
 export default class List extends Mixin {

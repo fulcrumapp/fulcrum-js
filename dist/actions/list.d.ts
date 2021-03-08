@@ -2,7 +2,7 @@ import Mixin from "mixmatch";
 import Page from "../page";
 import Base from "../resources/base";
 interface ListParam {
-    [key: string]: string | number;
+    [key: string]: string | number | boolean;
 }
 export default class List extends Mixin {
     get defaultListParams(): ListParam;
