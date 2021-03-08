@@ -1,3 +1,4 @@
+import Nullable from "./Nullable";
 export interface UserContextRole {
     can_assign_records: Nullable<boolean>;
     can_change_project: Nullable<boolean>;

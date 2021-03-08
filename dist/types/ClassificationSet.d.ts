@@ -1,4 +1,5 @@
 import DataContainer from "./DataContainer";
+import Nullable from "./Nullable";
 export interface ClassificationSetItem {
     child_classifications?: ClassificationSetItem[];
     label: string;

@@ -1,4 +1,5 @@
 import DataContainer from "./DataContainer";
+import Nullable from "./Nullable";
 declare type MinLat = number;
 declare type MinLong = number;
 declare type MaxLat = number;
