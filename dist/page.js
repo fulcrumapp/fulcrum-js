@@ -1,5 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/** The Page Class
+ * Note: the following names in the JSON are converted to the specified camelCase
+ *
+ * current_page --> currentPage
+ * total_pages --> totalPages
+ * total_count --> totalCount
+ * per_page --> perPage
+ */
 var Page = /** @class */ (function () {
     function Page(object, resourcesName) {
         this.objects = object[resourcesName];

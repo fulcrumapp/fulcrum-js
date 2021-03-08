@@ -1,3 +1,11 @@
+/** The Page Class
+ * Note: the following names in the JSON are converted to the specified camelCase
+ *
+ * current_page --> currentPage
+ * total_pages --> totalPages
+ * total_count --> totalCount
+ * per_page --> perPage
+ */
 export default class Page {
     objects: any[];
     currentPage: number;
