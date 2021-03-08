@@ -13,6 +13,4 @@ export interface ChoiceList {
     updated_at?: Nullable<string>;
     version?: Nullable<number>;
 }
-export interface ChoiceListContainer extends DataContainer<ChoiceList> {
-    objects: ChoiceList[];
-}
+export declare type ChoiceListContainer = DataContainer<ChoiceList>;
