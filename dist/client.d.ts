@@ -38,7 +38,7 @@ export default class Client {
     _signatures?: Signature;
     _videos?: Video;
     _webhooks?: Webhook;
-    constructor(token: string, opts: FetchOptions);
+    constructor(token: string, opts?: FetchOptions);
     urlFromPath(path: string, base: string): string;
     url(path: string, base: string): string;
     get forms(): Form;

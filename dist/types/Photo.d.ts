@@ -91,6 +91,4 @@ export interface Photo {
     uploaded?: Nullable<boolean>;
     url?: Nullable<string>;
 }
-export interface PhotoContainer extends DataContainer<Photo> {
-    objects: Photo[];
-}
+export declare type PhotoContainer = DataContainer<Photo>;

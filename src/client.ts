@@ -47,8 +47,8 @@ export default class Client {
   _videos?: Video;
   _webhooks?: Webhook;
 
-  constructor(token: string, opts: FetchOptions) {
-    const _opts: FetchOptions = opts || {};
+  constructor(token: string, opts: FetchOptions = {}) {
+    const _opts: FetchOptions = opts;
 
     this.baseUrl = _opts.baseUrl || BASE_URL;
     this.version = VERSION;

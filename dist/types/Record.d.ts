@@ -104,7 +104,5 @@ export interface Record extends RecordBase {
     updated_by?: Nullable<string>;
     vertical_accuracy?: Nullable<number>;
 }
-export interface RecordContainer extends DataContainer<Record> {
-    objects: Record[];
-}
+export declare type RecordContainer = DataContainer<Record>;
 export {};

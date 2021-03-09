@@ -22,7 +22,8 @@ var webhook_1 = require("./resources/webhook");
 var VERSION = require("../package.json").version;
 var Client = /** @class */ (function () {
     function Client(token, opts) {
-        var _opts = opts || {};
+        if (opts === void 0) { opts = {}; }
+        var _opts = opts;
         this.baseUrl = _opts.baseUrl || constants_1.BASE_URL;
         this.version = VERSION;
         var options = {
