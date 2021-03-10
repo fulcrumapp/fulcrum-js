@@ -41,7 +41,7 @@ export default abstract class MediaResource extends Resource {
     };
   }
 
-  async create(file: File, attributes: { [key: string]: string }) {
+  async create(file: File, attributes: { [key: string]: string }): Promise<any> {
     const options: FetchOptions = this.optionsForUpload(file, attributes);
 
     const body = await this.client.api.post(this.createAction, options);
@@ -49,7 +49,14 @@ export default abstract class MediaResource extends Resource {
     return body[this.resourceName];
   }
 
-  async media(accessKey: string, version = "original") {
+  /**
+   *
+   * @param {string} accessKey
+   * @param {string} version
+   * @returns {Promise<any>} will be Promise<ReadableStream<Uint8Array> | null> in a browser
+   *                         or will be Promise<NodeJS.ReadableStream | null> in node
+   */
+  async media(accessKey: string, version = "original"): Promise<any> {
     const media = await this.find(accessKey);
 
     if (!this.versions.includes(version)) {

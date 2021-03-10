@@ -64,7 +64,7 @@ export default class Fetcher {
     return options;
   }
 
-  async _fetch(url: string, opts: FetchOptions) {
+  async _fetch(url: string, opts: FetchOptions): Promise<any> {
     const resp = await fetch(url, opts);
 
     if (!resp.ok) {
@@ -86,11 +86,16 @@ export default class Fetcher {
     return resp.text();
   }
 
-  _queue(url: string, opts: FetchOptions) {
+  _queue(url: string, opts: FetchOptions): Promise<any> {
     return this.queue.add(() => this._fetch(url, opts));
   }
 
-  get(path: string, opts?: FetchOptions) {
+  /**
+   * @param path {string}
+   * @param opts {FetchOptions}
+   * @returns {Promise<any>} Should be either Promise<string> or a Promise with JSON results
+   */
+  get(path: string, opts?: FetchOptions): Promise<any> {
     let url = this.options.baseUrl + "/" + path;
 
     if (opts && opts.hasOwnProperty("qs")) {
@@ -103,6 +108,11 @@ export default class Fetcher {
     return this._queue(url, options);
   }
 
+  /**
+   * @param path {string}
+   * @param opts {FetchOptions}
+   * @returns {Promise<any>} Should be either Promise<string> or a Promise with JSON results
+   */
   post(path: string, opts?: FetchOptions) {
     const url = this.options.baseUrl + "/" + path;
 
@@ -111,6 +121,11 @@ export default class Fetcher {
     return this._queue(url, options);
   }
 
+  /**
+   * @param path {string}
+   * @param opts {FetchOptions}
+   * @returns {Promise<any>} Should be either Promise<string> or a Promise with JSON results
+   */
   put(path: string, opts?: FetchOptions) {
     const url = this.options.baseUrl + "/" + path;
 
@@ -119,6 +134,11 @@ export default class Fetcher {
     return this._queue(url, options);
   }
 
+  /**
+   * @param path {string}
+   * @param opts {FetchOptions}
+   * @returns {Promise<any>} Should be either Promise<string> or a Promise with JSON results
+   */
   del(path: string, opts?: FetchOptions) {
     const url = this.options.baseUrl + "/" + path;
 
