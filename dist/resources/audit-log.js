@@ -1,65 +1,43 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = require('babel-runtime/helpers/createClass');
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = require('babel-runtime/helpers/inherits');
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _list = require('../actions/list');
-
-var _list2 = _interopRequireDefault(_list);
-
-var _find = require('../actions/find');
-
-var _find2 = _interopRequireDefault(_find);
-
-var _base = require('./base');
-
-var _base2 = _interopRequireDefault(_base);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var AuditLog = function (_Resource) {
-  (0, _inherits3.default)(AuditLog, _Resource);
-
-  function AuditLog() {
-    (0, _classCallCheck3.default)(this, AuditLog);
-    return (0, _possibleConstructorReturn3.default)(this, (AuditLog.__proto__ || Object.getPrototypeOf(AuditLog)).apply(this, arguments));
-  }
-
-  (0, _createClass3.default)(AuditLog, [{
-    key: 'resourceName',
-    get: function get() {
-      return 'audit_log';
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var list_1 = require("../actions/list");
+var find_1 = require("../actions/find");
+var base_1 = require("./base");
+var AuditLog = /** @class */ (function (_super) {
+    __extends(AuditLog, _super);
+    function AuditLog() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-  }, {
-    key: 'resourcesName',
-    get: function get() {
-      return 'audit_logs';
-    }
-  }]);
-  return AuditLog;
-}(_base2.default);
-
+    Object.defineProperty(AuditLog.prototype, "resourceName", {
+        get: function () {
+            return "audit_log";
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(AuditLog.prototype, "resourcesName", {
+        get: function () {
+            return "audit_logs";
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return AuditLog;
+}(base_1.default));
 exports.default = AuditLog;
-
-
-_list2.default.includeInto(AuditLog);
-_find2.default.includeInto(AuditLog);
-module.exports = exports['default'];
+list_1.default.includeInto(AuditLog);
+find_1.default.includeInto(AuditLog);
 //# sourceMappingURL=audit-log.js.map

@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "allowJs": true,
+    "target": "es5",
+    "strict": true,
+    "sourceMap": true,
+    "module": "commonjs",
+    "declaration": true
+  },
+  "include": [
+    "src",
+    "src/types/mixmatch.d.ts"
+  ]
+}

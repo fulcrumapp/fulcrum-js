@@ -1,63 +1,61 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = require('babel-runtime/helpers/createClass');
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = require('babel-runtime/helpers/inherits');
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _mediaBase = require('./media-base');
-
-var _mediaBase2 = _interopRequireDefault(_mediaBase);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Signature = function (_MediaResource) {
-  (0, _inherits3.default)(Signature, _MediaResource);
-
-  function Signature() {
-    (0, _classCallCheck3.default)(this, Signature);
-    return (0, _possibleConstructorReturn3.default)(this, (Signature.__proto__ || Object.getPrototypeOf(Signature)).apply(this, arguments));
-  }
-
-  (0, _createClass3.default)(Signature, [{
-    key: 'defaultContentType',
-    get: function get() {
-      return 'image/png';
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var media_base_1 = require("./media-base");
+var Signature = /** @class */ (function (_super) {
+    __extends(Signature, _super);
+    function Signature() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-  }, {
-    key: 'resourceName',
-    get: function get() {
-      return 'signature';
-    }
-  }, {
-    key: 'resourcesName',
-    get: function get() {
-      return 'signatures';
-    }
-  }, {
-    key: 'versions',
-    get: function get() {
-      return ['original', 'thumbnail', 'large'];
-    }
-  }]);
-  return Signature;
-}(_mediaBase2.default);
-
+    Object.defineProperty(Signature.prototype, "defaultContentType", {
+        get: function () {
+            return "image/png";
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Signature.prototype, "resourceName", {
+        get: function () {
+            return "signature";
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Signature.prototype, "resourcesName", {
+        get: function () {
+            return "signatures";
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Signature.prototype, "versions", {
+        get: function () {
+            return ["original", "thumbnail", "large"];
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Signature.prototype, "createAction", {
+        //default implementation from Create
+        get: function () {
+            return this.collectionPath();
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return Signature;
+}(media_base_1.default));
 exports.default = Signature;
-module.exports = exports['default'];
 //# sourceMappingURL=signature.js.map

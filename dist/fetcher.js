@@ -1,202 +1,150 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _regenerator = require('babel-runtime/regenerator');
-
-var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
-
-var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
-var _extends2 = require('babel-runtime/helpers/extends');
-
-var _extends3 = _interopRequireDefault(_extends2);
-
-var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = require('babel-runtime/helpers/createClass');
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-require('portable-fetch');
-
-var _pQueue = require('p-queue');
-
-var _pQueue2 = _interopRequireDefault(_pQueue);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function getQueryString(params) {
-  return Object.keys(params).map(function (k) {
-    return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
-  }).join('&');
-}
-
-function errorMessageForStatus(status) {
-  var messages = {
-    400: 'Bad Request',
-    401: 'Unauthorized',
-    402: 'Payment Required',
-    403: 'Forbidden',
-    404: 'Not Found'
-  };
-
-  return messages[status] || 'HTTP ' + status;
-}
-
-var Fetcher = function () {
-  function Fetcher(options) {
-    (0, _classCallCheck3.default)(this, Fetcher);
-
-    this.options = options;
-    this.queue = new _pQueue2.default({ concurrency: 3 });
-    this.headers = options.headers;
-  }
-
-  (0, _createClass3.default)(Fetcher, [{
-    key: '_processOptions',
-    value: function _processOptions(opts) {
-      var options = (0, _extends3.default)({}, opts, {
-        headers: (0, _extends3.default)({}, this.headers, opts.headers)
-      });
-
-      // remove any nil or blank headers
-      // (e.g. to automatically set Content-Type with `FormData` boundary)
-      Object.keys(options.headers).forEach(function (key) {
-        if (typeof options.headers[key] === 'undefined' || options.headers[key] === null || options.headers[key] === '') {
-          delete options.headers[key];
+"use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
         }
-      });
-
-      delete options.baseURI;
-
-      if (options && options.hasOwnProperty('body') && options.hasOwnProperty('headers') && options.headers['Content-Type'] === 'application/json') {
-        options.body = JSON.stringify(options.body);
-      }
-
-      return options;
-    }
-  }, {
-    key: '_fetch',
-    value: function () {
-      var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(url, options) {
-        var resp, errorMessage, contentType;
-        return _regenerator2.default.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return fetch(url, options);
-
-              case 2:
-                resp = _context.sent;
-
-                if (resp.ok) {
-                  _context.next = 7;
-                  break;
-                }
-
-                errorMessage = errorMessageForStatus(resp.status) || 'Unknown Error';
-
-
-                if (errorMessage === 'Unauthorized' && this.authenticationErrorHandler) {
-                  this.authenticationErrorHandler();
-                }
-
-                throw new Error(errorMessage);
-
-              case 7:
-                contentType = resp.headers.get('Content-Type');
-
-                if (!(contentType && contentType.split(';')[0] === 'application/json')) {
-                  _context.next = 10;
-                  break;
-                }
-
-                return _context.abrupt('return', resp.json());
-
-              case 10:
-                return _context.abrupt('return', resp.text());
-
-              case 11:
-              case 'end':
-                return _context.stop();
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
             }
-          }
-        }, _callee, this);
-      }));
-
-      function _fetch(_x, _x2) {
-        return _ref.apply(this, arguments);
-      }
-
-      return _fetch;
-    }()
-  }, {
-    key: '_queue',
-    value: function _queue(url, options) {
-      var _this = this;
-
-      return this.queue.add(function () {
-        return _this._fetch(url, options);
-      });
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
-  }, {
-    key: 'get',
-    value: function get(path, opts) {
-      var url = this.options.baseURI + '/' + path;
-
-      if (opts && opts.hasOwnProperty('qs')) {
-        url += '?' + getQueryString(opts.qs);
-        delete opts.qs;
-      }
-
-      var options = this._processOptions(Object.assign({ method: 'GET' }, opts));
-
-      return this._queue(url, options);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+require("portable-fetch");
+var p_queue_1 = require("p-queue");
+function getQueryString(params) {
+    return Object.keys(params)
+        .map(function (k) { return encodeURIComponent(k) + "=" + encodeURIComponent(params[k]); })
+        .join("&");
+}
+function errorMessageForStatus(status) {
+    var messages = {
+        400: "Bad Request",
+        401: "Unauthorized",
+        402: "Payment Required",
+        403: "Forbidden",
+        404: "Not Found",
+    };
+    return messages[status] || "HTTP " + status;
+}
+var Fetcher = /** @class */ (function () {
+    function Fetcher(options) {
+        var _a;
+        this.options = options;
+        this.queue = new p_queue_1.default({ concurrency: 3 });
+        this.headers = (_a = options.headers) !== null && _a !== void 0 ? _a : {};
     }
-  }, {
-    key: 'post',
-    value: function post(path, opts) {
-      var url = this.options.baseURI + '/' + path;
-
-      var options = this._processOptions(Object.assign({ method: 'POST' }, opts));
-
-      return this._queue(url, options);
-    }
-  }, {
-    key: 'put',
-    value: function put(path, opts) {
-      var url = this.options.baseURI + '/' + path;
-
-      var options = this._processOptions(Object.assign({ method: 'PUT' }, opts));
-
-      return this._queue(url, options);
-    }
-  }, {
-    key: 'del',
-    value: function del(path, opts) {
-      var url = this.options.baseURI + '/' + path;
-
-      var options = this._processOptions(Object.assign({ method: 'DELETE' }, opts));
-
-      return this._queue(url, options);
-    }
-  }, {
-    key: 'registerAuthenticationErrorHandler',
-    value: function registerAuthenticationErrorHandler(func) {
-      this.authenticationErrorHandler = func;
-    }
-  }]);
-  return Fetcher;
-}();
-
+    Fetcher.prototype._processOptions = function (opts) {
+        var options = __assign(__assign({}, opts), { headers: __assign(__assign({}, this.headers), opts.headers) });
+        // remove any nil or blank headers
+        // (e.g. to automatically set Content-Type with `FormData` boundary)
+        Object.keys(options.headers).forEach(function (key) {
+            if (options.headers[key] === undefined || options.headers[key] === null || options.headers[key] === "") {
+                delete options.headers[key];
+            }
+        });
+        delete options.baseUrl;
+        if (options &&
+            options.hasOwnProperty("body") &&
+            options.hasOwnProperty("headers") &&
+            options.headers["Content-Type"] === "application/json") {
+            options.body = JSON.stringify(options.body);
+        }
+        return options;
+    };
+    Fetcher.prototype._fetch = function (url, opts) {
+        return __awaiter(this, void 0, void 0, function () {
+            var resp, errorMessage, contentType;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, fetch(url, opts)];
+                    case 1:
+                        resp = _a.sent();
+                        if (!resp.ok) {
+                            errorMessage = errorMessageForStatus(resp.status) || "Unknown Error";
+                            if (errorMessage === "Unauthorized" && this.authenticationErrorHandler) {
+                                this.authenticationErrorHandler();
+                            }
+                            throw new Error(errorMessage);
+                        }
+                        contentType = resp.headers.get("Content-Type");
+                        if (contentType && contentType.split(";")[0] === "application/json") {
+                            return [2 /*return*/, resp.json()];
+                        }
+                        return [2 /*return*/, resp.text()];
+                }
+            });
+        });
+    };
+    Fetcher.prototype._queue = function (url, opts) {
+        var _this = this;
+        return this.queue.add(function () { return _this._fetch(url, opts); });
+    };
+    Fetcher.prototype.get = function (path, opts) {
+        var url = this.options.baseUrl + "/" + path;
+        if (opts && opts.hasOwnProperty("qs")) {
+            url += "?" + getQueryString(opts.qs);
+            delete opts.qs;
+        }
+        var options = this._processOptions(Object.assign({ method: "GET" }, opts));
+        return this._queue(url, options);
+    };
+    Fetcher.prototype.post = function (path, opts) {
+        var url = this.options.baseUrl + "/" + path;
+        var options = this._processOptions(Object.assign({ method: "POST" }, opts));
+        return this._queue(url, options);
+    };
+    Fetcher.prototype.put = function (path, opts) {
+        var url = this.options.baseUrl + "/" + path;
+        var options = this._processOptions(Object.assign({ method: "PUT" }, opts));
+        return this._queue(url, options);
+    };
+    Fetcher.prototype.del = function (path, opts) {
+        var url = this.options.baseUrl + "/" + path;
+        var options = this._processOptions(Object.assign({ method: "DELETE" }, opts));
+        return this._queue(url, options);
+    };
+    Fetcher.prototype.registerAuthenticationErrorHandler = function (func) {
+        this.authenticationErrorHandler = func;
+    };
+    return Fetcher;
+}());
 exports.default = Fetcher;
-module.exports = exports['default'];
 //# sourceMappingURL=fetcher.js.map

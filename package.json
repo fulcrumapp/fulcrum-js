@@ -1,14 +1,17 @@
 {
   "name": "fulcrum-app",
-  "version": "2.5.0",
+  "version": "3.0.0",
   "description": "JavaScript wrapper for the Fulcrum API",
   "main": "dist/index.js",
+  "private":true,
   "scripts": {
-    "test": "mocha --require babel-core/register",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "lint": "node_modules/.bin/eslint src/* src/**/*",
-    "build": "node_modules/.bin/babel src --out-dir dist --source-maps",
-    "watch": "node_modules/.bin/babel src --out-dir dist --source-maps --watch",
-    "clean": "rm -rf dist"
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "pretty": "prettier src/**/*"
   },
   "author": "Jason Sanford (jasonsanford@gmail.com)",
   "license": "BSD-2-Clause",
@@ -19,29 +22,26 @@
     }
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.0.2",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.6.1",
-    "eslint": "^4.12.0",
+    "@types/base-64": "^0.1.3",
+    "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.28",
+    "@types/uuid": "^8.3.0",
+    "eslint": "^7.20.0",
     "eslint-config-fulcrum": "^1.5.4",
-    "eslint-plugin-babel": "^4.1.2",
     "eslint-plugin-react": "^7.5.1",
-    "mocha": "^4.0.1",
-    "nock": "^9.1.3"
+    "jest": "^26.6.3",
+    "nock": "^13.0.7",
+    "prettier": "^2.2.1",
+    "ts-jest": "^26.5.1",
+    "typescript": "^4.1.5"
   },
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
-    "babel-runtime": "^6.26.0",
-    "base-64": "^0.1.0",
-    "form-data": "^2.3.1",
-    "mixmatch": "0.0.2",
-    "p-queue": "^4.0.0",
+    "base-64": "^1.0.0",
+    "form-data": "^4.0.0",
+    "mixmatch": "0.0.3",
+    "p-queue": "^6.6.2",
     "portable-fetch": "^3.0.0",
+    "ts-node": "^9.1.1",
     "uuid": "^3.1.0"
   }
 }

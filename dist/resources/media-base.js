@@ -1,184 +1,122 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _regenerator = require('babel-runtime/regenerator');
-
-var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
-
-var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
-var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = require('babel-runtime/helpers/createClass');
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = require('babel-runtime/helpers/inherits');
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _uuid = require('uuid');
-
-var _uuid2 = _interopRequireDefault(_uuid);
-
-var _formData = require('form-data');
-
-var _formData2 = _interopRequireDefault(_formData);
-
-var _list = require('../actions/list');
-
-var _list2 = _interopRequireDefault(_list);
-
-var _find = require('../actions/find');
-
-var _find2 = _interopRequireDefault(_find);
-
-var _create = require('../actions/create');
-
-var _create2 = _interopRequireDefault(_create);
-
-var _base = require('./base');
-
-var _base2 = _interopRequireDefault(_base);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var MediaResource = function (_Resource) {
-  (0, _inherits3.default)(MediaResource, _Resource);
-
-  function MediaResource() {
-    (0, _classCallCheck3.default)(this, MediaResource);
-    return (0, _possibleConstructorReturn3.default)(this, (MediaResource.__proto__ || Object.getPrototypeOf(MediaResource)).apply(this, arguments));
-  }
-
-  (0, _createClass3.default)(MediaResource, [{
-    key: 'optionsForUpload',
-    value: function optionsForUpload(file, attributes) {
-      var attrs = attributes || {};
-      var formData = new _formData2.default();
-
-      var accessKey = attrs.hasOwnProperty('accessKey') ? attrs.accessKey : _uuid2.default.v4();
-
-      formData.append(this.resourceName + '[access_key]', accessKey);
-
-      if (attrs.hasOwnProperty('track')) {
-        formData.append(this.resourceName + '[track]', attrs.track);
-      }
-
-      var fileOptions = null;
-
-      // File names from media streams like
-      // fs.createReadStream('photo.jpg')
-      // are automatically added. When reading from buffers like
-      // fs.readFileSync('photo.jpg)
-      // the file name can't be inferred so it must be supplied like
-      // photos.create(fs.readFileSync('photo.jpg'), {fileName: 'photo.jpg'})
-      if (attrs.hasOwnProperty('fileName')) {
-        fileOptions = { filename: attrs.fileName };
-      }
-
-      formData.append(this.resourceName + '[file]', file, fileOptions);
-
-      return {
-        body: formData,
-        headers: {
-          'Content-Type': null
-        }
-      };
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
-  }, {
-    key: 'create',
-    value: function () {
-      var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(file, attributes) {
-        var options, body;
-        return _regenerator2.default.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                options = this.optionsForUpload(file, attributes);
-                _context.next = 3;
-                return this.client.api.post(this.createAction, options);
-
-              case 3:
-                body = _context.sent;
-                return _context.abrupt('return', body[this.resourceName]);
-
-              case 5:
-              case 'end':
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function create(_x, _x2) {
-        return _ref.apply(this, arguments);
-      }
-
-      return create;
-    }()
-  }, {
-    key: 'media',
-    value: function () {
-      var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(accessKey) {
-        var version = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'original';
-        var media;
-        return _regenerator2.default.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return this.find(accessKey);
-
-              case 2:
-                media = _context2.sent;
-
-                if (this.versions.includes(version)) {
-                  _context2.next = 5;
-                  break;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var uuid = require("uuid");
+var FormData = require("form-data");
+var list_1 = require("../actions/list");
+var find_1 = require("../actions/find");
+var create_1 = require("../actions/create");
+var base_1 = require("./base");
+var MediaResource = /** @class */ (function (_super) {
+    __extends(MediaResource, _super);
+    function MediaResource() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    MediaResource.prototype.optionsForUpload = function (file, attributes) {
+        var attrs = attributes || {};
+        var formData = new FormData();
+        var accessKey = attrs.hasOwnProperty("accessKey") ? attrs.accessKey : uuid.v4();
+        formData.append(this.resourceName + "[access_key]", accessKey);
+        if (attrs.hasOwnProperty("track")) {
+            formData.append(this.resourceName + "[track]", attrs.track);
+        }
+        // File names from media streams like
+        // fs.createReadStream('photo.jpg')
+        // are automatically added. When reading from buffers like
+        // fs.readFileSync('photo.jpg)
+        // the file name can't be inferred so it must be supplied like
+        // photos.create(fs.readFileSync('photo.jpg'), {fileName: 'photo.jpg'})
+        var fileOptions = attrs.hasOwnProperty("fileName") ? { filename: attrs.fileName } : {};
+        formData.append(this.resourceName + "[file]", file, fileOptions);
+        return {
+            body: formData,
+            headers: {},
+        };
+    };
+    MediaResource.prototype.create = function (file, attributes) {
+        return __awaiter(this, void 0, void 0, function () {
+            var options, body;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        options = this.optionsForUpload(file, attributes);
+                        return [4 /*yield*/, this.client.api.post(this.createAction, options)];
+                    case 1:
+                        body = _a.sent();
+                        return [2 /*return*/, body[this.resourceName]];
                 }
-
-                throw new Error('Version must be one of ' + this.versions.join(', ') + '.');
-
-              case 5:
-                return _context2.abrupt('return', fetch(media[version]).then(function (resp) {
-                  return resp.body;
-                }));
-
-              case 6:
-              case 'end':
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-
-      function media(_x3) {
-        return _ref2.apply(this, arguments);
-      }
-
-      return media;
-    }()
-  }]);
-  return MediaResource;
-}(_base2.default);
-
+            });
+        });
+    };
+    MediaResource.prototype.media = function (accessKey, version) {
+        if (version === void 0) { version = "original"; }
+        return __awaiter(this, void 0, void 0, function () {
+            var media;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.find(accessKey)];
+                    case 1:
+                        media = _a.sent();
+                        if (!this.versions.includes(version)) {
+                            throw new Error("Version must be one of " + this.versions.join(", ") + ".");
+                        }
+                        return [2 /*return*/, fetch(media[version]).then(function (resp) { return resp.body; })];
+                }
+            });
+        });
+    };
+    return MediaResource;
+}(base_1.default));
 exports.default = MediaResource;
-
-
-_list2.default.includeInto(MediaResource);
-_find2.default.includeInto(MediaResource);
-_create2.default.includeInto(MediaResource);
-module.exports = exports['default'];
+list_1.default.includeInto(MediaResource);
+find_1.default.includeInto(MediaResource);
+create_1.default.includeInto(MediaResource);
 //# sourceMappingURL=media-base.js.map
