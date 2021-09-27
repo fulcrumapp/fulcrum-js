@@ -14,6 +14,12 @@ export default class List extends Mixin {
     };
 
     const body = await this.client.api.get(this.collectionPath(), options);
+
+    if (this.client.opts.includeHeadersInResponseWrapper) {
+      const response = new Page(body.response, this.resourcesName);
+      return { headers: body.headers, response };
+    }
+
     return new Page(body, this.resourcesName);
   }
 }

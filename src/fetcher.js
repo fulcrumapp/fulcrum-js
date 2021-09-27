@@ -24,6 +24,7 @@ export default class Fetcher {
     this.options = options;
     this.queue = new Queue({concurrency: 3});
     this.headers = options.headers;
+    this.includeHeadersInResponseWrapper = options.includeHeadersInResponseWrapper === true;
   }
 
   _processOptions(opts) {
@@ -70,11 +71,24 @@ export default class Fetcher {
 
     const contentType = resp.headers.get('Content-Type');
 
+    // eslint-disable-next-line init-declarations
+    let result;
+
     if (contentType && contentType.split(';')[0] === 'application/json') {
-      return resp.json();
+      result = resp.json();
+    } else {
+      result = resp.text();
     }
 
-    return resp.text();
+    if (this.includeHeadersInResponseWrapper) {
+      return new Promise((resolve) => {
+        result.then(response => {
+          resolve({ response, headers: resp.headers });
+        });
+      });
+    }
+
+    return result;
   }
 
   _queue(url, options) {
