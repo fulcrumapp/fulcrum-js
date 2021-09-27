@@ -8,7 +8,7 @@ export default class Update extends Mixin {
 
     const body = await this.client.api.put(this.memberPath(id), options);
 
-    if (this.client.opts.includeHeadersInResponseWrapper) {
+    if (this.client.opts.responseOptions.includeHeaders) {
       const response = body.response[this.resourceName];
       return { headers: body.headers, response };
     }

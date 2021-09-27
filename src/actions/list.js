@@ -15,7 +15,7 @@ export default class List extends Mixin {
 
     const body = await this.client.api.get(this.collectionPath(), options);
 
-    if (this.client.opts.includeHeadersInResponseWrapper) {
+    if (this.client.opts.responseOptions.includeHeaders) {
       const response = new Page(body.response, this.resourcesName);
       return { headers: body.headers, response };
     }

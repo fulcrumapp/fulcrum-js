@@ -24,7 +24,7 @@ const BASE_URL = 'https://api.fulcrumapp.com/api/v2';
 
 export default class Client {
   constructor(token, opts) {
-    const _opts = opts || {};
+    const _opts = opts || { responseOptions: { includeHeaders: false }};
     this.opts = _opts;
 
     this.baseUrl = _opts.baseUrl || BASE_URL;
@@ -38,7 +38,7 @@ export default class Client {
         'Content-Type': 'application/json',
         'User-Agent': _opts.userAgent || `fulcrum-js version ${VERSION}`
       },
-      includeHeadersInResponseWrapper: _opts.includeHeadersInResponseWrapper
+      includeHeadersInResponseWrapper: _opts.responseOptions.includeHeaders === true
     };
 
     const tokenOptions = Object.assign({}, options);

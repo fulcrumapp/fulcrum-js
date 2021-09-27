@@ -12,7 +12,7 @@ export default class Create extends Mixin {
 
     const body = await this.client.api.post(this.createAction, options);
 
-    if (this.client.opts.includeHeadersInResponseWrapper) {
+    if (this.client.opts.responseOptions.includeHeaders) {
       const response = body.response[this.resourceName];
       return { headers: body.headers, response };
     }
