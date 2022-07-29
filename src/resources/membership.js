@@ -1,5 +1,7 @@
 import List from '../actions/list';
 import Find from '../actions/find';
+import Create from '../actions/create';
+
 import Resource from './base';
 
 export default class Membership extends Resource {
@@ -34,3 +36,4 @@ export default class Membership extends Resource {
 
 List.includeInto(Membership);
 Find.includeInto(Membership);
+Create.includeInto(Membership)
