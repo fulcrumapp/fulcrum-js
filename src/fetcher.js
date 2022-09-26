@@ -65,7 +65,7 @@ export default class Fetcher {
         this.authenticationErrorHandler();
       }
 
-      throw new Error(errorMessage);
+      throw new Error(JSON.stringify({'type': errorMessage, 'message': await resp.text()}));
     }
 
     const contentType = resp.headers.get('Content-Type');

@@ -98,7 +98,7 @@ var Fetcher = function () {
                 resp = _context.sent;
 
                 if (resp.ok) {
-                  _context.next = 7;
+                  _context.next = 15;
                   break;
                 }
 
@@ -109,22 +109,35 @@ var Fetcher = function () {
                   this.authenticationErrorHandler();
                 }
 
-                throw new Error(errorMessage);
+                _context.t0 = Error;
+                _context.t1 = JSON;
+                _context.t2 = errorMessage;
+                _context.next = 11;
+                return resp.text();
 
-              case 7:
+              case 11:
+                _context.t3 = _context.sent;
+                _context.t4 = {
+                  'type': _context.t2,
+                  'message': _context.t3
+                };
+                _context.t5 = _context.t1.stringify.call(_context.t1, _context.t4);
+                throw new _context.t0(_context.t5);
+
+              case 15:
                 contentType = resp.headers.get('Content-Type');
 
                 if (!(contentType && contentType.split(';')[0] === 'application/json')) {
-                  _context.next = 10;
+                  _context.next = 18;
                   break;
                 }
 
                 return _context.abrupt('return', resp.json());
 
-              case 10:
+              case 18:
                 return _context.abrupt('return', resp.text());
 
-              case 11:
+              case 19:
               case 'end':
                 return _context.stop();
             }
