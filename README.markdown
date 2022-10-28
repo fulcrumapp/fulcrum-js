@@ -56,7 +56,7 @@ Various methods are available for each of the resources. Check the chart below f
 | Signatures          | find, all, create, media                      |
 | Videos              | find, all, create, media, track, uploadTrack  |
 | Audio               | find, all, create, media, track, uploadTrack  |
-| Memberships         | all, change                                   |
+| Memberships         | all, create, change                           |
 | Roles               | all                                           |
 | Child Records       | all                                           |
 | Layers              | find, all, create, update, delete             |

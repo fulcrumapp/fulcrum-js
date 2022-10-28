@@ -36,6 +36,10 @@ var _find = require('../actions/find');
 
 var _find2 = _interopRequireDefault(_find);
 
+var _create = require('../actions/create');
+
+var _create2 = _interopRequireDefault(_create);
+
 var _base = require('./base');
 
 var _base2 = _interopRequireDefault(_base);
@@ -113,5 +117,6 @@ exports.default = Membership;
 
 _list2.default.includeInto(Membership);
 _find2.default.includeInto(Membership);
+_create2.default.includeInto(Membership);
 module.exports = exports['default'];
 //# sourceMappingURL=membership.js.map
