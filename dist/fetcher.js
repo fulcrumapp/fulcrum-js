@@ -24,7 +24,7 @@ var _createClass2 = require('babel-runtime/helpers/createClass');
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-require('portable-fetch');
+require('isomorphic-fetch');
 
 var _pQueue = require('p-queue');
 
