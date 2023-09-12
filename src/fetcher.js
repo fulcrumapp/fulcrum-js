@@ -1,4 +1,4 @@
-import 'portable-fetch';
+import 'isomorphic-fetch';
 import Queue from 'p-queue';
 
 function getQueryString(params) {
