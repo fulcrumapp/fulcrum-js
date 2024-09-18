@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "outDir": "dist",
+    "rootDir": ".",
+    "strict": true,
+    "lib": ["esnext"],
+    "allowJs": true,
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noImplicitAny": true,
+    "declaration": true,
+    "target": "ES6"
+  },
+  "include": [
+    "src/", "test/"
+  ]
+}

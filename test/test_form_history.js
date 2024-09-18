@@ -2,7 +2,7 @@ import assert from 'assert';
 import nock from 'nock';
 import path from 'path';
 
-import { Page } from '../';
+import { Page } from '../src';
 import client from './client';
 
 describe('Form History', () => {
@@ -11,7 +11,7 @@ describe('Form History', () => {
       nock('https://api.fulcrumapp.com')
         .get('/api/v2/forms/58ae9115-0430-459e-a1b7-7ac46011e0ce/history')
         .replyWithFile(201,
-                       path.join(__dirname, 'objects/form_history.json'),
+                       path.join(import.meta.dirname, 'objects/form_history.json'),
                        {'Content-Type': 'application/json'});
 
       const formHistory = await client.forms.history(
@@ -26,7 +26,7 @@ describe('Form History', () => {
       nock('https://api.fulcrumapp.com')
         .get('/api/v2/forms/58ae9115-0430-459e-a1b7-7ac46011e0ce/history?version=1')
         .replyWithFile(201,
-                       path.join(__dirname, 'objects/form_history_single_version.json'),
+                       path.join(import.meta.dirname, 'objects/form_history_single_version.json'),
                        {'Content-Type': 'application/json'});
 
       const formHistory = await client.forms.history(

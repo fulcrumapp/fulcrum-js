@@ -1,5 +1,5 @@
 import assert from 'assert';
-import Fetcher from '../dist/fetcher';
+import Fetcher from '../src/fetcher';
 
 import client from './client';
 

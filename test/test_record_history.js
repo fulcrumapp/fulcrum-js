@@ -2,7 +2,7 @@ import assert from 'assert';
 import nock from 'nock';
 import path from 'path';
 
-import { Page } from '../';
+import { Page } from '../src';
 import client from './client';
 
 describe('Record History', () => {
@@ -11,7 +11,7 @@ describe('Record History', () => {
       nock('https://api.fulcrumapp.com')
         .get('/api/v2/records/beef678b-fb89-4b15-9ee7-1f8be3e2abe7/history')
         .replyWithFile(201,
-                       path.join(__dirname, 'objects/record_history.json'),
+                       path.join(import.meta.dirname, 'objects/record_history.json'),
                        {'Content-Type': 'application/json'});
 
       const recordHistory = await client.records.history(

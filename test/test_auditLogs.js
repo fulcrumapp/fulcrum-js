@@ -2,9 +2,9 @@ import assert from 'assert';
 import nock from 'nock';
 import path from 'path';
 
-import { Page } from '../dist';
+import { Page } from '../src';
 
-const client = require('./client');
+import client from './client';
 
 describe('Audit Log Methods', () => {
   describe('#find()', () => {
@@ -12,7 +12,7 @@ describe('Audit Log Methods', () => {
       nock('https://api.fulcrumapp.com')
         .get('/api/v2/audit_logs/aaa058ef-d7e5-44df-a3df-8fc53ffab3e0')
         .replyWithFile(200,
-                       path.join(__dirname, 'objects/auditLog.json'),
+                       path.join(import.meta.dirname, 'objects/auditLog.json'),
                        {'Content-Type': 'application/json'});
       const auditLog = await client.auditLogs.find('aaa058ef-d7e5-44df-a3df-8fc53ffab3e0');
       assert.equal(auditLog.id,
@@ -27,7 +27,7 @@ describe('Audit Log Methods', () => {
       nock('https://api.fulcrumapp.com')
         .get('/api/v2/audit_logs?per_page=1000')
         .replyWithFile(200,
-                       path.join(__dirname, 'objects/auditLogs.json'),
+                       path.join(import.meta.dirname, 'objects/auditLogs.json'),
                        {'Content-Type': 'application/json'});
 
       const auditLogs = await client.auditLogs.all(null);

@@ -10,7 +10,7 @@ describe('Authorization Methods', () => {
       nock('https://api.fulcrumapp.com')
         .post('/api/v2/authorizations')
         .replyWithFile(201,
-                       path.join(__dirname, 'objects/authorization.json'),
+                       path.join(import.meta.dirname, 'objects/authorization.json'),
                        {'Content-Type': 'application/json'});
 
       const authorizationObj = {

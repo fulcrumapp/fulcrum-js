@@ -1,14 +1,19 @@
 {
   "name": "fulcrum-app",
-  "version": "2.8.0",
+  "version": "3.0.0",
   "description": "JavaScript wrapper for the Fulcrum API",
   "main": "dist/index.js",
+  "type": "module",
+  "exports": {
+    "./*": "./src/*.js"
+  },
   "scripts": {
-    "test": "mocha --experimental-modules --require @babel/register",
-    "lint": "node_modules/.bin/eslint src/* src/**/*",
-    "build": "node_modules/.bin/babel src --out-dir dist --source-maps",
-    "watch": "node_modules/.bin/babel src --out-dir dist --source-maps --watch",
-    "clean": "rm -rf dist"
+    "test": "mocha -r tsx ./test/*.js",
+    "prepublish": "yarn run clean && yarn run build",
+    "lint": "eslint src/* src/**/*",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc -b"
   },
   "author": "Jason Sanford (jasonsanford@gmail.com)",
   "license": "BSD-2-Clause",
@@ -19,28 +24,27 @@
     }
   },
   "devDependencies": {
-    "@babel/cli": "^7.23.4",
-    "@babel/core": "^7.23.7",
-    "@babel/eslint-plugin": "^7.23.5",
-    "@babel/plugin-transform-modules-commonjs": "^7.23.3",
-    "@babel/plugin-transform-object-rest-spread": "^7.23.4",
-    "@babel/plugin-transform-runtime": "^7.23.7",
-    "@babel/preset-env": "^7.23.8",
-    "@babel/register": "^7.23.7",
-    "eslint": "^8.49.0",
+    "@typescript-eslint/eslint-plugin": "^8.6.0",
+    "@typescript-eslint/parser": "^8.6.0",
+    "eslint": "^9.10.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-fulcrum": "^2.0.1",
     "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-import": "^2.30.0",
     "eslint-plugin-react": "^7.33.2",
     "mocha": "^10.2.0",
-    "nock": "^13.3.3"
+    "nock": "^14.0.0-beta.14",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2",
+    "vitest": "^2.1.1"
   },
   "dependencies": {
-    "@babel/runtime": "^7.23.8",
     "base-64": "^1.0.0",
     "form-data": "^4.0.0",
-    "isomorphic-fetch": "^3.0.0",
-    "mixmatch": "0.0.4",
+    "mixmatch": "^0.0.4",
     "p-queue": "^8.0.1",
     "uuid": "^9.0.1"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }
