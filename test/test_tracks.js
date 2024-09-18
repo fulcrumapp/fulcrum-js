@@ -2,7 +2,7 @@ import assert from 'assert';
 import nock from 'nock';
 import path from 'path';
 
-const client = require('./client');
+import client from './client';
 
 describe('Tracks', () => {
   describe('video', () => {
@@ -10,7 +10,7 @@ describe('Tracks', () => {
       nock('https://api.fulcrumapp.com')
         .get('/api/v2/videos/ccf931bd-4e0f-4562-8c00-3a57f8a62589/track.json')
         .replyWithFile(200,
-                       path.join(__dirname, 'objects/video_track.json'),
+                       path.join(import.meta.dirname, 'objects/video_track.json'),
                        {'Content-Type': 'application/json'});
 
       const track = await client.videos.track('ccf931bd-4e0f-4562-8c00-3a57f8a62589');
@@ -21,7 +21,7 @@ describe('Tracks', () => {
       nock('https://api.fulcrumapp.com')
         .get('/api/v2/videos/ccf931bd-4e0f-4562-8c00-3a57f8a62589/track.geojson')
         .replyWithFile(200,
-                       path.join(__dirname, 'objects/video_track.geojson'),
+                       path.join(import.meta.dirname, 'objects/video_track.geojson'),
                        {'Content-Type': 'application/json'});
 
       const geojson = await client.videos.track('ccf931bd-4e0f-4562-8c00-3a57f8a62589', 'geojson');
@@ -35,7 +35,7 @@ describe('Tracks', () => {
       nock('https://api.fulcrumapp.com')
         .get('/api/v2/audio/ddcb934e-54d5-4476-acf5-750e32f4863f/track.gpx')
         .replyWithFile(200,
-                       path.join(__dirname, 'objects/audio_track.gpx'),
+                       path.join(import.meta.dirname, 'objects/audio_track.gpx'),
                        {'Content-Type': 'application/gpx+xml'});
 
       const gpx = await client.audio.track('ddcb934e-54d5-4476-acf5-750e32f4863f', 'gpx');
@@ -46,7 +46,7 @@ describe('Tracks', () => {
       nock('https://api.fulcrumapp.com')
         .get('/api/v2/audio/ddcb934e-54d5-4476-acf5-750e32f4863f/track.kml')
         .replyWithFile(200,
-                       path.join(__dirname, 'objects/audio_track.kml'),
+                       path.join(import.meta.dirname, 'objects/audio_track.kml'),
                        {'Content-Type': 'application/vnd.google-earth.kml+xml'});
 
       const kml = await client.audio.track('ddcb934e-54d5-4476-acf5-750e32f4863f', 'kml');

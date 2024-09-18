@@ -1,4 +1,4 @@
-import Mixin from 'mixmatch';
+import Mixin from '../mixmatch';
 import Page from '../page';
 
 const DEFAULT_PER_PAGE = 1000;

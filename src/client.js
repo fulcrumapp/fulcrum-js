@@ -1,5 +1,6 @@
+import fs from 'fs';
+import path from 'path';
 import Fetcher from './fetcher';
-
 import Form from './resources/form';
 import Record from './resources/record';
 import Changeset from './resources/changeset';
@@ -18,8 +19,7 @@ import Webhook from './resources/webhook';
 import AuditLog from './resources/audit-log';
 import query from './resources/query';
 
-const VERSION = require('../package.json').version;
-
+const VERSION = JSON.parse(fs.readFileSync(path.join(import.meta.dirname, '../package.json'))).version;
 const BASE_URL = 'https://api.fulcrumapp.com/api/v2';
 
 export default class Client {

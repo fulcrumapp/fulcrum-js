@@ -1,6 +1,6 @@
 import FormData from 'form-data';
-import Mixin from 'mixmatch';
-import uuid from 'uuid';
+import Mixin from '../mixmatch';
+import { v4 as uuid } from 'uuid';
 
 export default class Track extends Mixin {
   async uploadTrack(file, id = null) {

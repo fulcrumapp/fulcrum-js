@@ -1,57 +1,26 @@
 "use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _classCallCheck2 = require("babel-runtime/helpers/classCallCheck");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = require("babel-runtime/helpers/createClass");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Base = function () {
-  function Base(client) {
-    (0, _classCallCheck3.default)(this, Base);
-
-    this.client = client;
-  }
-
-  (0, _createClass3.default)(Base, [{
-    key: "collectionPath",
-    value: function collectionPath() {
-      return this.resourcesName;
+Object.defineProperty(exports, "__esModule", { value: true });
+class Base {
+    constructor(client) {
+        this.client = client;
     }
-  }, {
-    key: "actionPath",
-    value: function actionPath(action) {
-      return this.resourcesName + "/" + action;
+    collectionPath() {
+        return this.resourcesName;
     }
-  }, {
-    key: "memberPath",
-    value: function memberPath(id) {
-      return this.resourcesName + "/" + id;
+    actionPath(action) {
+        return `${this.resourcesName}/${action}`;
     }
-  }, {
-    key: "memberActionPath",
-    value: function memberActionPath(id, action) {
-      return this.resourcesName + "/" + id + "/" + action;
+    memberPath(id) {
+        return `${this.resourcesName}/${id}`;
     }
-  }, {
-    key: "attributesForObject",
-    value: function attributesForObject(object) {
-      var attributes = {};
-      attributes[this.resourceName] = object;
-      return attributes;
+    memberActionPath(id, action) {
+        return `${this.resourcesName}/${id}/${action}`;
     }
-  }]);
-  return Base;
-}();
-
+    attributesForObject(object) {
+        const attributes = {};
+        attributes[this.resourceName] = object;
+        return attributes;
+    }
+}
 exports.default = Base;
-module.exports = exports["default"];
 //# sourceMappingURL=base.js.map

@@ -1,80 +1,26 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = require('babel-runtime/helpers/createClass');
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = require('babel-runtime/helpers/inherits');
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _list = require('../actions/list');
-
-var _list2 = _interopRequireDefault(_list);
-
-var _find = require('../actions/find');
-
-var _find2 = _interopRequireDefault(_find);
-
-var _create = require('../actions/create');
-
-var _create2 = _interopRequireDefault(_create);
-
-var _update = require('../actions/update');
-
-var _update2 = _interopRequireDefault(_update);
-
-var _delete = require('../actions/delete');
-
-var _delete2 = _interopRequireDefault(_delete);
-
-var _base = require('./base');
-
-var _base2 = _interopRequireDefault(_base);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Project = function (_Resource) {
-  (0, _inherits3.default)(Project, _Resource);
-
-  function Project() {
-    (0, _classCallCheck3.default)(this, Project);
-    return (0, _possibleConstructorReturn3.default)(this, (Project.__proto__ || Object.getPrototypeOf(Project)).apply(this, arguments));
-  }
-
-  (0, _createClass3.default)(Project, [{
-    key: 'resourceName',
-    get: function get() {
-      return 'project';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const list_1 = __importDefault(require("../actions/list"));
+const find_1 = __importDefault(require("../actions/find"));
+const create_1 = __importDefault(require("../actions/create"));
+const update_1 = __importDefault(require("../actions/update"));
+const delete_1 = __importDefault(require("../actions/delete"));
+const base_1 = __importDefault(require("./base"));
+class Project extends base_1.default {
+    get resourceName() {
+        return 'project';
     }
-  }, {
-    key: 'resourcesName',
-    get: function get() {
-      return 'projects';
+    get resourcesName() {
+        return 'projects';
     }
-  }]);
-  return Project;
-}(_base2.default);
-
+}
 exports.default = Project;
-
-
-_list2.default.includeInto(Project);
-_find2.default.includeInto(Project);
-_create2.default.includeInto(Project);
-_update2.default.includeInto(Project);
-_delete2.default.includeInto(Project);
-module.exports = exports['default'];
+list_1.default.includeInto(Project);
+find_1.default.includeInto(Project);
+create_1.default.includeInto(Project);
+update_1.default.includeInto(Project);
+delete_1.default.includeInto(Project);
 //# sourceMappingURL=project.js.map

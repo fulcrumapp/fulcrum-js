@@ -3,7 +3,7 @@ import nock from 'nock';
 import path from 'path';
 
 import client from './client';
-import { Page } from '../';
+import { Page } from '../src';
 
 describe('Signatures', () => {
   describe('#find()', () => {
@@ -11,7 +11,7 @@ describe('Signatures', () => {
       nock('https://api.fulcrumapp.com')
         .get('/api/v2/signatures/9855e3f2-85a5-4b9f-9e62-0b1bbcfef091')
         .replyWithFile(200,
-                       path.join(__dirname, 'objects/signature.json'),
+                       path.join(import.meta.dirname, 'objects/signature.json'),
                        {'Content-Type': 'application/json'});
       const signature = await client.signatures.find('9855e3f2-85a5-4b9f-9e62-0b1bbcfef091');
       assert.equal(signature.content_type, 'image/png');
@@ -23,7 +23,7 @@ describe('Signatures', () => {
       nock('https://api.fulcrumapp.com')
         .get('/api/v2/signatures?per_page=1000')
         .replyWithFile(200,
-                       path.join(__dirname, 'objects/signatures.json'),
+                       path.join(import.meta.dirname, 'objects/signatures.json'),
                        {'Content-Type': 'application/json'});
       const signatures = await client.signatures.all(null);
       assert(signatures instanceof Page, 'forms is not a Page.');

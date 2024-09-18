@@ -1,4 +1,4 @@
-import { Client } from '../dist';
+import { Client } from '../src';
 
 const client = new Client('fake');
 

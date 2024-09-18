@@ -1,4 +1,4 @@
-import Mixin from 'mixmatch';
+import Mixin from '../mixmatch';
 
 export default class Delete extends Mixin {
   async delete(id) {

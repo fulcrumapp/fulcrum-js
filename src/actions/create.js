@@ -1,4 +1,4 @@
-import Mixin from 'mixmatch';
+import Mixin from '../mixmatch';
 
 export default class Create extends Mixin {
   get createAction() {

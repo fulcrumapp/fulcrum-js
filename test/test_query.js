@@ -2,7 +2,7 @@ import assert from 'assert';
 import nock from 'nock';
 import path from 'path';
 
-const client = require('./client');
+import client from './client';
 
 describe('Query', () => {
   describe('#query()', () => {
@@ -10,7 +10,7 @@ describe('Query', () => {
       nock('https://api.fulcrumapp.com')
         .post('/api/v2/query')
         .replyWithFile(200,
-                       path.join(__dirname, 'objects/query.csv'),
+                       path.join(import.meta.dirname, 'objects/query.csv'),
                        {'Content-Type': 'text/plain'});
 
       const csv = await client.query('SELECT * FROM Expenses LIMIT 1;', 'csv');
@@ -22,7 +22,7 @@ describe('Query', () => {
       nock('https://api.fulcrumapp.com')
         .post('/api/v2/query')
         .replyWithFile(200,
-                       path.join(__dirname, 'objects/query.geojson'),
+                       path.join(import.meta.dirname, 'objects/query.geojson'),
                        {'Content-Type': 'application/json'});
 
       const geojson = await client.query('SELECT * FROM Expenses LIMIT 1;', 'geojson');

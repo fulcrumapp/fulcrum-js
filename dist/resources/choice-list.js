@@ -1,80 +1,26 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = require('babel-runtime/helpers/createClass');
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = require('babel-runtime/helpers/inherits');
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _list = require('../actions/list');
-
-var _list2 = _interopRequireDefault(_list);
-
-var _find = require('../actions/find');
-
-var _find2 = _interopRequireDefault(_find);
-
-var _create = require('../actions/create');
-
-var _create2 = _interopRequireDefault(_create);
-
-var _update = require('../actions/update');
-
-var _update2 = _interopRequireDefault(_update);
-
-var _delete = require('../actions/delete');
-
-var _delete2 = _interopRequireDefault(_delete);
-
-var _base = require('./base');
-
-var _base2 = _interopRequireDefault(_base);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ChoiceList = function (_Resource) {
-  (0, _inherits3.default)(ChoiceList, _Resource);
-
-  function ChoiceList() {
-    (0, _classCallCheck3.default)(this, ChoiceList);
-    return (0, _possibleConstructorReturn3.default)(this, (ChoiceList.__proto__ || Object.getPrototypeOf(ChoiceList)).apply(this, arguments));
-  }
-
-  (0, _createClass3.default)(ChoiceList, [{
-    key: 'resourceName',
-    get: function get() {
-      return 'choice_list';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const list_1 = __importDefault(require("../actions/list"));
+const find_1 = __importDefault(require("../actions/find"));
+const create_1 = __importDefault(require("../actions/create"));
+const update_1 = __importDefault(require("../actions/update"));
+const delete_1 = __importDefault(require("../actions/delete"));
+const base_1 = __importDefault(require("./base"));
+class ChoiceList extends base_1.default {
+    get resourceName() {
+        return 'choice_list';
     }
-  }, {
-    key: 'resourcesName',
-    get: function get() {
-      return 'choice_lists';
+    get resourcesName() {
+        return 'choice_lists';
     }
-  }]);
-  return ChoiceList;
-}(_base2.default);
-
+}
 exports.default = ChoiceList;
-
-
-_list2.default.includeInto(ChoiceList);
-_find2.default.includeInto(ChoiceList);
-_create2.default.includeInto(ChoiceList);
-_update2.default.includeInto(ChoiceList);
-_delete2.default.includeInto(ChoiceList);
-module.exports = exports['default'];
+list_1.default.includeInto(ChoiceList);
+find_1.default.includeInto(ChoiceList);
+create_1.default.includeInto(ChoiceList);
+update_1.default.includeInto(ChoiceList);
+delete_1.default.includeInto(ChoiceList);
 //# sourceMappingURL=choice-list.js.map
