@@ -2,7 +2,7 @@
   "compilerOptions": {
     "sourceMap": true,
     "outDir": "dist",
-    "rootDir": ".",
+    "rootDir": "./src",
     "strict": true,
     "lib": ["esnext", "DOM"],
     "allowJs": true,
@@ -11,9 +11,9 @@
     "moduleResolution": "Node",
     "noImplicitAny": true,
     "declaration": true,
-    "target": "ES2020"
+    "target": "ESNext"
   },
   "include": [
-    "src/", "test/"
+    "src/"
   ]
 }
