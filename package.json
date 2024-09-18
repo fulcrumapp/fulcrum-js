@@ -2,7 +2,7 @@
   "name": "fulcrum-app",
   "version": "3.0.0",
   "description": "JavaScript wrapper for the Fulcrum API",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "type": "module",
   "exports": {
     "./*": "./src/*.js"
