@@ -4,7 +4,7 @@
   "description": "JavaScript wrapper for the Fulcrum API",
   "main": "dist/index.js",
   "scripts": {
-    "test": "mocha --require babel-core/register",
+    "test": "mocha --require @babel/register",
     "lint": "node_modules/.bin/eslint src/* src/**/*",
     "build": "node_modules/.bin/babel src --out-dir dist --source-maps",
     "watch": "node_modules/.bin/babel src --out-dir dist --source-maps --watch",
@@ -19,28 +19,24 @@
     }
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.0.2",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.6.1",
-    "eslint": "^8.49.0",
-    "eslint-config-fulcrum": "^1.5.4",
-    "eslint-plugin-babel": "^4.1.2",
-    "eslint-plugin-react": "^7.5.1",
-    "mocha": "^10.2.0",
+    "@babel/cli": "^7.25.6",
+    "@babel/core": "^7.25.2",
+    "@babel/eslint-parser": "^7.25.1",
+    "@babel/plugin-transform-runtime": "^7.25.4",
+    "@babel/preset-env": "^7.25.4",
+    "@babel/register": "^7.24.6",
+    "eslint": "^9.10.0",
+    "eslint-config-fulcrum": "^2.0.0",
+    "mocha": "^10.7.3",
     "nock": "^9.1.3"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "^6.26.0",
-    "base-64": "^0.1.0",
+    "base-64": "^1.0.0",
     "form-data": "^2.3.1",
     "isomorphic-fetch": "^3.0.0",
-    "mixmatch": "0.0.2",
+    "mixmatch": "^0.0.4",
     "p-queue": "^4.0.0",
     "uuid": "^3.1.0"
   }
