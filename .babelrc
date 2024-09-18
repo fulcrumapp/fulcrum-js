@@ -1,5 +1,10 @@
 {
   "presets": ["@babel/preset-env"],
   "plugins": [
+    "@babel/transform-async-to-generator",
+    "@babel/transform-object-rest-spread",
+    ["@babel/transform-runtime", {
+      "regenerator": true
+    }]
   ]
 }
