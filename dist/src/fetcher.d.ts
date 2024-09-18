@@ -1,7 +1,7 @@
 export default class Fetcher {
     constructor(options: any);
     options: any;
-    queue: Queue<import("../node_modules/p-queue/dist/priority-queue").default, import("p-queue").QueueAddOptions>;
+    queue: Queue<import("p-queue/dist/priority-queue").default, import("p-queue").QueueAddOptions>;
     headers: any;
     _processOptions(opts: any): any;
     _fetch(url: any, options: any): Promise<any>;

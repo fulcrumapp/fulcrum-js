@@ -1,4 +1,6 @@
-export default class Base {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class Base {
     constructor(client) {
         this.client = client;
     }
@@ -20,4 +22,5 @@ export default class Base {
         return attributes;
     }
 }
+exports.default = Base;
 //# sourceMappingURL=base.js.map

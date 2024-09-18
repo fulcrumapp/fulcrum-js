@@ -1,33 +1,28 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-import List from '../actions/list';
-import Find from '../actions/find';
-import Create from '../actions/create';
-import Update from '../actions/update';
-import Resource from './base';
-export default class Changeset extends Resource {
+Object.defineProperty(exports, "__esModule", { value: true });
+const list_1 = __importDefault(require("../actions/list"));
+const find_1 = __importDefault(require("../actions/find"));
+const create_1 = __importDefault(require("../actions/create"));
+const update_1 = __importDefault(require("../actions/update"));
+const base_1 = __importDefault(require("./base"));
+class Changeset extends base_1.default {
     get resourceName() {
         return 'changeset';
     }
     get resourcesName() {
         return 'changesets';
     }
-    close(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const body = yield this.client.api.put(this.memberActionPath(id, 'close'));
-            return body[this.resourceName];
-        });
+    async close(id) {
+        const body = await this.client.api.put(this.memberActionPath(id, 'close'));
+        return body[this.resourceName];
     }
 }
-List.includeInto(Changeset);
-Find.includeInto(Changeset);
-Create.includeInto(Changeset);
-Update.includeInto(Changeset);
+exports.default = Changeset;
+list_1.default.includeInto(Changeset);
+find_1.default.includeInto(Changeset);
+create_1.default.includeInto(Changeset);
+update_1.default.includeInto(Changeset);
 //# sourceMappingURL=changeset.js.map

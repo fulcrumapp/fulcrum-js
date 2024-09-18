@@ -1,19 +1,15 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-import base64 from 'base-64';
-import List from '../actions/list';
-import Find from '../actions/find';
-import Update from '../actions/update';
-import Delete from '../actions/delete';
-import Resource from './base';
-export default class Authorization extends Resource {
+Object.defineProperty(exports, "__esModule", { value: true });
+const base_64_1 = __importDefault(require("base-64"));
+const list_1 = __importDefault(require("../actions/list"));
+const find_1 = __importDefault(require("../actions/find"));
+const update_1 = __importDefault(require("../actions/update"));
+const delete_1 = __importDefault(require("../actions/delete"));
+const base_1 = __importDefault(require("./base"));
+class Authorization extends base_1.default {
     get resourceName() {
         return 'authorization';
     }
@@ -23,31 +19,28 @@ export default class Authorization extends Resource {
     get createAction() {
         return this.collectionPath();
     }
-    create(object, email, password) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const encoded = base64.encode(`${email}:${password}`);
-            const options = {
-                body: this.attributesForObject(object),
-                headers: {
-                    'Authorization': `Basic ${encoded}`,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            };
-            const body = yield this.client.noTokenApi
-                .post(this.createAction, options);
-            return body[this.resourceName];
-        });
+    async create(object, email, password) {
+        const encoded = base_64_1.default.encode(`${email}:${password}`);
+        const options = {
+            body: this.attributesForObject(object),
+            headers: {
+                'Authorization': `Basic ${encoded}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        };
+        const body = await this.client.noTokenApi
+            .post(this.createAction, options);
+        return body[this.resourceName];
     }
-    regenerate(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const body = yield this.client.api.post(this.memberActionPath(id, 'regenerate'));
-            return body[this.resourceName];
-        });
+    async regenerate(id) {
+        const body = await this.client.api.post(this.memberActionPath(id, 'regenerate'));
+        return body[this.resourceName];
     }
 }
-List.includeInto(Authorization);
-Find.includeInto(Authorization);
-Update.includeInto(Authorization);
-Delete.includeInto(Authorization);
+exports.default = Authorization;
+list_1.default.includeInto(Authorization);
+find_1.default.includeInto(Authorization);
+update_1.default.includeInto(Authorization);
+delete_1.default.includeInto(Authorization);
 //# sourceMappingURL=authorization.js.map

@@ -1,40 +1,35 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-import List from '../actions/list';
-import Find from '../actions/find';
-import Create from '../actions/create';
-import Update from '../actions/update';
-import Delete from '../actions/delete';
-import Resource from './base';
-import Page from '../page';
-export default class Form extends Resource {
+Object.defineProperty(exports, "__esModule", { value: true });
+const list_1 = __importDefault(require("../actions/list"));
+const find_1 = __importDefault(require("../actions/find"));
+const create_1 = __importDefault(require("../actions/create"));
+const update_1 = __importDefault(require("../actions/update"));
+const delete_1 = __importDefault(require("../actions/delete"));
+const base_1 = __importDefault(require("./base"));
+const page_1 = __importDefault(require("../page"));
+class Form extends base_1.default {
     get resourceName() {
         return 'form';
     }
     get resourcesName() {
         return 'forms';
     }
-    history(id_1) {
-        return __awaiter(this, arguments, void 0, function* (id, version = null) {
-            let options = null;
-            if (version != null) {
-                options = { qs: { version: version } };
-            }
-            const body = yield this.client.api.get(this.memberActionPath(id, 'history'), options);
-            return new Page(body, this.resourcesName);
-        });
+    async history(id, version = null) {
+        let options = null;
+        if (version != null) {
+            options = { qs: { version: version } };
+        }
+        const body = await this.client.api.get(this.memberActionPath(id, 'history'), options);
+        return new page_1.default(body, this.resourcesName);
     }
 }
-List.includeInto(Form);
-Find.includeInto(Form);
-Create.includeInto(Form);
-Update.includeInto(Form);
-Delete.includeInto(Form);
+exports.default = Form;
+list_1.default.includeInto(Form);
+find_1.default.includeInto(Form);
+create_1.default.includeInto(Form);
+update_1.default.includeInto(Form);
+delete_1.default.includeInto(Form);
 //# sourceMappingURL=form.js.map

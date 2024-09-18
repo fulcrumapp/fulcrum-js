@@ -1,10 +1,15 @@
-import List from '../actions/list';
-import Find from '../actions/find';
-import Create from '../actions/create';
-import Update from '../actions/update';
-import Delete from '../actions/delete';
-import Resource from './base';
-export default class Project extends Resource {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const list_1 = __importDefault(require("../actions/list"));
+const find_1 = __importDefault(require("../actions/find"));
+const create_1 = __importDefault(require("../actions/create"));
+const update_1 = __importDefault(require("../actions/update"));
+const delete_1 = __importDefault(require("../actions/delete"));
+const base_1 = __importDefault(require("./base"));
+class Project extends base_1.default {
     get resourceName() {
         return 'project';
     }
@@ -12,9 +17,10 @@ export default class Project extends Resource {
         return 'projects';
     }
 }
-List.includeInto(Project);
-Find.includeInto(Project);
-Create.includeInto(Project);
-Update.includeInto(Project);
-Delete.includeInto(Project);
+exports.default = Project;
+list_1.default.includeInto(Project);
+find_1.default.includeInto(Project);
+create_1.default.includeInto(Project);
+update_1.default.includeInto(Project);
+delete_1.default.includeInto(Project);
 //# sourceMappingURL=project.js.map

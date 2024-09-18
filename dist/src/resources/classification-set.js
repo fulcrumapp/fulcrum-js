@@ -1,10 +1,15 @@
-import List from '../actions/list';
-import Find from '../actions/find';
-import Create from '../actions/create';
-import Update from '../actions/update';
-import Delete from '../actions/delete';
-import Resource from './base';
-export default class ClassificationSet extends Resource {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const list_1 = __importDefault(require("../actions/list"));
+const find_1 = __importDefault(require("../actions/find"));
+const create_1 = __importDefault(require("../actions/create"));
+const update_1 = __importDefault(require("../actions/update"));
+const delete_1 = __importDefault(require("../actions/delete"));
+const base_1 = __importDefault(require("./base"));
+class ClassificationSet extends base_1.default {
     get resourceName() {
         return 'classification_set';
     }
@@ -12,9 +17,10 @@ export default class ClassificationSet extends Resource {
         return 'classification_sets';
     }
 }
-List.includeInto(ClassificationSet);
-Find.includeInto(ClassificationSet);
-Create.includeInto(ClassificationSet);
-Update.includeInto(ClassificationSet);
-Delete.includeInto(ClassificationSet);
+exports.default = ClassificationSet;
+list_1.default.includeInto(ClassificationSet);
+find_1.default.includeInto(ClassificationSet);
+create_1.default.includeInto(ClassificationSet);
+update_1.default.includeInto(ClassificationSet);
+delete_1.default.includeInto(ClassificationSet);
 //# sourceMappingURL=classification-set.js.map

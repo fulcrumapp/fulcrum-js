@@ -1,6 +1,11 @@
-import List from '../actions/list';
-import Resource from './base';
-export default class Role extends Resource {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const list_1 = __importDefault(require("../actions/list"));
+const base_1 = __importDefault(require("./base"));
+class Role extends base_1.default {
     get resourceName() {
         return 'role';
     }
@@ -8,5 +13,6 @@ export default class Role extends Resource {
         return 'roles';
     }
 }
-List.includeInto(Role);
+exports.default = Role;
+list_1.default.includeInto(Role);
 //# sourceMappingURL=role.js.map

@@ -1,19 +1,15 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-import List from '../actions/list';
-import Find from '../actions/find';
-import Create from '../actions/create';
-import Update from '../actions/update';
-import Resource from './base';
-import Page from '../page';
-export default class Record extends Resource {
+Object.defineProperty(exports, "__esModule", { value: true });
+const list_1 = __importDefault(require("../actions/list"));
+const find_1 = __importDefault(require("../actions/find"));
+const create_1 = __importDefault(require("../actions/create"));
+const update_1 = __importDefault(require("../actions/update"));
+const base_1 = __importDefault(require("./base"));
+const page_1 = __importDefault(require("../page"));
+class Record extends base_1.default {
     get resourceName() {
         return 'record';
     }
@@ -31,15 +27,14 @@ export default class Record extends Resource {
         }
         return this.client.api.del(this.memberPath(id), options);
     }
-    history(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const body = yield this.client.api.get(this.memberActionPath(id, 'history'));
-            return new Page(body, this.resourcesName);
-        });
+    async history(id) {
+        const body = await this.client.api.get(this.memberActionPath(id, 'history'));
+        return new page_1.default(body, this.resourcesName);
     }
 }
-List.includeInto(Record);
-Find.includeInto(Record);
-Create.includeInto(Record);
-Update.includeInto(Record);
+exports.default = Record;
+list_1.default.includeInto(Record);
+find_1.default.includeInto(Record);
+create_1.default.includeInto(Record);
+update_1.default.includeInto(Record);
 //# sourceMappingURL=record.js.map

@@ -1,169 +1,174 @@
-import assert from 'assert';
-import Fetcher from '../src/fetcher';
-import client from './client';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const assert_1 = __importDefault(require("assert"));
+const fetcher_1 = __importDefault(require("../src/fetcher"));
+const client_1 = __importDefault(require("./client"));
 describe('Client', () => {
     describe('.api instanceof', () => {
         it('#api should be an instance of Fetcher.', () => {
-            assert.ok(client.api instanceof Fetcher);
+            assert_1.default.ok(client_1.default.api instanceof fetcher_1.default);
         });
     });
     describe('forms', () => {
         it('should have all properties', () => {
-            assert('forms' in client);
-            assert('find' in client.forms);
-            assert('all' in client.forms);
-            assert('create' in client.forms);
-            assert('update' in client.forms);
-            assert('delete' in client.forms);
-            assert('history' in client.forms);
+            (0, assert_1.default)('forms' in client_1.default);
+            (0, assert_1.default)('find' in client_1.default.forms);
+            (0, assert_1.default)('all' in client_1.default.forms);
+            (0, assert_1.default)('create' in client_1.default.forms);
+            (0, assert_1.default)('update' in client_1.default.forms);
+            (0, assert_1.default)('delete' in client_1.default.forms);
+            (0, assert_1.default)('history' in client_1.default.forms);
         });
     });
     describe('records', () => {
         it('should have all properties', () => {
-            assert('records' in client);
-            assert('find' in client.records);
-            assert('all' in client.records);
-            assert('create' in client.records);
-            assert('update' in client.records);
-            assert('delete' in client.records);
-            assert('history' in client.records);
+            (0, assert_1.default)('records' in client_1.default);
+            (0, assert_1.default)('find' in client_1.default.records);
+            (0, assert_1.default)('all' in client_1.default.records);
+            (0, assert_1.default)('create' in client_1.default.records);
+            (0, assert_1.default)('update' in client_1.default.records);
+            (0, assert_1.default)('delete' in client_1.default.records);
+            (0, assert_1.default)('history' in client_1.default.records);
         });
     });
     describe('changesets', () => {
         it('should have all properties', () => {
-            assert('changesets' in client);
-            assert('find' in client.changesets);
-            assert('all' in client.changesets);
-            assert('create' in client.changesets);
-            assert('update' in client.changesets);
-            assert('close' in client.changesets);
+            (0, assert_1.default)('changesets' in client_1.default);
+            (0, assert_1.default)('find' in client_1.default.changesets);
+            (0, assert_1.default)('all' in client_1.default.changesets);
+            (0, assert_1.default)('create' in client_1.default.changesets);
+            (0, assert_1.default)('update' in client_1.default.changesets);
+            (0, assert_1.default)('close' in client_1.default.changesets);
         });
     });
     describe('choiceLists', () => {
         it('should have all properties', () => {
-            assert('choiceLists' in client);
-            assert('find' in client.choiceLists);
-            assert('all' in client.choiceLists);
-            assert('create' in client.choiceLists);
-            assert('update' in client.choiceLists);
-            assert('delete' in client.choiceLists);
+            (0, assert_1.default)('choiceLists' in client_1.default);
+            (0, assert_1.default)('find' in client_1.default.choiceLists);
+            (0, assert_1.default)('all' in client_1.default.choiceLists);
+            (0, assert_1.default)('create' in client_1.default.choiceLists);
+            (0, assert_1.default)('update' in client_1.default.choiceLists);
+            (0, assert_1.default)('delete' in client_1.default.choiceLists);
         });
     });
     describe('classificationSets', () => {
         it('should have all properties', () => {
-            assert('classificationSets' in client);
-            assert('find' in client.classificationSets);
-            assert('all' in client.classificationSets);
-            assert('create' in client.classificationSets);
-            assert('update' in client.classificationSets);
-            assert('delete' in client.classificationSets);
+            (0, assert_1.default)('classificationSets' in client_1.default);
+            (0, assert_1.default)('find' in client_1.default.classificationSets);
+            (0, assert_1.default)('all' in client_1.default.classificationSets);
+            (0, assert_1.default)('create' in client_1.default.classificationSets);
+            (0, assert_1.default)('update' in client_1.default.classificationSets);
+            (0, assert_1.default)('delete' in client_1.default.classificationSets);
         });
     });
     describe('authorizations', () => {
         it('should have all properties', () => {
-            assert('authorizations' in client);
-            assert('find' in client.authorizations);
-            assert('all' in client.authorizations);
-            assert('create' in client.authorizations);
-            assert('update' in client.authorizations);
-            assert('delete' in client.authorizations);
-            assert('regenerate' in client.authorizations);
+            (0, assert_1.default)('authorizations' in client_1.default);
+            (0, assert_1.default)('find' in client_1.default.authorizations);
+            (0, assert_1.default)('all' in client_1.default.authorizations);
+            (0, assert_1.default)('create' in client_1.default.authorizations);
+            (0, assert_1.default)('update' in client_1.default.authorizations);
+            (0, assert_1.default)('delete' in client_1.default.authorizations);
+            (0, assert_1.default)('regenerate' in client_1.default.authorizations);
         });
     });
     describe('memberships', () => {
         it('should have all properties', () => {
-            assert('memberships' in client);
-            assert('find' in client.memberships);
-            assert('all' in client.memberships);
-            assert('change' in client.memberships);
+            (0, assert_1.default)('memberships' in client_1.default);
+            (0, assert_1.default)('find' in client_1.default.memberships);
+            (0, assert_1.default)('all' in client_1.default.memberships);
+            (0, assert_1.default)('change' in client_1.default.memberships);
         });
     });
     describe('projects', () => {
         it('should have all properties', () => {
-            assert('projects' in client);
-            assert('find' in client.projects);
-            assert('all' in client.projects);
-            assert('create' in client.projects);
-            assert('update' in client.projects);
-            assert('delete' in client.projects);
+            (0, assert_1.default)('projects' in client_1.default);
+            (0, assert_1.default)('find' in client_1.default.projects);
+            (0, assert_1.default)('all' in client_1.default.projects);
+            (0, assert_1.default)('create' in client_1.default.projects);
+            (0, assert_1.default)('update' in client_1.default.projects);
+            (0, assert_1.default)('delete' in client_1.default.projects);
         });
     });
     describe('layers', () => {
         it('should have all properties', () => {
-            assert('layers' in client);
-            assert('find' in client.layers);
-            assert('all' in client.layers);
-            assert('create' in client.layers);
-            assert('update' in client.layers);
-            assert('delete' in client.layers);
+            (0, assert_1.default)('layers' in client_1.default);
+            (0, assert_1.default)('find' in client_1.default.layers);
+            (0, assert_1.default)('all' in client_1.default.layers);
+            (0, assert_1.default)('create' in client_1.default.layers);
+            (0, assert_1.default)('update' in client_1.default.layers);
+            (0, assert_1.default)('delete' in client_1.default.layers);
         });
     });
     describe('photos', () => {
         it('should have all properties', () => {
-            assert('photos' in client);
-            assert('find' in client.photos);
-            assert('all' in client.photos);
-            assert('create' in client.photos);
-            assert('media' in client.photos);
+            (0, assert_1.default)('photos' in client_1.default);
+            (0, assert_1.default)('find' in client_1.default.photos);
+            (0, assert_1.default)('all' in client_1.default.photos);
+            (0, assert_1.default)('create' in client_1.default.photos);
+            (0, assert_1.default)('media' in client_1.default.photos);
         });
     });
     describe('signatures', () => {
         it('should have all properties', () => {
-            assert('signatures' in client);
-            assert('find' in client.signatures);
-            assert('all' in client.signatures);
-            assert('create' in client.signatures);
-            assert('media' in client.signatures);
+            (0, assert_1.default)('signatures' in client_1.default);
+            (0, assert_1.default)('find' in client_1.default.signatures);
+            (0, assert_1.default)('all' in client_1.default.signatures);
+            (0, assert_1.default)('create' in client_1.default.signatures);
+            (0, assert_1.default)('media' in client_1.default.signatures);
         });
     });
     describe('videos', () => {
         it('should have all properties', () => {
-            assert('videos' in client);
-            assert('find' in client.videos);
-            assert('all' in client.videos);
-            assert('create' in client.videos);
-            assert('media' in client.videos);
-            assert('uploadTrack' in client.videos);
-            assert('track' in client.videos);
+            (0, assert_1.default)('videos' in client_1.default);
+            (0, assert_1.default)('find' in client_1.default.videos);
+            (0, assert_1.default)('all' in client_1.default.videos);
+            (0, assert_1.default)('create' in client_1.default.videos);
+            (0, assert_1.default)('media' in client_1.default.videos);
+            (0, assert_1.default)('uploadTrack' in client_1.default.videos);
+            (0, assert_1.default)('track' in client_1.default.videos);
         });
     });
     describe('audio', () => {
         it('should have all properties', () => {
-            assert('audio' in client);
-            assert('find' in client.audio);
-            assert('all' in client.audio);
-            assert('create' in client.audio);
-            assert('media' in client.audio);
-            assert('uploadTrack' in client.audio);
-            assert('track' in client.audio);
+            (0, assert_1.default)('audio' in client_1.default);
+            (0, assert_1.default)('find' in client_1.default.audio);
+            (0, assert_1.default)('all' in client_1.default.audio);
+            (0, assert_1.default)('create' in client_1.default.audio);
+            (0, assert_1.default)('media' in client_1.default.audio);
+            (0, assert_1.default)('uploadTrack' in client_1.default.audio);
+            (0, assert_1.default)('track' in client_1.default.audio);
         });
     });
     describe('roles', () => {
         it('should have all properties', () => {
-            assert('roles' in client);
-            assert('all' in client.roles);
+            (0, assert_1.default)('roles' in client_1.default);
+            (0, assert_1.default)('all' in client_1.default.roles);
         });
     });
     describe('webhooks', () => {
         it('should have all properties', () => {
-            assert('webhooks' in client);
-            assert('find' in client.webhooks);
-            assert('all' in client.webhooks);
-            assert('create' in client.webhooks);
-            assert('update' in client.webhooks);
-            assert('delete' in client.webhooks);
+            (0, assert_1.default)('webhooks' in client_1.default);
+            (0, assert_1.default)('find' in client_1.default.webhooks);
+            (0, assert_1.default)('all' in client_1.default.webhooks);
+            (0, assert_1.default)('create' in client_1.default.webhooks);
+            (0, assert_1.default)('update' in client_1.default.webhooks);
+            (0, assert_1.default)('delete' in client_1.default.webhooks);
         });
     });
     describe('auditLogs', () => {
         it('should have all properties', () => {
-            assert('auditLogs' in client);
-            assert('find' in client.auditLogs);
-            assert('all' in client.auditLogs);
+            (0, assert_1.default)('auditLogs' in client_1.default);
+            (0, assert_1.default)('find' in client_1.default.auditLogs);
+            (0, assert_1.default)('all' in client_1.default.auditLogs);
         });
     });
     describe('query', () => {
         it('should have query', () => {
-            assert('query' in client);
+            (0, assert_1.default)('query' in client_1.default);
         });
     });
 });

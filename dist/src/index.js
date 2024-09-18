@@ -1,23 +1,22 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-import base64 from 'base-64';
-import Fetcher from './fetcher';
-import Client from './client';
-import Page from './page';
-export { Client };
-export { Page };
-const api = new Fetcher({
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Page = exports.Client = void 0;
+exports.getUser = getUser;
+exports.createAuthorization = createAuthorization;
+const base_64_1 = __importDefault(require("base-64"));
+const fetcher_1 = __importDefault(require("./fetcher"));
+const client_1 = __importDefault(require("./client"));
+exports.Client = client_1.default;
+const page_1 = __importDefault(require("./page"));
+exports.Page = page_1.default;
+const api = new fetcher_1.default({
     baseURI: 'https://api.fulcrumapp.com/api/v2'
 });
 function generateAuthOptions(email, password) {
-    const encoded = base64.encode(`${email}:${password}`);
+    const encoded = base_64_1.default.encode(`${email}:${password}`);
     return {
         headers: {
             'Authorization': `Basic ${encoded}`,
@@ -26,35 +25,31 @@ function generateAuthOptions(email, password) {
         }
     };
 }
-export function getUser(email, password) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const options = generateAuthOptions(email, password);
-        const body = yield api.get('/users', options);
-        const { user } = body;
-        user.contexts = user.contexts.map((context) => {
-            // To avoid confusion remove the old API tokens. These will
-            // be deprecated eventually, and authorizations have been
-            // the way to create tokens for a while now.
-            delete context.api_token;
-            return context;
-        });
-        return user;
+async function getUser(email, password) {
+    const options = generateAuthOptions(email, password);
+    const body = await api.get('/users', options);
+    const { user } = body;
+    user.contexts = user.contexts.map((context) => {
+        // To avoid confusion remove the old API tokens. These will
+        // be deprecated eventually, and authorizations have been
+        // the way to create tokens for a while now.
+        delete context.api_token;
+        return context;
     });
+    return user;
 }
-export function createAuthorization(email, password, organizationId, note, timeout, userId) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const authorizationObj = {
-            authorization: {
-                organization_id: organizationId,
-                user_id: userId,
-                note: note,
-                timeout: timeout
-            }
-        };
-        const options = generateAuthOptions(email, password);
-        options.body = authorizationObj;
-        const body = yield api.post('/authorizations', options);
-        return body.authorization;
-    });
+async function createAuthorization(email, password, organizationId, note, timeout, userId) {
+    const authorizationObj = {
+        authorization: {
+            organization_id: organizationId,
+            user_id: userId,
+            note: note,
+            timeout: timeout
+        }
+    };
+    const options = generateAuthOptions(email, password);
+    options.body = authorizationObj;
+    const body = await api.post('/authorizations', options);
+    return body.authorization;
 }
 //# sourceMappingURL=index.js.map

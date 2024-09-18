@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const ExcludedClassProperties = ['__super__'];
 const ExcludedPrototypeProperties = ['constructor'];
 function mix(from, to, exclude) {
@@ -10,7 +12,7 @@ function mix(from, to, exclude) {
         }
     }
 }
-export default class Mixin {
+class Mixin {
     static includeInto(constructor) {
         // include static properties
         mix(this, constructor, ExcludedClassProperties);
@@ -21,6 +23,7 @@ export default class Mixin {
         }
     }
 }
+exports.default = Mixin;
 for (const name in Mixin) {
     if (Mixin.hasOwnProperty(name)) {
         ExcludedClassProperties.push(name);

@@ -1,6 +1,11 @@
-import Track from '../actions/track';
-import MediaResource from './media-base';
-export default class Audio extends MediaResource {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const track_1 = __importDefault(require("../actions/track"));
+const media_base_1 = __importDefault(require("./media-base"));
+class Audio extends media_base_1.default {
     get defaultContentType() {
         return 'audio/x-m4a';
     }
@@ -17,5 +22,6 @@ export default class Audio extends MediaResource {
         return ['original'];
     }
 }
-Track.includeInto(Audio);
+exports.default = Audio;
+track_1.default.includeInto(Audio);
 //# sourceMappingURL=audio.js.map

@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const query = (client) => {
     return (sql, format = 'json') => {
         const options = {
@@ -9,5 +11,5 @@ const query = (client) => {
         return client.api.post('query', options);
     };
 };
-export default query;
+exports.default = query;
 //# sourceMappingURL=query.js.map

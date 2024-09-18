@@ -1,10 +1,15 @@
-import List from '../actions/list';
-import Find from '../actions/find';
-import Create from '../actions/create';
-import Update from '../actions/update';
-import Delete from '../actions/delete';
-import Resource from './base';
-export default class Layer extends Resource {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const list_1 = __importDefault(require("../actions/list"));
+const find_1 = __importDefault(require("../actions/find"));
+const create_1 = __importDefault(require("../actions/create"));
+const update_1 = __importDefault(require("../actions/update"));
+const delete_1 = __importDefault(require("../actions/delete"));
+const base_1 = __importDefault(require("./base"));
+class Layer extends base_1.default {
     get resourceName() {
         return 'layer';
     }
@@ -12,9 +17,10 @@ export default class Layer extends Resource {
         return 'layers';
     }
 }
-List.includeInto(Layer);
-Find.includeInto(Layer);
-Create.includeInto(Layer);
-Update.includeInto(Layer);
-Delete.includeInto(Layer);
+exports.default = Layer;
+list_1.default.includeInto(Layer);
+find_1.default.includeInto(Layer);
+create_1.default.includeInto(Layer);
+update_1.default.includeInto(Layer);
+delete_1.default.includeInto(Layer);
 //# sourceMappingURL=layer.js.map

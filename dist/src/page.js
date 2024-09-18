@@ -1,4 +1,6 @@
-export default class Page {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class Page {
     constructor(object, resourcesName) {
         this.objects = object[resourcesName];
         this.currentPage = object.current_page;
@@ -7,4 +9,5 @@ export default class Page {
         this.perPage = object.per_page;
     }
 }
+exports.default = Page;
 //# sourceMappingURL=page.js.map

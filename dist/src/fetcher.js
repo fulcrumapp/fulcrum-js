@@ -1,13 +1,9 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-import Queue from 'p-queue';
+Object.defineProperty(exports, "__esModule", { value: true });
+const p_queue_1 = __importDefault(require("p-queue"));
 function getQueryString(params) {
     return Object.keys(params)
         .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
@@ -23,14 +19,20 @@ function errorMessageForStatus(status) {
     };
     return messages[status] || `HTTP ${status}`;
 }
-export default class Fetcher {
+class Fetcher {
     constructor(options) {
         this.options = options;
-        this.queue = new Queue({ concurrency: 3 });
+        this.queue = new p_queue_1.default({ concurrency: 3 });
         this.headers = options.headers;
     }
     _processOptions(opts) {
-        const options = Object.assign(Object.assign({}, opts), { headers: Object.assign(Object.assign({}, this.headers), opts.headers) });
+        const options = {
+            ...opts,
+            headers: {
+                ...this.headers,
+                ...opts.headers
+            }
+        };
         // remove any nil or blank headers
         // (e.g. to automatically set Content-Type with `FormData` boundary)
         Object.keys(options.headers).forEach(key => {
@@ -47,22 +49,20 @@ export default class Fetcher {
         }
         return options;
     }
-    _fetch(url, options) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const resp = yield fetch(url, options);
-            if (!resp.ok) {
-                const errorMessage = errorMessageForStatus(resp.status) || 'Unknown Error';
-                if (errorMessage === 'Unauthorized' && this.authenticationErrorHandler) {
-                    this.authenticationErrorHandler();
-                }
-                throw new Error(errorMessage);
+    async _fetch(url, options) {
+        const resp = await fetch(url, options);
+        if (!resp.ok) {
+            const errorMessage = errorMessageForStatus(resp.status) || 'Unknown Error';
+            if (errorMessage === 'Unauthorized' && this.authenticationErrorHandler) {
+                this.authenticationErrorHandler();
             }
-            const contentType = resp.headers.get('Content-Type');
-            if (contentType && contentType.split(';')[0] === 'application/json') {
-                return resp.json();
-            }
-            return resp.text();
-        });
+            throw new Error(errorMessage);
+        }
+        const contentType = resp.headers.get('Content-Type');
+        if (contentType && contentType.split(';')[0] === 'application/json') {
+            return resp.json();
+        }
+        return resp.text();
     }
     _queue(url, options) {
         return this.queue.add(() => this._fetch(url, options));
@@ -95,4 +95,5 @@ export default class Fetcher {
         this.authenticationErrorHandler = func;
     }
 }
+exports.default = Fetcher;
 //# sourceMappingURL=fetcher.js.map
