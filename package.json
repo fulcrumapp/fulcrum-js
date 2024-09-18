@@ -24,6 +24,10 @@
     }
   },
   "devDependencies": {
+    "@types/form-data": "^2.5.0",
+    "@types/nock": "^11.1.0",
+    "@types/node": "^22.5.5",
+    "@types/p-queue": "^3.2.1",
     "@typescript-eslint/eslint-plugin": "^8.6.0",
     "@typescript-eslint/parser": "^8.6.0",
     "eslint": "^9.10.0",
