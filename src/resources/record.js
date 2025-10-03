@@ -2,6 +2,7 @@ import List from '../actions/list';
 import Find from '../actions/find';
 import Create from '../actions/create';
 import Update from '../actions/update';
+import SerialBatchUpdate from '../actions/serial-batch-update';
 import Resource from './base';
 import Page from '../page';
 
@@ -38,3 +39,4 @@ List.includeInto(Record);
 Find.includeInto(Record);
 Create.includeInto(Record);
 Update.includeInto(Record);
+SerialBatchUpdate.includeInto(Record);
