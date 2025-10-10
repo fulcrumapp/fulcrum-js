@@ -5,7 +5,7 @@ import fs from 'fs';
 
 import { Page } from '../';
 
-const client = require('./client');
+import client from './client';
 
 describe('Common Methods', () => {
   describe('#find()', () => {

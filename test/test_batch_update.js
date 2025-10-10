@@ -3,7 +3,7 @@ import nock from 'nock';
 import path from 'path';
 import fs from 'fs';
 
-const client = require('./client');
+import client from './client';
 
 describe('Serial Batch Update', () => {
   describe('#serialBatchUpdate()', () => {

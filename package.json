@@ -4,7 +4,7 @@
   "description": "JavaScript wrapper for the Fulcrum API",
   "main": "dist/index.js",
   "scripts": {
-    "test": "mocha --require babel-core/register",
+    "test": "mocha --require ./test/setup.js --require babel-core/register",
     "lint": "node_modules/.bin/eslint src/* src/**/*",
     "build": "node_modules/.bin/babel src --out-dir dist --source-maps",
     "watch": "node_modules/.bin/babel src --out-dir dist --source-maps --watch",
