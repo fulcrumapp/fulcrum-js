@@ -1,8 +1,11 @@
-// Disable native fetch and use isomorphic-fetch for tests
+// Disable native fetch and use node-fetch for tests
 // This ensures nock can properly intercept HTTP requests
 if (global.fetch) {
   delete global.fetch;
 }
 
-// Import isomorphic-fetch to provide fetch implementation
-require('isomorphic-fetch');
+// Use node-fetch v2 which works better with nock
+global.fetch = require('node-fetch');
+global.Headers = global.fetch.Headers;
+global.Request = global.fetch.Request;
+global.Response = global.fetch.Response;
