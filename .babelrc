@@ -1,10 +1,16 @@
 {
-  "presets": ["@babel/preset-env"],
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "browsers": ["last 2 versions"],
+          "node": "18"
+        }
+      }
+    ]
+  ],
   "plugins": [
-    "@babel/transform-async-to-generator",
-    "@babel/transform-object-rest-spread",
-    ["@babel/transform-runtime", {
-      "regenerator": true
-    }]
+    "@babel/plugin-transform-runtime"
   ]
 }
