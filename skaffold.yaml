@@ -1,0 +1,64 @@
+apiVersion: skaffold/v4beta11
+kind: Config
+build:
+  artifacts:
+    - image: 280296955917.dkr.ecr.us-east-2.amazonaws.com/sampleAPP
+      docker:
+        dockerfile: Dockerfile
+  tagPolicy:
+    dateTime:
+      format: 2006-01-02_15-04-05.999_MST
+      timezone: Local
+  platforms:
+    - linux/amd64
+  local:
+    tryImportMissing: true
+    useBuildkit: true
+    concurrency: 3
+deploy:
+  helm:
+    releases:
+      - name: sampleCHARTNAME
+        chartPath: charts/sampleCHARTNAME
+        valuesFiles:
+        - ./charts/sampleCHARTNAME/helm_vars/secrets.nonprod.chaos.yaml
+        - ./charts/sampleCHARTNAME/helm_vars/secrets.preview.chaos.yaml
+        - ./charts/sampleCHARTNAME/helm_vars/values.preview.yaml
+        namespace: '{{.USER}}'
+        setValueTemplates:
+          fullnameOverride: sampleCHARTNAME
+          image.repository: "{{.IMAGE_REPO}}"
+          image.tag: "{{.IMAGE_TAG}}"
+          ksvc.image.tag: '{{.IMAGE_TAG}}'
+          ksvc_enabled: false
+          cronjobs.image.tag: '{{.IMAGE_TAG}}'
+          crons_enabled: false
+          previewPrefix: "{{.USER}}"
+        useHelmSecrets: true
+profiles:
+  - name: ci
+    build:
+      tagPolicy:
+        gitCommit:
+          variant: AbbrevCommitSha
+          ignoreChanges: true
+  - name: kaniko
+    build:
+      cluster:
+        serviceAccount: ci-pipeline
+        namespace: ci
+        kanikoImage: 280296955917.dkr.ecr.us-east-2.amazonaws.com/kaniko:latest
+        # volumes:
+        # - name: npmrc
+        #   secret:
+        #     secretName: secret-npmrc
+      artifacts:
+        - image: 280296955917.dkr.ecr.us-east-2.amazonaws.com/sampleAPP
+          kaniko:
+            dockerfile: Dockerfile
+            useNewRun: true
+            image: 280296955917.dkr.ecr.us-east-2.amazonaws.com/kaniko:latest
+          # volumeMounts:
+          # - mountPath: /usr/local/etc/npmrc
+          #   name: npmrc
+          #   subPath: .npmrc
