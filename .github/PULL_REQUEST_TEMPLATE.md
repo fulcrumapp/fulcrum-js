@@ -20,7 +20,7 @@ Why is this Pull Request being created?
 - Not needed for self-explanatory code. Use your best judgement.
 
 # Code Review
-High quality code reviews are expected. You can utilize this [PR review checklist](https://fulcrumapp.atlassian.net/wiki/spaces/ENG/pages/1441693735/PR+Review+Checklist) to help you conduct one.
+High quality code reviews are expected. 
 
 # Testing
 

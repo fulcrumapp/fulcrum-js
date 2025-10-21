@@ -22,7 +22,7 @@ outputType: npm
 # auto_deploy: Controls automatic deployment to production on main branch merge
 # Values: True | False
 # Default: True for most services
-auto_deploy: True
+auto_deploy: False
 
 # create_preview_environment: Controls creation of preview environments for pull requests
 # Values: True | False
@@ -58,36 +58,3 @@ run_sonar_scanner: False
 # Default: "" (uses standard /app directory)
 # Example: "coverage" for projects that output to ./coverage/
 test_coverage_dir: ""
-
-# =============================================================================
-# HELM CHART DEPLOYMENT CONFIGURATION
-# =============================================================================
-
-# charts: Override default CD system behavior for Helm chart deployments
-# You can either:
-#   1. Set charts: [] to use all defaults
-#   2. Comment out this entire section to use all defaults
-#   3. Define specific chart configurations as shown below
-
-charts:
-  # Example chart configuration (replace 'fulcrum-js' with your actual chart name)
-  fulcrum-js:
-    # helm_options: Additional options passed to helm during deployment
-    # Default: Uses cluster-specific default options if empty
-    helm_options: ""
-    
-    # release_clusters: Which clusters to deploy to
-    # Values: 
-    #   - "ALL": Deploy to all production clusters (default)
-    #   - "chaos": Deploy only to chaos (staging) cluster
-    #   - "mongoose": Deploy only to us-east-1 cluster
-    #   - "chaos,ALL": Deploy to chaos AND all production clusters
-    release_clusters: "ALL"
-    
-    # release_name: Name for the Helm release
-    # Default: Uses the chart name if empty
-    release_name: ""
-    
-    # release_namespace: Kubernetes namespace for deployment
-    # Default: "fulcrum-prod" if empty
-    release_namespace: ""

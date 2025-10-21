@@ -15,26 +15,7 @@ build:
     tryImportMissing: true
     useBuildkit: true
     concurrency: 3
-deploy:
-  helm:
-    releases:
-      - name: fulcrum-js
-        chartPath: charts/fulcrum-js
-        valuesFiles:
-        - ./charts/fulcrum-js/helm_vars/secrets.nonprod.chaos.yaml
-        - ./charts/fulcrum-js/helm_vars/secrets.preview.chaos.yaml
-        - ./charts/fulcrum-js/helm_vars/values.preview.yaml
-        namespace: '{{.USER}}'
-        setValueTemplates:
-          fullnameOverride: fulcrum-js
-          image.repository: "{{.IMAGE_REPO}}"
-          image.tag: "{{.IMAGE_TAG}}"
-          ksvc.image.tag: '{{.IMAGE_TAG}}'
-          ksvc_enabled: false
-          cronjobs.image.tag: '{{.IMAGE_TAG}}'
-          crons_enabled: false
-          previewPrefix: "{{.USER}}"
-        useHelmSecrets: true
+deploy: {}
 profiles:
   - name: ci
     build:
