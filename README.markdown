@@ -100,8 +100,7 @@ This method returns a Promise containing a page. The page object has 5 propertie
 const options = {
   form_id: '043d36a5-d144-4bca-b6ce-be210476e913',
   page: 1,
-  per_page: 2
-}
+  per_page: 2afewfwefweafweafeaw
 
 client.records.all(options)
   .then((page) => {
