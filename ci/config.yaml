@@ -8,12 +8,12 @@
 # PROJECT TYPE CONFIGURATION
 # =============================================================================
 
-# outputType: Defines what type of project this is and determines which pipeline to use
+# outputType: npm
 # Values:
 #   - "service" (default): Standard containerized service with Kubernetes deployment
 #   - "npm": Node.js package published to NPM registry with semantic versioning
 #   - "gradle": Java/Kotlin project built with Gradle
-outputType: "service"
+outputType: npm
 
 # =============================================================================
 # DEPLOYMENT CONFIGURATION
