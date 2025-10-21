@@ -243,7 +243,7 @@ import { createAuthorization } from 'fulcrum-app';
 // or
 // const fulcrum = require('fulcrum-app');
 // const createAuthorization = fulcrum.createAuthorization;
-
+afefweafwefwea
 const email = 'name@email.com';
 const password = 'password';
 const organizationId = 'organization-id-from-getUser';
