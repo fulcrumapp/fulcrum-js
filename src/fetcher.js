@@ -1,4 +1,4 @@
-import 'isomorphic-fetch';
+import axios from 'axios';
 import Queue from 'p-queue';
 
 function getQueryString(params) {
@@ -56,25 +56,32 @@ export default class Fetcher {
   }
 
   async _fetch(url, options) {
-    const resp = await fetch(url, options);
+    try {
+      const resp = await axios({
+        url,
+        ...options
+      });
 
-    if (!resp.ok) {
-      const errorMessage = errorMessageForStatus(resp.status) || 'Unknown Error';
+      const contentType = resp.headers['content-type'];
 
-      if (errorMessage === 'Unauthorized' && this.authenticationErrorHandler) {
-        this.authenticationErrorHandler();
+      if (contentType && contentType.split(';')[0] === 'application/json') {
+        return resp.data;
       }
 
-      throw new Error(errorMessage);
+      return resp.data;
+    } catch (error) {
+      if (error.response) {
+        const errorMessage = errorMessageForStatus(error.response.status) || 'Unknown Error';
+
+        if (errorMessage === 'Unauthorized' && this.authenticationErrorHandler) {
+          this.authenticationErrorHandler();
+        }
+
+        throw new Error(errorMessage);
+      }
+
+      throw error;
     }
-
-    const contentType = resp.headers.get('Content-Type');
-
-    if (contentType && contentType.split(';')[0] === 'application/json') {
-      return resp.json();
-    }
-
-    return resp.text();
   }
 
   _queue(url, options) {
