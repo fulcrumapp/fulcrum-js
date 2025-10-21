@@ -2,7 +2,7 @@ apiVersion: skaffold/v4beta11
 kind: Config
 build:
   artifacts:
-    - image: 280296955917.dkr.ecr.us-east-2.amazonaws.com/sampleAPP
+    - image: 280296955917.dkr.ecr.us-east-2.amazonaws.com/fulcrum-js
       docker:
         dockerfile: Dockerfile
   tagPolicy:
@@ -18,15 +18,15 @@ build:
 deploy:
   helm:
     releases:
-      - name: sampleCHARTNAME
-        chartPath: charts/sampleCHARTNAME
+      - name: fulcrum-js
+        chartPath: charts/fulcrum-js
         valuesFiles:
-        - ./charts/sampleCHARTNAME/helm_vars/secrets.nonprod.chaos.yaml
-        - ./charts/sampleCHARTNAME/helm_vars/secrets.preview.chaos.yaml
-        - ./charts/sampleCHARTNAME/helm_vars/values.preview.yaml
+        - ./charts/fulcrum-js/helm_vars/secrets.nonprod.chaos.yaml
+        - ./charts/fulcrum-js/helm_vars/secrets.preview.chaos.yaml
+        - ./charts/fulcrum-js/helm_vars/values.preview.yaml
         namespace: '{{.USER}}'
         setValueTemplates:
-          fullnameOverride: sampleCHARTNAME
+          fullnameOverride: fulcrum-js
           image.repository: "{{.IMAGE_REPO}}"
           image.tag: "{{.IMAGE_TAG}}"
           ksvc.image.tag: '{{.IMAGE_TAG}}'
@@ -53,7 +53,7 @@ profiles:
         #   secret:
         #     secretName: secret-npmrc
       artifacts:
-        - image: 280296955917.dkr.ecr.us-east-2.amazonaws.com/sampleAPP
+        - image: 280296955917.dkr.ecr.us-east-2.amazonaws.com/fulcrum-js
           kaniko:
             dockerfile: Dockerfile
             useNewRun: true

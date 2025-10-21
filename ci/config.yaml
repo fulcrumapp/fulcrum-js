@@ -70,8 +70,8 @@ test_coverage_dir: ""
 #   3. Define specific chart configurations as shown below
 
 charts:
-  # Example chart configuration (replace 'sampleCHARTNAME' with your actual chart name)
-  sampleCHARTNAME:
+  # Example chart configuration (replace 'fulcrum-js' with your actual chart name)
+  fulcrum-js:
     # helm_options: Additional options passed to helm during deployment
     # Default: Uses cluster-specific default options if empty
     helm_options: ""
