@@ -3,6 +3,7 @@
   "version": "2.7.0",
   "description": "JavaScript wrapper for the Fulcrum API",
   "main": "dist/index.js",
+  "repository": "https://github.com/fulcrumapp/fulcrum-js",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
