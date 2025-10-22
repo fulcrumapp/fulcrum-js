@@ -1,8 +1,11 @@
 {
-  "name": "fulcrum-app",
+  "name": "@fulcrumapp/fulcrum-js",
   "version": "2.7.0",
   "description": "JavaScript wrapper for the Fulcrum API",
   "main": "dist/index.js",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
     "test": "mocha --require babel-core/register",
     "lint": "node_modules/.bin/eslint src/* src/**/*",
@@ -10,7 +13,7 @@
     "watch": "node_modules/.bin/babel src --out-dir dist --source-maps --watch",
     "clean": "rm -rf dist"
   },
-  "author": "Jason Sanford (jasonsanford@gmail.com)",
+  "author": "",
   "license": "BSD-2-Clause",
   "eslintConfig": {
     "extends": "fulcrum",
