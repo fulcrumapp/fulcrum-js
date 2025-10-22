@@ -1,0 +1,60 @@
+# =============================================================================
+# CI/CD Configuration File
+# =============================================================================
+# This file configures the Fulcrum CI/CD pipeline behavior for your project.
+# Customize the settings below based on your project's requirements.
+
+# =============================================================================
+# PROJECT TYPE CONFIGURATION
+# =============================================================================
+
+# outputType: npm
+# Values:
+#   - "service" (default): Standard containerized service with Kubernetes deployment
+#   - "npm": Node.js package published to NPM registry with semantic versioning
+#   - "gradle": Java/Kotlin project built with Gradle
+outputType: npm
+
+# =============================================================================
+# DEPLOYMENT CONFIGURATION
+# =============================================================================
+
+# auto_deploy: Controls automatic deployment to production on main branch merge
+# Values: True | False
+# Default: True for most services
+auto_deploy: False
+
+# create_preview_environment: Controls creation of preview environments for pull requests
+# Values: True | False
+# Default: False (preview environments are opt-in to reduce resource usage)
+# Note: Requires additional setup and is not available for all project types
+create_preview_environment: False
+
+# =============================================================================
+# CODE QUALITY & TESTING CONFIGURATION
+# =============================================================================
+
+# Unit Testing Configuration
+# If 'command' is None or missing, unit tests will be skipped
+unittest:
+  image: None      # Docker image to use for running tests (e.g., "node:18", "python:3.9")
+  command: None    # Command to execute tests (e.g., "npm test", "pytest")
+  # coverage_file: None  # Optional: Path to coverage file if not in default location
+
+# Code Linting Configuration  
+# If 'command' is None or missing, linting will be skipped
+lint:
+  image: None      # Docker image to use for running linter
+  command: None    # Command to execute linter (e.g., "npm run lint", "flake8")
+  # coverage_file: None  # Optional: Path to lint results file
+
+# SonarQube Code Analysis
+# run_sonar_scanner: Enables SonarQube static code analysis
+# Values: True | False
+# Default: False (requires sonar-project.properties file to be created first)
+run_sonar_scanner: False
+
+# test_coverage_dir: Custom directory for test coverage output files
+# Default: "" (uses standard /app directory)
+# Example: "coverage" for projects that output to ./coverage/
+test_coverage_dir: ""
