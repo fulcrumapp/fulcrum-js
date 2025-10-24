@@ -2,7 +2,7 @@ import assert from 'assert';
 import nock from 'nock';
 import path from 'path';
 
-const client = require('./client');
+import client from './client';
 
 describe('Tracks', () => {
   describe('video', () => {

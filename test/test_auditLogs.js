@@ -4,7 +4,7 @@ import path from 'path';
 
 import { Page } from '../dist';
 
-const client = require('./client');
+import client from './client';
 
 describe('Audit Log Methods', () => {
   describe('#find()', () => {
