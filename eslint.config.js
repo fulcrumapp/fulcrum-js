@@ -9,6 +9,7 @@ export default [
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
+    files: ['**/*.ts'],
     languageOptions: {
       ecmaVersion: 2020,
       sourceType: 'module',
@@ -28,11 +29,28 @@ export default [
     },
   },
   {
+    files: ['**/*.js'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
     files: ['**/*.test.ts'],
     languageOptions: {
       globals: {
         ...globals.jest,
       },
+    },
+  },
+  {
+    files: ['scripts/**/*.ts'],
+    rules: {
+      // Scripts can have higher complexity for CLI tools
+      'complexity': 'off',
     },
   },
 ];

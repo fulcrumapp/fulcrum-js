@@ -8,7 +8,6 @@
  * Usage: npm run verify
  */
 
-import { createInterface } from 'node:readline';
 import { FulcrumClient, FulcrumRegion } from '../src/client.js';
 
 // ANSI color codes for output
@@ -34,46 +33,81 @@ interface ApiStats {
 }
 
 async function promptForToken(): Promise<string> {
-  const rl = createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
   return new Promise((resolve) => {
-    rl.question(
-      `${colors.cyan}Enter your Fulcrum API token: ${colors.reset}`,
-      (token) => {
-        rl.close();
-        resolve(token.trim());
+    process.stdout.write(`${colors.cyan}Enter your Fulcrum API token: ${colors.reset}`);
+
+    let token = '';
+    const stdin = process.stdin;
+
+    stdin.setRawMode(true);
+    stdin.resume();
+    stdin.setEncoding('utf8');
+
+    const onData = (char: string) => {
+      const code = char.codePointAt(0);
+
+      if (!code) return;
+
+      // Handle Ctrl+C
+      if (code === 3) {
+        process.stdout.write('\n');
+        process.exit(0);
       }
-    );
+
+      // Handle Enter/Return
+      if (code === 13 || code === 10) {
+        process.stdout.write('\n');
+        stdin.setRawMode(false);
+        stdin.pause();
+        stdin.removeListener('data', onData);
+        resolve(token.trim());
+        return;
+      }
+
+      // Handle Backspace/Delete
+      if (code === 127 || code === 8) {
+        if (token.length > 0) {
+          token = token.slice(0, -1);
+          process.stdout.write('\b \b');
+        }
+        return;
+      }
+
+      // Handle normal characters
+      if (code >= 32) {
+        token += char;
+        process.stdout.write('*');
+      }
+    };
+
+    stdin.on('data', onData);
   });
 }
 
 async function verifyEndpoint(
   name: string,
-  fn: () => Promise<any>
+  fn: () => Promise<unknown>
 ): Promise<ApiStats> {
   const start = Date.now();
   try {
     const response = await fn();
     const durationMs = Date.now() - start;
-    const data = response.data;
+    const data = (response as { data: unknown }).data;
 
     // Extract array from response (different endpoints use different property names)
-    let items: any[] = [];
+    let items: unknown[] = [];
     let itemKey = '';
 
     if (Array.isArray(data)) {
       items = data;
     } else {
       // Try common property names for arrays
-      const arrayKeys = Object.keys(data).filter(
-        (key) => Array.isArray(data[key])
+      const arrayKeys = Object.keys(data as Record<string, unknown>).filter(
+        (key) => Array.isArray((data as Record<string, unknown>)[key])
       );
       if (arrayKeys.length > 0) {
         itemKey = arrayKeys[0];
-        items = data[itemKey];
+        items = (data as Record<string, unknown>)[itemKey] as unknown[];
       }
     }
 
@@ -84,77 +118,84 @@ async function verifyEndpoint(
 
     // Calculate response body size
     const responseBody = JSON.stringify(data);
-    const contentLength = response.headers?.['content-length']
-      ? Number.parseInt(response.headers['content-length'], 10)
+    const contentLength = (response as { headers?: { 'content-length'?: string } }).headers?.['content-length']
+      ? Number.parseInt((response as { headers: { 'content-length': string } }).headers['content-length'], 10)
       : Buffer.byteLength(responseBody, 'utf8');
 
     return {
       endpoint: name,
       count,
-      status: response.status,
+      status: (response as { status: number }).status,
       success: true,
       contentLength,
       sampleItem,
       durationMs,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     const durationMs = Date.now() - start;
     // Extract request details from axios error
-    const requestUrl = error.config?.url || 'unknown';
-    const requestMethod = error.config?.method?.toUpperCase() || 'GET';
-    const baseURL = error.config?.baseURL || '';
+    const axiosError = error as { config?: { url?: string; method?: string; baseURL?: string }; response?: { status?: number }; message?: string };
+    const requestUrl = axiosError.config?.url || 'unknown';
+    const requestMethod = axiosError.config?.method?.toUpperCase() || 'GET';
+    const baseURL = axiosError.config?.baseURL || '';
     const fullUrl = baseURL ? `${baseURL}${requestUrl}` : requestUrl;
 
     return {
       endpoint: name,
       count: 0,
-      status: error.response?.status || 0,
+      status: axiosError.response?.status || 0,
       success: false,
-      error: `${error.message} (${requestMethod} ${fullUrl})`,
+      error: `${axiosError.message || 'Unknown error'} (${requestMethod} ${fullUrl})`,
       durationMs,
     };
   }
 }
 
-async function main() {
+function printHeader() {
   console.log(`${colors.bright}${colors.blue}`);
   console.log('=================================================');
   console.log('  Fulcrum API Client Verification Script');
   console.log('=================================================');
   console.log(colors.reset);
+}
 
-  // Prompt for API token
-  const apiKey = await promptForToken();
-
-  if (!apiKey) {
-    console.error(`${colors.red}Error: API token is required${colors.reset}`);
-    process.exit(1);
-  }
-
-  console.log(`\n${colors.yellow}Initializing client...${colors.reset}\n`);
-  const client = new FulcrumClient({
-    apiKey,
-    region: FulcrumRegion.US
-  });
-
-  const stats: ApiStats[] = [];
-
-  // Test all list operations available in the wrapper
-  const tests = [
+function createTestSuite(client: FulcrumClient) {
+  return [
+    // Core resources
     { name: 'Forms', fn: () => client.forms.getAll() },
-    { name: 'Records', fn: () => client.records.getAll() },
+    { name: 'Records', fn: () => client.records.getAll({ perPage: 250 }) },
     { name: 'Projects', fn: () => client.projects.getAll() },
     { name: 'Webhooks', fn: () => client.webhooks.getAll() },
-    { name: 'Audit Logs', fn: () => client.auditLogs.getAll() },
+
+    // CRUD resources
     { name: 'Authorizations', fn: () => client.authorizations.getAll() },
-    { name: 'Changesets', fn: () => client.changesets.getAll() },
+    { name: 'Changesets', fn: () => client.changesets.getAll({ perPage: 250 }) },
     { name: 'Choice Lists', fn: () => client.choiceLists.getAll() },
     { name: 'Classification Sets', fn: () => client.classificationSets.getAll() },
     { name: 'Groups', fn: () => client.groups.getAll() },
     { name: 'Layers', fn: () => client.layers.getAll() },
     { name: 'Memberships', fn: () => client.memberships.getAll() },
     { name: 'Roles', fn: () => client.roles.getAll() },
+
+    // Specialized resources
+    { name: 'Workflows', fn: () => client.workflows.getAll() },
+    { name: 'Report Templates', fn: () => client.reportTemplates.getAll() },
+    { name: 'Batches', fn: () => client.batches.getAll() },
+    { name: 'Attachments', fn: () => client.attachments.getAll() },
+
+    // Audit logs
+    { name: 'Audit Logs', fn: () => client.auditLogs.getAll({ perPage: 250 }) },
+
+    // Media resources (these return metadata, not full files)
+    { name: 'Photos', fn: () => client.photos.getAllMetadata({ perPage: 250 }) },
+    { name: 'Signatures', fn: () => client.signatures.getAll({ perPage: 250 }) },
+    { name: 'Videos', fn: () => client.videos.getAll({ perPage: 250 }) },
+    { name: 'Audio', fn: () => client.audio.getAll({ perPage: 250 }) },
   ];
+}
+
+async function runTests(tests: Array<{ name: string; fn: () => Promise<unknown> }>): Promise<ApiStats[]> {
+  const stats: ApiStats[] = [];
 
   console.log(`${colors.bright}Testing ${tests.length} endpoints...${colors.reset}\n`);
 
@@ -173,7 +214,10 @@ async function main() {
     }
   }
 
-  // Print summary
+  return stats;
+}
+
+function printSummary(stats: ApiStats[], totalTests: number) {
   console.log(`\n${colors.bright}${colors.blue}Summary:${colors.reset}\n`);
 
   const successful = stats.filter((s) => s.success).length;
@@ -182,8 +226,8 @@ async function main() {
   const totalBytes = stats.reduce((sum, s) => sum + (s.contentLength || 0), 0);
   const totalKB = (totalBytes / 1024).toFixed(2);
 
-  console.log(`  ${colors.green}✓ Successful:${colors.reset} ${successful}/${tests.length}`);
-  console.log(`  ${colors.red}✗ Failed:${colors.reset}     ${failed}/${tests.length}`);
+  console.log(`  ${colors.green}✓ Successful:${colors.reset} ${successful}/${totalTests}`);
+  console.log(`  ${colors.red}✗ Failed:${colors.reset}     ${failed}/${totalTests}`);
   console.log(`  ${colors.cyan}Total Items:${colors.reset}  ${totalItems}`);
   console.log(`  ${colors.cyan}Total Size:${colors.reset}   ${totalKB} KB`);
 
@@ -196,14 +240,40 @@ async function main() {
     }
   }
 
-  // Exit with appropriate code
-  const exitCode = failed > 0 ? 1 : 0;
+  return failed;
+}
 
+function printFooter(exitCode: number) {
   console.log(`\n${colors.bright}${exitCode === 0 ? colors.green : colors.red}`);
   console.log('=================================================');
   console.log(exitCode === 0 ? '  ✓ Verification Complete' : '  ✗ Verification Failed');
   console.log('=================================================');
   console.log(colors.reset);
+}
+
+async function main() {
+  printHeader();
+
+  // Prompt for API token
+  const apiKey = await promptForToken();
+
+  if (!apiKey) {
+    console.error(`${colors.red}Error: API token is required${colors.reset}`);
+    process.exit(1);
+  }
+
+  console.log(`\n${colors.yellow}Initializing client...${colors.reset}\n`);
+  const client = new FulcrumClient({
+    apiKey,
+    region: FulcrumRegion.US
+  });
+
+  const tests = createTestSuite(client);
+  const stats = await runTests(tests);
+  const failed = printSummary(stats, tests.length);
+
+  const exitCode = failed > 0 ? 1 : 0;
+  printFooter(exitCode);
 
   process.exit(exitCode);
 }
