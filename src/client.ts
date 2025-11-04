@@ -26,6 +26,7 @@ import type {
   DefaultApiClassificationSetsGetAllRequest,
   DefaultApiLayersGetAllRequest,
   DefaultApiMembershipsGetAllRequest,
+  DefaultApiRolesGetAllRequest,
   RecordsCreateRequest,
   RecordsUpdateRequest,
   FormsCreateRequest,
@@ -551,6 +552,22 @@ export class FulcrumClient {
       getAll: (params: Omit<DefaultApiMembershipsGetAllRequest, 'accept'> = {}) =>
         this.withSpan('Memberships.getAll', () =>
           api.membershipsGetAll({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+    } as const;
+  }
+
+  /**
+   * Roles API
+   */
+  get roles() {
+    const api = this.api;
+    return {
+      getAll: (params: Omit<DefaultApiRolesGetAllRequest, 'accept'> = {}) =>
+        this.withSpan('Roles.getAll', () =>
+          api.rolesGetAll({
             accept: 'application/json',
             ...params,
           }),

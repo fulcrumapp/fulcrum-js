@@ -146,6 +146,7 @@ async function main() {
     { name: 'Classification Sets', fn: () => client.classificationSets.getAll() },
     { name: 'Layers', fn: () => client.layers.getAll() },
     { name: 'Memberships', fn: () => client.memberships.getAll() },
+    { name: 'Roles', fn: () => client.roles.getAll() },
   ];
 
   console.log(`${colors.bright}Testing ${tests.length} endpoints...${colors.reset}\n`);
