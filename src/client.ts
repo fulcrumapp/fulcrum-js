@@ -20,13 +20,74 @@ import type {
   DefaultApiQueryGetRequest,
   DefaultApiQueryPostRequest,
   DefaultApiAuditLogsGetAllRequest,
+  DefaultApiAuditLogsGetSingleRequest,
   DefaultApiAuthorizationsGetAllRequest,
+  DefaultApiAuthorizationsGetSingleRequest,
+  DefaultApiAuthorizationsCreateRequest,
+  DefaultApiAuthorizationsUpdateRequest,
+  DefaultApiAuthorizationsDeleteRequest,
   DefaultApiChangesetsGetAllRequest,
+  DefaultApiChangesetsGetSingleRequest,
+  DefaultApiChangesetsCreateRequest,
+  DefaultApiChangesetsUpdateRequest,
+  DefaultApiChangesetsCloseRequest,
   DefaultApiChoiceListsGetAllRequest,
+  DefaultApiChoiceListsGetSingleRequest,
+  DefaultApiChoiceListsCreateRequest,
+  DefaultApiChoiceListsUpdateRequest,
+  DefaultApiChoiceListsDeleteRequest,
   DefaultApiClassificationSetsGetAllRequest,
+  DefaultApiClassificationSetsGetSingleRequest,
+  DefaultApiClassificationSetsCreateRequest,
+  DefaultApiClassificationSetsUpdateRequest,
+  DefaultApiClassificationSetsDeleteRequest,
   DefaultApiLayersGetAllRequest,
+  DefaultApiLayersGetSingleRequest,
+  DefaultApiLayersCreateRequest,
+  DefaultApiLayersUpdateRequest,
+  DefaultApiLayersDeleteRequest,
   DefaultApiMembershipsGetAllRequest,
+  DefaultApiMembershipsGetSingleRequest,
+  DefaultApiMembershipsChangePermissionsRequest,
   DefaultApiRolesGetAllRequest,
+  DefaultApiGetAllGroupsRequest,
+  DefaultApiGetSingleGroupRequest,
+  DefaultApiCreateGroupRequest,
+  DefaultApiUpdateGroupNameDescriptionRequest,
+  DefaultApiDeleteGroupRequest,
+  DefaultApiGetAllWorkflowsRequest,
+  DefaultApiGetSingleWorkflowRequest,
+  DefaultApiCreateWorkflowRequest,
+  DefaultApiUpdateWorkflowRequest,
+  DefaultApiDeleteWorkflowRequest,
+  DefaultApiGetAllReportTemplatesRequest,
+  DefaultApiGetSingleReportTemplateRequest,
+  DefaultApiCreateReportTemplateRequest,
+  DefaultApiUpdateReportTemplateRequest,
+  DefaultApiDeleteReportTemplateRequest,
+  DefaultApiGetAllBatchesRequest,
+  DefaultApiGetSingleBatchRequest,
+  DefaultApiCreateBatchRequest,
+  DefaultApiAddBatchOperationsRequest,
+  DefaultApiStartBatchRequest,
+  DefaultApiGetAllAttachmentsRequest,
+  DefaultApiGetSingleAttachmentRequest,
+  DefaultApiCreateAttachmentRequest,
+  DefaultApiFinalizeAttachmentRequest,
+  DefaultApiDeleteAttachmentRequest,
+  DefaultApiPhotosGetAllMetadataRequest,
+  DefaultApiPhotosGetSingleFileRequest,
+  DefaultApiPhotosGetSingleMetadataRequest,
+  DefaultApiPhotosLargeFileRequest,
+  DefaultApiPhotosLargeMetadataRequest,
+  DefaultApiPhotosThumbnailFileRequest,
+  DefaultApiPhotosThumbnailMetadataRequest,
+  DefaultApiPhotosUploadRequest,
+  DefaultApiFormsGetSingleRequest,
+  DefaultApiFormsGetHistoryRequest,
+  DefaultApiProjectsGetSingleRequest,
+  DefaultApiWebhooksGetSingleRequest,
+  DefaultApiUsersGetUserRequest,
   RecordsCreateRequest,
   RecordsUpdateRequest,
   FormsCreateRequest,
@@ -299,6 +360,26 @@ export class FulcrumClient {
           }),
         ),
 
+      getById: (formId: string, params: Omit<DefaultApiFormsGetSingleRequest, 'formId' | 'accept'> = {}) =>
+        this.withSpan('Forms.getById', () =>
+          api.formsGetSingle({
+            accept: 'application/json',
+            formId,
+            ...params,
+          }),
+          { 'fulcrum.form_id': formId },
+        ),
+
+      getHistory: (formId: string, params: Omit<DefaultApiFormsGetHistoryRequest, 'formId' | 'accept'> = {}) =>
+        this.withSpan('Forms.getHistory', () =>
+          api.formsGetHistory({
+            accept: 'application/json',
+            formId,
+            ...params,
+          }),
+          { 'fulcrum.form_id': formId },
+        ),
+
       create: (params: FormsCreateParams) =>
         this.withSpan('Forms.create', () =>
           api.formsCreate({
@@ -342,6 +423,16 @@ export class FulcrumClient {
           }),
         ),
 
+      getById: (projectId: string, params: Omit<DefaultApiProjectsGetSingleRequest, 'projectId' | 'accept'> = {}) =>
+        this.withSpan('Projects.getById', () =>
+          api.projectsGetSingle({
+            accept: 'application/json',
+            projectId,
+            ...params,
+          }),
+          { 'fulcrum.project_id': projectId },
+        ),
+
       create: (params: ProjectsCreateParams) =>
         this.withSpan('Projects.create', () =>
           api.projectsCreate({
@@ -383,6 +474,16 @@ export class FulcrumClient {
             accept: 'application/json',
             ...params,
           }),
+        ),
+
+      getById: (webhookId: string, params: Omit<DefaultApiWebhooksGetSingleRequest, 'webhookId' | 'accept'> = {}) =>
+        this.withSpan('Webhooks.getById', () =>
+          api.webhooksGetSingle({
+            accept: 'application/json',
+            webhookId,
+            ...params,
+          }),
+          { 'fulcrum.webhook_id': webhookId },
         ),
 
       create: (params: WebhooksCreateParams) =>
@@ -460,6 +561,16 @@ export class FulcrumClient {
             ...params,
           }),
         ),
+
+      getById: (auditLogId: string, params: Omit<DefaultApiAuditLogsGetSingleRequest, 'auditLogId' | 'accept'> = {}) =>
+        this.withSpan('AuditLogs.getById', () =>
+          api.auditLogsGetSingle({
+            accept: 'application/json',
+            auditLogId,
+            ...params,
+          }),
+          { 'fulcrum.audit_log_id': auditLogId },
+        ),
     } as const;
   }
 
@@ -475,6 +586,46 @@ export class FulcrumClient {
             accept: 'application/json',
             ...params,
           }),
+        ),
+
+      getById: (authorizationId: string, params: Omit<DefaultApiAuthorizationsGetSingleRequest, 'authorizationId' | 'accept'> = {}) =>
+        this.withSpan('Authorizations.getById', () =>
+          api.authorizationsGetSingle({
+            accept: 'application/json',
+            authorizationId,
+            ...params,
+          }),
+          { 'fulcrum.authorization_id': authorizationId },
+        ),
+
+      create: (params: Omit<DefaultApiAuthorizationsCreateRequest, 'accept' | 'contentType'> = {}) =>
+        this.withSpan('Authorizations.create', () =>
+          api.authorizationsCreate({
+            accept: 'application/json',
+            contentType: 'application/json',
+            ...params,
+          }),
+        ),
+
+      update: (authorizationId: string, params: Omit<DefaultApiAuthorizationsUpdateRequest, 'authorizationId' | 'accept' | 'contentType'> = {}) =>
+        this.withSpan('Authorizations.update', () =>
+          api.authorizationsUpdate({
+            accept: 'application/json',
+            contentType: 'application/json',
+            authorizationId,
+            ...params,
+          }),
+          { 'fulcrum.authorization_id': authorizationId },
+        ),
+
+      delete: (authorizationId: string, params: Omit<DefaultApiAuthorizationsDeleteRequest, 'authorizationId' | 'accept'> = {}) =>
+        this.withSpan('Authorizations.delete', () =>
+          api.authorizationsDelete({
+            accept: 'application/json',
+            authorizationId,
+            ...params,
+          }),
+          { 'fulcrum.authorization_id': authorizationId },
         ),
     } as const;
   }
@@ -492,6 +643,46 @@ export class FulcrumClient {
             ...params,
           }),
         ),
+
+      getById: (changesetId: string, params: Omit<DefaultApiChangesetsGetSingleRequest, 'changesetId' | 'accept'> = {}) =>
+        this.withSpan('Changesets.getById', () =>
+          api.changesetsGetSingle({
+            accept: 'application/json',
+            changesetId,
+            ...params,
+          }),
+          { 'fulcrum.changeset_id': changesetId },
+        ),
+
+      create: (params: Omit<DefaultApiChangesetsCreateRequest, 'accept' | 'contentType'> = {}) =>
+        this.withSpan('Changesets.create', () =>
+          api.changesetsCreate({
+            accept: 'application/json',
+            contentType: 'application/json',
+            ...params,
+          }),
+        ),
+
+      update: (changesetId: string, params: Omit<DefaultApiChangesetsUpdateRequest, 'changesetId' | 'accept' | 'contentType'> = {}) =>
+        this.withSpan('Changesets.update', () =>
+          api.changesetsUpdate({
+            accept: 'application/json',
+            contentType: 'application/json',
+            changesetId,
+            ...params,
+          }),
+          { 'fulcrum.changeset_id': changesetId },
+        ),
+
+      close: (changesetId: string, params: Omit<DefaultApiChangesetsCloseRequest, 'changesetId' | 'accept'> = {}) =>
+        this.withSpan('Changesets.close', () =>
+          api.changesetsClose({
+            accept: 'application/json',
+            changesetId,
+            ...params,
+          }),
+          { 'fulcrum.changeset_id': changesetId },
+        ),
     } as const;
   }
 
@@ -507,6 +698,46 @@ export class FulcrumClient {
             accept: 'application/json',
             ...params,
           }),
+        ),
+
+      getById: (choiceListId: string, params: Omit<DefaultApiChoiceListsGetSingleRequest, 'choiceListId' | 'accept'> = {}) =>
+        this.withSpan('ChoiceLists.getById', () =>
+          api.choiceListsGetSingle({
+            accept: 'application/json',
+            choiceListId,
+            ...params,
+          }),
+          { 'fulcrum.choice_list_id': choiceListId },
+        ),
+
+      create: (params: Omit<DefaultApiChoiceListsCreateRequest, 'accept' | 'contentType'> = {}) =>
+        this.withSpan('ChoiceLists.create', () =>
+          api.choiceListsCreate({
+            accept: 'application/json',
+            contentType: 'application/json',
+            ...params,
+          }),
+        ),
+
+      update: (choiceListId: string, params: Omit<DefaultApiChoiceListsUpdateRequest, 'choiceListId' | 'accept' | 'contentType'> = {}) =>
+        this.withSpan('ChoiceLists.update', () =>
+          api.choiceListsUpdate({
+            accept: 'application/json',
+            contentType: 'application/json',
+            choiceListId,
+            ...params,
+          }),
+          { 'fulcrum.choice_list_id': choiceListId },
+        ),
+
+      delete: (choiceListId: string, params: Omit<DefaultApiChoiceListsDeleteRequest, 'choiceListId' | 'accept'> = {}) =>
+        this.withSpan('ChoiceLists.delete', () =>
+          api.choiceListsDelete({
+            accept: 'application/json',
+            choiceListId,
+            ...params,
+          }),
+          { 'fulcrum.choice_list_id': choiceListId },
         ),
     } as const;
   }
@@ -524,6 +755,46 @@ export class FulcrumClient {
             ...params,
           }),
         ),
+
+      getById: (classificationSetId: string, params: Omit<DefaultApiClassificationSetsGetSingleRequest, 'classificationSetId' | 'accept'> = {}) =>
+        this.withSpan('ClassificationSets.getById', () =>
+          api.classificationSetsGetSingle({
+            accept: 'application/json',
+            classificationSetId,
+            ...params,
+          }),
+          { 'fulcrum.classification_set_id': classificationSetId },
+        ),
+
+      create: (params: Omit<DefaultApiClassificationSetsCreateRequest, 'accept' | 'contentType'> = {}) =>
+        this.withSpan('ClassificationSets.create', () =>
+          api.classificationSetsCreate({
+            accept: 'application/json',
+            contentType: 'application/json',
+            ...params,
+          }),
+        ),
+
+      update: (classificationSetId: string, params: Omit<DefaultApiClassificationSetsUpdateRequest, 'classificationSetId' | 'accept' | 'contentType'> = {}) =>
+        this.withSpan('ClassificationSets.update', () =>
+          api.classificationSetsUpdate({
+            accept: 'application/json',
+            contentType: 'application/json',
+            classificationSetId,
+            ...params,
+          }),
+          { 'fulcrum.classification_set_id': classificationSetId },
+        ),
+
+      delete: (classificationSetId: string, params: Omit<DefaultApiClassificationSetsDeleteRequest, 'classificationSetId' | 'accept'> = {}) =>
+        this.withSpan('ClassificationSets.delete', () =>
+          api.classificationSetsDelete({
+            accept: 'application/json',
+            classificationSetId,
+            ...params,
+          }),
+          { 'fulcrum.classification_set_id': classificationSetId },
+        ),
     } as const;
   }
 
@@ -539,6 +810,46 @@ export class FulcrumClient {
             accept: 'application/json',
             ...params,
           }),
+        ),
+
+      getById: (layerId: string, params: Omit<DefaultApiLayersGetSingleRequest, 'layerId' | 'accept'> = {}) =>
+        this.withSpan('Layers.getById', () =>
+          api.layersGetSingle({
+            accept: 'application/json',
+            layerId,
+            ...params,
+          }),
+          { 'fulcrum.layer_id': layerId },
+        ),
+
+      create: (params: Omit<DefaultApiLayersCreateRequest, 'accept' | 'contentType'> = {}) =>
+        this.withSpan('Layers.create', () =>
+          api.layersCreate({
+            accept: 'application/json',
+            contentType: 'application/json',
+            ...params,
+          }),
+        ),
+
+      update: (layerId: string, params: Omit<DefaultApiLayersUpdateRequest, 'layerId' | 'accept' | 'contentType'> = {}) =>
+        this.withSpan('Layers.update', () =>
+          api.layersUpdate({
+            accept: 'application/json',
+            contentType: 'application/json',
+            layerId,
+            ...params,
+          }),
+          { 'fulcrum.layer_id': layerId },
+        ),
+
+      delete: (layerId: string, params: Omit<DefaultApiLayersDeleteRequest, 'layerId' | 'accept'> = {}) =>
+        this.withSpan('Layers.delete', () =>
+          api.layersDelete({
+            accept: 'application/json',
+            layerId,
+            ...params,
+          }),
+          { 'fulcrum.layer_id': layerId },
         ),
     } as const;
   }
@@ -556,6 +867,25 @@ export class FulcrumClient {
             ...params,
           }),
         ),
+
+      getById: (membershipId: string, params: Omit<DefaultApiMembershipsGetSingleRequest, 'membershipId' | 'accept'> = {}) =>
+        this.withSpan('Memberships.getById', () =>
+          api.membershipsGetSingle({
+            accept: 'application/json',
+            membershipId,
+            ...params,
+          }),
+          { 'fulcrum.membership_id': membershipId },
+        ),
+
+      changePermissions: (params: Omit<DefaultApiMembershipsChangePermissionsRequest, 'accept' | 'contentType'> = {}) =>
+        this.withSpan('Memberships.changePermissions', () =>
+          api.membershipsChangePermissions({
+            accept: 'application/json',
+            contentType: 'application/json',
+            ...params,
+          }),
+        ),
     } as const;
   }
 
@@ -569,6 +899,346 @@ export class FulcrumClient {
         this.withSpan('Roles.getAll', () =>
           api.rolesGetAll({
             accept: 'application/json',
+            ...params,
+          }),
+        ),
+    } as const;
+  }
+
+  /**
+   * Groups API
+   */
+  get groups() {
+    const api = this.api;
+    return {
+      getAll: (params: DefaultApiGetAllGroupsRequest = {}) =>
+        this.withSpan('Groups.getAll', () =>
+          api.getAllGroups(params),
+        ),
+
+      getById: (groupId: string, params: Omit<DefaultApiGetSingleGroupRequest, 'groupId'> = {}) =>
+        this.withSpan('Groups.getById', () =>
+          api.getSingleGroup({
+            groupId,
+            ...params,
+          }),
+          { 'fulcrum.group_id': groupId },
+        ),
+
+      create: (params: Omit<DefaultApiCreateGroupRequest, 'accept' | 'contentType'> = {}) =>
+        this.withSpan('Groups.create', () =>
+          api.createGroup({
+            accept: 'application/json',
+            contentType: 'application/json',
+            ...params,
+          }),
+        ),
+
+      update: (groupId: string, params: Omit<DefaultApiUpdateGroupNameDescriptionRequest, 'groupId' | 'accept' | 'contentType'> = {}) =>
+        this.withSpan('Groups.update', () =>
+          api.updateGroupNameDescription({
+            accept: 'application/json',
+            contentType: 'application/json',
+            groupId,
+            ...params,
+          }),
+          { 'fulcrum.group_id': groupId },
+        ),
+
+      delete: (groupId: string, params: Omit<DefaultApiDeleteGroupRequest, 'groupId' | 'accept'> = {}) =>
+        this.withSpan('Groups.delete', () =>
+          api.deleteGroup({
+            accept: 'application/json',
+            groupId,
+            ...params,
+          }),
+          { 'fulcrum.group_id': groupId },
+        ),
+    } as const;
+  }
+
+  /**
+   * Workflows API
+   */
+  get workflows() {
+    const api = this.api;
+    return {
+      getAll: (params: Omit<DefaultApiGetAllWorkflowsRequest, 'accept'> = {}) =>
+        this.withSpan('Workflows.getAll', () =>
+          api.getAllWorkflows({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+
+      getById: (workflowId: string, params: Omit<DefaultApiGetSingleWorkflowRequest, 'workflowId' | 'accept'> = {}) =>
+        this.withSpan('Workflows.getById', () =>
+          api.getSingleWorkflow({
+            accept: 'application/json',
+            workflowId,
+            ...params,
+          }),
+          { 'fulcrum.workflow_id': workflowId },
+        ),
+
+      create: (params: Omit<DefaultApiCreateWorkflowRequest, 'accept' | 'contentTyoe'> = {}) =>
+        this.withSpan('Workflows.create', () =>
+          api.createWorkflow({
+            accept: 'application/json',
+            contentTyoe: 'application/json',
+            ...params,
+          }),
+        ),
+
+      update: (workflowId: string, params: Omit<DefaultApiUpdateWorkflowRequest, 'workflowId' | 'accept' | 'contentTyoe'> = {}) =>
+        this.withSpan('Workflows.update', () =>
+          api.updateWorkflow({
+            accept: 'application/json',
+            contentTyoe: 'application/json',
+            workflowId,
+            ...params,
+          }),
+          { 'fulcrum.workflow_id': workflowId },
+        ),
+
+      delete: (workflowId: string, params: Omit<DefaultApiDeleteWorkflowRequest, 'workflowId' | 'accept'> = {}) =>
+        this.withSpan('Workflows.delete', () =>
+          api.deleteWorkflow({
+            accept: 'application/json',
+            workflowId,
+            ...params,
+          }),
+          { 'fulcrum.workflow_id': workflowId },
+        ),
+    } as const;
+  }
+
+  /**
+   * Report Templates API
+   */
+  get reportTemplates() {
+    const api = this.api;
+    return {
+      getAll: (params: DefaultApiGetAllReportTemplatesRequest = {}) =>
+        this.withSpan('ReportTemplates.getAll', () =>
+          api.getAllReportTemplates(params),
+        ),
+
+      getById: (id: string, params: Omit<DefaultApiGetSingleReportTemplateRequest, 'id'> = {}) =>
+        this.withSpan('ReportTemplates.getById', () =>
+          api.getSingleReportTemplate({
+            id,
+            ...params,
+          }),
+          { 'fulcrum.report_template_id': id },
+        ),
+
+      create: (params: DefaultApiCreateReportTemplateRequest = {}) =>
+        this.withSpan('ReportTemplates.create', () =>
+          api.createReportTemplate(params),
+        ),
+
+      update: (id: string, params: Omit<DefaultApiUpdateReportTemplateRequest, 'id'> = {}) =>
+        this.withSpan('ReportTemplates.update', () =>
+          api.updateReportTemplate({
+            id,
+            ...params,
+          }),
+          { 'fulcrum.report_template_id': id },
+        ),
+
+      delete: (id: string, params: Omit<DefaultApiDeleteReportTemplateRequest, 'id'> = {}) =>
+        this.withSpan('ReportTemplates.delete', () =>
+          api.deleteReportTemplate({
+            id,
+            ...params,
+          }),
+          { 'fulcrum.report_template_id': id },
+        ),
+    } as const;
+  }
+
+  /**
+   * Batches API
+   */
+  get batches() {
+    const api = this.api;
+    return {
+      getAll: (params: DefaultApiGetAllBatchesRequest = {}) =>
+        this.withSpan('Batches.getAll', () =>
+          api.getAllBatches(params),
+        ),
+
+      getById: (batchId: string, params: Omit<DefaultApiGetSingleBatchRequest, 'batchId'> = {}) =>
+        this.withSpan('Batches.getById', () =>
+          api.getSingleBatch({
+            batchId,
+            ...params,
+          }),
+          { 'fulcrum.batch_id': batchId },
+        ),
+
+      create: (params: DefaultApiCreateBatchRequest = {}) =>
+        this.withSpan('Batches.create', () =>
+          api.createBatch(params),
+        ),
+
+      addOperations: (batchId: string, params: Omit<DefaultApiAddBatchOperationsRequest, 'batchId'> = {}) =>
+        this.withSpan('Batches.addOperations', () =>
+          api.addBatchOperations({
+            batchId,
+            ...params,
+          }),
+          { 'fulcrum.batch_id': batchId },
+        ),
+
+      start: (batchId: string, params: Omit<DefaultApiStartBatchRequest, 'batchId'> = {}) =>
+        this.withSpan('Batches.start', () =>
+          api.startBatch({
+            batchId,
+            ...params,
+          }),
+          { 'fulcrum.batch_id': batchId },
+        ),
+    } as const;
+  }
+
+  /**
+   * Attachments API
+   */
+  get attachments() {
+    const api = this.api;
+    return {
+      getAll: (params: DefaultApiGetAllAttachmentsRequest = {}) =>
+        this.withSpan('Attachments.getAll', () =>
+          api.getAllAttachments(params),
+        ),
+
+      getById: (attachmentId: string, params: Omit<DefaultApiGetSingleAttachmentRequest, 'attachmentId'> = {}) =>
+        this.withSpan('Attachments.getById', () =>
+          api.getSingleAttachment({
+            attachmentId,
+            ...params,
+          }),
+          { 'fulcrum.attachment_id': attachmentId },
+        ),
+
+      create: (params: DefaultApiCreateAttachmentRequest = {}) =>
+        this.withSpan('Attachments.create', () =>
+          api.createAttachment(params),
+        ),
+
+      finalize: (params: DefaultApiFinalizeAttachmentRequest = {}) =>
+        this.withSpan('Attachments.finalize', () =>
+          api.finalizeAttachment(params),
+        ),
+
+      delete: (attachmentId: string, params: Omit<DefaultApiDeleteAttachmentRequest, 'attachmentId'> = {}) =>
+        this.withSpan('Attachments.delete', () =>
+          api.deleteAttachment({
+            attachmentId,
+            ...params,
+          }),
+          { 'fulcrum.attachment_id': attachmentId },
+        ),
+    } as const;
+  }
+
+  /**
+   * Users API
+   */
+  get users() {
+    const api = this.api;
+    return {
+      getUser: (params: Omit<DefaultApiUsersGetUserRequest, 'accept'> = {}) =>
+        this.withSpan('Users.getUser', () =>
+          api.usersGetUser({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+    } as const;
+  }
+
+  /**
+   * Photos API
+   */
+  get photos() {
+    const api = this.api;
+    return {
+      getAllMetadata: (params: Omit<DefaultApiPhotosGetAllMetadataRequest, 'accept'> = {}) =>
+        this.withSpan('Photos.getAllMetadata', () =>
+          api.photosGetAllMetadata({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+
+      getSingleFile: (photoId: string, params: Omit<DefaultApiPhotosGetSingleFileRequest, 'photoId' | 'accept'> = {}) =>
+        this.withSpan('Photos.getSingleFile', () =>
+          api.photosGetSingleFile({
+            accept: 'application/json',
+            photoId,
+            ...params,
+          }),
+          { 'fulcrum.photo_id': photoId },
+        ),
+
+      getSingleMetadata: (photoId: string, params: Omit<DefaultApiPhotosGetSingleMetadataRequest, 'photoId' | 'accept'> = {}) =>
+        this.withSpan('Photos.getSingleMetadata', () =>
+          api.photosGetSingleMetadata({
+            accept: 'application/json',
+            photoId,
+            ...params,
+          }),
+          { 'fulcrum.photo_id': photoId },
+        ),
+
+      getLargeFile: (photoId: string, params: Omit<DefaultApiPhotosLargeFileRequest, 'photoId' | 'accept'> = {}) =>
+        this.withSpan('Photos.getLargeFile', () =>
+          api.photosLargeFile({
+            accept: 'application/json',
+            photoId,
+            ...params,
+          }),
+          { 'fulcrum.photo_id': photoId },
+        ),
+
+      getLargeMetadata: (photoId: string, params: Omit<DefaultApiPhotosLargeMetadataRequest, 'photoId' | 'accept'> = {}) =>
+        this.withSpan('Photos.getLargeMetadata', () =>
+          api.photosLargeMetadata({
+            accept: 'application/json',
+            photoId,
+            ...params,
+          }),
+          { 'fulcrum.photo_id': photoId },
+        ),
+
+      getThumbnailFile: (photoId: string, params: Omit<DefaultApiPhotosThumbnailFileRequest, 'photoId' | 'accept'> = {}) =>
+        this.withSpan('Photos.getThumbnailFile', () =>
+          api.photosThumbnailFile({
+            accept: 'application/json',
+            photoId,
+            ...params,
+          }),
+          { 'fulcrum.photo_id': photoId },
+        ),
+
+      getThumbnailMetadata: (photoId: string, params: Omit<DefaultApiPhotosThumbnailMetadataRequest, 'photoId' | 'accept'> = {}) =>
+        this.withSpan('Photos.getThumbnailMetadata', () =>
+          api.photosThumbnailMetadata({
+            accept: 'application/json',
+            photoId,
+            ...params,
+          }),
+          { 'fulcrum.photo_id': photoId },
+        ),
+
+      upload: (params: Omit<DefaultApiPhotosUploadRequest, 'accept' | 'contentType'> = {}) =>
+        this.withSpan('Photos.upload', () =>
+          api.photosUpload({
+            accept: 'application/json',
+            contentType: 'application/json',
             ...params,
           }),
         ),

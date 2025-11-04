@@ -150,6 +150,7 @@ async function main() {
     { name: 'Changesets', fn: () => client.changesets.getAll() },
     { name: 'Choice Lists', fn: () => client.choiceLists.getAll() },
     { name: 'Classification Sets', fn: () => client.classificationSets.getAll() },
+    { name: 'Groups', fn: () => client.groups.getAll() },
     { name: 'Layers', fn: () => client.layers.getAll() },
     { name: 'Memberships', fn: () => client.memberships.getAll() },
     { name: 'Roles', fn: () => client.roles.getAll() },
