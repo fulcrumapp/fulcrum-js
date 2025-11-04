@@ -115,6 +115,7 @@ client.forms.getAll().then(response => {
 ### Version 3.0 (Latest)
 
 **Breaking Changes:**
+
 - Complete API redesign using auto-generated TypeScript client from OpenAPI spec
 - New method naming convention (e.g., `formsGetAll()` instead of `forms.all()`)
 - Direct axios responses instead of wrapped `Page` objects
@@ -122,6 +123,7 @@ client.forms.getAll().then(response => {
 - Full TypeScript support with comprehensive type definitions
 
 **New Features:**
+
 - 🎯 **271+ API methods** covering the complete Fulcrum API
 - 🔒 **Full TypeScript support** with 106 TypeScript interfaces
 - 📦 **Auto-generated from OpenAPI spec** - always up-to-date with API changes
@@ -327,6 +329,7 @@ Every API call is wrapped in a span with a descriptive name (e.g., `Records.getA
 **Span Naming Pattern:** `<Resource>.<operation>`
 
 Examples:
+
 - `Records.getAll` - Fetching all records
 - `Records.getById` - Fetching a single record
 - `Forms.create` - Creating a new form
@@ -378,7 +381,7 @@ const records = await client.records.getAll({ formId: 'abc123' });
 
 When you make an API call, you'll see a trace hierarchy like this:
 
-```
+```text
 Your Application Span
 └─ Records.create (fulcrum.form_id: abc123, fulcrum.skip_workflows: false)
    └─ HTTP POST https://api.fulcrumapp.com/api/v2/records
@@ -429,11 +432,15 @@ await tracer.startActiveSpan('processRecords', async (span) => {
 
 This creates a trace hierarchy like:
 
-```
+```text
 processRecords (record.count: 100)
 └─ Records.getAll (fulcrum.form_id: abc123)
    └─ HTTP GET https://api.fulcrumapp.com/api/v2/records
 ```
+
+### Working with Forms (Low-Level API)
+
+```typescript
 const form = formResponse.data.form;
 console.log(form.elements);  // Access form schema
 
@@ -494,7 +501,7 @@ const audioResponse = await api.audioGetSingleMetadata('audio-id');
 const signatureResponse = await api.signaturesGetSingleMetadata('signature-id');
 ```
 
-### Working with Projects
+### Working with Projects (Low-Level API)
 
 ```typescript
 // Get all projects
@@ -571,7 +578,7 @@ await api.changesetsUpdate('changeset-id', 'application/json', 'application/json
 });
 ```
 
-### Working with Webhooks
+### Working with Webhooks (Low-Level API)
 
 ```typescript
 // Get all webhooks
@@ -603,7 +610,7 @@ await api.webhooksUpdate('webhook-id', 'application/json', 'application/json', {
 await api.webhooksDelete('webhook-id');
 ```
 
-### Query API
+### Query API (Low-Level API)
 
 ```typescript
 // Execute SQL queries
@@ -622,7 +629,7 @@ const csvResponse = await api.queryPost('text/csv', 'application/json', {
 });
 ```
 
-### Batch Operations
+### Batch Operations (Low-Level API)
 
 ```typescript
 // Create a batch
@@ -877,6 +884,7 @@ const { DefaultApi, Configuration } = require('@fulcrumapp/fulcrum-js/generated'
 The API structure changed from resource-oriented to flat method names.
 
 **v2.x:**
+
 ```javascript
 // Resource-based API
 await client.records.all({ form_id: 'abc' });
@@ -889,6 +897,7 @@ await client.forms.find('form-id');
 ```
 
 **v3.0:**
+
 ```typescript
 // Flat method-based API
 await api.recordsGetAll(false, undefined, 'abc');  // formId as parameter
@@ -903,6 +912,7 @@ await api.formsGetSingle('form-id');
 #### 3. Response Structure
 
 **v2.x** returned custom `Page` objects:
+
 ```javascript
 const page = await client.records.all({ form_id: 'abc' });
 console.log(page.objects);        // Array of records
@@ -912,6 +922,7 @@ console.log(page.totalCount);     // Total count
 ```
 
 **v3.0** returns standard axios responses:
+
 ```typescript
 const response = await api.recordsGetAll(false, undefined, 'abc');
 console.log(response.data.records);     // Array of records
@@ -923,6 +934,7 @@ console.log(response.data);             // Full response body
 #### 4. Error Handling
 
 **v2.x:**
+
 ```javascript
 try {
   const record = await client.records.find('id');
@@ -932,6 +944,7 @@ try {
 ```
 
 **v3.0** uses axios error structure:
+
 ```typescript
 import { AxiosError } from 'axios';
 
@@ -948,12 +961,14 @@ try {
 #### 5. Query API
 
 **v2.x:**
+
 ```javascript
 const result = await client.query('SELECT * FROM "Form"');
 const geojson = await client.query('SELECT * FROM "Form"', 'geojson');
 ```
 
 **v3.0:**
+
 ```typescript
 const jsonResponse = await api.queryPost('application/json', 'application/json', {
   q: 'SELECT * FROM "Form"'
@@ -967,6 +982,7 @@ const geoResponse = await api.queryPost('application/geo+json', 'application/jso
 #### 6. Media Handling
 
 **v2.x:**
+
 ```javascript
 // Upload photo
 const stream = fs.createReadStream('photo.jpg');
@@ -978,6 +994,7 @@ photoStream.pipe(fs.createWriteStream('photo.jpg'));
 ```
 
 **v3.0:**
+
 ```typescript
 // Upload photo
 await api.photosUpload('application/json', 'image/jpeg');
@@ -990,6 +1007,7 @@ const response = await api.photosLargeFile('photo-id');
 #### 7. Changesets
 
 **v2.x:**
+
 ```javascript
 const changeset = await client.changesets.create({
   form_id: 'form-id',
@@ -1001,6 +1019,7 @@ await client.changesets.close(changeset.id);
 ```
 
 **v3.0:**
+
 ```typescript
 const response = await api.changesetsCreate('application/json', 'application/json', {
   changeset: {
@@ -1023,12 +1042,14 @@ If you have a large codebase, you can migrate gradually:
 
 1. Install v3 alongside v2 (they can coexist)
 2. Import from different paths:
+
    ```typescript
    // Old code
    import { Client } from '@fulcrumapp/fulcrum-js';
    // New code
    import { DefaultApi } from '@fulcrumapp/fulcrum-js/generated';
    ```
+
 3. Migrate one resource at a time
 4. Once complete, remove old client usage
 
@@ -1107,25 +1128,29 @@ class FulcrumClientV2Compat {
 
 Features that are **new** in v3 and weren't available in v2:
 
-#### Report Templates
+#### New in v3: Report Templates
+
 ```typescript
 await api.createReportTemplate('application/json', 'application/json', { report_template: {...} });
 await api.getAllReportTemplates();
 ```
 
 #### Workflows
+
 ```typescript
 await api.createWorkflow('application/json', 'application/json', { workflow: {...} });
 await api.getAllWorkflows();
 ```
 
 #### Batch Operations
+
 ```typescript
 await api.createBatch('application/json', 'application/json', { batch: {...} });
 await api.startBatch('batch-id');
 ```
 
 #### Groups
+
 ```typescript
 await api.createGroup('application/json', 'application/json', { group: {...} });
 await api.getAllGroups();
@@ -1133,6 +1158,7 @@ await api.updateGroupPermissions('group-id', ...);
 ```
 
 #### Enhanced Media Operations
+
 ```typescript
 // More granular media access
 await api.photosLargeMetadata('photo-id');
@@ -1141,6 +1167,7 @@ await api.videosGetThumbnailLargeSquare('video-id');
 ```
 
 #### Track Data
+
 ```typescript
 // Get GPS tracks in multiple formats
 await api.videosGetSingleTrackGeojson('video-id');
@@ -1246,8 +1273,6 @@ await api.audioGetAllTracksGpx();
 ## V2 Usage (Legacy)
 
 **Note:** The following documentation is for v2.x. If you're using v3.0, see the [Usage](#usage) section above.
-
-## Usage
 
 There are three main exports from this module: `Client`, `getUser`, and `createAuthorization`.
 
@@ -1712,31 +1737,31 @@ To update the generated client from the latest Fulcrum API specification:
 
 1. Update the OpenAPI spec (optional, only if the spec has changed):
 
-```bash
-# Download main spec file
-curl -s "https://raw.githubusercontent.com/fulcrumapp/api/spike/power-automate-testing/reference/rest-api.json" > openapi/rest-api.json
+   ```bash
+   # Download main spec file
+   curl -s "https://raw.githubusercontent.com/fulcrumapp/api/spike/power-automate-testing/reference/rest-api.json" > openapi/rest-api.json
 
-# Download external schema files
-curl -s "https://raw.githubusercontent.com/fulcrumapp/api/spike/power-automate-testing/reference/components/schemas/ReportTemplateRequest.json" > openapi/components/schemas/ReportTemplateRequest.json
-```
+   # Download external schema files
+   curl -s "https://raw.githubusercontent.com/fulcrumapp/api/spike/power-automate-testing/reference/components/schemas/ReportTemplateRequest.json" > openapi/components/schemas/ReportTemplateRequest.json
+   ```
 
 2. Generate the client from the OpenAPI specification:
 
-```bash
-npm run generate
-```
+   ```bash
+   npm run generate
+   ```
 
 3. Build the project:
 
-```bash
-npm run build
-```
+   ```bash
+   npm run build
+   ```
 
 4. Run tests to ensure nothing broke:
 
-```bash
-npm test
-```
+   ```bash
+   npm test
+   ```
 
 #### How Generation Works
 
@@ -1881,5 +1906,3 @@ npm run build
 # Publish to npm
 npm publish
 ```
-
-````
