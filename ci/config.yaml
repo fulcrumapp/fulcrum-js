@@ -45,7 +45,7 @@ unittest:
 # If 'command' is None or missing, linting will be skipped
 lint:
   image: 280296955917.dkr.ecr.us-east-2.amazonaws.com/dockerhub/library/node:22
-  command: "npm ci && npm run lint || true"
+  command: "npm ci && npm run lint"
   # coverage_file: None  # Optional: Path to lint results file
 
 # SonarQube Code Analysis
