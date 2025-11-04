@@ -2,6 +2,17 @@
 
 This document provides instructions for AI coding agents working on this project.
 
+## ⚠️ CRITICAL: Version Control Policy
+
+Agents MUST NEVER COMMIT CODE AUTOMATICALLY
+
+- ❌ DO NOT use `git commit` commands
+- ❌ DO NOT commit changes without explicit user permission
+- ✅ Instead: Prepare changes and ask the user to review before committing
+- ✅ Ask the user: "Should I commit these changes with message: ..."
+
+This ensures the user maintains full control over what gets committed and maintains an accurate git history.
+
 ## Critical Requirements
 
 ### 1. ✅ Verify Problems Tab
