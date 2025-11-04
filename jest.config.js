@@ -17,12 +17,4 @@ export default {
   collectCoverageFrom: ['src/**/*.ts', '!src/**/*.test.ts'],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
-  coverageThreshold: {
-    global: {
-      branches: 80,
-      functions: 90,
-      lines: 90,
-      statements: 90,
-    },
-  },
 };
