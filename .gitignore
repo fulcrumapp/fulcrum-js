@@ -4,5 +4,15 @@
 
 node_modules/
 src/go*
-dist/go*
-dist/*
+
+# Build outputs (not committed)
+dist/
+lib/
+
+# OpenAPI generated code (not committed)
+generated/
+
+# Test coverage
+coverage/
+*.log
+openapi/
