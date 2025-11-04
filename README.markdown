@@ -1,7 +1,5 @@
 # fulcrum-js
 
-[![Build Status](https://api.travis-ci.org/fulcrumapp/fulcrum-js.png?branch=master)](https://travis-ci.org/fulcrumapp/fulcrum-js)&nbsp;[![npm Version](https://img.shields.io/npm/v/@fulcrumapp/fulcrum-js.svg)](https://www.npmjs.com/package/@fulcrumapp/fulcrum-js)
-
 A JavaScript and TypeScript library for the Fulcrum API.
 
 ## Installation
@@ -870,13 +868,16 @@ const client = new Client('token');
 **v3.0:**
 
 ```javascript
-// ES Modules (recommended)
+// ES Modules (recommended) - Use the wrapper client!
 import { FulcrumClient, FulcrumRegion } from '@fulcrumapp/fulcrum-js';
-const config = new Configuration({ apiKey: 'token' });
-const api = new DefaultApi(config);
+
+const client = new FulcrumClient({
+  apiKey: 'token',
+  region: FulcrumRegion.US
+});
 
 // Or CommonJS for legacy compatibility
-const { DefaultApi, Configuration } = require('@fulcrumapp/fulcrum-js/generated');
+const { FulcrumClient, FulcrumRegion } = require('@fulcrumapp/fulcrum-js');
 ```
 
 #### 2. Method Names and Structure
@@ -899,14 +900,14 @@ await client.forms.find('form-id');
 **v3.0:**
 
 ```typescript
-// Flat method-based API
-await api.recordsGetAll(false, undefined, 'abc');  // formId as parameter
-await api.recordsGetSingle('record-id');
-await api.recordsCreate('application/json', 'application/json', false, false, { record: { ... } });
-await api.recordsUpdate('id', 'application/json', 'application/json', false, false, { record: { ... } });
-await api.recordsDelete('id');
-await api.formsGetAll();
-await api.formsGetSingle('form-id');
+// Use the wrapper client for a cleaner API
+await client.records.getAll({ formId: 'abc' });
+await client.records.getById('record-id');
+await client.records.create({ record: { form_id: 'abc', ... } });
+await client.records.update('id', { record: { ... } });
+await client.records.delete('id');
+await client.forms.getAll();
+await client.forms.getById('form-id');
 ```
 
 #### 3. Response Structure
@@ -1036,92 +1037,59 @@ await api.changesetsClose(changesetId);
 
 ### Migration Strategy
 
-#### Option 1: Gradual Migration
+#### Recommended: Use the Wrapper Client
 
-If you have a large codebase, you can migrate gradually:
+The v3 wrapper client (`FulcrumClient`) provides a clean, resource-oriented API similar to v2:
 
-1. Install v3 alongside v2 (they can coexist)
-2. Import from different paths:
+1. Install v3:
 
-   ```typescript
-   // Old code
-   import { Client } from '@fulcrumapp/fulcrum-js';
-   // New code
-   import { DefaultApi } from '@fulcrumapp/fulcrum-js/generated';
+   ```bash
+   npm install @fulcrumapp/fulcrum-js@latest
    ```
 
-3. Migrate one resource at a time
-4. Once complete, remove old client usage
+2. Update your imports:
 
-#### Option 2: Wrapper Layer
+   ```typescript
+   // Old v2 code
+   import { Client } from 'fulcrum-app';
 
-Create a compatibility wrapper that matches the old API:
+   // New v3 code
+   import { FulcrumClient, FulcrumRegion } from '@fulcrumapp/fulcrum-js';
+   ```
+
+3. Update client initialization:
+
+   ```typescript
+   // Old v2
+   const client = new Client('api-token');
+
+   // New v3
+   const client = new FulcrumClient({
+     apiKey: 'api-token',
+     region: FulcrumRegion.US  // Must specify region
+   });
+   ```
+
+4. Method names are slightly different but similar:
+
+   - `.all()` → `.getAll()`
+   - `.find()` → `.getById()`
+   - Parameters are now typed objects instead of positional
+
+#### Advanced: Direct Generated API Access
+
+For advanced use cases, you can access the full generated API client directly through `client.client`:
 
 ```typescript
-import { DefaultApi, Configuration } from '@fulcrumapp/fulcrum-js/generated';
+import { FulcrumClient, FulcrumRegion } from '@fulcrumapp/fulcrum-js';
 
-class FulcrumClientV2Compat {
-  private api: DefaultApi;
+const client = new FulcrumClient({
+  apiKey: 'token',
+  region: FulcrumRegion.US
+});
 
-  constructor(token: string) {
-    const config = new Configuration({
-      apiKey: token,
-      basePath: 'https://api.fulcrumapp.com/api'
-    });
-    this.api = new DefaultApi(config);
-  }
-
-  get records() {
-    return {
-      all: async (params?: { form_id?: string; page?: number; per_page?: number }) => {
-        const response = await this.api.recordsGetAll(
-          false,
-          undefined,
-          params?.form_id,
-          undefined,
-          params?.page,
-          params?.per_page
-        );
-        return {
-          objects: response.data.records,
-          currentPage: params?.page || 1,
-          totalPages: 1,  // Calculate from response if needed
-          totalCount: response.data.records.length
-        };
-      },
-      find: async (id: string) => {
-        const response = await this.api.recordsGetSingle(id);
-        return response.data.record;
-      },
-      create: async (record: any) => {
-        const response = await this.api.recordsCreate(
-          'application/json',
-          'application/json',
-          false,
-          false,
-          { record }
-        );
-        return response.data.record;
-      },
-      update: async (id: string, record: any) => {
-        const response = await this.api.recordsUpdate(
-          id,
-          'application/json',
-          'application/json',
-          false,
-          false,
-          { record }
-        );
-        return response.data.record;
-      },
-      delete: async (id: string) => {
-        await this.api.recordsDelete(id);
-      }
-    };
-  }
-
-  // Add similar wrappers for other resources...
-}
+// Access any of the 271+ API methods directly
+const response = await client.client.changesetsGetAll();
 ```
 
 ### New Features in v3

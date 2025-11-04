@@ -269,10 +269,14 @@ npm run generate
 
 # 3. Update dependencies in generated/package.json to current versions
 # This is the ONE thing you ARE allowed to edit in generated/
-# Update axios, @types/node, and typescript to latest versions
+# Use npm-check-updates to find and update to latest versions:
 cd generated
-npm outdated
-# Then manually update package.json with current versions
+npx npm-check-updates
+# Review the proposed updates, then apply them:
+npx npm-check-updates -u
+# Or manually update specific packages:
+npm install axios@latest @types/node@latest typescript@latest
+cd ..
 
 # 4. Build generated client
 npm run build:generated

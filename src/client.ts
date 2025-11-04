@@ -296,7 +296,15 @@ export class FulcrumClient {
   /**
    * Records API
    */
-  get records() {
+  get records(): {
+    getAll: (params?: RecordsGetAllParams) => Promise<unknown>;
+    getById: (recordId: string, params?: Omit<RecordsGetSingleParams, 'recordId'>) => Promise<unknown>;
+    create: (params: RecordsCreateParams) => Promise<unknown>;
+    update: (recordId: string, params: RecordsUpdateParams) => Promise<unknown>;
+    delete: (recordId: string) => Promise<unknown>;
+    getHistory: (recordId: string, params?: Omit<DefaultApiRecordsGetHistoryRequest, 'recordId'>) => Promise<unknown>;
+    getAllHistory: (params?: DefaultApiRecordsGetAllHistoryRequest) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       /**
@@ -394,7 +402,14 @@ export class FulcrumClient {
   /**
    * Forms API
    */
-  get forms() {
+  get forms(): {
+    getAll: (params?: FormsGetAllParams) => Promise<unknown>;
+    getById: (formId: string, params?: Omit<DefaultApiFormsGetSingleRequest, 'formId' | 'accept'>) => Promise<unknown>;
+    getHistory: (formId: string, params?: Omit<DefaultApiFormsGetHistoryRequest, 'formId' | 'accept'>) => Promise<unknown>;
+    create: (params: FormsCreateParams) => Promise<unknown>;
+    update: (formId: string, params: FormsUpdateParams) => Promise<unknown>;
+    delete: (formId: string) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: FormsGetAllParams = {}) =>
@@ -457,7 +472,13 @@ export class FulcrumClient {
   /**
    * Projects API
    */
-  get projects() {
+  get projects(): {
+    getAll: (params?: ProjectsGetAllParams) => Promise<unknown>;
+    getById: (projectId: string, params?: Omit<DefaultApiProjectsGetSingleRequest, 'projectId' | 'accept'>) => Promise<unknown>;
+    create: (params: ProjectsCreateParams) => Promise<unknown>;
+    update: (projectId: string, params: ProjectsUpdateParams) => Promise<unknown>;
+    delete: (projectId: string) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: ProjectsGetAllParams = {}) =>
@@ -510,7 +531,13 @@ export class FulcrumClient {
   /**
    * Webhooks API
    */
-  get webhooks() {
+  get webhooks(): {
+    getAll: (params?: WebhooksGetAllParams) => Promise<unknown>;
+    getById: (webhookId: string, params?: Omit<DefaultApiWebhooksGetSingleRequest, 'webhookId' | 'accept'>) => Promise<unknown>;
+    create: (params: WebhooksCreateParams) => Promise<unknown>;
+    update: (webhookId: string, params: WebhooksUpdateParams) => Promise<unknown>;
+    delete: (webhookId: string) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: WebhooksGetAllParams = {}) =>
@@ -564,7 +591,10 @@ export class FulcrumClient {
    * Query API
    * Note: Accept header IS exposed here since it's meaningful (json/csv/geojson)
    */
-  get query() {
+  get query(): {
+    get: (params: QueryGetParams) => Promise<unknown>;
+    post: (params: QueryPostParams) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       get: (params: QueryGetParams) =>
@@ -596,7 +626,10 @@ export class FulcrumClient {
   /**
    * Audit Logs API
    */
-  get auditLogs() {
+  get auditLogs(): {
+    getAll: (params?: Omit<DefaultApiAuditLogsGetAllRequest, 'accept'>) => Promise<unknown>;
+    getById: (auditLogId: string, params?: Omit<DefaultApiAuditLogsGetSingleRequest, 'auditLogId' | 'accept'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: Omit<DefaultApiAuditLogsGetAllRequest, 'accept'> = {}) =>
@@ -622,7 +655,13 @@ export class FulcrumClient {
   /**
    * Authorizations API
    */
-  get authorizations() {
+  get authorizations(): {
+    getAll: (params?: Omit<DefaultApiAuthorizationsGetAllRequest, 'accept'>) => Promise<unknown>;
+    getById: (authorizationId: string, params?: Omit<DefaultApiAuthorizationsGetSingleRequest, 'authorizationId' | 'accept'>) => Promise<unknown>;
+    create: (params?: Omit<DefaultApiAuthorizationsCreateRequest, 'accept' | 'contentType'>) => Promise<unknown>;
+    update: (authorizationId: string, params?: Omit<DefaultApiAuthorizationsUpdateRequest, 'authorizationId' | 'accept' | 'contentType'>) => Promise<unknown>;
+    delete: (authorizationId: string, params?: Omit<DefaultApiAuthorizationsDeleteRequest, 'authorizationId' | 'accept'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: Omit<DefaultApiAuthorizationsGetAllRequest, 'accept'> = {}) =>
@@ -678,7 +717,13 @@ export class FulcrumClient {
   /**
    * Changesets API
    */
-  get changesets() {
+  get changesets(): {
+    getAll: (params?: Omit<DefaultApiChangesetsGetAllRequest, 'accept'>) => Promise<unknown>;
+    getById: (changesetId: string, params?: Omit<DefaultApiChangesetsGetSingleRequest, 'changesetId' | 'accept'>) => Promise<unknown>;
+    create: (params?: Omit<DefaultApiChangesetsCreateRequest, 'accept' | 'contentType'>) => Promise<unknown>;
+    update: (changesetId: string, params?: Omit<DefaultApiChangesetsUpdateRequest, 'changesetId' | 'accept' | 'contentType'>) => Promise<unknown>;
+    close: (changesetId: string, params?: Omit<DefaultApiChangesetsCloseRequest, 'changesetId' | 'accept'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: Omit<DefaultApiChangesetsGetAllRequest, 'accept'> = {}) =>
@@ -734,7 +779,13 @@ export class FulcrumClient {
   /**
    * Choice Lists API
    */
-  get choiceLists() {
+  get choiceLists(): {
+    getAll: (params?: Omit<DefaultApiChoiceListsGetAllRequest, 'accept'>) => Promise<unknown>;
+    getById: (choiceListId: string, params?: Omit<DefaultApiChoiceListsGetSingleRequest, 'choiceListId' | 'accept'>) => Promise<unknown>;
+    create: (params?: Omit<DefaultApiChoiceListsCreateRequest, 'accept' | 'contentType'>) => Promise<unknown>;
+    update: (choiceListId: string, params?: Omit<DefaultApiChoiceListsUpdateRequest, 'choiceListId' | 'accept' | 'contentType'>) => Promise<unknown>;
+    delete: (choiceListId: string, params?: Omit<DefaultApiChoiceListsDeleteRequest, 'choiceListId' | 'accept'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: Omit<DefaultApiChoiceListsGetAllRequest, 'accept'> = {}) =>
@@ -790,7 +841,13 @@ export class FulcrumClient {
   /**
    * Classification Sets API
    */
-  get classificationSets() {
+  get classificationSets(): {
+    getAll: (params?: Omit<DefaultApiClassificationSetsGetAllRequest, 'accept'>) => Promise<unknown>;
+    getById: (classificationSetId: string, params?: Omit<DefaultApiClassificationSetsGetSingleRequest, 'classificationSetId' | 'accept'>) => Promise<unknown>;
+    create: (params?: Omit<DefaultApiClassificationSetsCreateRequest, 'accept' | 'contentType'>) => Promise<unknown>;
+    update: (classificationSetId: string, params?: Omit<DefaultApiClassificationSetsUpdateRequest, 'classificationSetId' | 'accept' | 'contentType'>) => Promise<unknown>;
+    delete: (classificationSetId: string, params?: Omit<DefaultApiClassificationSetsDeleteRequest, 'classificationSetId' | 'accept'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: Omit<DefaultApiClassificationSetsGetAllRequest, 'accept'> = {}) =>
@@ -846,7 +903,13 @@ export class FulcrumClient {
   /**
    * Layers API
    */
-  get layers() {
+  get layers(): {
+    getAll: (params?: Omit<DefaultApiLayersGetAllRequest, 'accept'>) => Promise<unknown>;
+    getById: (layerId: string, params?: Omit<DefaultApiLayersGetSingleRequest, 'layerId' | 'accept'>) => Promise<unknown>;
+    create: (params?: Omit<DefaultApiLayersCreateRequest, 'accept' | 'contentType'>) => Promise<unknown>;
+    update: (layerId: string, params?: Omit<DefaultApiLayersUpdateRequest, 'layerId' | 'accept' | 'contentType'>) => Promise<unknown>;
+    delete: (layerId: string, params?: Omit<DefaultApiLayersDeleteRequest, 'layerId' | 'accept'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: Omit<DefaultApiLayersGetAllRequest, 'accept'> = {}) =>
@@ -902,7 +965,15 @@ export class FulcrumClient {
   /**
    * Memberships API
    */
-  get memberships() {
+  get memberships(): {
+    getAll: (params?: Omit<DefaultApiMembershipsGetAllRequest, 'accept'>) => Promise<unknown>;
+    getById: (membershipId: string, params?: Omit<DefaultApiMembershipsGetSingleRequest, 'membershipId' | 'accept'>) => Promise<unknown>;
+    changePermissions: (params?: Omit<DefaultApiMembershipsChangePermissionsRequest, 'accept' | 'contentType'>) => Promise<unknown>;
+    create: (params?: Omit<DefaultApiCreateMemberRequest, 'accept' | 'contentType'>) => Promise<unknown>;
+    update: (membershipId: string, params?: Omit<DefaultApiUpdateMemberRequest, 'membershipId'>) => Promise<unknown>;
+    delete: (membershipId: string, params?: Omit<DefaultApiDeleteMemberRequest, 'membershipId'>) => Promise<unknown>;
+    getAllForObject: (type: string, objectId: string, params?: Omit<DefaultApiGetAllMembershipsRequest, 'type' | 'objectId' | 'accept'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: Omit<DefaultApiMembershipsGetAllRequest, 'accept'> = {}) =>
@@ -975,7 +1046,9 @@ export class FulcrumClient {
   /**
    * Roles API
    */
-  get roles() {
+  get roles(): {
+    getAll: (params?: Omit<DefaultApiRolesGetAllRequest, 'accept'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: Omit<DefaultApiRolesGetAllRequest, 'accept'> = {}) =>
@@ -991,7 +1064,15 @@ export class FulcrumClient {
   /**
    * Groups API
    */
-  get groups() {
+  get groups(): {
+    getAll: (params?: DefaultApiGetAllGroupsRequest) => Promise<unknown>;
+    getById: (groupId: string, params?: Omit<DefaultApiGetSingleGroupRequest, 'groupId'>) => Promise<unknown>;
+    create: (params?: Omit<DefaultApiCreateGroupRequest, 'accept' | 'contentType'>) => Promise<unknown>;
+    update: (groupId: string, params?: Omit<DefaultApiUpdateGroupNameDescriptionRequest, 'groupId' | 'accept' | 'contentType'>) => Promise<unknown>;
+    delete: (groupId: string, params?: Omit<DefaultApiDeleteGroupRequest, 'groupId' | 'accept'>) => Promise<unknown>;
+    getResource: (groupId: string, resource: string, params?: Omit<DefaultApiGetGroupResourceRequest, 'groupId' | 'resource' | 'accept'>) => Promise<unknown>;
+    updatePermissions: (params?: Omit<DefaultApiUpdateGroupPermissionsRequest, 'accept' | 'contentType'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: DefaultApiGetAllGroupsRequest = {}) =>
@@ -1063,7 +1144,13 @@ export class FulcrumClient {
   /**
    * Workflows API
    */
-  get workflows() {
+  get workflows(): {
+    getAll: (params?: Omit<DefaultApiGetAllWorkflowsRequest, 'accept'>) => Promise<unknown>;
+    getById: (workflowId: string, params?: Omit<DefaultApiGetSingleWorkflowRequest, 'workflowId' | 'accept'>) => Promise<unknown>;
+    create: (params?: Omit<DefaultApiCreateWorkflowRequest, 'accept' | 'contentTyoe'>) => Promise<unknown>;
+    update: (workflowId: string, params?: Omit<DefaultApiUpdateWorkflowRequest, 'workflowId' | 'accept' | 'contentTyoe'>) => Promise<unknown>;
+    delete: (workflowId: string, params?: Omit<DefaultApiDeleteWorkflowRequest, 'workflowId' | 'accept'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: Omit<DefaultApiGetAllWorkflowsRequest, 'accept'> = {}) =>
@@ -1119,7 +1206,13 @@ export class FulcrumClient {
   /**
    * Report Templates API
    */
-  get reportTemplates() {
+  get reportTemplates(): {
+    getAll: (params?: DefaultApiGetAllReportTemplatesRequest) => Promise<unknown>;
+    getById: (id: string, params?: Omit<DefaultApiGetSingleReportTemplateRequest, 'id'>) => Promise<unknown>;
+    create: (params?: DefaultApiCreateReportTemplateRequest) => Promise<unknown>;
+    update: (id: string, params?: Omit<DefaultApiUpdateReportTemplateRequest, 'id'>) => Promise<unknown>;
+    delete: (id: string, params?: Omit<DefaultApiDeleteReportTemplateRequest, 'id'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: DefaultApiGetAllReportTemplatesRequest = {}) =>
@@ -1164,7 +1257,13 @@ export class FulcrumClient {
   /**
    * Batches API
    */
-  get batches() {
+  get batches(): {
+    getAll: (params?: DefaultApiGetAllBatchesRequest) => Promise<unknown>;
+    getById: (batchId: string, params?: Omit<DefaultApiGetSingleBatchRequest, 'batchId'>) => Promise<unknown>;
+    create: (params?: DefaultApiCreateBatchRequest) => Promise<unknown>;
+    addOperations: (batchId: string, params?: Omit<DefaultApiAddBatchOperationsRequest, 'batchId'>) => Promise<unknown>;
+    start: (batchId: string, params?: Omit<DefaultApiStartBatchRequest, 'batchId'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: DefaultApiGetAllBatchesRequest = {}) =>
@@ -1209,7 +1308,13 @@ export class FulcrumClient {
   /**
    * Attachments API
    */
-  get attachments() {
+  get attachments(): {
+    getAll: (params?: DefaultApiGetAllAttachmentsRequest) => Promise<unknown>;
+    getById: (attachmentId: string, params?: Omit<DefaultApiGetSingleAttachmentRequest, 'attachmentId'>) => Promise<unknown>;
+    create: (params?: DefaultApiCreateAttachmentRequest) => Promise<unknown>;
+    delete: (attachmentId: string, params?: Omit<DefaultApiDeleteAttachmentRequest, 'attachmentId'>) => Promise<unknown>;
+    finalize: (params?: DefaultApiFinalizeAttachmentRequest) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: DefaultApiGetAllAttachmentsRequest = {}) =>
@@ -1250,7 +1355,9 @@ export class FulcrumClient {
   /**
    * Users API
    */
-  get users() {
+  get users(): {
+    getUser: (params?: Omit<DefaultApiUsersGetUserRequest, 'accept'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getUser: (params: Omit<DefaultApiUsersGetUserRequest, 'accept'> = {}) =>
@@ -1266,7 +1373,16 @@ export class FulcrumClient {
   /**
    * Photos API
    */
-  get photos() {
+  get photos(): {
+    getAllMetadata: (params?: Omit<DefaultApiPhotosGetAllMetadataRequest, 'accept'>) => Promise<unknown>;
+    getSingleFile: (photoId: string, params?: Omit<DefaultApiPhotosGetSingleFileRequest, 'photoId' | 'accept'>) => Promise<unknown>;
+    getSingleMetadata: (photoId: string, params?: Omit<DefaultApiPhotosGetSingleMetadataRequest, 'photoId' | 'accept'>) => Promise<unknown>;
+    getLargeFile: (photoId: string, params?: Omit<DefaultApiPhotosLargeFileRequest, 'photoId' | 'accept'>) => Promise<unknown>;
+    getLargeMetadata: (photoId: string, params?: Omit<DefaultApiPhotosLargeMetadataRequest, 'photoId' | 'accept'>) => Promise<unknown>;
+    getThumbnailFile: (photoId: string, params?: Omit<DefaultApiPhotosThumbnailFileRequest, 'photoId' | 'accept'>) => Promise<unknown>;
+    getThumbnailMetadata: (photoId: string, params?: Omit<DefaultApiPhotosThumbnailMetadataRequest, 'photoId' | 'accept'>) => Promise<unknown>;
+    upload: (params?: Omit<DefaultApiPhotosUploadRequest, 'accept' | 'contentType'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAllMetadata: (params: Omit<DefaultApiPhotosGetAllMetadataRequest, 'accept'> = {}) =>
@@ -1351,7 +1467,14 @@ export class FulcrumClient {
   /**
    * Signatures API
    */
-  get signatures() {
+  get signatures(): {
+    getAll: (params?: Omit<DefaultApiSignaturesGetAllRequest, 'accept'>) => Promise<unknown>;
+    getSingleFile: (signatureId: string, params?: Omit<DefaultApiSignaturesGetSingleFileRequest, 'signatureId' | 'accept'>) => Promise<unknown>;
+    getSingleMetadata: (signatureId: string, params?: Omit<DefaultApiSignaturesGetSingleMetadataRequest, 'signatureId' | 'accept'>) => Promise<unknown>;
+    getThumbnailFile: (signatureId: string, params?: Omit<DefaultApiSignaturesGetThumbnailFileRequest, 'signatureId' | 'accept'>) => Promise<unknown>;
+    getThumbnailMetadata: (signatureId: string, params?: Omit<DefaultApiSignaturesGetThumbnailMetadataRequest, 'signatureId' | 'accept'>) => Promise<unknown>;
+    upload: (params?: Omit<DefaultApiSignaturesUploadRequest, 'accept' | 'contentType'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: Omit<DefaultApiSignaturesGetAllRequest, 'accept'> = {}) =>
@@ -1416,7 +1539,29 @@ export class FulcrumClient {
   /**
    * Videos API
    */
-  get videos() {
+  get videos(): {
+    getAll: (params?: Omit<DefaultApiVideosGetAllRequest, 'accept'>) => Promise<unknown>;
+    getAllTracksGeojson: (params?: Omit<DefaultApiVideosGetAllTracksGeojsonRequest, 'accept'>) => Promise<unknown>;
+    getAllTracksGpx: (params?: Omit<DefaultApiVideosGetAllTracksGpxRequest, 'accept'>) => Promise<unknown>;
+    getAllTracksKml: (params?: Omit<DefaultApiVideosGetAllTracksKmlRequest, 'accept'>) => Promise<unknown>;
+    getMediumFile: (videoId: string, params?: Omit<DefaultApiVideosGetMediumFileRequest, 'videoId' | 'accept'>) => Promise<unknown>;
+    getOriginalFile: (videoId: string, params?: Omit<DefaultApiVideosGetOriginalFileRequest, 'videoId' | 'accept'>) => Promise<unknown>;
+    getSingleMetadata: (videoId: string, params?: Omit<DefaultApiVideosGetSingleMetadataRequest, 'videoId' | 'accept'>) => Promise<unknown>;
+    getSingleTrackGeojson: (videoId: string, params?: Omit<DefaultApiVideosGetSingleTrackGeojsonRequest, 'videoId' | 'accept'>) => Promise<unknown>;
+    getSingleTrackGpx: (videoId: string, params?: Omit<DefaultApiVideosGetSingleTrackGpxRequest, 'videoId' | 'accept'>) => Promise<unknown>;
+    getSingleTrackJson: (videoId: string, params?: Omit<DefaultApiVideosGetSingleTrackJsonRequest, 'videoId' | 'accept'>) => Promise<unknown>;
+    getSingleTrackKml: (videoId: string, params?: Omit<DefaultApiVideosGetSingleTrackKmlRequest, 'videoId' | 'accept'>) => Promise<unknown>;
+    getSmallFile: (videoId: string, params?: Omit<DefaultApiVideosGetSmallFileRequest, 'videoId' | 'accept'>) => Promise<unknown>;
+    getThumbnailHuge: (videoId: string, params?: Omit<DefaultApiVideosGetThumbnailHugeRequest, 'videoId' | 'accept'>) => Promise<unknown>;
+    getThumbnailHugeSquare: (videoId: string, params?: Omit<DefaultApiVideosGetThumbnailHugeSquareRequest, 'videoId' | 'accept'>) => Promise<unknown>;
+    getThumbnailLarge: (videoId: string, params?: Omit<DefaultApiVideosGetThumbnailLargeRequest, 'videoId' | 'accept'>) => Promise<unknown>;
+    getThumbnailLargeSquare: (videoId: string, params?: Omit<DefaultApiVideosGetThumbnailLargeSquareRequest, 'videoId' | 'accept'>) => Promise<unknown>;
+    getThumbnailMedium: (videoId: string, params?: Omit<DefaultApiVideosGetThumbnailMediumRequest, 'videoId' | 'accept'>) => Promise<unknown>;
+    getThumbnailMediumSquare: (videoId: string, params?: Omit<DefaultApiVideosGetThumbnailMediumSquareRequest, 'videoId' | 'accept'>) => Promise<unknown>;
+    getThumbnailSmall: (videoId: string, params?: Omit<DefaultApiVideosGetThumbnailSmallRequest, 'videoId' | 'accept'>) => Promise<unknown>;
+    getThumbnailSmallSquare: (videoId: string, params?: Omit<DefaultApiVideosGetThumbnailSmallSquareRequest, 'videoId' | 'accept'>) => Promise<unknown>;
+    upload: (params?: Omit<DefaultApiVideosUploadRequest, 'accept' | 'contentType'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: Omit<DefaultApiVideosGetAllRequest, 'accept'> = {}) =>
@@ -1625,7 +1770,20 @@ export class FulcrumClient {
   /**
    * Audio API
    */
-  get audio() {
+  get audio(): {
+    getAll: (params?: Omit<DefaultApiAudioGetAllRequest, 'accept'>) => Promise<unknown>;
+    getAllTracksGeojson: (params?: Omit<DefaultApiAudioGetAllTracksGeojsonRequest, 'accept'>) => Promise<unknown>;
+    getAllTracksGpx: (params?: Omit<DefaultApiAudioGetAllTracksGpxRequest, 'accept'>) => Promise<unknown>;
+    getAllTracksJson: (params?: Omit<DefaultApiAudioGetAllTracksJsonRequest, 'accept'>) => Promise<unknown>;
+    getAllTracksKml: (params?: Omit<DefaultApiAudioGetAllTracksKmlRequest, 'accept'>) => Promise<unknown>;
+    getOriginalFile: (audioId: string, params?: Omit<DefaultApiAudioGetOriginalFileRequest, 'audioId' | 'accept'>) => Promise<unknown>;
+    getSingleMetadata: (audioId: string, params?: Omit<DefaultApiAudioGetSingleMetadataRequest, 'audioId' | 'accept'>) => Promise<unknown>;
+    getSingleTrackGeojson: (audioId: string, params?: Omit<DefaultApiAudioGetSingleTrackGeojsonRequest, 'audioId' | 'accept'>) => Promise<unknown>;
+    getSingleTrackGpx: (audioId: string, params?: Omit<DefaultApiAudioGetSingleTrackGpxRequest, 'audioId' | 'accept'>) => Promise<unknown>;
+    getSingleTrackJson: (audioId: string, params?: Omit<DefaultApiAudioGetSingleTrackJsonRequest, 'audioId' | 'accept'>) => Promise<unknown>;
+    getSingleTrackKml: (audioId: string, params?: Omit<DefaultApiAudioGetSingleTrackKmlRequest, 'audioId' | 'accept'>) => Promise<unknown>;
+    upload: (params?: Omit<DefaultApiAudioUploadRequest, 'accept' | 'contentType'>) => Promise<unknown>;
+  } {
     const api = this.api;
     return {
       getAll: (params: Omit<DefaultApiAudioGetAllRequest, 'accept'> = {}) =>
