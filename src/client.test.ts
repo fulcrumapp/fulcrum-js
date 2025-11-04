@@ -345,5 +345,21 @@ describe('FulcrumClient', () => {
         expect(typeof client.client.recordsGetAll).toBe('function');
       });
     });
+
+    describe('error handling with OpenTelemetry', () => {
+      it('should handle errors in API calls and record them in spans', async () => {
+        const error = new Error('API Error');
+        client.client.recordsGetAll = jest.fn().mockRejectedValue(error);
+
+        await expect(client.records.getAll()).rejects.toThrow('API Error');
+      });
+
+      it('should handle non-Error objects in API calls', async () => {
+        const error = 'String error';
+        client.client.formsGetAll = jest.fn().mockRejectedValue(error);
+
+        await expect(client.forms.getAll()).rejects.toBe(error);
+      });
+    });
   });
 });

@@ -129,6 +129,7 @@ client.forms.getAll().then(response => {
 - 🧩 **Comprehensive type safety** - catch errors at compile time
 - 📚 **Enhanced API coverage** including Report Templates, Workflows, Batch Operations, Groups, and more
 - 🎁 **Dual module support** - ES Modules (recommended) and CommonJS for compatibility
+- 📊 **Built-in OpenTelemetry instrumentation** - automatic tracing for all API calls
 
 See the [Upgrading](#upgrading-from-v2-to-v3) section for migration details.
 
@@ -314,6 +315,125 @@ const response2 = await client.client.photosGetAllMetadata({ formId: 'form-id' }
 ```
 
 This gives you access to all Fulcrum API endpoints while still benefiting from the configured client.
+
+### OpenTelemetry Instrumentation
+
+The Fulcrum client includes built-in OpenTelemetry instrumentation that automatically creates spans for all API operations. This provides automatic distributed tracing without any additional configuration.
+
+#### How It Works
+
+Every API call is wrapped in a span with a descriptive name (e.g., `Records.getAll`, `Forms.create`) that will appear in your traces alongside the automatic HTTP spans created by axios instrumentation. This gives you both high-level operation context and low-level HTTP details.
+
+**Span Naming Pattern:** `<Resource>.<operation>`
+
+Examples:
+- `Records.getAll` - Fetching all records
+- `Records.getById` - Fetching a single record
+- `Forms.create` - Creating a new form
+- `Query.post` - Executing a SQL query
+
+#### Span Attributes
+
+Spans include relevant Fulcrum-specific attributes:
+
+- `fulcrum.form_id` - Form ID for record operations
+- `fulcrum.record_id` - Record ID for single record operations
+- `fulcrum.project_id` - Project ID for project operations
+- `fulcrum.skip_workflows` - Whether workflows were skipped
+- `fulcrum.skip_webhooks` - Whether webhooks were skipped
+- `fulcrum.query.sql` - SQL query being executed
+- `fulcrum.query.format` - Query response format (json/csv/geojson)
+
+#### Example: Setting Up Tracing
+
+```typescript
+import { NodeSDK } from '@opentelemetry/sdk-node';
+import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
+import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-node';
+import { FulcrumClient, FulcrumRegion } from '@fulcrumapp/fulcrum-js';
+
+// Initialize OpenTelemetry
+const sdk = new NodeSDK({
+  traceExporter: new ConsoleSpanExporter(),
+  instrumentations: [getNodeAutoInstrumentations()],
+});
+
+sdk.start();
+
+// Create Fulcrum client - tracing is automatic
+const client = new FulcrumClient({
+  apiKey: 'your-api-key',
+  region: FulcrumRegion.US,
+});
+
+// All API calls are automatically traced
+const records = await client.records.getAll({ formId: 'abc123' });
+
+// Your trace will show:
+// └─ Records.getAll (fulcrum.form_id: abc123)
+//    └─ HTTP GET https://api.fulcrumapp.com/api/v2/records
+```
+
+#### Trace Hierarchy
+
+When you make an API call, you'll see a trace hierarchy like this:
+
+```
+Your Application Span
+└─ Records.create (fulcrum.form_id: abc123, fulcrum.skip_workflows: false)
+   └─ HTTP POST https://api.fulcrumapp.com/api/v2/records
+      └─ DNS lookup
+      └─ TCP connection
+      └─ TLS handshake
+      └─ HTTP request/response
+```
+
+The Fulcrum span (`Records.create`) provides business context, while the nested HTTP span provides technical details about the network request.
+
+#### Error Tracking
+
+Errors are automatically recorded in spans with full exception details:
+
+```typescript
+try {
+  await client.records.getById('invalid-id');
+} catch (error) {
+  // Span will be marked as error with exception details
+  // Error status and message automatically recorded
+}
+```
+
+#### Custom Instrumentation
+
+The client uses the standard OpenTelemetry API, so you can add your own custom spans:
+
+```typescript
+import { trace } from '@opentelemetry/api';
+
+const tracer = trace.getTracer('my-app');
+
+await tracer.startActiveSpan('processRecords', async (span) => {
+  span.setAttribute('record.count', 100);
+
+  // Fulcrum API calls will be nested under this span
+  const records = await client.records.getAll({ formId: 'abc123' });
+
+  // Your processing logic
+  for (const record of records.data.records || []) {
+    // Process each record
+  }
+
+  span.end();
+});
+```
+
+This creates a trace hierarchy like:
+
+```
+processRecords (record.count: 100)
+└─ Records.getAll (fulcrum.form_id: abc123)
+   └─ HTTP GET https://api.fulcrumapp.com/api/v2/records
+```
 const form = formResponse.data.form;
 console.log(form.elements);  // Access form schema
 
