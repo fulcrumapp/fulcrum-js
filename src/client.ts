@@ -49,12 +49,18 @@ import type {
   DefaultApiMembershipsGetAllRequest,
   DefaultApiMembershipsGetSingleRequest,
   DefaultApiMembershipsChangePermissionsRequest,
+  DefaultApiCreateMemberRequest,
+  DefaultApiDeleteMemberRequest,
+  DefaultApiUpdateMemberRequest,
+  DefaultApiGetAllMembershipsRequest,
   DefaultApiRolesGetAllRequest,
   DefaultApiGetAllGroupsRequest,
   DefaultApiGetSingleGroupRequest,
   DefaultApiCreateGroupRequest,
   DefaultApiUpdateGroupNameDescriptionRequest,
   DefaultApiDeleteGroupRequest,
+  DefaultApiGetGroupResourceRequest,
+  DefaultApiUpdateGroupPermissionsRequest,
   DefaultApiGetAllWorkflowsRequest,
   DefaultApiGetSingleWorkflowRequest,
   DefaultApiCreateWorkflowRequest,
@@ -83,6 +89,45 @@ import type {
   DefaultApiPhotosThumbnailFileRequest,
   DefaultApiPhotosThumbnailMetadataRequest,
   DefaultApiPhotosUploadRequest,
+  DefaultApiSignaturesGetAllRequest,
+  DefaultApiSignaturesGetSingleFileRequest,
+  DefaultApiSignaturesGetSingleMetadataRequest,
+  DefaultApiSignaturesGetThumbnailFileRequest,
+  DefaultApiSignaturesGetThumbnailMetadataRequest,
+  DefaultApiSignaturesUploadRequest,
+  DefaultApiVideosGetAllRequest,
+  DefaultApiVideosGetAllTracksGeojsonRequest,
+  DefaultApiVideosGetAllTracksGpxRequest,
+  DefaultApiVideosGetAllTracksKmlRequest,
+  DefaultApiVideosGetMediumFileRequest,
+  DefaultApiVideosGetOriginalFileRequest,
+  DefaultApiVideosGetSingleMetadataRequest,
+  DefaultApiVideosGetSingleTrackGeojsonRequest,
+  DefaultApiVideosGetSingleTrackGpxRequest,
+  DefaultApiVideosGetSingleTrackJsonRequest,
+  DefaultApiVideosGetSingleTrackKmlRequest,
+  DefaultApiVideosGetSmallFileRequest,
+  DefaultApiVideosGetThumbnailHugeRequest,
+  DefaultApiVideosGetThumbnailHugeSquareRequest,
+  DefaultApiVideosGetThumbnailLargeRequest,
+  DefaultApiVideosGetThumbnailLargeSquareRequest,
+  DefaultApiVideosGetThumbnailMediumRequest,
+  DefaultApiVideosGetThumbnailMediumSquareRequest,
+  DefaultApiVideosGetThumbnailSmallRequest,
+  DefaultApiVideosGetThumbnailSmallSquareRequest,
+  DefaultApiVideosUploadRequest,
+  DefaultApiAudioGetAllRequest,
+  DefaultApiAudioGetAllTracksGeojsonRequest,
+  DefaultApiAudioGetAllTracksGpxRequest,
+  DefaultApiAudioGetAllTracksJsonRequest,
+  DefaultApiAudioGetAllTracksKmlRequest,
+  DefaultApiAudioGetOriginalFileRequest,
+  DefaultApiAudioGetSingleMetadataRequest,
+  DefaultApiAudioGetSingleTrackGeojsonRequest,
+  DefaultApiAudioGetSingleTrackGpxRequest,
+  DefaultApiAudioGetSingleTrackJsonRequest,
+  DefaultApiAudioGetSingleTrackKmlRequest,
+  DefaultApiAudioUploadRequest,
   DefaultApiFormsGetSingleRequest,
   DefaultApiFormsGetHistoryRequest,
   DefaultApiProjectsGetSingleRequest,
@@ -886,6 +931,44 @@ export class FulcrumClient {
             ...params,
           }),
         ),
+
+      create: (params: Omit<DefaultApiCreateMemberRequest, 'accept' | 'contentType'> = {}) =>
+        this.withSpan('Memberships.create', () =>
+          api.createMember({
+            accept: 'application/json',
+            contentType: 'application/json',
+            ...params,
+          }),
+        ),
+
+      update: (membershipId: string, params: Omit<DefaultApiUpdateMemberRequest, 'membershipId'> = {}) =>
+        this.withSpan('Memberships.update', () =>
+          api.updateMember({
+            membershipId,
+            ...params,
+          }),
+          { 'fulcrum.membership_id': membershipId },
+        ),
+
+      delete: (membershipId: string, params: Omit<DefaultApiDeleteMemberRequest, 'membershipId'> = {}) =>
+        this.withSpan('Memberships.delete', () =>
+          api.deleteMember({
+            membershipId,
+            ...params,
+          }),
+          { 'fulcrum.membership_id': membershipId },
+        ),
+
+      getAllForObject: (type: string, objectId: string, params: Omit<DefaultApiGetAllMembershipsRequest, 'type' | 'objectId' | 'accept'> = {}) =>
+        this.withSpan('Memberships.getAllForObject', () =>
+          api.getAllMemberships({
+            accept: 'application/json',
+            type,
+            objectId,
+            ...params,
+          }),
+          { 'fulcrum.membership_type': type, 'fulcrum.object_id': objectId },
+        ),
     } as const;
   }
 
@@ -953,6 +1036,26 @@ export class FulcrumClient {
             ...params,
           }),
           { 'fulcrum.group_id': groupId },
+        ),
+
+      getResource: (groupId: string, resource: string, params: Omit<DefaultApiGetGroupResourceRequest, 'groupId' | 'resource' | 'accept'> = {}) =>
+        this.withSpan('Groups.getResource', () =>
+          api.getGroupResource({
+            accept: 'application/json',
+            groupId,
+            resource,
+            ...params,
+          }),
+          { 'fulcrum.group_id': groupId, 'fulcrum.resource': resource },
+        ),
+
+      updatePermissions: (params: Omit<DefaultApiUpdateGroupPermissionsRequest, 'accept' | 'contentType'> = {}) =>
+        this.withSpan('Groups.updatePermissions', () =>
+          api.updateGroupPermissions({
+            accept: 'application/json',
+            contentType: 'application/json',
+            ...params,
+          }),
         ),
     } as const;
   }
@@ -1237,6 +1340,397 @@ export class FulcrumClient {
       upload: (params: Omit<DefaultApiPhotosUploadRequest, 'accept' | 'contentType'> = {}) =>
         this.withSpan('Photos.upload', () =>
           api.photosUpload({
+            accept: 'application/json',
+            contentType: 'application/json',
+            ...params,
+          }),
+        ),
+    } as const;
+  }
+
+  /**
+   * Signatures API
+   */
+  get signatures() {
+    const api = this.api;
+    return {
+      getAll: (params: Omit<DefaultApiSignaturesGetAllRequest, 'accept'> = {}) =>
+        this.withSpan('Signatures.getAll', () =>
+          api.signaturesGetAll({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+
+      getSingleFile: (signatureId: string, params: Omit<DefaultApiSignaturesGetSingleFileRequest, 'signatureId' | 'accept'> = {}) =>
+        this.withSpan('Signatures.getSingleFile', () =>
+          api.signaturesGetSingleFile({
+            accept: 'application/json',
+            signatureId,
+            ...params,
+          }),
+          { 'fulcrum.signature_id': signatureId },
+        ),
+
+      getSingleMetadata: (signatureId: string, params: Omit<DefaultApiSignaturesGetSingleMetadataRequest, 'signatureId' | 'accept'> = {}) =>
+        this.withSpan('Signatures.getSingleMetadata', () =>
+          api.signaturesGetSingleMetadata({
+            accept: 'application/json',
+            signatureId,
+            ...params,
+          }),
+          { 'fulcrum.signature_id': signatureId },
+        ),
+
+      getThumbnailFile: (signatureId: string, params: Omit<DefaultApiSignaturesGetThumbnailFileRequest, 'signatureId' | 'accept'> = {}) =>
+        this.withSpan('Signatures.getThumbnailFile', () =>
+          api.signaturesGetThumbnailFile({
+            accept: 'application/json',
+            signatureId,
+            ...params,
+          }),
+          { 'fulcrum.signature_id': signatureId },
+        ),
+
+      getThumbnailMetadata: (signatureId: string, params: Omit<DefaultApiSignaturesGetThumbnailMetadataRequest, 'signatureId' | 'accept'> = {}) =>
+        this.withSpan('Signatures.getThumbnailMetadata', () =>
+          api.signaturesGetThumbnailMetadata({
+            accept: 'application/json',
+            signatureId,
+            ...params,
+          }),
+          { 'fulcrum.signature_id': signatureId },
+        ),
+
+      upload: (params: Omit<DefaultApiSignaturesUploadRequest, 'accept' | 'contentType'> = {}) =>
+        this.withSpan('Signatures.upload', () =>
+          api.signaturesUpload({
+            accept: 'application/json',
+            contentType: 'application/json',
+            ...params,
+          }),
+        ),
+    } as const;
+  }
+
+  /**
+   * Videos API
+   */
+  get videos() {
+    const api = this.api;
+    return {
+      getAll: (params: Omit<DefaultApiVideosGetAllRequest, 'accept'> = {}) =>
+        this.withSpan('Videos.getAll', () =>
+          api.videosGetAll({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+
+      getAllTracksGeojson: (params: Omit<DefaultApiVideosGetAllTracksGeojsonRequest, 'accept'> = {}) =>
+        this.withSpan('Videos.getAllTracksGeojson', () =>
+          api.videosGetAllTracksGeojson({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+
+      getAllTracksGpx: (params: Omit<DefaultApiVideosGetAllTracksGpxRequest, 'accept'> = {}) =>
+        this.withSpan('Videos.getAllTracksGpx', () =>
+          api.videosGetAllTracksGpx({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+
+      getAllTracksKml: (params: Omit<DefaultApiVideosGetAllTracksKmlRequest, 'accept'> = {}) =>
+        this.withSpan('Videos.getAllTracksKml', () =>
+          api.videosGetAllTracksKml({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+
+      getMediumFile: (videoId: string, params: Omit<DefaultApiVideosGetMediumFileRequest, 'videoId' | 'accept'> = {}) =>
+        this.withSpan('Videos.getMediumFile', () =>
+          api.videosGetMediumFile({
+            accept: 'application/json',
+            videoId,
+            ...params,
+          }),
+          { 'fulcrum.video_id': videoId },
+        ),
+
+      getOriginalFile: (videoId: string, params: Omit<DefaultApiVideosGetOriginalFileRequest, 'videoId' | 'accept'> = {}) =>
+        this.withSpan('Videos.getOriginalFile', () =>
+          api.videosGetOriginalFile({
+            accept: 'application/json',
+            videoId,
+            ...params,
+          }),
+          { 'fulcrum.video_id': videoId },
+        ),
+
+      getSingleMetadata: (videoId: string, params: Omit<DefaultApiVideosGetSingleMetadataRequest, 'videoId' | 'accept'> = {}) =>
+        this.withSpan('Videos.getSingleMetadata', () =>
+          api.videosGetSingleMetadata({
+            accept: 'application/json',
+            videoId,
+            ...params,
+          }),
+          { 'fulcrum.video_id': videoId },
+        ),
+
+      getSingleTrackGeojson: (videoId: string, params: Omit<DefaultApiVideosGetSingleTrackGeojsonRequest, 'videoId' | 'accept'> = {}) =>
+        this.withSpan('Videos.getSingleTrackGeojson', () =>
+          api.videosGetSingleTrackGeojson({
+            accept: 'application/json',
+            videoId,
+            ...params,
+          }),
+          { 'fulcrum.video_id': videoId },
+        ),
+
+      getSingleTrackGpx: (videoId: string, params: Omit<DefaultApiVideosGetSingleTrackGpxRequest, 'videoId' | 'accept'> = {}) =>
+        this.withSpan('Videos.getSingleTrackGpx', () =>
+          api.videosGetSingleTrackGpx({
+            accept: 'application/json',
+            videoId,
+            ...params,
+          }),
+          { 'fulcrum.video_id': videoId },
+        ),
+
+      getSingleTrackJson: (videoId: string, params: Omit<DefaultApiVideosGetSingleTrackJsonRequest, 'videoId' | 'accept'> = {}) =>
+        this.withSpan('Videos.getSingleTrackJson', () =>
+          api.videosGetSingleTrackJson({
+            accept: 'application/json',
+            videoId,
+            ...params,
+          }),
+          { 'fulcrum.video_id': videoId },
+        ),
+
+      getSingleTrackKml: (videoId: string, params: Omit<DefaultApiVideosGetSingleTrackKmlRequest, 'videoId' | 'accept'> = {}) =>
+        this.withSpan('Videos.getSingleTrackKml', () =>
+          api.videosGetSingleTrackKml({
+            accept: 'application/json',
+            videoId,
+            ...params,
+          }),
+          { 'fulcrum.video_id': videoId },
+        ),
+
+      getSmallFile: (videoId: string, params: Omit<DefaultApiVideosGetSmallFileRequest, 'videoId' | 'accept'> = {}) =>
+        this.withSpan('Videos.getSmallFile', () =>
+          api.videosGetSmallFile({
+            accept: 'application/json',
+            videoId,
+            ...params,
+          }),
+          { 'fulcrum.video_id': videoId },
+        ),
+
+      getThumbnailHuge: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailHugeRequest, 'videoId' | 'accept'> = {}) =>
+        this.withSpan('Videos.getThumbnailHuge', () =>
+          api.videosGetThumbnailHuge({
+            accept: 'application/json',
+            videoId,
+            ...params,
+          }),
+          { 'fulcrum.video_id': videoId },
+        ),
+
+      getThumbnailHugeSquare: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailHugeSquareRequest, 'videoId' | 'accept'> = {}) =>
+        this.withSpan('Videos.getThumbnailHugeSquare', () =>
+          api.videosGetThumbnailHugeSquare({
+            accept: 'application/json',
+            videoId,
+            ...params,
+          }),
+          { 'fulcrum.video_id': videoId },
+        ),
+
+      getThumbnailLarge: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailLargeRequest, 'videoId' | 'accept'> = {}) =>
+        this.withSpan('Videos.getThumbnailLarge', () =>
+          api.videosGetThumbnailLarge({
+            accept: 'application/json',
+            videoId,
+            ...params,
+          }),
+          { 'fulcrum.video_id': videoId },
+        ),
+
+      getThumbnailLargeSquare: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailLargeSquareRequest, 'videoId' | 'accept'> = {}) =>
+        this.withSpan('Videos.getThumbnailLargeSquare', () =>
+          api.videosGetThumbnailLargeSquare({
+            accept: 'application/json',
+            videoId,
+            ...params,
+          }),
+          { 'fulcrum.video_id': videoId },
+        ),
+
+      getThumbnailMedium: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailMediumRequest, 'videoId' | 'accept'> = {}) =>
+        this.withSpan('Videos.getThumbnailMedium', () =>
+          api.videosGetThumbnailMedium({
+            accept: 'application/json',
+            videoId,
+            ...params,
+          }),
+          { 'fulcrum.video_id': videoId },
+        ),
+
+      getThumbnailMediumSquare: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailMediumSquareRequest, 'videoId' | 'accept'> = {}) =>
+        this.withSpan('Videos.getThumbnailMediumSquare', () =>
+          api.videosGetThumbnailMediumSquare({
+            accept: 'application/json',
+            videoId,
+            ...params,
+          }),
+          { 'fulcrum.video_id': videoId },
+        ),
+
+      getThumbnailSmall: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailSmallRequest, 'videoId' | 'accept'> = {}) =>
+        this.withSpan('Videos.getThumbnailSmall', () =>
+          api.videosGetThumbnailSmall({
+            accept: 'application/json',
+            videoId,
+            ...params,
+          }),
+          { 'fulcrum.video_id': videoId },
+        ),
+
+      getThumbnailSmallSquare: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailSmallSquareRequest, 'videoId' | 'accept'> = {}) =>
+        this.withSpan('Videos.getThumbnailSmallSquare', () =>
+          api.videosGetThumbnailSmallSquare({
+            accept: 'application/json',
+            videoId,
+            ...params,
+          }),
+          { 'fulcrum.video_id': videoId },
+        ),
+
+      upload: (params: Omit<DefaultApiVideosUploadRequest, 'accept' | 'contentType'> = {}) =>
+        this.withSpan('Videos.upload', () =>
+          api.videosUpload({
+            accept: 'application/json',
+            contentType: 'application/json',
+            ...params,
+          }),
+        ),
+    } as const;
+  }
+
+  /**
+   * Audio API
+   */
+  get audio() {
+    const api = this.api;
+    return {
+      getAll: (params: Omit<DefaultApiAudioGetAllRequest, 'accept'> = {}) =>
+        this.withSpan('Audio.getAll', () =>
+          api.audioGetAll({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+
+      getAllTracksGeojson: (params: Omit<DefaultApiAudioGetAllTracksGeojsonRequest, 'accept'> = {}) =>
+        this.withSpan('Audio.getAllTracksGeojson', () =>
+          api.audioGetAllTracksGeojson({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+
+      getAllTracksGpx: (params: Omit<DefaultApiAudioGetAllTracksGpxRequest, 'accept'> = {}) =>
+        this.withSpan('Audio.getAllTracksGpx', () =>
+          api.audioGetAllTracksGpx({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+
+      getAllTracksJson: (params: Omit<DefaultApiAudioGetAllTracksJsonRequest, 'accept'> = {}) =>
+        this.withSpan('Audio.getAllTracksJson', () =>
+          api.audioGetAllTracksJson({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+
+      getAllTracksKml: (params: Omit<DefaultApiAudioGetAllTracksKmlRequest, 'accept'> = {}) =>
+        this.withSpan('Audio.getAllTracksKml', () =>
+          api.audioGetAllTracksKml({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+
+      getOriginalFile: (audioId: string, params: Omit<DefaultApiAudioGetOriginalFileRequest, 'audioId' | 'accept'> = {}) =>
+        this.withSpan('Audio.getOriginalFile', () =>
+          api.audioGetOriginalFile({
+            accept: 'application/json',
+            audioId,
+            ...params,
+          }),
+          { 'fulcrum.audio_id': audioId },
+        ),
+
+      getSingleMetadata: (audioId: string, params: Omit<DefaultApiAudioGetSingleMetadataRequest, 'audioId' | 'accept'> = {}) =>
+        this.withSpan('Audio.getSingleMetadata', () =>
+          api.audioGetSingleMetadata({
+            accept: 'application/json',
+            audioId,
+            ...params,
+          }),
+          { 'fulcrum.audio_id': audioId },
+        ),
+
+      getSingleTrackGeojson: (audioId: string, params: Omit<DefaultApiAudioGetSingleTrackGeojsonRequest, 'audioId' | 'accept'> = {}) =>
+        this.withSpan('Audio.getSingleTrackGeojson', () =>
+          api.audioGetSingleTrackGeojson({
+            accept: 'application/json',
+            audioId,
+            ...params,
+          }),
+          { 'fulcrum.audio_id': audioId },
+        ),
+
+      getSingleTrackGpx: (audioId: string, params: Omit<DefaultApiAudioGetSingleTrackGpxRequest, 'audioId' | 'accept'> = {}) =>
+        this.withSpan('Audio.getSingleTrackGpx', () =>
+          api.audioGetSingleTrackGpx({
+            accept: 'application/json',
+            audioId,
+            ...params,
+          }),
+          { 'fulcrum.audio_id': audioId },
+        ),
+
+      getSingleTrackJson: (audioId: string, params: Omit<DefaultApiAudioGetSingleTrackJsonRequest, 'audioId' | 'accept'> = {}) =>
+        this.withSpan('Audio.getSingleTrackJson', () =>
+          api.audioGetSingleTrackJson({
+            accept: 'application/json',
+            audioId,
+            ...params,
+          }),
+          { 'fulcrum.audio_id': audioId },
+        ),
+
+      getSingleTrackKml: (audioId: string, params: Omit<DefaultApiAudioGetSingleTrackKmlRequest, 'audioId' | 'accept'> = {}) =>
+        this.withSpan('Audio.getSingleTrackKml', () =>
+          api.audioGetSingleTrackKml({
+            accept: 'application/json',
+            audioId,
+            ...params,
+          }),
+          { 'fulcrum.audio_id': audioId },
+        ),
+
+      upload: (params: Omit<DefaultApiAudioUploadRequest, 'accept' | 'contentType'> = {}) =>
+        this.withSpan('Audio.upload', () =>
+          api.audioUpload({
             accept: 'application/json',
             contentType: 'application/json',
             ...params,
