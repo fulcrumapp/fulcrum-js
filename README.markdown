@@ -1176,10 +1176,8 @@ await api.audioGetAllTracksGpx();
 
 ### Complete Method Mapping
 
-<details>
-<summary>Click to expand full v2 → v3 method mapping</summary>
-
 **Records:**
+
 - `client.records.all()` → `api.recordsGetAll()`
 - `client.records.find(id)` → `api.recordsGetSingle(id)`
 - `client.records.create(obj)` → `api.recordsCreate(..., { record: obj })`
@@ -1189,6 +1187,7 @@ await api.audioGetAllTracksGpx();
 - *(new)* `api.recordsGetAllHistory()`
 
 **Forms:**
+
 - `client.forms.all()` → `api.formsGetAll()`
 - `client.forms.find(id)` → `api.formsGetSingle(id)`
 - `client.forms.create(obj)` → `api.formsCreate(..., { form: obj })`
@@ -1197,6 +1196,7 @@ await api.audioGetAllTracksGpx();
 - `client.forms.history(id)` → `api.formsGetHistory(id)`
 
 **Projects:**
+
 - `client.projects.all()` → `api.projectsGetAll()`
 - `client.projects.find(id)` → `api.projectsGetSingle(id)`
 - `client.projects.create(obj)` → `api.projectsCreate(..., { project: obj })`
@@ -1204,6 +1204,7 @@ await api.audioGetAllTracksGpx();
 - `client.projects.delete(id)` → `api.projectsDelete(id)`
 
 **Changesets:**
+
 - `client.changesets.all()` → `api.changesetsGetAll()`
 - `client.changesets.find(id)` → `api.changesetsGetSingle(id)`
 - `client.changesets.create(obj)` → `api.changesetsCreate(..., { changeset: obj })`
@@ -1211,6 +1212,7 @@ await api.audioGetAllTracksGpx();
 - `client.changesets.close(id)` → `api.changesetsClose(id)`
 
 **Choice Lists:**
+
 - `client.choiceLists.all()` → `api.choiceListsGetAll()`
 - `client.choiceLists.find(id)` → `api.choiceListsGetSingle(id)`
 - `client.choiceLists.create(obj)` → `api.choiceListsCreate(..., { choice_list: obj })`
@@ -1218,6 +1220,7 @@ await api.audioGetAllTracksGpx();
 - `client.choiceLists.delete(id)` → `api.choiceListsDelete(id)`
 
 **Classification Sets:**
+
 - `client.classificationSets.all()` → `api.classificationSetsGetAll()`
 - `client.classificationSets.find(id)` → `api.classificationSetsGetSingle(id)`
 - `client.classificationSets.create(obj)` → `api.classificationSetsCreate(..., { classification_set: obj })`
@@ -1225,6 +1228,7 @@ await api.audioGetAllTracksGpx();
 - `client.classificationSets.delete(id)` → `api.classificationSetsDelete(id)`
 
 **Webhooks:**
+
 - `client.webhooks.all()` → `api.webhooksGetAll()`
 - `client.webhooks.find(id)` → `api.webhooksGetSingle(id)`
 - `client.webhooks.create(obj)` → `api.webhooksCreate(..., { webhook: obj })`
@@ -1232,6 +1236,7 @@ await api.audioGetAllTracksGpx();
 - `client.webhooks.delete(id)` → `api.webhooksDelete(id)`
 
 **Photos:**
+
 - `client.photos.all()` → `api.photosGetAllMetadata()`
 - `client.photos.find(id)` → `api.photosGetSingleMetadata(id)`
 - `client.photos.media(id, 'original')` → `api.photosGetSingleFile(id)`
@@ -1240,14 +1245,17 @@ await api.audioGetAllTracksGpx();
 - *(new)* `api.photosUpload()`
 
 **Videos, Audio, Signatures:**
+
 - Similar pattern to photos with specific methods for each media type
 - *(new)* Track data methods: `videosGetSingleTrackGeojson()`, `audioGetAllTracksGpx()`, etc.
 
 **Audit Logs:**
+
 - `client.auditLogs.all()` → `api.auditLogsGetAll()`
 - `client.auditLogs.find(id)` → `api.auditLogsGetSingle(id)`
 
 **Authorizations:**
+
 - `client.authorizations.all()` → `api.authorizationsGetAll()`
 - `client.authorizations.find(id)` → `api.authorizationsGetSingle(id)`
 - `client.authorizations.create(obj)` → `api.authorizationsCreate(..., { authorization: obj })`
@@ -1255,13 +1263,16 @@ await api.audioGetAllTracksGpx();
 - `client.authorizations.delete(id)` → `api.authorizationsDelete(id)`
 
 **Memberships:**
+
 - `client.memberships.all()` → `api.membershipsGetAll()`
 - *(new)* `api.createMember()`, `api.updateMember()`, `api.deleteMember()`
 
 **Roles:**
+
 - `client.roles.all()` → `api.rolesGetAll()`
 
 **Layers:**
+
 - `client.layers.all()` → `api.layersGetAll()`
 - `client.layers.find(id)` → `api.layersGetSingle(id)`
 - `client.layers.create(obj)` → `api.layersCreate(..., { layer: obj })`

@@ -23,15 +23,19 @@ This document provides instructions for AI coding agents working on this project
 **ALL code changes MUST**:
 
 1. **Pass all existing tests**:
+
    ```bash
    npm test
    ```
+
    All tests must pass with **0 failures**.
 
 2. **Maintain 90%+ code coverage** (80%+ for branches):
+
    ```bash
    npm run test:coverage
    ```
+
    - **Statement coverage**: ≥90%
    - **Branch coverage**: ≥80% (some branches from optional params are hard to test)
    - **Function coverage**: ≥90%
@@ -46,7 +50,8 @@ This document provides instructions for AI coding agents working on this project
 ### 3. 📁 Project Structure
 
 #### Hand-Written Code (COMMITTED to git)
-```
+
+```text
 src/
 ├── client.ts         # Wrapper client - YOUR CODE
 ├── client.test.ts    # Tests - YOUR CODE
@@ -54,7 +59,8 @@ src/
 ```
 
 #### Generated Code (NOT COMMITTED)
-```
+
+```text
 generated/            # OpenAPI-generated TypeScript client
 dist/                 # Build outputs
 coverage/             # Test coverage reports
@@ -63,6 +69,7 @@ coverage/             # Test coverage reports
 ### 4. 🔨 Build Process
 
 Before any code changes:
+
 ```bash
 # Ensure generated client exists
 npm run generate:full
@@ -72,6 +79,7 @@ npm run build
 ```
 
 After code changes to `src/`:
+
 ```bash
 # Build wrapper
 npm run build:wrapper
@@ -89,6 +97,7 @@ npm run test:coverage
 ### 5. 🚫 What NOT to Touch
 
 **NEVER edit these directly**:
+
 - `generated/**` - Auto-generated from OpenAPI spec (regenerated on every build)
   - ⚠️ **CRITICAL**: Any manual edits to `generated/` will be lost when regenerating
   - **EXCEPTION**: You ARE allowed to update dependencies in `generated/package.json` to current versions after generation
@@ -98,11 +107,13 @@ npm run test:coverage
 - `node_modules/**` - Dependencies
 
 **Only edit**:
+
 - `src/**/*.ts` - Hand-written wrapper code
 - `src/**/*.test.ts` - Test files
 - Configuration files when necessary
 
 **Generation Configuration** (edit with care):
+
 - `openapitools.json` - OpenAPI Generator configuration
   - Can modify generation options (naming, templates, etc.)
   - **But**: Changes must be abstracted in wrapper client
@@ -112,19 +123,23 @@ npm run test:coverage
 ### 6. 📝 Code Quality Standards
 
 #### TypeScript
+
 - **Strict mode enabled** - No implicit any
 - **ESM modules** - Use `.js` extensions in imports
 - **Explicit types** - Type all function parameters and returns
 - **No errors** - Must compile cleanly
 
 #### Testing
+
 - **Descriptive test names** - Use "should..." pattern
 - **Arrange-Act-Assert** - Clear test structure
 - **Mock external dependencies** - Don't call real APIs in tests
 - **Test edge cases** - Not just happy paths
 
 #### Coverage Rules
+
 If coverage drops below 90%:
+
 1. Write tests for uncovered code
 2. Or remove/refactor unused code
 3. Do NOT ship with <90% coverage
@@ -181,6 +196,7 @@ await client.records.create({
 ```
 
 **When generated code has quirks**:
+
 - ✅ **DO**: Hide them in the wrapper layer
 - ✅ **DO**: Set sensible defaults (like `'application/json'`)
 - ✅ **DO**: Simplify type signatures
@@ -292,6 +308,7 @@ npx jest -u
 ### 10. 📊 Quality Gates
 
 **Pull requests MUST**:
+
 - ✅ Pass all tests (100% pass rate)
 - ✅ Maintain ≥90% code coverage (≥80% branch coverage)
 - ✅ Have 0 TypeScript errors
@@ -299,6 +316,7 @@ npx jest -u
 - ✅ Pass Sonar quality gate (if configured)
 
 **Before merging, verify**:
+
 ```bash
 npm run build          # Must succeed
 npm test               # Must be 100% pass
