@@ -30,6 +30,7 @@ interface ApiStats {
   contentLength?: number;
   error?: string;
   sampleItem?: string;
+  durationMs?: number;
 }
 
 async function promptForToken(): Promise<string> {
@@ -53,8 +54,10 @@ async function verifyEndpoint(
   name: string,
   fn: () => Promise<any>
 ): Promise<ApiStats> {
+  const start = Date.now();
   try {
     const response = await fn();
+    const durationMs = Date.now() - start;
     const data = response.data;
 
     // Extract array from response (different endpoints use different property names)
@@ -92,8 +95,10 @@ async function verifyEndpoint(
       success: true,
       contentLength,
       sampleItem,
+      durationMs,
     };
   } catch (error: any) {
+    const durationMs = Date.now() - start;
     // Extract request details from axios error
     const requestUrl = error.config?.url || 'unknown';
     const requestMethod = error.config?.method?.toUpperCase() || 'GET';
@@ -106,6 +111,7 @@ async function verifyEndpoint(
       status: error.response?.status || 0,
       success: false,
       error: `${error.message} (${requestMethod} ${fullUrl})`,
+      durationMs,
     };
   }
 }
@@ -158,9 +164,11 @@ async function main() {
 
     if (result.success) {
       const sizeKB = result.contentLength ? (result.contentLength / 1024).toFixed(2) : '0';
-      console.log(`${colors.green}✓ ${result.count} items (HTTP ${result.status}, ${sizeKB} KB)${colors.reset}`);
+      const duration = result.durationMs ? `${result.durationMs} ms` : '';
+      console.log(`${colors.green}✓ ${result.count} items (HTTP ${result.status}, ${sizeKB} KB, ${duration})${colors.reset}`);
     } else {
-      console.log(`${colors.red}✗ Failed (${result.error})${colors.reset}`);
+      const duration = result.durationMs ? `, ${result.durationMs} ms` : '';
+      console.log(`${colors.red}✗ Failed (${result.error}${duration})${colors.reset}`);
     }
   }
 
