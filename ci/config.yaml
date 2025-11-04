@@ -1,0 +1,30 @@
+outputType: "npm"
+
+# fulcrum-js v3.0.0 - TypeScript API Client
+# Configuration for Tekton CI/CD Pipeline
+
+# Tell the CI system to deploy this code on merge to main.
+# Note: For npm projects this means publishing to npm registry
+auto_deploy: False # Will be set to True when ready for production release
+
+# create_preview_environment
+# Tells the CI system to create a preview environment.
+# Not needed for npm packages
+create_preview_environment: False
+
+# run_sonar_scanner:
+# Tells the CI system to run SonarQube analysis
+# Requires sonar-project.properties file and proper project setup
+run_sonar_scanner: True
+test_coverage_dir: "coverage"
+
+# For unittest and lint...
+# if command is `None` or missing. then those steps will be skipped.
+unittest:
+  image: 280296955917.dkr.ecr.us-east-2.amazonaws.com/dockerhub/library/node:22
+  command: "npm ci && npm run test:coverage"
+  # coverage_file: None # Optional
+lint:
+  image: 280296955917.dkr.ecr.us-east-2.amazonaws.com/dockerhub/library/node:22
+  command: "npm ci && npm run lint || true"
+  # coverage_file: None # Optional

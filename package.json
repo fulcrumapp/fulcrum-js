@@ -38,12 +38,6 @@
   },
   "author": "Jason Sanford (jasonsanford@gmail.com)",
   "license": "BSD-2-Clause",
-  "eslintConfig": {
-    "extends": "fulcrum",
-    "globals": {
-      "fetch": true
-    }
-  },
   "devDependencies": {
     "@eslint/js": "^9.18.0",
     "@openapitools/openapi-generator-cli": "^2.16.5",
