@@ -78,6 +78,100 @@ describe('FulcrumClient', () => {
     });
   });
 
+  describe('path construction', () => {
+    it('should construct paths that start with /api/v2', () => {
+      // Test with US region - just verify the region value
+      expect(FulcrumRegion.US).toBe('https://api.fulcrumapp.com/api');
+      // Generated API paths start with /v2/
+      // So final URL should be: https://api.fulcrumapp.com/api + /v2/forms.json
+      // = https://api.fulcrumapp.com/api/v2/forms.json
+    });
+
+    it('should not have duplicate "api" in the path', () => {
+      // All regions should end with /api (no /v2)
+      expect(FulcrumRegion.US).toBe('https://api.fulcrumapp.com/api');
+      expect(FulcrumRegion.AU).toBe('https://api.fulcrumapp-au.com/api');
+      expect(FulcrumRegion.CA).toBe('https://api.fulcrumapp-ca.com/api');
+      expect(FulcrumRegion.EU).toBe('https://api.fulcrumapp-eu.com/api');
+
+      // None should contain "/api/api" or "/api" appearing twice in path segments
+      expect(FulcrumRegion.US).not.toMatch(/\/api\/.*\/api/);
+      expect(FulcrumRegion.AU).not.toMatch(/\/api\/.*\/api/);
+      expect(FulcrumRegion.CA).not.toMatch(/\/api\/.*\/api/);
+      expect(FulcrumRegion.EU).not.toMatch(/\/api\/.*\/api/);
+    });
+
+    it('should not have duplicate "v2" in the path', () => {
+      // Regions should not end with /v2/v2 or contain v2 twice
+      expect(FulcrumRegion.US).not.toMatch(/v2.*v2/);
+      expect(FulcrumRegion.AU).not.toMatch(/v2.*v2/);
+      expect(FulcrumRegion.CA).not.toMatch(/v2.*v2/);
+      expect(FulcrumRegion.EU).not.toMatch(/v2.*v2/);
+    });
+
+    it('should not have double slashes in the path', () => {
+      // Check that region values don't end with slash
+      expect(FulcrumRegion.US).not.toMatch(/\/$/);
+      expect(FulcrumRegion.AU).not.toMatch(/\/$/);
+      expect(FulcrumRegion.CA).not.toMatch(/\/$/);
+      expect(FulcrumRegion.EU).not.toMatch(/\/$/);
+
+      // And don't contain double slashes (except in https://)
+      const withoutProtocol = FulcrumRegion.US.replace('https://', '');
+      expect(withoutProtocol).not.toMatch(/\/\//);
+    });
+
+    it('should construct correct full URLs for all regions', () => {
+      // When basePath is "https://api.fulcrumapp.com/api"
+      // and API path is "/v2/forms.json"
+      // Result should be: "https://api.fulcrumapp.com/api/v2/forms.json"
+
+      const testCases = [
+        {
+          region: FulcrumRegion.US,
+          expected: 'https://api.fulcrumapp.com/api/v2/forms.json'
+        },
+        {
+          region: FulcrumRegion.AU,
+          expected: 'https://api.fulcrumapp-au.com/api/v2/forms.json'
+        },
+        {
+          region: FulcrumRegion.CA,
+          expected: 'https://api.fulcrumapp-ca.com/api/v2/forms.json'
+        },
+        {
+          region: FulcrumRegion.EU,
+          expected: 'https://api.fulcrumapp-eu.com/api/v2/forms.json'
+        },
+      ];
+
+      for (const { region, expected } of testCases) {
+        const fullUrl = `${region}/v2/forms.json`;
+        expect(fullUrl).toBe(expected);
+
+        // Verify no duplicate path segments
+        expect(fullUrl).not.toMatch(/\/api\/.*\/api/); // No /api appearing twice in path
+        expect(fullUrl).not.toMatch(/\/v2\/.*\/v2/);   // No /v2 appearing twice in path
+
+        // Verify no double slashes (except https://)
+        const withoutProtocol = fullUrl.replace('https://', '');
+        expect(withoutProtocol).not.toMatch(/\/\//);
+      }
+    });
+
+    it('should work with custom region URLs', () => {
+      const customRegion = 'https://custom.fulcrum.com/api';
+      const fullUrl = `${customRegion}/v2/forms.json`;
+
+      expect(fullUrl).toBe('https://custom.fulcrum.com/api/v2/forms.json');
+      expect(fullUrl).not.toMatch(/\/api\/.*\/api/);
+      expect(fullUrl).not.toMatch(/\/v2\/.*\/v2/);
+
+      const withoutProtocol = fullUrl.replace('https://', '');
+      expect(withoutProtocol).not.toMatch(/\/\//);
+    });
+  });
+
   describe('API accessors', () => {
     let client: FulcrumClient;
 

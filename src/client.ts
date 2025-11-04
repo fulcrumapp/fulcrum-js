@@ -34,13 +34,13 @@ import type {
  */
 export enum FulcrumRegion {
   /** United States (default) */
-  US = 'https://api.fulcrumapp.com/api/v2',
+  US = 'https://api.fulcrumapp.com/api',
   /** Australia */
-  AU = 'https://api.fulcrumapp-au.com/api/v2',
+  AU = 'https://api.fulcrumapp-au.com/api',
   /** Canada */
-  CA = 'https://api.fulcrumapp-ca.com/api/v2',
-  /** European Union */
-  EU = 'https://api.fulcrumapp-eu.com/api/v2',
+  CA = 'https://api.fulcrumapp-ca.com/api',
+  /** Europe */
+  EU = 'https://api.fulcrumapp-eu.com/api',
 }
 
 export interface FulcrumClientOptions {
@@ -134,7 +134,6 @@ export class FulcrumClient {
       baseOptions: {
         headers: {
           ...(options.userAgent && { 'User-Agent': options.userAgent }),
-          'X-ApiToken': options.apiKey,
         },
       },
     };

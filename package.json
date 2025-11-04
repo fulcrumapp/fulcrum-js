@@ -39,6 +39,7 @@
     "download:spec": "curl -s https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json > openapi/rest-api.json",
     "generate": "npx @openapitools/openapi-generator-cli generate -i openapi/rest-api.json -g typescript-axios -o generated --additional-properties=npmName=fulcrum-generated,npmVersion=3.0.0,supportsES6=true,withSeparateModelsAndApi=true,apiPackage=api,modelPackage=models,importFileExtension=.js,useSingleRequestParameter=true,stringEnums=true,withInterfaces=true",
     "generate:full": "npm run download:spec && npm run generate && npm run build",
+    "verify": "tsx scripts/verify-api.ts",
     "prepublishOnly": "npm run build"
   },
   "author": "Jason Sanford (jasonsanford@gmail.com)",
@@ -52,6 +53,7 @@
     "globals": "^15.14.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
+    "tsx": "^4.20.6",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.19.1"
   },

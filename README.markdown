@@ -1872,6 +1872,55 @@ npm run test -- test/test_forms.js  # Run specific test file
 npm run lint                # Check code quality
 ```
 
+### API Verification
+
+To verify the API client against a live Fulcrum account, use the verification script:
+
+```bash
+npm run verify
+```
+
+This interactive script will:
+
+- Prompt you for your Fulcrum API token
+- Test all available list operations (Forms, Records, Projects, Webhooks)
+- Display colored output showing success/failure for each endpoint
+- Print statistics about the responses (count of items, sample data)
+- Exit with code 0 on success, 1 on failure
+
+**Example output:**
+
+```text
+Enter your Fulcrum API token: ****************************
+
+Initializing client...
+
+Testing 4 endpoints...
+
+Testing Forms                    ✓ 5 items (HTTP 200, 12.45 KB)
+Testing Records                  ✓ 42 items (HTTP 200, 156.78 KB)
+Testing Projects                 ✓ 3 items (HTTP 200, 2.34 KB)
+Testing Webhooks                 ✓ 0 items (HTTP 200, 0.15 KB)
+
+Summary:
+
+  ✓ Successful: 4/4
+  ✗ Failed:     0/4
+  Total Items:  50
+  Total Size:   171.72 KB
+
+=================================================
+  ✓ Verification Complete
+=================================================
+```
+
+This is useful for:
+
+- Testing API connectivity
+- Verifying your API token works
+- Checking account permissions
+- Debugging API issues
+
 ### Writing Tests
 
 Tests are located in the `test/` directory and use Mocha + nock for HTTP mocking.
