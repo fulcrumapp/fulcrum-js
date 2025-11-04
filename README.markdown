@@ -1450,7 +1450,7 @@ client.forms.delete('6fc7d1dc-62a4-4c81-a857-6b9660f18b55')
 The client also provides a `registerAuthenticationErrorHandler` method which accepts a single parameter, a function to handle authentication errors. Authentication errors will still be thrown but all authentication errors will be sent to the function passed into this method. This is helpful if you've built a client application where a user "logs in" using the `getUser` and `createAuthorization` methods (documented below), and for some reason the authorization token has been deleted. This can tell your application to reset the current session and prompt the user to "log in" again. Using this method is optional.
 
 ```javascript
-import { Client } from 'fulcrum-app';
+import { Client } from '@fulcrumapp/fulcrum-js';
 
 const handleAuthError = () {
   console.log('The authorization token is no longer valid');
@@ -1468,7 +1468,7 @@ client.registerAuthenticationErrorHandler(handleAuthError);
 The `Client` object has a `query` method that can be used to access the [Query API](https://learn.fulcrumapp.com/dev/query/intro). The arguments are a SQL string, and an optional format. The default format is `'json'`. Other formats are `'csv'` or `'geojson'`.
 
 ```javascript
-import { Client } from 'fulcrum-app';
+import { Client } from '@fulcrumapp/fulcrum-js';
 
 const client = new Client('your-api-token');
 
@@ -1728,14 +1728,14 @@ npm install
 
 ### Building
 
-This project uses Babel to transpile ES6+ to CommonJS:
+This project uses TypeScript compilation to build ESM and CommonJS outputs:
 
 ```bash
-npm run build       # Compile src/ → dist/ with source maps
-npm run watch       # Watch for changes and rebuild automatically
-npm run clean       # Remove dist/ directory
+npm run build       # Build everything (generated client + wrapper)
+npm run build:wrapper # Build only the wrapper (src/ → dist/)
+npm run clean       # Remove dist/ and generated/dist/ directories
 npm run lint        # Check code quality with ESLint
-npm test            # Run tests with Mocha
+npm test            # Run tests with Jest
 ```
 
 ### OpenAPI Client Generation
@@ -1848,7 +1848,7 @@ The project uses **axios** for HTTP requests (as of v2.7.0). Previously it used 
 To integrate OpenTelemetry tracing:
 
 ```javascript
-import { Client } from 'fulcrum-app';
+import { Client } from '@fulcrumapp/fulcrum-js';
 import { BasicTracerProvider } from '@opentelemetry/sdk-trace-node';
 import { registerInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { AxiosInstrumentation } from '@opentelemetry/instrumentation-axios';

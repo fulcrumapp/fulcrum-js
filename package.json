@@ -2,8 +2,6 @@
   "name": "@fulcrumapp/fulcrum-js",
   "version": "3.0.0",
   "description": "JavaScript and TypeScript wrapper for the Fulcrum API",
-  "main": "./dist/index.js",
-  "module": "./dist/esm/index.js",
   "type": "module",
   "exports": {
     ".": {
