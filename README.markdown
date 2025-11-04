@@ -1,5 +1,4 @@
 
-
 # fulcrum-js
 
 A JavaScript and TypeScript library for the Fulcrum API.
