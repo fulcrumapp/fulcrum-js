@@ -139,6 +139,13 @@ async function main() {
     { name: 'Records', fn: () => client.records.getAll() },
     { name: 'Projects', fn: () => client.projects.getAll() },
     { name: 'Webhooks', fn: () => client.webhooks.getAll() },
+    { name: 'Audit Logs', fn: () => client.auditLogs.getAll() },
+    { name: 'Authorizations', fn: () => client.authorizations.getAll() },
+    { name: 'Changesets', fn: () => client.changesets.getAll() },
+    { name: 'Choice Lists', fn: () => client.choiceLists.getAll() },
+    { name: 'Classification Sets', fn: () => client.classificationSets.getAll() },
+    { name: 'Layers', fn: () => client.layers.getAll() },
+    { name: 'Memberships', fn: () => client.memberships.getAll() },
   ];
 
   console.log(`${colors.bright}Testing ${tests.length} endpoints...${colors.reset}\n`);

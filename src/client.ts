@@ -19,6 +19,13 @@ import type {
   DefaultApiWebhooksUpdateRequest,
   DefaultApiQueryGetRequest,
   DefaultApiQueryPostRequest,
+  DefaultApiAuditLogsGetAllRequest,
+  DefaultApiAuthorizationsGetAllRequest,
+  DefaultApiChangesetsGetAllRequest,
+  DefaultApiChoiceListsGetAllRequest,
+  DefaultApiClassificationSetsGetAllRequest,
+  DefaultApiLayersGetAllRequest,
+  DefaultApiMembershipsGetAllRequest,
   RecordsCreateRequest,
   RecordsUpdateRequest,
   FormsCreateRequest,
@@ -435,6 +442,118 @@ export class FulcrumClient {
             'fulcrum.query.format': params.accept || 'application/json',
             'fulcrum.query.sql': params.queryPostRequest?.q || '',
           },
+        ),
+    } as const;
+  }
+
+  /**
+   * Audit Logs API
+   */
+  get auditLogs() {
+    const api = this.api;
+    return {
+      getAll: (params: Omit<DefaultApiAuditLogsGetAllRequest, 'accept'> = {}) =>
+        this.withSpan('AuditLogs.getAll', () =>
+          api.auditLogsGetAll({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+    } as const;
+  }
+
+  /**
+   * Authorizations API
+   */
+  get authorizations() {
+    const api = this.api;
+    return {
+      getAll: (params: Omit<DefaultApiAuthorizationsGetAllRequest, 'accept'> = {}) =>
+        this.withSpan('Authorizations.getAll', () =>
+          api.authorizationsGetAll({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+    } as const;
+  }
+
+  /**
+   * Changesets API
+   */
+  get changesets() {
+    const api = this.api;
+    return {
+      getAll: (params: Omit<DefaultApiChangesetsGetAllRequest, 'accept'> = {}) =>
+        this.withSpan('Changesets.getAll', () =>
+          api.changesetsGetAll({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+    } as const;
+  }
+
+  /**
+   * Choice Lists API
+   */
+  get choiceLists() {
+    const api = this.api;
+    return {
+      getAll: (params: Omit<DefaultApiChoiceListsGetAllRequest, 'accept'> = {}) =>
+        this.withSpan('ChoiceLists.getAll', () =>
+          api.choiceListsGetAll({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+    } as const;
+  }
+
+  /**
+   * Classification Sets API
+   */
+  get classificationSets() {
+    const api = this.api;
+    return {
+      getAll: (params: Omit<DefaultApiClassificationSetsGetAllRequest, 'accept'> = {}) =>
+        this.withSpan('ClassificationSets.getAll', () =>
+          api.classificationSetsGetAll({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+    } as const;
+  }
+
+  /**
+   * Layers API
+   */
+  get layers() {
+    const api = this.api;
+    return {
+      getAll: (params: Omit<DefaultApiLayersGetAllRequest, 'accept'> = {}) =>
+        this.withSpan('Layers.getAll', () =>
+          api.layersGetAll({
+            accept: 'application/json',
+            ...params,
+          }),
+        ),
+    } as const;
+  }
+
+  /**
+   * Memberships API
+   */
+  get memberships() {
+    const api = this.api;
+    return {
+      getAll: (params: Omit<DefaultApiMembershipsGetAllRequest, 'accept'> = {}) =>
+        this.withSpan('Memberships.getAll', () =>
+          api.membershipsGetAll({
+            accept: 'application/json',
+            ...params,
+          }),
         ),
     } as const;
   }
