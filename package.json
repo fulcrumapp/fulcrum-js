@@ -22,6 +22,10 @@
     "README.markdown",
     "LICENSE"
   ],
+  "repository": "https://github.com/fulcrumapp/fulcrum-js",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",

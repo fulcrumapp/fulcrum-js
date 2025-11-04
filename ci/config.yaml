@@ -1,30 +1,60 @@
-outputType: "npm"
+# =============================================================================
+# CI/CD Configuration File
+# =============================================================================
+# This file configures the Fulcrum CI/CD pipeline behavior for your project.
+# Customize the settings below based on your project's requirements.
 
-# fulcrum-js v3.0.0 - TypeScript API Client
-# Configuration for Tekton CI/CD Pipeline
+# =============================================================================
+# PROJECT TYPE CONFIGURATION
+# =============================================================================
 
-# Tell the CI system to deploy this code on merge to main.
-# Note: For npm projects this means publishing to npm registry
-auto_deploy: False # Will be set to True when ready for production release
+# outputType: npm
+# Values:
+#   - "service" (default): Standard containerized service with Kubernetes deployment
+#   - "npm": Node.js package published to NPM registry with semantic versioning
+#   - "gradle": Java/Kotlin project built with Gradle
+outputType: npm
 
-# create_preview_environment
-# Tells the CI system to create a preview environment.
-# Not needed for npm packages
+# =============================================================================
+# DEPLOYMENT CONFIGURATION
+# =============================================================================
+
+# auto_deploy: Controls automatic deployment to production on main branch merge
+# Values: True | False
+# Default: True for most services
+auto_deploy: False
+
+# create_preview_environment: Controls creation of preview environments for pull requests
+# Values: True | False
+# Default: False (preview environments are opt-in to reduce resource usage)
+# Note: Requires additional setup and is not available for all project types
 create_preview_environment: False
 
-# run_sonar_scanner:
-# Tells the CI system to run SonarQube analysis
-# Requires sonar-project.properties file and proper project setup
-run_sonar_scanner: True
-test_coverage_dir: "coverage"
+# =============================================================================
+# CODE QUALITY & TESTING CONFIGURATION
+# =============================================================================
 
-# For unittest and lint...
-# if command is `None` or missing. then those steps will be skipped.
+# Unit Testing Configuration
+# If 'command' is None or missing, unit tests will be skipped
 unittest:
   image: 280296955917.dkr.ecr.us-east-2.amazonaws.com/dockerhub/library/node:22
   command: "npm ci && npm run test:coverage"
-  # coverage_file: None # Optional
+  # coverage_file: None  # Optional: Path to coverage file if not in default location
+
+# Code Linting Configuration
+# If 'command' is None or missing, linting will be skipped
 lint:
   image: 280296955917.dkr.ecr.us-east-2.amazonaws.com/dockerhub/library/node:22
   command: "npm ci && npm run lint || true"
-  # coverage_file: None # Optional
+  # coverage_file: None  # Optional: Path to lint results file
+
+# SonarQube Code Analysis
+# run_sonar_scanner: Enables SonarQube static code analysis
+# Values: True | False
+# Default: False (requires sonar-project.properties file to be created first)
+run_sonar_scanner: True
+
+# test_coverage_dir: Custom directory for test coverage output files
+# Default: "" (uses standard /app directory)
+# Example: "coverage" for projects that output to ./coverage/
+test_coverage_dir: "coverage"

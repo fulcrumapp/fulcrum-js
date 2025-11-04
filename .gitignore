@@ -16,3 +16,6 @@ generated/
 coverage/
 *.log
 openapi/
+
+# NPM and package manager files
+.npmrc
