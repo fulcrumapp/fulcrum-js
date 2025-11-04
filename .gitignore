@@ -9,13 +9,13 @@ src/go*
 dist/
 lib/
 
-# OpenAPI generated code (not committed)
-generated/
+# OpenAPI generated code IS COMMITTED for simplicity
+# generated/ (removed from ignore - we commit the generated code)
 
 # Test coverage
 coverage/
 *.log
-openapi/
+# openapi/ (spec file not committed, but generation script available)
 
 # NPM and package manager files
 .npmrc
