@@ -22,47 +22,31 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base.js';
 // @ts-ignore
-import type { AddBatchOperationsRequest } from '../models/index.js';
+import type { AttachmentCreateRequest } from '../models/index.js';
 // @ts-ignore
-import type { AuthorizationsCreateRequest } from '../models/index.js';
+import type { AttachmentTrackRequest } from '../models/index.js';
 // @ts-ignore
-import type { AuthorizationsUpdateRequest } from '../models/index.js';
+import type { AuthorizationRequest } from '../models/index.js';
 // @ts-ignore
-import type { ChangesetsCreateRequest } from '../models/index.js';
+import type { BadRequestResponse } from '../models/index.js';
 // @ts-ignore
-import type { ChangesetsUpdateRequest } from '../models/index.js';
+import type { BatchAddOperationsRequest } from '../models/index.js';
 // @ts-ignore
-import type { ChoiceListsCreateRequest } from '../models/index.js';
+import type { BatchCreateRequest } from '../models/index.js';
 // @ts-ignore
-import type { ChoiceListsUpdateRequest } from '../models/index.js';
+import type { ChangesetCreateRequest } from '../models/index.js';
 // @ts-ignore
-import type { ClassificationSetsCreateRequest } from '../models/index.js';
+import type { ChangesetRequest } from '../models/index.js';
 // @ts-ignore
-import type { ClassificationSetsUpdateRequest } from '../models/index.js';
+import type { ChoiceListRequest } from '../models/index.js';
+// @ts-ignore
+import type { ClassificationSetRequest } from '../models/index.js';
 // @ts-ignore
 import type { CreateAttachment200Response } from '../models/index.js';
 // @ts-ignore
-import type { CreateAttachmentRequest } from '../models/index.js';
-// @ts-ignore
-import type { CreateBatchRequest } from '../models/index.js';
-// @ts-ignore
 import type { CreateGroup201Response } from '../models/index.js';
 // @ts-ignore
-import type { CreateGroupRequest } from '../models/index.js';
-// @ts-ignore
-import type { CreateMemberRequest } from '../models/index.js';
-// @ts-ignore
-import type { CreateReportTemplateRequest } from '../models/index.js';
-// @ts-ignore
-import type { CreateWorkflowRequest } from '../models/index.js';
-// @ts-ignore
-import type { DeleteMemberRequest } from '../models/index.js';
-// @ts-ignore
-import type { FinalizeAttachmentRequest } from '../models/index.js';
-// @ts-ignore
-import type { FormsCreateRequest } from '../models/index.js';
-// @ts-ignore
-import type { FormsUpdateRequest } from '../models/index.js';
+import type { FormRequest } from '../models/index.js';
 // @ts-ignore
 import type { GetAllAttachments200Response } from '../models/index.js';
 // @ts-ignore
@@ -70,47 +54,47 @@ import type { GetAllAttachments401Response } from '../models/index.js';
 // @ts-ignore
 import type { GetSingleAttachment200Response } from '../models/index.js';
 // @ts-ignore
-import type { LayersCreateRequest } from '../models/index.js';
+import type { GroupCreateRequest } from '../models/index.js';
 // @ts-ignore
-import type { LayersUpdateRequest } from '../models/index.js';
+import type { GroupPermissionChangeRequest } from '../models/index.js';
 // @ts-ignore
-import type { MembershipsChangePermissionsRequest } from '../models/index.js';
+import type { GroupUpdateRequest } from '../models/index.js';
+// @ts-ignore
+import type { LayerRequest } from '../models/index.js';
+// @ts-ignore
+import type { MembershipCreateRequest } from '../models/index.js';
+// @ts-ignore
+import type { MembershipDeleteRequest } from '../models/index.js';
+// @ts-ignore
+import type { MembershipUpdateRequest } from '../models/index.js';
 // @ts-ignore
 import type { ModelRecord } from '../models/index.js';
 // @ts-ignore
-import type { ProjectsCreateRequest } from '../models/index.js';
+import type { PermissionChangeRequest } from '../models/index.js';
 // @ts-ignore
-import type { ProjectsUpdateRequest } from '../models/index.js';
+import type { ProjectRequest } from '../models/index.js';
 // @ts-ignore
-import type { QueryPostRequest } from '../models/index.js';
+import type { QueryRequest } from '../models/index.js';
 // @ts-ignore
-import type { RecordsCreateRequest } from '../models/index.js';
+import type { RecordRequest } from '../models/index.js';
 // @ts-ignore
 import type { RecordsGetAll400Response } from '../models/index.js';
 // @ts-ignore
 import type { RecordsResponse } from '../models/index.js';
 // @ts-ignore
-import type { RecordsUpdateRequest } from '../models/index.js';
+import type { ReportTemplateRequest } from '../models/index.js';
 // @ts-ignore
-import type { UpdateGroupNameDescriptionRequest } from '../models/index.js';
-// @ts-ignore
-import type { UpdateGroupPermissionsRequest } from '../models/index.js';
-// @ts-ignore
-import type { UpdateMemberRequest } from '../models/index.js';
-// @ts-ignore
-import type { UpdateReportTemplateRequest } from '../models/index.js';
-// @ts-ignore
-import type { UpdateWorkflowRequest } from '../models/index.js';
+import type { WebhookRequest } from '../models/index.js';
 // @ts-ignore
 import type { WebhooksCreate201Response } from '../models/index.js';
 // @ts-ignore
 import type { WebhooksCreate422Response } from '../models/index.js';
 // @ts-ignore
-import type { WebhooksCreateRequest } from '../models/index.js';
-// @ts-ignore
 import type { WebhooksGetAll200Response } from '../models/index.js';
 // @ts-ignore
-import type { WebhooksUpdateRequest } from '../models/index.js';
+import type { WorkflowCreateRequest } from '../models/index.js';
+// @ts-ignore
+import type { WorkflowUpdateRequest } from '../models/index.js';
 /**
  * DefaultApi - axios parameter creator
  */
@@ -120,11 +104,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * Using the batch operations API, you can bulk delete records from a form or update project, assignee, or status values on multiple records.
          * @summary Add batch operations
          * @param {string} batchId ID of the batch
-         * @param {AddBatchOperationsRequest} [addBatchOperationsRequest] 
+         * @param {BatchAddOperationsRequest} [batchAddOperationsRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        addBatchOperations: async (batchId: string, addBatchOperationsRequest?: AddBatchOperationsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        addBatchOperations: async (batchId: string, batchAddOperationsRequest?: BatchAddOperationsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'batchId' is not null or undefined
             assertParamExists('addBatchOperations', 'batchId', batchId)
             const localVarPath = `/v2/batch/{batch_id}/operations.json`
@@ -150,7 +134,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(addBatchOperationsRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(batchAddOperationsRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -806,11 +790,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Create Authorization
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {AuthorizationsCreateRequest} [authorizationsCreateRequest] 
+         * @param {AuthorizationRequest} [authorizationRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authorizationsCreate: async (accept?: string, contentType?: string, authorizationsCreateRequest?: AuthorizationsCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        authorizationsCreate: async (accept?: string, contentType?: string, authorizationRequest?: AuthorizationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/authorizations.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -839,7 +823,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(authorizationsCreateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(authorizationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -981,11 +965,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} authorizationId Authorization ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {AuthorizationsUpdateRequest} [authorizationsUpdateRequest] 
+         * @param {AuthorizationRequest} [authorizationRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authorizationsUpdate: async (authorizationId: string, accept?: string, contentType?: string, authorizationsUpdateRequest?: AuthorizationsUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        authorizationsUpdate: async (authorizationId: string, accept?: string, contentType?: string, authorizationRequest?: AuthorizationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'authorizationId' is not null or undefined
             assertParamExists('authorizationsUpdate', 'authorizationId', authorizationId)
             const localVarPath = `/v2/authorizations/{authorization_id}.json`
@@ -1017,7 +1001,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(authorizationsUpdateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(authorizationRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1074,11 +1058,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Create Changeset
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {ChangesetsCreateRequest} [changesetsCreateRequest] 
+         * @param {ChangesetCreateRequest} [changesetCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        changesetsCreate: async (accept?: string, contentType?: string, changesetsCreateRequest?: ChangesetsCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        changesetsCreate: async (accept?: string, contentType?: string, changesetCreateRequest?: ChangesetCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/changesets.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1107,7 +1091,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(changesetsCreateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(changesetCreateRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1208,11 +1192,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} changesetId Changeset ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {ChangesetsUpdateRequest} [changesetsUpdateRequest] 
+         * @param {ChangesetRequest} [changesetRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        changesetsUpdate: async (changesetId: string, accept?: string, contentType?: string, changesetsUpdateRequest?: ChangesetsUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        changesetsUpdate: async (changesetId: string, accept?: string, contentType?: string, changesetRequest?: ChangesetRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'changesetId' is not null or undefined
             assertParamExists('changesetsUpdate', 'changesetId', changesetId)
             const localVarPath = `/v2/changesets/{changeset_id}.json`
@@ -1244,7 +1228,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(changesetsUpdateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(changesetRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1256,11 +1240,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Create Choice List
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {ChoiceListsCreateRequest} [choiceListsCreateRequest] 
+         * @param {ChoiceListRequest} [choiceListRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        choiceListsCreate: async (accept?: string, contentType?: string, choiceListsCreateRequest?: ChoiceListsCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        choiceListsCreate: async (accept?: string, contentType?: string, choiceListRequest?: ChoiceListRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/choice_lists.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1289,7 +1273,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(choiceListsCreateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(choiceListRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1431,11 +1415,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} choiceListId Choice List ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {ChoiceListsUpdateRequest} [choiceListsUpdateRequest] 
+         * @param {ChoiceListRequest} [choiceListRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        choiceListsUpdate: async (choiceListId: string, accept?: string, contentType?: string, choiceListsUpdateRequest?: ChoiceListsUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        choiceListsUpdate: async (choiceListId: string, accept?: string, contentType?: string, choiceListRequest?: ChoiceListRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'choiceListId' is not null or undefined
             assertParamExists('choiceListsUpdate', 'choiceListId', choiceListId)
             const localVarPath = `/v2/choice_lists/{choice_list_id}.json`
@@ -1467,7 +1451,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(choiceListsUpdateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(choiceListRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1479,11 +1463,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Create Classification Set
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {ClassificationSetsCreateRequest} [classificationSetsCreateRequest] 
+         * @param {ClassificationSetRequest} [classificationSetRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        classificationSetsCreate: async (accept?: string, contentType?: string, classificationSetsCreateRequest?: ClassificationSetsCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        classificationSetsCreate: async (accept?: string, contentType?: string, classificationSetRequest?: ClassificationSetRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/classification_sets.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1512,7 +1496,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(classificationSetsCreateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(classificationSetRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1659,11 +1643,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} classificationSetId Classification Set ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {ClassificationSetsUpdateRequest} [classificationSetsUpdateRequest] 
+         * @param {ClassificationSetRequest} [classificationSetRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        classificationSetsUpdate: async (classificationSetId: string, accept?: string, contentType?: string, classificationSetsUpdateRequest?: ClassificationSetsUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        classificationSetsUpdate: async (classificationSetId: string, accept?: string, contentType?: string, classificationSetRequest?: ClassificationSetRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'classificationSetId' is not null or undefined
             assertParamExists('classificationSetsUpdate', 'classificationSetId', classificationSetId)
             const localVarPath = `/v2/classification_sets/{classification_set_id}.json`
@@ -1695,7 +1679,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(classificationSetsUpdateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(classificationSetRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1706,11 +1690,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * There is only one parameter that is required for creating an attachment: `owners`. You must specify at least one owner of type `record` or `form`. If you create a `record` attachment you can optionally include a `name` and `file_size`. The name will be the name of the file shown in the record information. The file_size is only used for verifying that uploading this attachment will not exceed your current storage limit. If no file_size is provided the attachment may be rejected once it has been uploaded. The response will provide the `url` to upload (PUT) the file to.
          * @summary Create Attachment
          * @param {string} [xApitoken] API Token. Required to authenticate the request.
-         * @param {CreateAttachmentRequest} [createAttachmentRequest] 
+         * @param {AttachmentCreateRequest} [attachmentCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createAttachment: async (xApitoken?: string, createAttachmentRequest?: CreateAttachmentRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createAttachment: async (xApitoken?: string, attachmentCreateRequest?: AttachmentCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/attachments`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1736,7 +1720,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createAttachmentRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(attachmentCreateRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1746,11 +1730,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * Using the batch operations API, you can bulk delete records from a form.
          * @summary Create Batch to Bulk Delete Records
-         * @param {CreateBatchRequest} [createBatchRequest] 
+         * @param {BatchCreateRequest} [batchCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createBatch: async (createBatchRequest?: CreateBatchRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createBatch: async (batchCreateRequest?: BatchCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/batch.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1773,7 +1757,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createBatchRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(batchCreateRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1785,11 +1769,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Create Group
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {CreateGroupRequest} [createGroupRequest] 
+         * @param {GroupCreateRequest} [groupCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createGroup: async (accept?: string, contentType?: string, createGroupRequest?: CreateGroupRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createGroup: async (accept?: string, contentType?: string, groupCreateRequest?: GroupCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/groups.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1818,7 +1802,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createGroupRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(groupCreateRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1830,11 +1814,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Create Member
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {CreateMemberRequest} [createMemberRequest] 
+         * @param {MembershipCreateRequest} [membershipCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMember: async (accept?: string, contentType?: string, createMemberRequest?: CreateMemberRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createMember: async (accept?: string, contentType?: string, membershipCreateRequest?: MembershipCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/memberships.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1863,7 +1847,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createMemberRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(membershipCreateRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1873,11 +1857,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @summary Create Report Template
-         * @param {CreateReportTemplateRequest} [createReportTemplateRequest] 
+         * @param {ReportTemplateRequest} [reportTemplateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createReportTemplate: async (createReportTemplateRequest?: CreateReportTemplateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createReportTemplate: async (reportTemplateRequest?: ReportTemplateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/report_templates.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1900,7 +1884,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createReportTemplateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(reportTemplateRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1912,11 +1896,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Create Workflow
          * @param {string} [accept] 
          * @param {string} [contentTyoe] 
-         * @param {CreateWorkflowRequest} [createWorkflowRequest] 
+         * @param {WorkflowCreateRequest} [workflowCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWorkflow: async (accept?: string, contentTyoe?: string, createWorkflowRequest?: CreateWorkflowRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createWorkflow: async (accept?: string, contentTyoe?: string, workflowCreateRequest?: WorkflowCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/workflows.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1945,7 +1929,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createWorkflowRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(workflowCreateRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2038,11 +2022,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @summary Delete Member
          * @param {string} membershipId The ID of the member
-         * @param {DeleteMemberRequest} [deleteMemberRequest] 
+         * @param {MembershipDeleteRequest} [membershipDeleteRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteMember: async (membershipId: string, deleteMemberRequest?: DeleteMemberRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteMember: async (membershipId: string, membershipDeleteRequest?: MembershipDeleteRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'membershipId' is not null or undefined
             assertParamExists('deleteMember', 'membershipId', membershipId)
             const localVarPath = `/v2/memberships/{membership_id}.json`
@@ -2068,7 +2052,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(deleteMemberRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(membershipDeleteRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2157,11 +2141,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * The finalize endpoint is a required step for Form attachments. Use this endpoint to tell Fulcrum that your attachment has been uploaded.
          * @summary Finalize Attachment
          * @param {string} [xApitoken] API Token. Required to authenticate the request.
-         * @param {FinalizeAttachmentRequest} [finalizeAttachmentRequest] 
+         * @param {AttachmentTrackRequest} [attachmentTrackRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        finalizeAttachment: async (xApitoken?: string, finalizeAttachmentRequest?: FinalizeAttachmentRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        finalizeAttachment: async (xApitoken?: string, attachmentTrackRequest?: AttachmentTrackRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/attachments/finalize`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2187,7 +2171,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(finalizeAttachmentRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(attachmentTrackRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2199,11 +2183,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Create Form
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {FormsCreateRequest} [formsCreateRequest] 
+         * @param {FormRequest} [formRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        formsCreate: async (accept?: string, contentType?: string, formsCreateRequest?: FormsCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        formsCreate: async (accept?: string, contentType?: string, formRequest?: FormRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/forms.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2232,7 +2216,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(formsCreateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(formRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2445,11 +2429,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} formId Form ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {FormsUpdateRequest} [formsUpdateRequest] 
+         * @param {FormRequest} [formRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        formsUpdate: async (formId: string, accept?: string, contentType?: string, formsUpdateRequest?: FormsUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        formsUpdate: async (formId: string, accept?: string, contentType?: string, formRequest?: FormRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'formId' is not null or undefined
             assertParamExists('formsUpdate', 'formId', formId)
             const localVarPath = `/v2/forms/{form_id}.json`
@@ -2481,7 +2465,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(formsUpdateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(formRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3069,11 +3053,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Create Layer
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {LayersCreateRequest} [layersCreateRequest] 
+         * @param {LayerRequest} [layerRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        layersCreate: async (accept?: string, contentType?: string, layersCreateRequest?: LayersCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        layersCreate: async (accept?: string, contentType?: string, layerRequest?: LayerRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/layers.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3102,7 +3086,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(layersCreateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(layerRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3244,11 +3228,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} layerId Layer ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {LayersUpdateRequest} [layersUpdateRequest] 
+         * @param {LayerRequest} [layerRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        layersUpdate: async (layerId: string, accept?: string, contentType?: string, layersUpdateRequest?: LayersUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        layersUpdate: async (layerId: string, accept?: string, contentType?: string, layerRequest?: LayerRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'layerId' is not null or undefined
             assertParamExists('layersUpdate', 'layerId', layerId)
             const localVarPath = `/v2/layers/{layer_id}.json`
@@ -3280,7 +3264,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(layersUpdateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(layerRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3292,11 +3276,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Change Permissions
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {MembershipsChangePermissionsRequest} [membershipsChangePermissionsRequest] 
+         * @param {PermissionChangeRequest} [permissionChangeRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        membershipsChangePermissions: async (accept?: string, contentType?: string, membershipsChangePermissionsRequest?: MembershipsChangePermissionsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        membershipsChangePermissions: async (accept?: string, contentType?: string, permissionChangeRequest?: PermissionChangeRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/memberships/change_permissions.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3325,7 +3309,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(membershipsChangePermissionsRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(permissionChangeRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3804,11 +3788,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Create Project
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {ProjectsCreateRequest} [projectsCreateRequest] 
+         * @param {ProjectRequest} [projectRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectsCreate: async (accept?: string, contentType?: string, projectsCreateRequest?: ProjectsCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        projectsCreate: async (accept?: string, contentType?: string, projectRequest?: ProjectRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/projects.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3837,7 +3821,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(projectsCreateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(projectRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3979,11 +3963,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} projectId Project ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {ProjectsUpdateRequest} [projectsUpdateRequest] 
+         * @param {ProjectRequest} [projectRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        projectsUpdate: async (projectId: string, accept?: string, contentType?: string, projectsUpdateRequest?: ProjectsUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        projectsUpdate: async (projectId: string, accept?: string, contentType?: string, projectRequest?: ProjectRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'projectId' is not null or undefined
             assertParamExists('projectsUpdate', 'projectId', projectId)
             const localVarPath = `/v2/projects/{project_id}.json`
@@ -4015,7 +3999,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(projectsUpdateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(projectRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4121,11 +4105,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
-         * @param {QueryPostRequest} [queryPostRequest] 
+         * @param {QueryRequest} [queryRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        queryPost: async (page?: number, perPage?: number, accept?: string, queryPostRequest?: QueryPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        queryPost: async (page?: number, perPage?: number, accept?: string, queryRequest?: QueryRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/query`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4159,7 +4143,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(queryPostRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(queryRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4173,11 +4157,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} [contentType] 
          * @param {boolean} [xSkipWorkflows] Skips all app workflows
          * @param {boolean} [xSkipWebhooks] Skips all app webhooks
-         * @param {RecordsCreateRequest} [recordsCreateRequest] 
+         * @param {RecordRequest} [recordRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        recordsCreate: async (accept?: string, contentType?: string, xSkipWorkflows?: boolean, xSkipWebhooks?: boolean, recordsCreateRequest?: RecordsCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        recordsCreate: async (accept?: string, contentType?: string, xSkipWorkflows?: boolean, xSkipWebhooks?: boolean, recordRequest?: RecordRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/records.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4216,7 +4200,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(recordsCreateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(recordRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4541,11 +4525,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} [contentType] 
          * @param {boolean} [xSkipWorkflows] Skips all app workflows
          * @param {boolean} [xSkipWebhooks] Skips all app webhooks
-         * @param {RecordsUpdateRequest} [recordsUpdateRequest] 
+         * @param {RecordRequest} [recordRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        recordsUpdate: async (recordId: string, accept?: string, contentType?: string, xSkipWorkflows?: boolean, xSkipWebhooks?: boolean, recordsUpdateRequest?: RecordsUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        recordsUpdate: async (recordId: string, accept?: string, contentType?: string, xSkipWorkflows?: boolean, xSkipWebhooks?: boolean, recordRequest?: RecordRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'recordId' is not null or undefined
             assertParamExists('recordsUpdate', 'recordId', recordId)
             const localVarPath = `/v2/records/{record_id}.json`
@@ -4587,7 +4571,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(recordsUpdateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(recordRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4976,11 +4960,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} groupId ID of the group
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {UpdateGroupNameDescriptionRequest} [updateGroupNameDescriptionRequest] 
+         * @param {GroupUpdateRequest} [groupUpdateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateGroupNameDescription: async (groupId: string, accept?: string, contentType?: string, updateGroupNameDescriptionRequest?: UpdateGroupNameDescriptionRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateGroupNameDescription: async (groupId: string, accept?: string, contentType?: string, groupUpdateRequest?: GroupUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'groupId' is not null or undefined
             assertParamExists('updateGroupNameDescription', 'groupId', groupId)
             const localVarPath = `/v2/groups/{group_id}.json`
@@ -5012,7 +4996,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateGroupNameDescriptionRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(groupUpdateRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5024,11 +5008,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Update Group Permissions
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {UpdateGroupPermissionsRequest} [updateGroupPermissionsRequest] 
+         * @param {GroupPermissionChangeRequest} [groupPermissionChangeRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateGroupPermissions: async (accept?: string, contentType?: string, updateGroupPermissionsRequest?: UpdateGroupPermissionsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateGroupPermissions: async (accept?: string, contentType?: string, groupPermissionChangeRequest?: GroupPermissionChangeRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/groups/change_permissions.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5057,7 +5041,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateGroupPermissionsRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(groupPermissionChangeRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5068,11 +5052,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * You can use this to update parameters of a member, but this will not work if the member is apart of multiple organizations.
          * @summary Update Member
          * @param {string} membershipId The ID of the member
-         * @param {UpdateMemberRequest} [updateMemberRequest] 
+         * @param {MembershipUpdateRequest} [membershipUpdateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateMember: async (membershipId: string, updateMemberRequest?: UpdateMemberRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateMember: async (membershipId: string, membershipUpdateRequest?: MembershipUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'membershipId' is not null or undefined
             assertParamExists('updateMember', 'membershipId', membershipId)
             const localVarPath = `/v2/memberships/{membership_id}.json`
@@ -5098,7 +5082,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateMemberRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(membershipUpdateRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5109,11 +5093,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @summary Update Report Template
          * @param {string} id The id of the report
-         * @param {UpdateReportTemplateRequest} [updateReportTemplateRequest] 
+         * @param {ReportTemplateRequest} [reportTemplateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateReportTemplate: async (id: string, updateReportTemplateRequest?: UpdateReportTemplateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateReportTemplate: async (id: string, reportTemplateRequest?: ReportTemplateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('updateReportTemplate', 'id', id)
             const localVarPath = `/v2/report_templates/{id}.json`
@@ -5139,7 +5123,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateReportTemplateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(reportTemplateRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5152,11 +5136,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} workflowId The ID of the workflow
          * @param {string} [accept] 
          * @param {string} [contentTyoe] 
-         * @param {UpdateWorkflowRequest} [updateWorkflowRequest] 
+         * @param {WorkflowUpdateRequest} [workflowUpdateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateWorkflow: async (workflowId: string, accept?: string, contentTyoe?: string, updateWorkflowRequest?: UpdateWorkflowRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateWorkflow: async (workflowId: string, accept?: string, contentTyoe?: string, workflowUpdateRequest?: WorkflowUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'workflowId' is not null or undefined
             assertParamExists('updateWorkflow', 'workflowId', workflowId)
             const localVarPath = `/v2/workflows/{workflow_id}.json`
@@ -5188,7 +5172,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateWorkflowRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(workflowUpdateRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -6142,11 +6126,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Create Webhook
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {WebhooksCreateRequest} [webhooksCreateRequest] 
+         * @param {WebhookRequest} [webhookRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        webhooksCreate: async (accept?: string, contentType?: string, webhooksCreateRequest?: WebhooksCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        webhooksCreate: async (accept?: string, contentType?: string, webhookRequest?: WebhookRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/webhooks.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6175,7 +6159,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(webhooksCreateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(webhookRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -6317,11 +6301,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} webhookId Webhook ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {WebhooksUpdateRequest} [webhooksUpdateRequest] 
+         * @param {WebhookRequest} [webhookRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        webhooksUpdate: async (webhookId: string, accept?: string, contentType?: string, webhooksUpdateRequest?: WebhooksUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        webhooksUpdate: async (webhookId: string, accept?: string, contentType?: string, webhookRequest?: WebhookRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'webhookId' is not null or undefined
             assertParamExists('webhooksUpdate', 'webhookId', webhookId)
             const localVarPath = `/v2/webhooks/{webhook_id}.json`
@@ -6353,7 +6337,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(webhooksUpdateRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(webhookRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -6373,12 +6357,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * Using the batch operations API, you can bulk delete records from a form or update project, assignee, or status values on multiple records.
          * @summary Add batch operations
          * @param {string} batchId ID of the batch
-         * @param {AddBatchOperationsRequest} [addBatchOperationsRequest] 
+         * @param {BatchAddOperationsRequest} [batchAddOperationsRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async addBatchOperations(batchId: string, addBatchOperationsRequest?: AddBatchOperationsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.addBatchOperations(batchId, addBatchOperationsRequest, options);
+        async addBatchOperations(batchId: string, batchAddOperationsRequest?: BatchAddOperationsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addBatchOperations(batchId, batchAddOperationsRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.addBatchOperations']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6596,12 +6580,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Create Authorization
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {AuthorizationsCreateRequest} [authorizationsCreateRequest] 
+         * @param {AuthorizationRequest} [authorizationRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authorizationsCreate(accept?: string, contentType?: string, authorizationsCreateRequest?: AuthorizationsCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authorizationsCreate(accept, contentType, authorizationsCreateRequest, options);
+        async authorizationsCreate(accept?: string, contentType?: string, authorizationRequest?: AuthorizationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authorizationsCreate(accept, contentType, authorizationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.authorizationsCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6655,12 +6639,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {string} authorizationId Authorization ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {AuthorizationsUpdateRequest} [authorizationsUpdateRequest] 
+         * @param {AuthorizationRequest} [authorizationRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authorizationsUpdate(authorizationId: string, accept?: string, contentType?: string, authorizationsUpdateRequest?: AuthorizationsUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.authorizationsUpdate(authorizationId, accept, contentType, authorizationsUpdateRequest, options);
+        async authorizationsUpdate(authorizationId: string, accept?: string, contentType?: string, authorizationRequest?: AuthorizationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.authorizationsUpdate(authorizationId, accept, contentType, authorizationRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.authorizationsUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6685,12 +6669,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Create Changeset
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {ChangesetsCreateRequest} [changesetsCreateRequest] 
+         * @param {ChangesetCreateRequest} [changesetCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async changesetsCreate(accept?: string, contentType?: string, changesetsCreateRequest?: ChangesetsCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.changesetsCreate(accept, contentType, changesetsCreateRequest, options);
+        async changesetsCreate(accept?: string, contentType?: string, changesetCreateRequest?: ChangesetCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.changesetsCreate(accept, contentType, changesetCreateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.changesetsCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6730,12 +6714,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {string} changesetId Changeset ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {ChangesetsUpdateRequest} [changesetsUpdateRequest] 
+         * @param {ChangesetRequest} [changesetRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async changesetsUpdate(changesetId: string, accept?: string, contentType?: string, changesetsUpdateRequest?: ChangesetsUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.changesetsUpdate(changesetId, accept, contentType, changesetsUpdateRequest, options);
+        async changesetsUpdate(changesetId: string, accept?: string, contentType?: string, changesetRequest?: ChangesetRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.changesetsUpdate(changesetId, accept, contentType, changesetRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.changesetsUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6745,12 +6729,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Create Choice List
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {ChoiceListsCreateRequest} [choiceListsCreateRequest] 
+         * @param {ChoiceListRequest} [choiceListRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async choiceListsCreate(accept?: string, contentType?: string, choiceListsCreateRequest?: ChoiceListsCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.choiceListsCreate(accept, contentType, choiceListsCreateRequest, options);
+        async choiceListsCreate(accept?: string, contentType?: string, choiceListRequest?: ChoiceListRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.choiceListsCreate(accept, contentType, choiceListRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.choiceListsCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6804,12 +6788,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {string} choiceListId Choice List ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {ChoiceListsUpdateRequest} [choiceListsUpdateRequest] 
+         * @param {ChoiceListRequest} [choiceListRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async choiceListsUpdate(choiceListId: string, accept?: string, contentType?: string, choiceListsUpdateRequest?: ChoiceListsUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.choiceListsUpdate(choiceListId, accept, contentType, choiceListsUpdateRequest, options);
+        async choiceListsUpdate(choiceListId: string, accept?: string, contentType?: string, choiceListRequest?: ChoiceListRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.choiceListsUpdate(choiceListId, accept, contentType, choiceListRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.choiceListsUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6819,12 +6803,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Create Classification Set
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {ClassificationSetsCreateRequest} [classificationSetsCreateRequest] 
+         * @param {ClassificationSetRequest} [classificationSetRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async classificationSetsCreate(accept?: string, contentType?: string, classificationSetsCreateRequest?: ClassificationSetsCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.classificationSetsCreate(accept, contentType, classificationSetsCreateRequest, options);
+        async classificationSetsCreate(accept?: string, contentType?: string, classificationSetRequest?: ClassificationSetRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.classificationSetsCreate(accept, contentType, classificationSetRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.classificationSetsCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6879,12 +6863,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {string} classificationSetId Classification Set ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {ClassificationSetsUpdateRequest} [classificationSetsUpdateRequest] 
+         * @param {ClassificationSetRequest} [classificationSetRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async classificationSetsUpdate(classificationSetId: string, accept?: string, contentType?: string, classificationSetsUpdateRequest?: ClassificationSetsUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.classificationSetsUpdate(classificationSetId, accept, contentType, classificationSetsUpdateRequest, options);
+        async classificationSetsUpdate(classificationSetId: string, accept?: string, contentType?: string, classificationSetRequest?: ClassificationSetRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.classificationSetsUpdate(classificationSetId, accept, contentType, classificationSetRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.classificationSetsUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6893,12 +6877,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * There is only one parameter that is required for creating an attachment: `owners`. You must specify at least one owner of type `record` or `form`. If you create a `record` attachment you can optionally include a `name` and `file_size`. The name will be the name of the file shown in the record information. The file_size is only used for verifying that uploading this attachment will not exceed your current storage limit. If no file_size is provided the attachment may be rejected once it has been uploaded. The response will provide the `url` to upload (PUT) the file to.
          * @summary Create Attachment
          * @param {string} [xApitoken] API Token. Required to authenticate the request.
-         * @param {CreateAttachmentRequest} [createAttachmentRequest] 
+         * @param {AttachmentCreateRequest} [attachmentCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createAttachment(xApitoken?: string, createAttachmentRequest?: CreateAttachmentRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateAttachment200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createAttachment(xApitoken, createAttachmentRequest, options);
+        async createAttachment(xApitoken?: string, attachmentCreateRequest?: AttachmentCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateAttachment200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createAttachment(xApitoken, attachmentCreateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.createAttachment']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6906,12 +6890,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * Using the batch operations API, you can bulk delete records from a form.
          * @summary Create Batch to Bulk Delete Records
-         * @param {CreateBatchRequest} [createBatchRequest] 
+         * @param {BatchCreateRequest} [batchCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createBatch(createBatchRequest?: CreateBatchRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createBatch(createBatchRequest, options);
+        async createBatch(batchCreateRequest?: BatchCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createBatch(batchCreateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.createBatch']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6921,12 +6905,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Create Group
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {CreateGroupRequest} [createGroupRequest] 
+         * @param {GroupCreateRequest} [groupCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createGroup(accept?: string, contentType?: string, createGroupRequest?: CreateGroupRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateGroup201Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createGroup(accept, contentType, createGroupRequest, options);
+        async createGroup(accept?: string, contentType?: string, groupCreateRequest?: GroupCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateGroup201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createGroup(accept, contentType, groupCreateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.createGroup']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6936,12 +6920,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Create Member
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {CreateMemberRequest} [createMemberRequest] 
+         * @param {MembershipCreateRequest} [membershipCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createMember(accept?: string, contentType?: string, createMemberRequest?: CreateMemberRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createMember(accept, contentType, createMemberRequest, options);
+        async createMember(accept?: string, contentType?: string, membershipCreateRequest?: MembershipCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createMember(accept, contentType, membershipCreateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.createMember']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6949,12 +6933,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Create Report Template
-         * @param {CreateReportTemplateRequest} [createReportTemplateRequest] 
+         * @param {ReportTemplateRequest} [reportTemplateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createReportTemplate(createReportTemplateRequest?: CreateReportTemplateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createReportTemplate(createReportTemplateRequest, options);
+        async createReportTemplate(reportTemplateRequest?: ReportTemplateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createReportTemplate(reportTemplateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.createReportTemplate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6964,12 +6948,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Create Workflow
          * @param {string} [accept] 
          * @param {string} [contentTyoe] 
-         * @param {CreateWorkflowRequest} [createWorkflowRequest] 
+         * @param {WorkflowCreateRequest} [workflowCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createWorkflow(accept?: string, contentTyoe?: string, createWorkflowRequest?: CreateWorkflowRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createWorkflow(accept, contentTyoe, createWorkflowRequest, options);
+        async createWorkflow(accept?: string, contentTyoe?: string, workflowCreateRequest?: WorkflowCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createWorkflow(accept, contentTyoe, workflowCreateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.createWorkflow']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7006,12 +6990,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * 
          * @summary Delete Member
          * @param {string} membershipId The ID of the member
-         * @param {DeleteMemberRequest} [deleteMemberRequest] 
+         * @param {MembershipDeleteRequest} [membershipDeleteRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteMember(membershipId: string, deleteMemberRequest?: DeleteMemberRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteMember(membershipId, deleteMemberRequest, options);
+        async deleteMember(membershipId: string, membershipDeleteRequest?: MembershipDeleteRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteMember(membershipId, membershipDeleteRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.deleteMember']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7047,12 +7031,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * The finalize endpoint is a required step for Form attachments. Use this endpoint to tell Fulcrum that your attachment has been uploaded.
          * @summary Finalize Attachment
          * @param {string} [xApitoken] API Token. Required to authenticate the request.
-         * @param {FinalizeAttachmentRequest} [finalizeAttachmentRequest] 
+         * @param {AttachmentTrackRequest} [attachmentTrackRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async finalizeAttachment(xApitoken?: string, finalizeAttachmentRequest?: FinalizeAttachmentRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.finalizeAttachment(xApitoken, finalizeAttachmentRequest, options);
+        async finalizeAttachment(xApitoken?: string, attachmentTrackRequest?: AttachmentTrackRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.finalizeAttachment(xApitoken, attachmentTrackRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.finalizeAttachment']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7062,12 +7046,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Create Form
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {FormsCreateRequest} [formsCreateRequest] 
+         * @param {FormRequest} [formRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async formsCreate(accept?: string, contentType?: string, formsCreateRequest?: FormsCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.formsCreate(accept, contentType, formsCreateRequest, options);
+        async formsCreate(accept?: string, contentType?: string, formRequest?: FormRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.formsCreate(accept, contentType, formRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.formsCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7141,12 +7125,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {string} formId Form ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {FormsUpdateRequest} [formsUpdateRequest] 
+         * @param {FormRequest} [formRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async formsUpdate(formId: string, accept?: string, contentType?: string, formsUpdateRequest?: FormsUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.formsUpdate(formId, accept, contentType, formsUpdateRequest, options);
+        async formsUpdate(formId: string, accept?: string, contentType?: string, formRequest?: FormRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.formsUpdate(formId, accept, contentType, formRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.formsUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7338,12 +7322,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Create Layer
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {LayersCreateRequest} [layersCreateRequest] 
+         * @param {LayerRequest} [layerRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async layersCreate(accept?: string, contentType?: string, layersCreateRequest?: LayersCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.layersCreate(accept, contentType, layersCreateRequest, options);
+        async layersCreate(accept?: string, contentType?: string, layerRequest?: LayerRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.layersCreate(accept, contentType, layerRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.layersCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7397,12 +7381,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {string} layerId Layer ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {LayersUpdateRequest} [layersUpdateRequest] 
+         * @param {LayerRequest} [layerRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async layersUpdate(layerId: string, accept?: string, contentType?: string, layersUpdateRequest?: LayersUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.layersUpdate(layerId, accept, contentType, layersUpdateRequest, options);
+        async layersUpdate(layerId: string, accept?: string, contentType?: string, layerRequest?: LayerRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.layersUpdate(layerId, accept, contentType, layerRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.layersUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7412,12 +7396,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Change Permissions
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {MembershipsChangePermissionsRequest} [membershipsChangePermissionsRequest] 
+         * @param {PermissionChangeRequest} [permissionChangeRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async membershipsChangePermissions(accept?: string, contentType?: string, membershipsChangePermissionsRequest?: MembershipsChangePermissionsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.membershipsChangePermissions(accept, contentType, membershipsChangePermissionsRequest, options);
+        async membershipsChangePermissions(accept?: string, contentType?: string, permissionChangeRequest?: PermissionChangeRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.membershipsChangePermissions(accept, contentType, permissionChangeRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.membershipsChangePermissions']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7578,12 +7562,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Create Project
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {ProjectsCreateRequest} [projectsCreateRequest] 
+         * @param {ProjectRequest} [projectRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectsCreate(accept?: string, contentType?: string, projectsCreateRequest?: ProjectsCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.projectsCreate(accept, contentType, projectsCreateRequest, options);
+        async projectsCreate(accept?: string, contentType?: string, projectRequest?: ProjectRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.projectsCreate(accept, contentType, projectRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.projectsCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7637,12 +7621,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {string} projectId Project ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {ProjectsUpdateRequest} [projectsUpdateRequest] 
+         * @param {ProjectRequest} [projectRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async projectsUpdate(projectId: string, accept?: string, contentType?: string, projectsUpdateRequest?: ProjectsUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.projectsUpdate(projectId, accept, contentType, projectsUpdateRequest, options);
+        async projectsUpdate(projectId: string, accept?: string, contentType?: string, projectRequest?: ProjectRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.projectsUpdate(projectId, accept, contentType, projectRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.projectsUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7677,12 +7661,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
-         * @param {QueryPostRequest} [queryPostRequest] 
+         * @param {QueryRequest} [queryRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async queryPost(page?: number, perPage?: number, accept?: string, queryPostRequest?: QueryPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.queryPost(page, perPage, accept, queryPostRequest, options);
+        async queryPost(page?: number, perPage?: number, accept?: string, queryRequest?: QueryRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.queryPost(page, perPage, accept, queryRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.queryPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7694,12 +7678,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {string} [contentType] 
          * @param {boolean} [xSkipWorkflows] Skips all app workflows
          * @param {boolean} [xSkipWebhooks] Skips all app webhooks
-         * @param {RecordsCreateRequest} [recordsCreateRequest] 
+         * @param {RecordRequest} [recordRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async recordsCreate(accept?: string, contentType?: string, xSkipWorkflows?: boolean, xSkipWebhooks?: boolean, recordsCreateRequest?: RecordsCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.recordsCreate(accept, contentType, xSkipWorkflows, xSkipWebhooks, recordsCreateRequest, options);
+        async recordsCreate(accept?: string, contentType?: string, xSkipWorkflows?: boolean, xSkipWebhooks?: boolean, recordRequest?: RecordRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.recordsCreate(accept, contentType, xSkipWorkflows, xSkipWebhooks, recordRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.recordsCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7799,12 +7783,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {string} [contentType] 
          * @param {boolean} [xSkipWorkflows] Skips all app workflows
          * @param {boolean} [xSkipWebhooks] Skips all app webhooks
-         * @param {RecordsUpdateRequest} [recordsUpdateRequest] 
+         * @param {RecordRequest} [recordRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async recordsUpdate(recordId: string, accept?: string, contentType?: string, xSkipWorkflows?: boolean, xSkipWebhooks?: boolean, recordsUpdateRequest?: RecordsUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.recordsUpdate(recordId, accept, contentType, xSkipWorkflows, xSkipWebhooks, recordsUpdateRequest, options);
+        async recordsUpdate(recordId: string, accept?: string, contentType?: string, xSkipWorkflows?: boolean, xSkipWebhooks?: boolean, recordRequest?: RecordRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.recordsUpdate(recordId, accept, contentType, xSkipWorkflows, xSkipWebhooks, recordRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.recordsUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7936,12 +7920,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {string} groupId ID of the group
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {UpdateGroupNameDescriptionRequest} [updateGroupNameDescriptionRequest] 
+         * @param {GroupUpdateRequest} [groupUpdateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateGroupNameDescription(groupId: string, accept?: string, contentType?: string, updateGroupNameDescriptionRequest?: UpdateGroupNameDescriptionRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateGroup201Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateGroupNameDescription(groupId, accept, contentType, updateGroupNameDescriptionRequest, options);
+        async updateGroupNameDescription(groupId: string, accept?: string, contentType?: string, groupUpdateRequest?: GroupUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateGroup201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateGroupNameDescription(groupId, accept, contentType, groupUpdateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.updateGroupNameDescription']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7951,12 +7935,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Update Group Permissions
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {UpdateGroupPermissionsRequest} [updateGroupPermissionsRequest] 
+         * @param {GroupPermissionChangeRequest} [groupPermissionChangeRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateGroupPermissions(accept?: string, contentType?: string, updateGroupPermissionsRequest?: UpdateGroupPermissionsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateGroup201Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateGroupPermissions(accept, contentType, updateGroupPermissionsRequest, options);
+        async updateGroupPermissions(accept?: string, contentType?: string, groupPermissionChangeRequest?: GroupPermissionChangeRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateGroup201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateGroupPermissions(accept, contentType, groupPermissionChangeRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.updateGroupPermissions']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7965,12 +7949,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * You can use this to update parameters of a member, but this will not work if the member is apart of multiple organizations.
          * @summary Update Member
          * @param {string} membershipId The ID of the member
-         * @param {UpdateMemberRequest} [updateMemberRequest] 
+         * @param {MembershipUpdateRequest} [membershipUpdateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateMember(membershipId: string, updateMemberRequest?: UpdateMemberRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateMember(membershipId, updateMemberRequest, options);
+        async updateMember(membershipId: string, membershipUpdateRequest?: MembershipUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateMember(membershipId, membershipUpdateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.updateMember']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7979,12 +7963,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * 
          * @summary Update Report Template
          * @param {string} id The id of the report
-         * @param {UpdateReportTemplateRequest} [updateReportTemplateRequest] 
+         * @param {ReportTemplateRequest} [reportTemplateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateReportTemplate(id: string, updateReportTemplateRequest?: UpdateReportTemplateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateReportTemplate(id, updateReportTemplateRequest, options);
+        async updateReportTemplate(id: string, reportTemplateRequest?: ReportTemplateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateReportTemplate(id, reportTemplateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.updateReportTemplate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7995,12 +7979,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {string} workflowId The ID of the workflow
          * @param {string} [accept] 
          * @param {string} [contentTyoe] 
-         * @param {UpdateWorkflowRequest} [updateWorkflowRequest] 
+         * @param {WorkflowUpdateRequest} [workflowUpdateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateWorkflow(workflowId: string, accept?: string, contentTyoe?: string, updateWorkflowRequest?: UpdateWorkflowRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateWorkflow(workflowId, accept, contentTyoe, updateWorkflowRequest, options);
+        async updateWorkflow(workflowId: string, accept?: string, contentTyoe?: string, workflowUpdateRequest?: WorkflowUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateWorkflow(workflowId, accept, contentTyoe, workflowUpdateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.updateWorkflow']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -8325,12 +8309,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Create Webhook
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {WebhooksCreateRequest} [webhooksCreateRequest] 
+         * @param {WebhookRequest} [webhookRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async webhooksCreate(accept?: string, contentType?: string, webhooksCreateRequest?: WebhooksCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WebhooksCreate201Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.webhooksCreate(accept, contentType, webhooksCreateRequest, options);
+        async webhooksCreate(accept?: string, contentType?: string, webhookRequest?: WebhookRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WebhooksCreate201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.webhooksCreate(accept, contentType, webhookRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.webhooksCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -8384,12 +8368,12 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {string} webhookId Webhook ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
-         * @param {WebhooksUpdateRequest} [webhooksUpdateRequest] 
+         * @param {WebhookRequest} [webhookRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async webhooksUpdate(webhookId: string, accept?: string, contentType?: string, webhooksUpdateRequest?: WebhooksUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.webhooksUpdate(webhookId, accept, contentType, webhooksUpdateRequest, options);
+        async webhooksUpdate(webhookId: string, accept?: string, contentType?: string, webhookRequest?: WebhookRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.webhooksUpdate(webhookId, accept, contentType, webhookRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.webhooksUpdate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -8411,7 +8395,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         addBatchOperations(requestParameters: DefaultApiAddBatchOperationsRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.addBatchOperations(requestParameters.batchId, requestParameters.addBatchOperationsRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.addBatchOperations(requestParameters.batchId, requestParameters.batchAddOperationsRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8561,7 +8545,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         authorizationsCreate(requestParameters: DefaultApiAuthorizationsCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.authorizationsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.authorizationsCreateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.authorizationsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.authorizationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8601,7 +8585,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         authorizationsUpdate(requestParameters: DefaultApiAuthorizationsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.authorizationsUpdate(requestParameters.authorizationId, requestParameters.accept, requestParameters.contentType, requestParameters.authorizationsUpdateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.authorizationsUpdate(requestParameters.authorizationId, requestParameters.accept, requestParameters.contentType, requestParameters.authorizationRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8621,7 +8605,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         changesetsCreate(requestParameters: DefaultApiChangesetsCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.changesetsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.changesetsCreateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.changesetsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.changesetCreateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8651,7 +8635,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         changesetsUpdate(requestParameters: DefaultApiChangesetsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.changesetsUpdate(requestParameters.changesetId, requestParameters.accept, requestParameters.contentType, requestParameters.changesetsUpdateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.changesetsUpdate(requestParameters.changesetId, requestParameters.accept, requestParameters.contentType, requestParameters.changesetRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8661,7 +8645,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         choiceListsCreate(requestParameters: DefaultApiChoiceListsCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.choiceListsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.choiceListsCreateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.choiceListsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.choiceListRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8701,7 +8685,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         choiceListsUpdate(requestParameters: DefaultApiChoiceListsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.choiceListsUpdate(requestParameters.choiceListId, requestParameters.accept, requestParameters.contentType, requestParameters.choiceListsUpdateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.choiceListsUpdate(requestParameters.choiceListId, requestParameters.accept, requestParameters.contentType, requestParameters.choiceListRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8711,7 +8695,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         classificationSetsCreate(requestParameters: DefaultApiClassificationSetsCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.classificationSetsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.classificationSetsCreateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.classificationSetsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.classificationSetRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8751,7 +8735,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         classificationSetsUpdate(requestParameters: DefaultApiClassificationSetsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.classificationSetsUpdate(requestParameters.classificationSetId, requestParameters.accept, requestParameters.contentType, requestParameters.classificationSetsUpdateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.classificationSetsUpdate(requestParameters.classificationSetId, requestParameters.accept, requestParameters.contentType, requestParameters.classificationSetRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * There is only one parameter that is required for creating an attachment: `owners`. You must specify at least one owner of type `record` or `form`. If you create a `record` attachment you can optionally include a `name` and `file_size`. The name will be the name of the file shown in the record information. The file_size is only used for verifying that uploading this attachment will not exceed your current storage limit. If no file_size is provided the attachment may be rejected once it has been uploaded. The response will provide the `url` to upload (PUT) the file to.
@@ -8761,7 +8745,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         createAttachment(requestParameters: DefaultApiCreateAttachmentRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<CreateAttachment200Response> {
-            return localVarFp.createAttachment(requestParameters.xApitoken, requestParameters.createAttachmentRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.createAttachment(requestParameters.xApitoken, requestParameters.attachmentCreateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Using the batch operations API, you can bulk delete records from a form.
@@ -8771,7 +8755,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         createBatch(requestParameters: DefaultApiCreateBatchRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.createBatch(requestParameters.createBatchRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.createBatch(requestParameters.batchCreateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8781,7 +8765,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         createGroup(requestParameters: DefaultApiCreateGroupRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<CreateGroup201Response> {
-            return localVarFp.createGroup(requestParameters.accept, requestParameters.contentType, requestParameters.createGroupRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.createGroup(requestParameters.accept, requestParameters.contentType, requestParameters.groupCreateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8791,7 +8775,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         createMember(requestParameters: DefaultApiCreateMemberRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.createMember(requestParameters.accept, requestParameters.contentType, requestParameters.createMemberRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.createMember(requestParameters.accept, requestParameters.contentType, requestParameters.membershipCreateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8801,7 +8785,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         createReportTemplate(requestParameters: DefaultApiCreateReportTemplateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.createReportTemplate(requestParameters.createReportTemplateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.createReportTemplate(requestParameters.reportTemplateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8811,7 +8795,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         createWorkflow(requestParameters: DefaultApiCreateWorkflowRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.createWorkflow(requestParameters.accept, requestParameters.contentTyoe, requestParameters.createWorkflowRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.createWorkflow(requestParameters.accept, requestParameters.contentTyoe, requestParameters.workflowCreateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * The delete endpoint only applies to Form attachments. Use this endpoint to delete an attachment. For record attachments, simply remove the association of an attachment from the record and the attachment will be deleted.
@@ -8841,7 +8825,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         deleteMember(requestParameters: DefaultApiDeleteMemberRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.deleteMember(requestParameters.membershipId, requestParameters.deleteMemberRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.deleteMember(requestParameters.membershipId, requestParameters.membershipDeleteRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8871,7 +8855,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         finalizeAttachment(requestParameters: DefaultApiFinalizeAttachmentRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.finalizeAttachment(requestParameters.xApitoken, requestParameters.finalizeAttachmentRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.finalizeAttachment(requestParameters.xApitoken, requestParameters.attachmentTrackRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8881,7 +8865,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         formsCreate(requestParameters: DefaultApiFormsCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.formsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.formsCreateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.formsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.formRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8931,7 +8915,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         formsUpdate(requestParameters: DefaultApiFormsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.formsUpdate(requestParameters.formId, requestParameters.accept, requestParameters.contentType, requestParameters.formsUpdateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.formsUpdate(requestParameters.formId, requestParameters.accept, requestParameters.contentType, requestParameters.formRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9061,7 +9045,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         layersCreate(requestParameters: DefaultApiLayersCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.layersCreate(requestParameters.accept, requestParameters.contentType, requestParameters.layersCreateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.layersCreate(requestParameters.accept, requestParameters.contentType, requestParameters.layerRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9101,7 +9085,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         layersUpdate(requestParameters: DefaultApiLayersUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.layersUpdate(requestParameters.layerId, requestParameters.accept, requestParameters.contentType, requestParameters.layersUpdateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.layersUpdate(requestParameters.layerId, requestParameters.accept, requestParameters.contentType, requestParameters.layerRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * Add or remove membership permissions from layers, forms, or projects
@@ -9111,7 +9095,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         membershipsChangePermissions(requestParameters: DefaultApiMembershipsChangePermissionsRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.membershipsChangePermissions(requestParameters.accept, requestParameters.contentType, requestParameters.membershipsChangePermissionsRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.membershipsChangePermissions(requestParameters.accept, requestParameters.contentType, requestParameters.permissionChangeRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9221,7 +9205,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         projectsCreate(requestParameters: DefaultApiProjectsCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.projectsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.projectsCreateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.projectsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.projectRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9261,7 +9245,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         projectsUpdate(requestParameters: DefaultApiProjectsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.projectsUpdate(requestParameters.projectId, requestParameters.accept, requestParameters.contentType, requestParameters.projectsUpdateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.projectsUpdate(requestParameters.projectId, requestParameters.accept, requestParameters.contentType, requestParameters.projectRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9281,7 +9265,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         queryPost(requestParameters: DefaultApiQueryPostRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.queryPost(requestParameters.page, requestParameters.perPage, requestParameters.accept, requestParameters.queryPostRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.queryPost(requestParameters.page, requestParameters.perPage, requestParameters.accept, requestParameters.queryRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9291,7 +9275,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         recordsCreate(requestParameters: DefaultApiRecordsCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.recordsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.xSkipWorkflows, requestParameters.xSkipWebhooks, requestParameters.recordsCreateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.recordsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.xSkipWorkflows, requestParameters.xSkipWebhooks, requestParameters.recordRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9351,7 +9335,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         recordsUpdate(requestParameters: DefaultApiRecordsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.recordsUpdate(requestParameters.recordId, requestParameters.accept, requestParameters.contentType, requestParameters.xSkipWorkflows, requestParameters.xSkipWebhooks, requestParameters.recordsUpdateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.recordsUpdate(requestParameters.recordId, requestParameters.accept, requestParameters.contentType, requestParameters.xSkipWorkflows, requestParameters.xSkipWebhooks, requestParameters.recordRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9441,7 +9425,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         updateGroupNameDescription(requestParameters: DefaultApiUpdateGroupNameDescriptionRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateGroup201Response> {
-            return localVarFp.updateGroupNameDescription(requestParameters.groupId, requestParameters.accept, requestParameters.contentType, requestParameters.updateGroupNameDescriptionRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.updateGroupNameDescription(requestParameters.groupId, requestParameters.accept, requestParameters.contentType, requestParameters.groupUpdateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9451,7 +9435,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         updateGroupPermissions(requestParameters: DefaultApiUpdateGroupPermissionsRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<CreateGroup201Response> {
-            return localVarFp.updateGroupPermissions(requestParameters.accept, requestParameters.contentType, requestParameters.updateGroupPermissionsRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.updateGroupPermissions(requestParameters.accept, requestParameters.contentType, requestParameters.groupPermissionChangeRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * You can use this to update parameters of a member, but this will not work if the member is apart of multiple organizations.
@@ -9461,7 +9445,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         updateMember(requestParameters: DefaultApiUpdateMemberRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.updateMember(requestParameters.membershipId, requestParameters.updateMemberRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.updateMember(requestParameters.membershipId, requestParameters.membershipUpdateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9471,7 +9455,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         updateReportTemplate(requestParameters: DefaultApiUpdateReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.updateReportTemplate(requestParameters.id, requestParameters.updateReportTemplateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.updateReportTemplate(requestParameters.id, requestParameters.reportTemplateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9481,7 +9465,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         updateWorkflow(requestParameters: DefaultApiUpdateWorkflowRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.updateWorkflow(requestParameters.workflowId, requestParameters.accept, requestParameters.contentTyoe, requestParameters.updateWorkflowRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.updateWorkflow(requestParameters.workflowId, requestParameters.accept, requestParameters.contentTyoe, requestParameters.workflowUpdateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9711,7 +9695,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         webhooksCreate(requestParameters: DefaultApiWebhooksCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<WebhooksCreate201Response> {
-            return localVarFp.webhooksCreate(requestParameters.accept, requestParameters.contentType, requestParameters.webhooksCreateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.webhooksCreate(requestParameters.accept, requestParameters.contentType, requestParameters.webhookRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9751,7 +9735,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         webhooksUpdate(requestParameters: DefaultApiWebhooksUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.webhooksUpdate(requestParameters.webhookId, requestParameters.accept, requestParameters.contentType, requestParameters.webhooksUpdateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.webhooksUpdate(requestParameters.webhookId, requestParameters.accept, requestParameters.contentType, requestParameters.webhookRequest, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -10986,7 +10970,7 @@ export interface DefaultApiAddBatchOperationsRequest {
      */
     readonly batchId: string
 
-    readonly addBatchOperationsRequest?: AddBatchOperationsRequest
+    readonly batchAddOperationsRequest?: BatchAddOperationsRequest
 }
 
 /**
@@ -11222,7 +11206,7 @@ export interface DefaultApiAuthorizationsCreateRequest {
 
     readonly contentType?: string
 
-    readonly authorizationsCreateRequest?: AuthorizationsCreateRequest
+    readonly authorizationRequest?: AuthorizationRequest
 }
 
 /**
@@ -11279,7 +11263,7 @@ export interface DefaultApiAuthorizationsUpdateRequest {
 
     readonly contentType?: string
 
-    readonly authorizationsUpdateRequest?: AuthorizationsUpdateRequest
+    readonly authorizationRequest?: AuthorizationRequest
 }
 
 /**
@@ -11304,7 +11288,7 @@ export interface DefaultApiChangesetsCreateRequest {
 
     readonly contentType?: string
 
-    readonly changesetsCreateRequest?: ChangesetsCreateRequest
+    readonly changesetCreateRequest?: ChangesetCreateRequest
 }
 
 /**
@@ -11349,7 +11333,7 @@ export interface DefaultApiChangesetsUpdateRequest {
 
     readonly contentType?: string
 
-    readonly changesetsUpdateRequest?: ChangesetsUpdateRequest
+    readonly changesetRequest?: ChangesetRequest
 }
 
 /**
@@ -11360,7 +11344,7 @@ export interface DefaultApiChoiceListsCreateRequest {
 
     readonly contentType?: string
 
-    readonly choiceListsCreateRequest?: ChoiceListsCreateRequest
+    readonly choiceListRequest?: ChoiceListRequest
 }
 
 /**
@@ -11417,7 +11401,7 @@ export interface DefaultApiChoiceListsUpdateRequest {
 
     readonly contentType?: string
 
-    readonly choiceListsUpdateRequest?: ChoiceListsUpdateRequest
+    readonly choiceListRequest?: ChoiceListRequest
 }
 
 /**
@@ -11428,7 +11412,7 @@ export interface DefaultApiClassificationSetsCreateRequest {
 
     readonly contentType?: string
 
-    readonly classificationSetsCreateRequest?: ClassificationSetsCreateRequest
+    readonly classificationSetRequest?: ClassificationSetRequest
 }
 
 /**
@@ -11490,7 +11474,7 @@ export interface DefaultApiClassificationSetsUpdateRequest {
 
     readonly contentType?: string
 
-    readonly classificationSetsUpdateRequest?: ClassificationSetsUpdateRequest
+    readonly classificationSetRequest?: ClassificationSetRequest
 }
 
 /**
@@ -11502,14 +11486,14 @@ export interface DefaultApiCreateAttachmentRequest {
      */
     readonly xApitoken?: string
 
-    readonly createAttachmentRequest?: CreateAttachmentRequest
+    readonly attachmentCreateRequest?: AttachmentCreateRequest
 }
 
 /**
  * Request parameters for createBatch operation in DefaultApi.
  */
 export interface DefaultApiCreateBatchRequest {
-    readonly createBatchRequest?: CreateBatchRequest
+    readonly batchCreateRequest?: BatchCreateRequest
 }
 
 /**
@@ -11520,7 +11504,7 @@ export interface DefaultApiCreateGroupRequest {
 
     readonly contentType?: string
 
-    readonly createGroupRequest?: CreateGroupRequest
+    readonly groupCreateRequest?: GroupCreateRequest
 }
 
 /**
@@ -11531,14 +11515,14 @@ export interface DefaultApiCreateMemberRequest {
 
     readonly contentType?: string
 
-    readonly createMemberRequest?: CreateMemberRequest
+    readonly membershipCreateRequest?: MembershipCreateRequest
 }
 
 /**
  * Request parameters for createReportTemplate operation in DefaultApi.
  */
 export interface DefaultApiCreateReportTemplateRequest {
-    readonly createReportTemplateRequest?: CreateReportTemplateRequest
+    readonly reportTemplateRequest?: ReportTemplateRequest
 }
 
 /**
@@ -11549,7 +11533,7 @@ export interface DefaultApiCreateWorkflowRequest {
 
     readonly contentTyoe?: string
 
-    readonly createWorkflowRequest?: CreateWorkflowRequest
+    readonly workflowCreateRequest?: WorkflowCreateRequest
 }
 
 /**
@@ -11588,7 +11572,7 @@ export interface DefaultApiDeleteMemberRequest {
      */
     readonly membershipId: string
 
-    readonly deleteMemberRequest?: DeleteMemberRequest
+    readonly membershipDeleteRequest?: MembershipDeleteRequest
 }
 
 /**
@@ -11622,7 +11606,7 @@ export interface DefaultApiFinalizeAttachmentRequest {
      */
     readonly xApitoken?: string
 
-    readonly finalizeAttachmentRequest?: FinalizeAttachmentRequest
+    readonly attachmentTrackRequest?: AttachmentTrackRequest
 }
 
 /**
@@ -11633,7 +11617,7 @@ export interface DefaultApiFormsCreateRequest {
 
     readonly contentType?: string
 
-    readonly formsCreateRequest?: FormsCreateRequest
+    readonly formRequest?: FormRequest
 }
 
 /**
@@ -11732,7 +11716,7 @@ export interface DefaultApiFormsUpdateRequest {
 
     readonly contentType?: string
 
-    readonly formsUpdateRequest?: FormsUpdateRequest
+    readonly formRequest?: FormRequest
 }
 
 /**
@@ -11957,7 +11941,7 @@ export interface DefaultApiLayersCreateRequest {
 
     readonly contentType?: string
 
-    readonly layersCreateRequest?: LayersCreateRequest
+    readonly layerRequest?: LayerRequest
 }
 
 /**
@@ -12014,7 +11998,7 @@ export interface DefaultApiLayersUpdateRequest {
 
     readonly contentType?: string
 
-    readonly layersUpdateRequest?: LayersUpdateRequest
+    readonly layerRequest?: LayerRequest
 }
 
 /**
@@ -12025,7 +12009,7 @@ export interface DefaultApiMembershipsChangePermissionsRequest {
 
     readonly contentType?: string
 
-    readonly membershipsChangePermissionsRequest?: MembershipsChangePermissionsRequest
+    readonly permissionChangeRequest?: PermissionChangeRequest
 }
 
 /**
@@ -12208,7 +12192,7 @@ export interface DefaultApiProjectsCreateRequest {
 
     readonly contentType?: string
 
-    readonly projectsCreateRequest?: ProjectsCreateRequest
+    readonly projectRequest?: ProjectRequest
 }
 
 /**
@@ -12265,7 +12249,7 @@ export interface DefaultApiProjectsUpdateRequest {
 
     readonly contentType?: string
 
-    readonly projectsUpdateRequest?: ProjectsUpdateRequest
+    readonly projectRequest?: ProjectRequest
 }
 
 /**
@@ -12343,7 +12327,7 @@ export interface DefaultApiQueryPostRequest {
 
     readonly accept?: string
 
-    readonly queryPostRequest?: QueryPostRequest
+    readonly queryRequest?: QueryRequest
 }
 
 /**
@@ -12364,7 +12348,7 @@ export interface DefaultApiRecordsCreateRequest {
      */
     readonly xSkipWebhooks?: boolean
 
-    readonly recordsCreateRequest?: RecordsCreateRequest
+    readonly recordRequest?: RecordRequest
 }
 
 /**
@@ -12529,7 +12513,7 @@ export interface DefaultApiRecordsUpdateRequest {
      */
     readonly xSkipWebhooks?: boolean
 
-    readonly recordsUpdateRequest?: RecordsUpdateRequest
+    readonly recordRequest?: RecordRequest
 }
 
 /**
@@ -12686,7 +12670,7 @@ export interface DefaultApiUpdateGroupNameDescriptionRequest {
 
     readonly contentType?: string
 
-    readonly updateGroupNameDescriptionRequest?: UpdateGroupNameDescriptionRequest
+    readonly groupUpdateRequest?: GroupUpdateRequest
 }
 
 /**
@@ -12697,7 +12681,7 @@ export interface DefaultApiUpdateGroupPermissionsRequest {
 
     readonly contentType?: string
 
-    readonly updateGroupPermissionsRequest?: UpdateGroupPermissionsRequest
+    readonly groupPermissionChangeRequest?: GroupPermissionChangeRequest
 }
 
 /**
@@ -12709,7 +12693,7 @@ export interface DefaultApiUpdateMemberRequest {
      */
     readonly membershipId: string
 
-    readonly updateMemberRequest?: UpdateMemberRequest
+    readonly membershipUpdateRequest?: MembershipUpdateRequest
 }
 
 /**
@@ -12721,7 +12705,7 @@ export interface DefaultApiUpdateReportTemplateRequest {
      */
     readonly id: string
 
-    readonly updateReportTemplateRequest?: UpdateReportTemplateRequest
+    readonly reportTemplateRequest?: ReportTemplateRequest
 }
 
 /**
@@ -12737,7 +12721,7 @@ export interface DefaultApiUpdateWorkflowRequest {
 
     readonly contentTyoe?: string
 
-    readonly updateWorkflowRequest?: UpdateWorkflowRequest
+    readonly workflowUpdateRequest?: WorkflowUpdateRequest
 }
 
 /**
@@ -13044,7 +13028,7 @@ export interface DefaultApiWebhooksCreateRequest {
 
     readonly contentType?: string
 
-    readonly webhooksCreateRequest?: WebhooksCreateRequest
+    readonly webhookRequest?: WebhookRequest
 }
 
 /**
@@ -13101,7 +13085,7 @@ export interface DefaultApiWebhooksUpdateRequest {
 
     readonly contentType?: string
 
-    readonly webhooksUpdateRequest?: WebhooksUpdateRequest
+    readonly webhookRequest?: WebhookRequest
 }
 
 /**
@@ -13116,7 +13100,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public addBatchOperations(requestParameters: DefaultApiAddBatchOperationsRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).addBatchOperations(requestParameters.batchId, requestParameters.addBatchOperationsRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).addBatchOperations(requestParameters.batchId, requestParameters.batchAddOperationsRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13281,7 +13265,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public authorizationsCreate(requestParameters: DefaultApiAuthorizationsCreateRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).authorizationsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.authorizationsCreateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).authorizationsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.authorizationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13325,7 +13309,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public authorizationsUpdate(requestParameters: DefaultApiAuthorizationsUpdateRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).authorizationsUpdate(requestParameters.authorizationId, requestParameters.accept, requestParameters.contentType, requestParameters.authorizationsUpdateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).authorizationsUpdate(requestParameters.authorizationId, requestParameters.accept, requestParameters.contentType, requestParameters.authorizationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13347,7 +13331,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public changesetsCreate(requestParameters: DefaultApiChangesetsCreateRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).changesetsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.changesetsCreateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).changesetsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.changesetCreateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13380,7 +13364,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public changesetsUpdate(requestParameters: DefaultApiChangesetsUpdateRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).changesetsUpdate(requestParameters.changesetId, requestParameters.accept, requestParameters.contentType, requestParameters.changesetsUpdateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).changesetsUpdate(requestParameters.changesetId, requestParameters.accept, requestParameters.contentType, requestParameters.changesetRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13391,7 +13375,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public choiceListsCreate(requestParameters: DefaultApiChoiceListsCreateRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).choiceListsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.choiceListsCreateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).choiceListsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.choiceListRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13435,7 +13419,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public choiceListsUpdate(requestParameters: DefaultApiChoiceListsUpdateRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).choiceListsUpdate(requestParameters.choiceListId, requestParameters.accept, requestParameters.contentType, requestParameters.choiceListsUpdateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).choiceListsUpdate(requestParameters.choiceListId, requestParameters.accept, requestParameters.contentType, requestParameters.choiceListRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13446,7 +13430,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public classificationSetsCreate(requestParameters: DefaultApiClassificationSetsCreateRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).classificationSetsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.classificationSetsCreateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).classificationSetsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.classificationSetRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13490,7 +13474,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public classificationSetsUpdate(requestParameters: DefaultApiClassificationSetsUpdateRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).classificationSetsUpdate(requestParameters.classificationSetId, requestParameters.accept, requestParameters.contentType, requestParameters.classificationSetsUpdateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).classificationSetsUpdate(requestParameters.classificationSetId, requestParameters.accept, requestParameters.contentType, requestParameters.classificationSetRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13501,7 +13485,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public createAttachment(requestParameters: DefaultApiCreateAttachmentRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).createAttachment(requestParameters.xApitoken, requestParameters.createAttachmentRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).createAttachment(requestParameters.xApitoken, requestParameters.attachmentCreateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13512,7 +13496,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public createBatch(requestParameters: DefaultApiCreateBatchRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).createBatch(requestParameters.createBatchRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).createBatch(requestParameters.batchCreateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13523,7 +13507,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public createGroup(requestParameters: DefaultApiCreateGroupRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).createGroup(requestParameters.accept, requestParameters.contentType, requestParameters.createGroupRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).createGroup(requestParameters.accept, requestParameters.contentType, requestParameters.groupCreateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13534,7 +13518,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public createMember(requestParameters: DefaultApiCreateMemberRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).createMember(requestParameters.accept, requestParameters.contentType, requestParameters.createMemberRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).createMember(requestParameters.accept, requestParameters.contentType, requestParameters.membershipCreateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13545,7 +13529,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public createReportTemplate(requestParameters: DefaultApiCreateReportTemplateRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).createReportTemplate(requestParameters.createReportTemplateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).createReportTemplate(requestParameters.reportTemplateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13556,7 +13540,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public createWorkflow(requestParameters: DefaultApiCreateWorkflowRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).createWorkflow(requestParameters.accept, requestParameters.contentTyoe, requestParameters.createWorkflowRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).createWorkflow(requestParameters.accept, requestParameters.contentTyoe, requestParameters.workflowCreateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13589,7 +13573,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public deleteMember(requestParameters: DefaultApiDeleteMemberRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).deleteMember(requestParameters.membershipId, requestParameters.deleteMemberRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).deleteMember(requestParameters.membershipId, requestParameters.membershipDeleteRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13622,7 +13606,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public finalizeAttachment(requestParameters: DefaultApiFinalizeAttachmentRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).finalizeAttachment(requestParameters.xApitoken, requestParameters.finalizeAttachmentRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).finalizeAttachment(requestParameters.xApitoken, requestParameters.attachmentTrackRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13633,7 +13617,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public formsCreate(requestParameters: DefaultApiFormsCreateRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).formsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.formsCreateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).formsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.formRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13688,7 +13672,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public formsUpdate(requestParameters: DefaultApiFormsUpdateRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).formsUpdate(requestParameters.formId, requestParameters.accept, requestParameters.contentType, requestParameters.formsUpdateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).formsUpdate(requestParameters.formId, requestParameters.accept, requestParameters.contentType, requestParameters.formRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13831,7 +13815,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public layersCreate(requestParameters: DefaultApiLayersCreateRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).layersCreate(requestParameters.accept, requestParameters.contentType, requestParameters.layersCreateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).layersCreate(requestParameters.accept, requestParameters.contentType, requestParameters.layerRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13875,7 +13859,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public layersUpdate(requestParameters: DefaultApiLayersUpdateRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).layersUpdate(requestParameters.layerId, requestParameters.accept, requestParameters.contentType, requestParameters.layersUpdateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).layersUpdate(requestParameters.layerId, requestParameters.accept, requestParameters.contentType, requestParameters.layerRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13886,7 +13870,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public membershipsChangePermissions(requestParameters: DefaultApiMembershipsChangePermissionsRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).membershipsChangePermissions(requestParameters.accept, requestParameters.contentType, requestParameters.membershipsChangePermissionsRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).membershipsChangePermissions(requestParameters.accept, requestParameters.contentType, requestParameters.permissionChangeRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14007,7 +13991,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public projectsCreate(requestParameters: DefaultApiProjectsCreateRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).projectsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.projectsCreateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).projectsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.projectRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14051,7 +14035,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public projectsUpdate(requestParameters: DefaultApiProjectsUpdateRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).projectsUpdate(requestParameters.projectId, requestParameters.accept, requestParameters.contentType, requestParameters.projectsUpdateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).projectsUpdate(requestParameters.projectId, requestParameters.accept, requestParameters.contentType, requestParameters.projectRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14073,7 +14057,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public queryPost(requestParameters: DefaultApiQueryPostRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).queryPost(requestParameters.page, requestParameters.perPage, requestParameters.accept, requestParameters.queryPostRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).queryPost(requestParameters.page, requestParameters.perPage, requestParameters.accept, requestParameters.queryRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14084,7 +14068,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public recordsCreate(requestParameters: DefaultApiRecordsCreateRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).recordsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.xSkipWorkflows, requestParameters.xSkipWebhooks, requestParameters.recordsCreateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).recordsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.xSkipWorkflows, requestParameters.xSkipWebhooks, requestParameters.recordRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14150,7 +14134,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public recordsUpdate(requestParameters: DefaultApiRecordsUpdateRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).recordsUpdate(requestParameters.recordId, requestParameters.accept, requestParameters.contentType, requestParameters.xSkipWorkflows, requestParameters.xSkipWebhooks, requestParameters.recordsUpdateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).recordsUpdate(requestParameters.recordId, requestParameters.accept, requestParameters.contentType, requestParameters.xSkipWorkflows, requestParameters.xSkipWebhooks, requestParameters.recordRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14249,7 +14233,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public updateGroupNameDescription(requestParameters: DefaultApiUpdateGroupNameDescriptionRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).updateGroupNameDescription(requestParameters.groupId, requestParameters.accept, requestParameters.contentType, requestParameters.updateGroupNameDescriptionRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).updateGroupNameDescription(requestParameters.groupId, requestParameters.accept, requestParameters.contentType, requestParameters.groupUpdateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14260,7 +14244,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public updateGroupPermissions(requestParameters: DefaultApiUpdateGroupPermissionsRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).updateGroupPermissions(requestParameters.accept, requestParameters.contentType, requestParameters.updateGroupPermissionsRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).updateGroupPermissions(requestParameters.accept, requestParameters.contentType, requestParameters.groupPermissionChangeRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14271,7 +14255,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public updateMember(requestParameters: DefaultApiUpdateMemberRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).updateMember(requestParameters.membershipId, requestParameters.updateMemberRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).updateMember(requestParameters.membershipId, requestParameters.membershipUpdateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14282,7 +14266,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public updateReportTemplate(requestParameters: DefaultApiUpdateReportTemplateRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).updateReportTemplate(requestParameters.id, requestParameters.updateReportTemplateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).updateReportTemplate(requestParameters.id, requestParameters.reportTemplateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14293,7 +14277,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public updateWorkflow(requestParameters: DefaultApiUpdateWorkflowRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).updateWorkflow(requestParameters.workflowId, requestParameters.accept, requestParameters.contentTyoe, requestParameters.updateWorkflowRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).updateWorkflow(requestParameters.workflowId, requestParameters.accept, requestParameters.contentTyoe, requestParameters.workflowUpdateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14546,7 +14530,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public webhooksCreate(requestParameters: DefaultApiWebhooksCreateRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).webhooksCreate(requestParameters.accept, requestParameters.contentType, requestParameters.webhooksCreateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).webhooksCreate(requestParameters.accept, requestParameters.contentType, requestParameters.webhookRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14590,7 +14574,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public webhooksUpdate(requestParameters: DefaultApiWebhooksUpdateRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).webhooksUpdate(requestParameters.webhookId, requestParameters.accept, requestParameters.contentType, requestParameters.webhooksUpdateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).webhooksUpdate(requestParameters.webhookId, requestParameters.accept, requestParameters.contentType, requestParameters.webhookRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

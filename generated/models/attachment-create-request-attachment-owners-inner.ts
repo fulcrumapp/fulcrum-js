@@ -13,11 +13,15 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { ReportTemplateRequestReportTemplate } from './report-template-request-report-template.js';
 
-export interface ReportTemplateRequest {
-    'report_template': ReportTemplateRequestReportTemplate;
+export interface AttachmentCreateRequestAttachmentOwnersInner {
+    /**
+     * Type of the owner (e.g., \'record\', \'form\')
+     */
+    'type': string;
+    /**
+     * Identifier of the owner
+     */
+    'id': string;
 }
 

@@ -13,11 +13,15 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { ReportTemplateRequestReportTemplate } from './report-template-request-report-template.js';
 
-export interface ReportTemplateRequest {
-    'report_template': ReportTemplateRequestReportTemplate;
+export interface GroupUpdateRequestGroup {
+    /**
+     * Updated name of the group
+     */
+    'name'?: string;
+    /**
+     * Updated description of the group
+     */
+    'description'?: string;
 }
 

@@ -14,21 +14,22 @@
 
 
 
-export interface Geometry {
+export interface WebhookRequestWebhook {
     /**
-     * GeoJSON geometry type
+     * Display name for the webhook
      */
-    'type': GeometryTypeEnum;
-    'coordinates': any;
+    'name': string | null;
+    /**
+     * Destination URL that will receive webhook payloads
+     */
+    'url': string;
+    /**
+     * Whether the webhook is enabled
+     */
+    'active'?: boolean;
+    /**
+     * Whether the webhook runs for bulk record actions
+     */
+    'run_for_bulk_actions'?: boolean;
 }
-
-export enum GeometryTypeEnum {
-    Point = 'Point',
-    LineString = 'LineString',
-    Polygon = 'Polygon',
-    MultiPoint = 'MultiPoint',
-    MultiLineString = 'MultiLineString',
-    MultiPolygon = 'MultiPolygon'
-}
-
 

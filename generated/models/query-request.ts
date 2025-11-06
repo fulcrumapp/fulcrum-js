@@ -13,11 +13,26 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { ReportTemplateRequestReportTemplate } from './report-template-request-report-template.js';
 
-export interface ReportTemplateRequest {
-    'report_template': ReportTemplateRequestReportTemplate;
+export interface QueryRequest {
+    /**
+     * SQL query to execute
+     */
+    'q': string;
+    /**
+     * Response format
+     */
+    'format'?: QueryRequestFormatEnum;
+    /**
+     * Name of the table to query
+     */
+    'table_name'?: string;
 }
+
+export enum QueryRequestFormatEnum {
+    Json = 'json',
+    Csv = 'csv',
+    Geojson = 'geojson'
+}
+
 

@@ -37,7 +37,7 @@
     "ci:test": "npm run build:generated && npm run build:wrapper && npm run test:coverage",
     "clean": "rm -rf dist generated/dist",
     "download:spec": "curl -s https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json > openapi/rest-api.json",
-    "generate": "npx @openapitools/openapi-generator-cli generate -i openapi/rest-api.json -g typescript-axios -o generated --additional-properties=npmName=fulcrum-generated,npmVersion=3.0.0,supportsES6=true,withSeparateModelsAndApi=true,apiPackage=api,modelPackage=models,importFileExtension=.js,useSingleRequestParameter=true,stringEnums=true,withInterfaces=true",
+    "generate": "npx @openapitools/openapi-generator-cli generate -i openapi/rest-api.json -g typescript-axios -o generated --additional-properties=npmName=fulcrum-generated,npmVersion=3.0.0,supportsES6=true,withSeparateModelsAndApi=true,apiPackage=api,modelPackage=models,importFileExtension=.js,useSingleRequestParameter=true,stringEnums=true,withInterfaces=true,generateApiDocumentation=false,generateModelDocumentation=false --skip-validate-spec && rm -rf generated/docs",
     "generate:full": "npm run download:spec && npm run generate && npm run build",
     "verify": "tsx scripts/verify-api.ts",
     "prepublishOnly": "npm run build"

@@ -15,9 +15,9 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import type { ReportTemplateRequestReportTemplate } from './report-template-request-report-template.js';
+import type { RecordRequestRecord } from './record-request-record.js';
 
-export interface ReportTemplateRequest {
-    'report_template': ReportTemplateRequestReportTemplate;
+export interface RecordRequest {
+    'record': RecordRequestRecord;
 }
 

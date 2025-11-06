@@ -15,9 +15,20 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import type { ReportTemplateRequestReportTemplate } from './report-template-request-report-template.js';
+import type { ChoiceListRequestChoiceListChoicesInner } from './choice-list-request-choice-list-choices-inner.js';
 
-export interface ReportTemplateRequest {
-    'report_template': ReportTemplateRequestReportTemplate;
+export interface ChoiceListRequestChoiceList {
+    /**
+     * Name of the choice list
+     */
+    'name': string;
+    /**
+     * Description of the choice list
+     */
+    'description'?: string;
+    /**
+     * Array of choices
+     */
+    'choices': Array<ChoiceListRequestChoiceListChoicesInner>;
 }
 

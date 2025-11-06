@@ -16,9 +16,6 @@
 // May contain unused imports in some cases
 // @ts-ignore
 import type { Geometry } from './geometry.js';
-// May contain unused imports in some cases
-// @ts-ignore
-import type { RecordFormValuesValue } from './record-form-values-value.js';
 
 export interface ModelRecord {
     'status'?: string | null;
@@ -42,7 +39,10 @@ export interface ModelRecord {
     'record_series_id'?: string | null;
     'assigned_to'?: string | null;
     'assigned_to_id'?: string | null;
-    'form_values'?: { [key: string]: RecordFormValuesValue; };
+    /**
+     * Field values keyed by field key - values can be strings, objects, or arrays depending on field type
+     */
+    'form_values'?: object;
     'latitude'?: number | null;
     'longitude'?: number | null;
     'altitude'?: number | null;

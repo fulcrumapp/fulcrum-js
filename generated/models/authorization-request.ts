@@ -15,9 +15,9 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import type { ReportTemplateRequestReportTemplate } from './report-template-request-report-template.js';
+import type { AuthorizationRequestAuthorization } from './authorization-request-authorization.js';
 
-export interface ReportTemplateRequest {
-    'report_template': ReportTemplateRequestReportTemplate;
+export interface AuthorizationRequest {
+    'authorization': AuthorizationRequestAuthorization;
 }
 

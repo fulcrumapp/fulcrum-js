@@ -13,11 +13,19 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { ReportTemplateRequestReportTemplate } from './report-template-request-report-template.js';
 
-export interface ReportTemplateRequest {
-    'report_template': ReportTemplateRequestReportTemplate;
+export interface ClassificationSetRequestClassificationSetItemsInner {
+    /**
+     * Display label
+     */
+    'label': string;
+    /**
+     * Value stored
+     */
+    'value': string;
+    /**
+     * Child classification items
+     */
+    'child_classifications'?: Array<object>;
 }
 

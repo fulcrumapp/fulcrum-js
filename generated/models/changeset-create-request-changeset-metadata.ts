@@ -13,11 +13,13 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { ReportTemplateRequestReportTemplate } from './report-template-request-report-template.js';
 
-export interface ReportTemplateRequest {
-    'report_template': ReportTemplateRequestReportTemplate;
+/**
+ * Optional metadata describing the changeset
+ */
+export interface ChangesetCreateRequestChangesetMetadata {
+    'comment'?: string;
+    'app_created_by'?: string;
+    'app_name'?: string;
 }
 

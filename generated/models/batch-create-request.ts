@@ -15,9 +15,9 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import type { ReportTemplateRequestReportTemplate } from './report-template-request-report-template.js';
+import type { BatchCreateRequestBatch } from './batch-create-request-batch.js';
 
-export interface ReportTemplateRequest {
-    'report_template': ReportTemplateRequestReportTemplate;
+export interface BatchCreateRequest {
+    'batch': BatchCreateRequestBatch;
 }
 

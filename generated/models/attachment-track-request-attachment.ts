@@ -15,9 +15,16 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import type { ReportTemplateRequestReportTemplate } from './report-template-request-report-template.js';
+import type { AttachmentCreateRequestAttachmentOwnersInner } from './attachment-create-request-attachment-owners-inner.js';
 
-export interface ReportTemplateRequest {
-    'report_template': ReportTemplateRequestReportTemplate;
+export interface AttachmentTrackRequestAttachment {
+    /**
+     * Identifier of the attachment
+     */
+    'id': string;
+    /**
+     * Array of owner objects for the attachment
+     */
+    'owners'?: Array<AttachmentCreateRequestAttachmentOwnersInner>;
 }
 

@@ -13,11 +13,19 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { ReportTemplateRequestReportTemplate } from './report-template-request-report-template.js';
 
-export interface ReportTemplateRequest {
-    'report_template': ReportTemplateRequestReportTemplate;
+export interface FormRequestForm {
+    /**
+     * Name of the form
+     */
+    'name'?: string;
+    /**
+     * Description of the form
+     */
+    'description'?: string;
+    /**
+     * Form elements/fields
+     */
+    'elements'?: Array<object>;
 }
 
