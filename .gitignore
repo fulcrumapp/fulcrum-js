@@ -19,3 +19,4 @@ coverage/
 
 # NPM and package manager files
 .npmrc
+openapi/
