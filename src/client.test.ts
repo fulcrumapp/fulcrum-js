@@ -381,20 +381,20 @@ describe('FulcrumClient', () => {
         expect(client.client.recordsCreate).toHaveBeenCalledWith({
           accept: 'application/json',
           contentType: 'application/json',
-          recordsCreateRequest: payload,
+          recordRequest: payload,
           xSkipWorkflows: undefined,
           xSkipWebhooks: undefined,
         });
       });
 
       it('should call update method', async () => {
-        const payload = { record: { latitude: 1.5 } };
+        const payload = { record: { form_id: 'form-123', latitude: 1.5 } };
         await client.records.update('record-123', payload);
         expect(client.client.recordsUpdate).toHaveBeenCalledWith({
           accept: 'application/json',
           contentType: 'application/json',
           recordId: 'record-123',
-          recordsUpdateRequest: payload,
+          recordRequest: payload,
           xSkipWorkflows: undefined,
           xSkipWebhooks: undefined,
         });
@@ -473,7 +473,7 @@ describe('FulcrumClient', () => {
         expect(client.client.formsCreate).toHaveBeenCalledWith({
           accept: 'application/json',
           contentType: 'application/json',
-          formsCreateRequest: payload,
+          formRequest: payload,
         });
       });
 
@@ -484,7 +484,7 @@ describe('FulcrumClient', () => {
           accept: 'application/json',
           contentType: 'application/json',
           formId: 'form-123',
-          formsUpdateRequest: payload,
+          formRequest: payload,
         });
       });
 
@@ -526,7 +526,7 @@ describe('FulcrumClient', () => {
         expect(client.client.projectsCreate).toHaveBeenCalledWith({
           accept: 'application/json',
           contentType: 'application/json',
-          projectsCreateRequest: payload,
+          projectRequest: payload,
         });
       });
 
@@ -537,7 +537,7 @@ describe('FulcrumClient', () => {
           accept: 'application/json',
           contentType: 'application/json',
           projectId: 'project-123',
-          projectsUpdateRequest: payload,
+          projectRequest: payload,
         });
       });
 
@@ -578,18 +578,18 @@ describe('FulcrumClient', () => {
         expect(client.client.webhooksCreate).toHaveBeenCalledWith({
           accept: 'application/json',
           contentType: 'application/json',
-          webhooksCreateRequest: payload,
+          webhookRequest: payload,
         });
       });
 
       it('should call update method', async () => {
-        const payload = { webhook: { name: 'Updated' } };
+        const payload = { webhook: { name: 'Updated', url: 'https://example.com/webhooks/updated' } };
         await client.webhooks.update('webhook-123', payload);
         expect(client.client.webhooksUpdate).toHaveBeenCalledWith({
           accept: 'application/json',
           contentType: 'application/json',
           webhookId: 'webhook-123',
-          webhooksUpdateRequest: payload,
+          webhookRequest: payload,
         });
       });
 
@@ -616,7 +616,7 @@ describe('FulcrumClient', () => {
       });
 
       it('should call post method', async () => {
-        const params = { queryPostRequest: { q: 'SELECT * FROM records' } };
+        const params = { queryRequest: { q: 'SELECT * FROM records' } };
         await client.query.post(params);
         expect(client.client.queryPost).toHaveBeenCalledWith({
           accept: 'application/json',

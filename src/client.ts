@@ -133,14 +133,10 @@ import type {
   DefaultApiProjectsGetSingleRequest,
   DefaultApiWebhooksGetSingleRequest,
   DefaultApiUsersGetUserRequest,
-  RecordsCreateRequest,
-  RecordsUpdateRequest,
-  FormsCreateRequest,
-  FormsUpdateRequest,
-  ProjectsCreateRequest,
-  ProjectsUpdateRequest,
-  WebhooksCreateRequest,
-  WebhooksUpdateRequest,
+  RecordRequest,
+  FormRequest,
+  ProjectRequest,
+  WebhookRequest,
 } from '../generated/dist/index.js';
 
 /**
@@ -177,37 +173,37 @@ export interface FulcrumClientOptions {
 export type RecordsGetAllParams = Omit<DefaultApiRecordsGetAllRequest, 'accept' | 'contentType'>;
 export type RecordsGetSingleParams = Omit<DefaultApiRecordsGetSingleRequest, 'accept' | 'contentType'>;
 export type RecordsCreateParams = Omit<DefaultApiRecordsCreateRequest, 'accept' | 'contentType'> & {
-  record: RecordsCreateRequest['record'];
+  record: RecordRequest['record'];
 };
 export type RecordsUpdateParams = Omit<DefaultApiRecordsUpdateRequest, 'accept' | 'contentType' | 'recordId'> & {
-  record: RecordsUpdateRequest['record'];
+  record: RecordRequest['record'];
 };
 
 // Forms
 export type FormsGetAllParams = Omit<DefaultApiFormsGetAllRequest, 'accept' | 'contentType'>;
 export type FormsCreateParams = Omit<DefaultApiFormsCreateRequest, 'accept' | 'contentType'> & {
-  form: FormsCreateRequest['form'];
+  form: FormRequest['form'];
 };
 export type FormsUpdateParams = Omit<DefaultApiFormsUpdateRequest, 'accept' | 'contentType' | 'formId'> & {
-  form: FormsUpdateRequest['form'];
+  form: FormRequest['form'];
 };
 
 // Projects
 export type ProjectsGetAllParams = Omit<DefaultApiProjectsGetAllRequest, 'accept' | 'contentType'>;
 export type ProjectsCreateParams = Omit<DefaultApiProjectsCreateRequest, 'accept' | 'contentType'> & {
-  project: ProjectsCreateRequest['project'];
+  project: ProjectRequest['project'];
 };
 export type ProjectsUpdateParams = Omit<DefaultApiProjectsUpdateRequest, 'accept' | 'contentType' | 'projectId'> & {
-  project: ProjectsUpdateRequest['project'];
+  project: ProjectRequest['project'];
 };
 
 // Webhooks
 export type WebhooksGetAllParams = Omit<DefaultApiWebhooksGetAllRequest, 'accept' | 'contentType'>;
 export type WebhooksCreateParams = Omit<DefaultApiWebhooksCreateRequest, 'accept' | 'contentType'> & {
-  webhook: WebhooksCreateRequest['webhook'];
+  webhook: WebhookRequest['webhook'];
 };
 export type WebhooksUpdateParams = Omit<DefaultApiWebhooksUpdateRequest, 'accept' | 'contentType' | 'webhookId'> & {
-  webhook: WebhooksUpdateRequest['webhook'];
+  webhook: WebhookRequest['webhook'];
 };
 
 // Query - keeping as-is since accept header is actually meaningful for query (json/csv/geojson)
@@ -340,7 +336,7 @@ export class FulcrumClient {
           api.recordsCreate({
             accept: 'application/json',
             contentType: 'application/json',
-            recordsCreateRequest: { record: params.record },
+            recordRequest: { record: params.record },
             xSkipWorkflows: params.xSkipWorkflows,
             xSkipWebhooks: params.xSkipWebhooks,
           }),
@@ -360,7 +356,7 @@ export class FulcrumClient {
             accept: 'application/json',
             contentType: 'application/json',
             recordId,
-            recordsUpdateRequest: { record: params.record },
+            recordRequest: { record: params.record },
             xSkipWorkflows: params.xSkipWorkflows,
             xSkipWebhooks: params.xSkipWebhooks,
           }),
@@ -445,7 +441,7 @@ export class FulcrumClient {
           api.formsCreate({
             accept: 'application/json',
             contentType: 'application/json',
-            formsCreateRequest: { form: params.form },
+            formRequest: { form: params.form },
           }),
           params.form.name ? { 'fulcrum.form_name': params.form.name } : undefined,
         ),
@@ -456,7 +452,7 @@ export class FulcrumClient {
             accept: 'application/json',
             contentType: 'application/json',
             formId,
-            formsUpdateRequest: { form: params.form },
+            formRequest: { form: params.form },
           }),
           { 'fulcrum.form_id': formId },
         ),
@@ -504,7 +500,7 @@ export class FulcrumClient {
           api.projectsCreate({
             accept: 'application/json',
             contentType: 'application/json',
-            projectsCreateRequest: { project: params.project },
+            projectRequest: { project: params.project },
           }),
           params.project.name ? { 'fulcrum.project_name': params.project.name } : undefined,
         ),
@@ -515,7 +511,7 @@ export class FulcrumClient {
             accept: 'application/json',
             contentType: 'application/json',
             projectId,
-            projectsUpdateRequest: { project: params.project },
+            projectRequest: { project: params.project },
           }),
           { 'fulcrum.project_id': projectId },
         ),
@@ -563,7 +559,7 @@ export class FulcrumClient {
           api.webhooksCreate({
             accept: 'application/json',
             contentType: 'application/json',
-            webhooksCreateRequest: { webhook: params.webhook },
+            webhookRequest: { webhook: params.webhook },
           }),
           params.webhook.name ? { 'fulcrum.webhook_name': params.webhook.name } : undefined,
         ),
@@ -574,7 +570,7 @@ export class FulcrumClient {
             accept: 'application/json',
             contentType: 'application/json',
             webhookId,
-            webhooksUpdateRequest: { webhook: params.webhook },
+            webhookRequest: { webhook: params.webhook },
           }),
           { 'fulcrum.webhook_id': webhookId },
         ),
@@ -617,7 +613,7 @@ export class FulcrumClient {
           }),
           {
             'fulcrum.query.format': params.accept || 'application/json',
-            'fulcrum.query.sql': params.queryPostRequest?.q || '',
+            'fulcrum.query.sql': params.queryRequest?.q || '',
           },
         ),
     } as const;

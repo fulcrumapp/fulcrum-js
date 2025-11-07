@@ -164,6 +164,7 @@ function createTestSuite(client: FulcrumClient) {
     // Core resources
     { name: 'Forms', fn: () => client.forms.getAll() },
     { name: 'Records', fn: () => client.records.getAll({ perPage: 250 }) },
+    { name: 'Records All History', fn: () => client.records.getAllHistory() },
     { name: 'Projects', fn: () => client.projects.getAll() },
     { name: 'Webhooks', fn: () => client.webhooks.getAll() },
 
