@@ -37,24 +37,24 @@ create_preview_environment: False
 # Unit Testing Configuration
 # If 'command' is None or missing, unit tests will be skipped
 unittest:
-  image: None      # Docker image to use for running tests (e.g., "node:18", "python:3.9")
-  command: None    # Command to execute tests (e.g., "npm test", "pytest")
+  image: 280296955917.dkr.ecr.us-east-2.amazonaws.com/dockerhub/library/node:22
+  command: "npm ci && npm run ci:test"
   # coverage_file: None  # Optional: Path to coverage file if not in default location
 
-# Code Linting Configuration  
+# Code Linting Configuration
 # If 'command' is None or missing, linting will be skipped
 lint:
-  image: None      # Docker image to use for running linter
-  command: None    # Command to execute linter (e.g., "npm run lint", "flake8")
+  image: 280296955917.dkr.ecr.us-east-2.amazonaws.com/dockerhub/library/node:22
+  command: "npm ci && npm run lint"
   # coverage_file: None  # Optional: Path to lint results file
 
 # SonarQube Code Analysis
 # run_sonar_scanner: Enables SonarQube static code analysis
 # Values: True | False
 # Default: False (requires sonar-project.properties file to be created first)
-run_sonar_scanner: False
+run_sonar_scanner: True
 
 # test_coverage_dir: Custom directory for test coverage output files
 # Default: "" (uses standard /app directory)
 # Example: "coverage" for projects that output to ./coverage/
-test_coverage_dir: ""
+test_coverage_dir: "coverage"
