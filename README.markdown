@@ -6,6 +6,8 @@ A JavaScript and TypeScript library for the Fulcrum API.
 ## Installation
 
 ```bash
+yarn add @fulcrumapp/fulcrum-js
+# or
 npm install --save @fulcrumapp/fulcrum-js
 ```
 
@@ -1044,34 +1046,36 @@ The v3 wrapper client (`FulcrumClient`) provides a clean, resource-oriented API 
 
 1. Install v3:
 
-   ```bash
-   npm install @fulcrumapp/fulcrum-js@latest
-   ```
+  ```bash
+  yarn add @fulcrumapp/fulcrum-js@latest
+  # or
+  npm install @fulcrumapp/fulcrum-js@latest
+  ```
 
-2. Update your imports:
+1. Update your imports:
 
-   ```typescript
-   // Old v2 code
-   import { Client } from 'fulcrum-app';
+  ```typescript
+  // Old v2 code
+  import { Client } from 'fulcrum-app';
 
-   // New v3 code
-   import { FulcrumClient, FulcrumRegion } from '@fulcrumapp/fulcrum-js';
-   ```
+  // New v3 code
+  import { FulcrumClient, FulcrumRegion } from '@fulcrumapp/fulcrum-js';
+  ```
 
-3. Update client initialization:
+1. Update client initialization:
 
-   ```typescript
-   // Old v2
-   const client = new Client('api-token');
+  ```typescript
+  // Old v2
+  const client = new Client('api-token');
 
-   // New v3
-   const client = new FulcrumClient({
-     apiKey: 'api-token',
-     region: FulcrumRegion.US  // Must specify region
-   });
-   ```
+  // New v3
+  const client = new FulcrumClient({
+    apiKey: 'api-token',
+    region: FulcrumRegion.US  // Must specify region
+  });
+  ```
 
-4. Method names are slightly different but similar:
+1. Method names are slightly different but similar:
 
    - `.all()` → `.getAll()`
    - `.find()` → `.getById()`
@@ -1692,7 +1696,7 @@ Install dependencies:
 
 ```bash
 cd fulcrum-js
-npm install
+yarn install
 ```
 
 ### Building
@@ -1700,11 +1704,11 @@ npm install
 This project uses TypeScript compilation to build ESM and CommonJS outputs:
 
 ```bash
-npm run build       # Build everything (generated client + wrapper)
-npm run build:wrapper # Build only the wrapper (src/ → dist/)
-npm run clean       # Remove dist/ and generated/dist/ directories
-npm run lint        # Check code quality with ESLint
-npm test            # Run tests with Jest
+yarn build            # Build everything (generated client + wrapper)
+yarn build:wrapper   # Build only the wrapper (src/ → dist/)
+yarn clean           # Remove dist/ and generated/dist/ directories
+yarn lint            # Check code quality with ESLint
+yarn test            # Run tests with Jest
 ```
 
 ### OpenAPI Client Generation
@@ -1717,31 +1721,31 @@ To update the generated client from the latest Fulcrum API specification:
 
 1. Update the OpenAPI spec (optional, only if the spec has changed):
 
-   ```bash
-   # Download main spec file
-   curl -s "https://raw.githubusercontent.com/fulcrumapp/api/spike/power-automate-testing/reference/rest-api.json" > openapi/rest-api.json
+  ```bash
+  # Download main spec file
+  curl -s "https://raw.githubusercontent.com/fulcrumapp/api/spike/power-automate-testing/reference/rest-api.json" > openapi/rest-api.json
 
-   # Download external schema files
-   curl -s "https://raw.githubusercontent.com/fulcrumapp/api/spike/power-automate-testing/reference/components/schemas/ReportTemplateRequest.json" > openapi/components/schemas/ReportTemplateRequest.json
-   ```
+  # Download external schema files
+  curl -s "https://raw.githubusercontent.com/fulcrumapp/api/spike/power-automate-testing/reference/components/schemas/ReportTemplateRequest.json" > openapi/components/schemas/ReportTemplateRequest.json
+  ```
 
-2. Generate the client from the OpenAPI specification:
+1. Generate the client from the OpenAPI specification:
 
-   ```bash
-   npm run generate
-   ```
+  ```bash
+  yarn generate
+  ```
 
-3. Build the project:
+1. Build the project:
 
-   ```bash
-   npm run build
-   ```
+  ```bash
+  yarn build
+  ```
 
-4. Run tests to ensure nothing broke:
+1. Run tests to ensure nothing broke:
 
-   ```bash
-   npm test
-   ```
+  ```bash
+  yarn test
+  ```
 
 #### How Generation Works
 
@@ -1836,9 +1840,9 @@ const client = new Client('your-api-token');
 ## Tests
 
 ```bash
-npm test                    # Run all tests
-npm run test -- test/test_forms.js  # Run specific test file
-npm run lint                # Check code quality
+yarn test                    # Run all tests
+yarn test -- test/test_forms.js  # Run specific test file
+yarn lint                    # Check code quality
 ```
 
 ### API Verification
@@ -1846,7 +1850,7 @@ npm run lint                # Check code quality
 To verify the API client against a live Fulcrum account, use the verification script:
 
 ```bash
-npm run verify
+yarn verify
 ```
 
 This interactive script will:
@@ -1920,18 +1924,18 @@ describe('Forms', () => {
 
 ## Publishing
 
-To publish a new version to npm:
+To publish a new version:
 
 ```bash
 # Ensure all tests pass
-npm test
+yarn test
 
 # Update version in package.json
-npm version patch  # or minor/major
+yarn version --patch  # or --minor/--major
 
 # Build the project
-npm run build
+yarn build
 
 # Publish to npm
-npm publish
+yarn publish
 ```

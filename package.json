@@ -31,16 +31,16 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "lint": "eslint src/**/*.ts",
-    "build": "npm run build:generated && npm run build:wrapper",
-    "build:generated": "cd generated && npm install && npm run build",
+    "build": "yarn run build:generated && yarn run build:wrapper",
+    "build:generated": "yarn --cwd generated install --frozen-lockfile && yarn --cwd generated run build",
     "build:wrapper": "tsc -p tsconfig.build.json && tsc -p tsconfig.build.esm.json",
-    "ci:test": "npm run build:generated && npm run build:wrapper && npm run test:coverage",
+    "ci:test": "yarn run build:generated && yarn run build:wrapper && yarn run test:coverage",
     "clean": "rm -rf dist generated/dist",
     "download:spec": "curl -s https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json > openapi/rest-api.json",
-    "generate": "npx @openapitools/openapi-generator-cli generate -i openapi/rest-api.json -g typescript-axios -o generated --additional-properties=npmName=fulcrum-generated,npmVersion=3.0.0,supportsES6=true,withSeparateModelsAndApi=true,apiPackage=api,modelPackage=models,importFileExtension=.js,useSingleRequestParameter=true,stringEnums=true,withInterfaces=true,generateApiDocumentation=false,generateModelDocumentation=false --skip-validate-spec && rm -rf generated/docs",
-    "generate:full": "npm run download:spec && npm run generate && npm run build",
+    "generate": "yarn dlx @openapitools/openapi-generator-cli generate -i openapi/rest-api.json -g typescript-axios -o generated --additional-properties=npmName=fulcrum-generated,npmVersion=3.0.0,supportsES6=true,withSeparateModelsAndApi=true,apiPackage=api,modelPackage=models,importFileExtension=.js,useSingleRequestParameter=true,stringEnums=true,withInterfaces=true,generateApiDocumentation=false,generateModelDocumentation=false --skip-validate-spec && rm -rf generated/docs",
+    "generate:full": "yarn run download:spec && yarn run generate && yarn run build",
     "verify": "tsx scripts/verify-api.ts",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "yarn run build"
   },
   "author": "Jason Sanford (jasonsanford@gmail.com)",
   "license": "BSD-2-Clause",
@@ -60,5 +60,6 @@
   "dependencies": {
     "@opentelemetry/api": "^1.9.0",
     "axios": "^1.13.1"
-  }
+  },
+  "packageManager": "yarn@1.22.22"
 }
