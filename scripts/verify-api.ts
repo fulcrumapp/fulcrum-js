@@ -5,7 +5,7 @@
  * This script verifies the Fulcrum API client by calling all list operations
  * and printing statistics about the responses.
  *
- * Usage: npm run verify
+ * Usage: yarn verify
  */
 
 import { FulcrumClient, FulcrumRegion } from '../src/client.js';

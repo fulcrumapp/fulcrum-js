@@ -38,14 +38,14 @@ create_preview_environment: False
 # If 'command' is None or missing, unit tests will be skipped
 unittest:
   image: 280296955917.dkr.ecr.us-east-2.amazonaws.com/dockerhub/library/node:22
-  command: "npm ci && npm run ci:test"
+  command: "yarn install --frozen-lockfile && yarn ci:test"
   # coverage_file: None  # Optional: Path to coverage file if not in default location
 
 # Code Linting Configuration
 # If 'command' is None or missing, linting will be skipped
 lint:
   image: 280296955917.dkr.ecr.us-east-2.amazonaws.com/dockerhub/library/node:22
-  command: "npm ci && npm run lint"
+  command: "yarn install --frozen-lockfile && yarn lint"
   # coverage_file: None  # Optional: Path to lint results file
 
 # SonarQube Code Analysis

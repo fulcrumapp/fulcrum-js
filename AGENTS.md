@@ -33,30 +33,11 @@ This ensures the user maintains full control over what gets committed and mainta
 
 **ALL code changes MUST**:
 
-1. **Pass all existing tests**:
+1. **Pass all existing tests** – run `yarn test` and ensure 0 failures.
 
-   ```bash
-   npm test
-   ```
+2. **Maintain 90%+ code coverage** (80%+ for branches) – run `yarn test:coverage`. Targets: statements ≥90%, branches ≥80% (allowing for optional-parameter gaps), functions ≥90%, lines ≥90%.
 
-   All tests must pass with **0 failures**.
-
-2. **Maintain 90%+ code coverage** (80%+ for branches):
-
-   ```bash
-   npm run test:coverage
-   ```
-
-   - **Statement coverage**: ≥90%
-   - **Branch coverage**: ≥80% (some branches from optional params are hard to test)
-   - **Function coverage**: ≥90%
-   - **Line coverage**: ≥90%
-
-3. **Write tests for new code**:
-   - Every new function/method needs test coverage
-   - Every new feature needs integration tests
-   - Tests go in `src/**/*.test.ts` files
-   - Use Jest with TypeScript
+3. **Write tests for new code** – cover every new function/method, add integration tests for each new feature, keep tests in `src/**/*.test.ts`, and use Jest with TypeScript.
 
 ### 3. 📁 Project Structure
 
@@ -83,23 +64,23 @@ Before any code changes:
 
 ```bash
 # Ensure generated client exists
-npm run generate:full
+yarn generate:full
 
 # Build everything
-npm run build
+yarn build
 ```
 
 After code changes to `src/`:
 
 ```bash
 # Build wrapper
-npm run build:wrapper
+yarn build:wrapper
 
 # Run tests
-npm test
+yarn test
 
 # Verify coverage
-npm run test:coverage
+yarn test:coverage
 
 # Check for problems
 # Use get_errors() tool
@@ -159,9 +140,9 @@ If coverage drops below 90%:
 
 For EVERY code change:
 
-- [ ] Code compiles (`npm run build:wrapper`)
-- [ ] All tests pass (`npm test`)
-- [ ] Coverage ≥90% (`npm run test:coverage`)
+- [ ] Code compiles (`yarn build:wrapper`)
+- [ ] All tests pass (`yarn test`)
+- [ ] Coverage ≥90% (`yarn test:coverage`)
 - [ ] Problems tab clean (`get_errors()`)
 - [ ] No TypeScript errors
 - [ ] No ESLint errors
@@ -237,8 +218,8 @@ describe('myResource', () => {
 });
 
 // 3. Build and test
-npm run build:wrapper
-npm run test:coverage
+yarn build:wrapper
+yarn test:coverage
 
 // 4. Verify coverage ≥90%
 ```
@@ -247,7 +228,7 @@ npm run test:coverage
 
 ```bash
 # 1. See what's not covered
-npm run test:coverage
+yarn test:coverage
 
 # 2. Check coverage report
 open coverage/lcov-report/index.html
@@ -255,31 +236,31 @@ open coverage/lcov-report/index.html
 # 3. Add tests for uncovered lines
 
 # 4. Verify improvement
-npm run test:coverage
+yarn test:coverage
 ```
 
 #### Updating generated client
 
 ```bash
 # 1. Download latest OpenAPI spec
-npm run download:spec
+yarn download:spec
 
 # 2. Regenerate client
-npm run generate
+yarn generate
 
 # 3. Update dependencies in generated/package.json to current versions
 # This is the ONE thing you ARE allowed to edit in generated/
 # Use npm-check-updates to find and update to latest versions:
 cd generated
-npx npm-check-updates
+yarn dlx npm-check-updates
 # Review the proposed updates, then apply them:
-npx npm-check-updates -u
+yarn dlx npm-check-updates -u
 # Or manually update specific packages:
-npm install axios@latest @types/node@latest typescript@latest
+yarn add axios@latest @types/node@latest typescript@latest
 cd ..
 
 # 4. Build generated client
-npm run build:generated
+yarn build:generated
 
 # 5. Check for breaking changes in generated API
 # Compare method signatures in generated/dist/api/default-api.d.ts
@@ -295,8 +276,8 @@ npm run build:generated
 # Edit src/client.test.ts
 
 # 7. Full verification
-npm run build
-npm run test:coverage
+yarn build
+yarn test:coverage
 
 # 8. Document breaking changes if user-facing API changed
 # Update README.md if needed
@@ -308,16 +289,16 @@ npm run test:coverage
 
 ```bash
 # Run in watch mode
-npm run test:watch
+yarn test:watch
 
 # Run specific test file
-npx jest src/client.test.ts
+yarn jest src/client.test.ts
 
 # Run with verbose output
-npx jest --verbose
+yarn jest --verbose
 
 # Update snapshots if needed
-npx jest -u
+yarn jest -u
 ```
 
 ### 10. 📊 Quality Gates
@@ -333,25 +314,25 @@ npx jest -u
 **Before merging, verify**:
 
 ```bash
-npm run build          # Must succeed
-npm test               # Must be 100% pass
-npm run test:coverage  # Must be ≥90%
-npm run lint          # Must have 0 errors
+yarn build          # Must succeed
+yarn test           # Must be 100% pass
+yarn test:coverage  # Must be ≥90%
+yarn lint           # Must have 0 errors
 ```
 
 ### 11. 🛠️ Tools & Commands Reference
 
 | Command | Purpose | When to Use |
 |---------|---------|-------------|
-| `npm test` | Run tests | After every code change |
-| `npm run test:watch` | Run tests in watch mode | During development |
-| `npm run test:coverage` | Run tests with coverage | Before committing |
-| `npm run build` | Build everything | Before publishing |
-| `npm run build:wrapper` | Build only wrapper | After editing src/ |
-| `npm run lint` | Run ESLint | Before committing |
-| `npm run generate` | Generate client from spec | After spec update |
-| `npm run generate:full` | Download spec + generate + build | Full regeneration |
-| `npm run clean` | Remove build artifacts | When starting fresh |
+| `yarn test` | Run tests | After every code change |
+| `yarn test:watch` | Run tests in watch mode | During development |
+| `yarn test:coverage` | Run tests with coverage | Before committing |
+| `yarn build` | Build everything | Before publishing |
+| `yarn build:wrapper` | Build only wrapper | After editing src/ |
+| `yarn lint` | Run ESLint | Before committing |
+| `yarn generate` | Generate client from spec | After spec update |
+| `yarn generate:full` | Download spec + generate + build | Full regeneration |
+| `yarn clean` | Remove build artifacts | When starting fresh |
 
 ### 12. 🎓 Best Practices
 
@@ -376,16 +357,16 @@ npm run lint          # Must have 0 errors
 
 ```bash
 # 1. Build
-npm run build:wrapper
+yarn build:wrapper
 
 # 2. Test
-npm run test:coverage
+yarn test:coverage
 
 # 3. Verify coverage ≥90%
 # Check output of previous command
 
 # 4. Lint
-npm run lint
+yarn lint
 
 # 5. Check problems
 # Use get_errors() tool - must be 0 errors
@@ -404,8 +385,8 @@ git status
 The most important rules:
 
 1. **Problems tab MUST be clean** - Use `get_errors()` tool
-2. **All tests MUST pass** - Run `npm test`
-3. **Coverage MUST be ≥90%** - Run `npm run test:coverage`
+2. **All tests MUST pass** - Run `yarn test`
+3. **Coverage MUST be ≥90%** - Run `yarn test:coverage`
 4. **Never edit generated code** - Only edit `src/`
 5. **Test everything** - New code needs new tests
 
