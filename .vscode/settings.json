@@ -1,6 +1,6 @@
 {
   "jest.runMode": "on-demand",
-  "jest.jestCommandLine": "npm test --",
+  "jest.jestCommandLine": "yarn test --",
   "jest.rootPath": ".",
   "jest.nodeEnv": {
     "NODE_OPTIONS": "--experimental-vm-modules"
