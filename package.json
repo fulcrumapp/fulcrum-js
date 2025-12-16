@@ -1,6 +1,6 @@
 {
   "name": "@fulcrumapp/fulcrum-js",
-  "version": "2.7.4",
+  "version": "2.7.5",
   "description": "JavaScript and TypeScript wrapper for the Fulcrum API",
   "type": "module",
   "exports": {
