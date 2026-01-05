@@ -5,10 +5,22 @@ A JavaScript and TypeScript library for the Fulcrum API.
 
 ## Installation
 
+This package is hosted on the GitHub Package Registry. To install it, you must configure your package manager to use the GitHub registry for the `@fulcrumapp` scope.
+
+### 1. Configure Registry
+
+Add a `.npmrc` file to your project root:
+
+```text
+@fulcrumapp:registry=https://npm.pkg.github.com
+```
+
+### 2. Install Package
+
 ```bash
 yarn add @fulcrumapp/fulcrum-js
 # or
-npm install --save @fulcrumapp/fulcrum-js
+npm install @fulcrumapp/fulcrum-js
 ```
 
 ## Quick Start
@@ -1044,7 +1056,7 @@ await api.changesetsClose(changesetId);
 
 The v3 wrapper client (`FulcrumClient`) provides a clean, resource-oriented API similar to v2:
 
-1. Install v3:
+1. Install v3 (ensure you have [configured the GitHub registry](#1-configure-registry)):
 
   ```bash
   yarn add @fulcrumapp/fulcrum-js@latest
@@ -1936,6 +1948,6 @@ yarn version --patch  # or --minor/--major
 # Build the project
 yarn build
 
-# Publish to npm
+# Publish to GitHub Packages
 yarn publish
 ```
