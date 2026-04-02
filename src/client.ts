@@ -1143,8 +1143,8 @@ export class FulcrumClient {
   get workflows(): {
     getAll: (params?: Omit<DefaultApiGetAllWorkflowsRequest, 'accept'>) => Promise<unknown>;
     getById: (workflowId: string, params?: Omit<DefaultApiGetSingleWorkflowRequest, 'workflowId' | 'accept'>) => Promise<unknown>;
-    create: (params?: Omit<DefaultApiCreateWorkflowRequest, 'accept' | 'contentTyoe'>) => Promise<unknown>;
-    update: (workflowId: string, params?: Omit<DefaultApiUpdateWorkflowRequest, 'workflowId' | 'accept' | 'contentTyoe'>) => Promise<unknown>;
+    create: (params?: Omit<DefaultApiCreateWorkflowRequest, 'accept' | 'contentType'>) => Promise<unknown>;
+    update: (workflowId: string, params?: Omit<DefaultApiUpdateWorkflowRequest, 'workflowId' | 'accept' | 'contentType'>) => Promise<unknown>;
     delete: (workflowId: string, params?: Omit<DefaultApiDeleteWorkflowRequest, 'workflowId' | 'accept'>) => Promise<unknown>;
   } {
     const api = this.api;
