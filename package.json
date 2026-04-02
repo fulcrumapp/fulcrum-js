@@ -33,7 +33,7 @@
     "lint": "eslint src/**/*.ts",
     "build": "yarn run build:generated && yarn run build:wrapper",
     "build:generated": "yarn --cwd generated install --frozen-lockfile && yarn --cwd generated run build",
-    "build:wrapper": "tsc -p tsconfig.build.json && tsc -p tsconfig.build.esm.json",
+    "build:wrapper": "tsc -p tsconfig.build.json && tsc -p tsconfig.build.esm.json && tsx scripts/fix-esm-paths.ts",
     "ci:test": "yarn run build:generated && yarn run build:wrapper && yarn run test:coverage",
     "clean": "rm -rf dist generated/dist",
     "download:spec": "curl -s https://raw.githubusercontent.com/fulcrumapp/api/v2/reference/rest-api.json > openapi/rest-api.json",
