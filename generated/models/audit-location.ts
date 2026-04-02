@@ -13,17 +13,26 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { ChangesetCreateRequestChangesetMetadata } from './changeset-create-request-changeset-metadata.js';
 
-export interface ChangesetCreateRequestChangeset {
-    [key: string]: any;
-
+/**
+ * Location metadata captured at creation or update time.
+ */
+export interface AuditLocation {
     /**
-     * Identifier of the form the changeset applies to
+     * The latitude coordinate.
      */
-    'form_id': string;
-    'metadata'?: ChangesetCreateRequestChangesetMetadata;
+    'latitude'?: number;
+    /**
+     * The longitude coordinate.
+     */
+    'longitude'?: number;
+    /**
+     * The altitude in meters.
+     */
+    'altitude'?: number;
+    /**
+     * The horizontal accuracy in meters.
+     */
+    'horizontal_accuracy'?: number;
 }
 

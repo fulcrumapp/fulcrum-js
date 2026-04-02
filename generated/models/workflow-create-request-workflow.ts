@@ -18,11 +18,11 @@ export interface WorkflowCreateRequestWorkflow {
     /**
      * Display name of the workflow
      */
-    'name': string | null;
+    'name': string;
     /**
      * Optional description of the workflow
      */
-    'description'?: string | null;
+    'description'?: string;
     /**
      * Type of object the workflow targets (for example, form)
      */

@@ -18,7 +18,7 @@ export interface WebhookRequestWebhook {
     /**
      * Display name for the webhook
      */
-    'name': string | null;
+    'name': string;
     /**
      * Destination URL that will receive webhook payloads
      */

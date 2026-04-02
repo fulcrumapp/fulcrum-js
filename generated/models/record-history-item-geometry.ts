@@ -15,13 +15,10 @@
 
 
 /**
- * Optional metadata describing the changeset
+ * GeoJSON geometry object
  */
-export interface ChangesetCreateRequestChangesetMetadata {
-    [key: string]: any;
-
-    'comment'?: string;
-    'app_created_by'?: string;
-    'app_name'?: string;
+export interface RecordHistoryItemGeometry {
+    'type'?: string;
+    'coordinates'?: Array<number>;
 }
 

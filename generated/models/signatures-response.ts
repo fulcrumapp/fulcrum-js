@@ -13,15 +13,15 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import type { Signature } from './signature.js';
 
-/**
- * Optional metadata describing the changeset
- */
-export interface ChangesetCreateRequestChangesetMetadata {
-    [key: string]: any;
-
-    'comment'?: string;
-    'app_created_by'?: string;
-    'app_name'?: string;
+export interface SignaturesResponse {
+    'signatures': Array<Signature>;
+    'current_page': number;
+    'total_pages': number;
+    'total_count': number;
+    'per_page': number;
 }
 

@@ -14,14 +14,14 @@
 
 
 
-/**
- * Optional metadata describing the changeset
- */
-export interface ChangesetCreateRequestChangesetMetadata {
-    [key: string]: any;
-
-    'comment'?: string;
-    'app_created_by'?: string;
-    'app_name'?: string;
+export interface ReportRequestReport {
+    /**
+     * The ID of the record to generate a report for
+     */
+    'record_id': string;
+    /**
+     * The ID of the report template to use (optional)
+     */
+    'template_id'?: string;
 }
 

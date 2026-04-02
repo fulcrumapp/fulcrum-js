@@ -14,14 +14,10 @@
 
 
 
-/**
- * Optional metadata describing the changeset
- */
-export interface ChangesetCreateRequestChangesetMetadata {
-    [key: string]: any;
-
-    'comment'?: string;
-    'app_created_by'?: string;
-    'app_name'?: string;
+export interface AttachmentCopyAllResponse {
+    /**
+     * A mapping of original reference file attachment IDs to their new copies
+     */
+    'ref_file_mapping'?: { [key: string]: string; };
 }
 

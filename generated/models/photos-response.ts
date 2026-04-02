@@ -13,15 +13,15 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import type { Photo } from './photo.js';
 
-/**
- * Optional metadata describing the changeset
- */
-export interface ChangesetCreateRequestChangesetMetadata {
-    [key: string]: any;
-
-    'comment'?: string;
-    'app_created_by'?: string;
-    'app_name'?: string;
+export interface PhotosResponse {
+    'photos': Array<Photo>;
+    'current_page': number;
+    'total_pages': number;
+    'total_count': number;
+    'per_page': number;
 }
 

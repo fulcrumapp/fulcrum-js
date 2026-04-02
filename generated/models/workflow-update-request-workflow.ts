@@ -18,11 +18,11 @@ export interface WorkflowUpdateRequestWorkflow {
     /**
      * Updated display name of the workflow
      */
-    'name'?: string | null;
+    'name'?: string;
     /**
      * Updated description of the workflow
      */
-    'description'?: string | null;
+    'description'?: string;
     /**
      * Updated object type targeted by the workflow
      */

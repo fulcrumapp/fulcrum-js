@@ -18,13 +18,23 @@ import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
 import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common.js';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction, replaceWithSerializableTypeIfNeeded } from '../common.js';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base.js';
+// @ts-ignore
+import type { Attachment } from '../models/index.js';
+// @ts-ignore
+import type { AttachmentCopyAllRequest } from '../models/index.js';
+// @ts-ignore
+import type { AttachmentCopyAllResponse } from '../models/index.js';
 // @ts-ignore
 import type { AttachmentCreateRequest } from '../models/index.js';
 // @ts-ignore
 import type { AttachmentTrackRequest } from '../models/index.js';
+// @ts-ignore
+import type { AttachmentsResponse } from '../models/index.js';
+// @ts-ignore
+import type { AudiosResponse } from '../models/index.js';
 // @ts-ignore
 import type { AuthorizationRequest } from '../models/index.js';
 // @ts-ignore
@@ -42,17 +52,15 @@ import type { ChoiceListRequest } from '../models/index.js';
 // @ts-ignore
 import type { ClassificationSetRequest } from '../models/index.js';
 // @ts-ignore
+import type { CopyAllAttachments400Response } from '../models/index.js';
+// @ts-ignore
 import type { CreateAttachment200Response } from '../models/index.js';
 // @ts-ignore
 import type { CreateGroup201Response } from '../models/index.js';
 // @ts-ignore
 import type { FormRequest } from '../models/index.js';
 // @ts-ignore
-import type { GetAllAttachments200Response } from '../models/index.js';
-// @ts-ignore
 import type { GetAllAttachments401Response } from '../models/index.js';
-// @ts-ignore
-import type { GetSingleAttachment200Response } from '../models/index.js';
 // @ts-ignore
 import type { GroupCreateRequest } from '../models/index.js';
 // @ts-ignore
@@ -68,13 +76,17 @@ import type { MembershipDeleteRequest } from '../models/index.js';
 // @ts-ignore
 import type { MembershipUpdateRequest } from '../models/index.js';
 // @ts-ignore
-import type { ModelRecord } from '../models/index.js';
-// @ts-ignore
 import type { PermissionChangeRequest } from '../models/index.js';
+// @ts-ignore
+import type { PhotosResponse } from '../models/index.js';
 // @ts-ignore
 import type { ProjectRequest } from '../models/index.js';
 // @ts-ignore
 import type { QueryRequest } from '../models/index.js';
+// @ts-ignore
+import type { RecordHistoryResponse } from '../models/index.js';
+// @ts-ignore
+import type { RecordPatchRequest } from '../models/index.js';
 // @ts-ignore
 import type { RecordRequest } from '../models/index.js';
 // @ts-ignore
@@ -82,7 +94,31 @@ import type { RecordsGetAll400Response } from '../models/index.js';
 // @ts-ignore
 import type { RecordsResponse } from '../models/index.js';
 // @ts-ignore
+import type { ReportRequest } from '../models/index.js';
+// @ts-ignore
+import type { ReportResponse } from '../models/index.js';
+// @ts-ignore
 import type { ReportTemplateRequest } from '../models/index.js';
+// @ts-ignore
+import type { SignaturesResponse } from '../models/index.js';
+// @ts-ignore
+import type { SingleAudioResponse } from '../models/index.js';
+// @ts-ignore
+import type { SinglePhotoResponse } from '../models/index.js';
+// @ts-ignore
+import type { SingleRecordResponse } from '../models/index.js';
+// @ts-ignore
+import type { SingleSignatureResponse } from '../models/index.js';
+// @ts-ignore
+import type { SingleSketchResponse } from '../models/index.js';
+// @ts-ignore
+import type { SingleVideoResponse } from '../models/index.js';
+// @ts-ignore
+import type { SketchesResponse } from '../models/index.js';
+// @ts-ignore
+import type { UnauthorizedResponse } from '../models/index.js';
+// @ts-ignore
+import type { VideosResponse } from '../models/index.js';
 // @ts-ignore
 import type { WebhookRequest } from '../models/index.js';
 // @ts-ignore
@@ -127,9 +163,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -142,16 +177,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get All Audio
-         * @param {string} [recordId] The ID of the record with which the video is associated.
-         * @param {string} [formId] The ID of the form with which the video is associated. Leaving this blank will query against all of your videos.
-         * @param {boolean} [newestFirst] If present, videos will be sorted by updated_at date.
-         * @param {boolean} [processed] Video has been completely processed.
-         * @param {boolean} [stored] Video has been completely stored.
-         * @param {boolean} [uploaded] Video has been completely uploaded.
-         * @param {number} [page] The page number requested
-         * @param {number} [perPage] Number of items per page
+         * Retrieve metadata for a list of audio files.
+         * @summary Get a list of audio metadata
+         * @param {string} [recordId] The ID of the record with which the audio file is associated.
+         * @param {string} [formId] The ID of the form with which the audio file is associated. Leaving this blank will query against all of your audio files.
+         * @param {boolean} [newestFirst] If present, audio files will be sorted by updated_at date.
+         * @param {boolean} [processed] Filter for audio files that have been completely processed.
+         * @param {boolean} [stored] Filter for audio files that have been completely stored.
+         * @param {boolean} [uploaded] Filter for audio files that have been completely uploaded.
+         * @param {number} [page] The page number requested.
+         * @param {number} [perPage] The number of items to return per page.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -204,8 +239,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -219,7 +254,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get GPS tracks for audio files in GeoJSON format.
          * @summary Get GeoJSON Tracks for All Audio
          * @param {string} [accept] 
          * @param {string} [type] Set value to &#x60;points&#x60; to fetch tracks as GeoJSON points
@@ -246,8 +281,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['type'] = type;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -261,7 +296,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get GPS tracks for audio files in GPX format.
          * @summary Get GPX Tracks for All Audio
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -283,8 +318,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -298,7 +333,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get GPS tracks for audio files in JSON format.
          * @summary Get JSON Tracks for All Audio
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -320,8 +355,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -335,7 +370,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get GPS tracks for audio files in KML format.
          * @summary Get KML Tracks for All Audio
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -357,8 +392,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -372,14 +407,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get Original Audio File
-         * @param {string} audioId Audio ID
-         * @param {string} [accept] 
+         * Download the original audio file.
+         * @summary Get an audio original file
+         * @param {string} audioId The unique identifier of the audio file.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        audioGetOriginalFile: async (audioId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        audioGetOriginalFile: async (audioId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'audioId' is not null or undefined
             assertParamExists('audioGetOriginalFile', 'audioId', audioId)
             const localVarPath = `/v2/audio/{audio_id}.mp4`
@@ -398,11 +432,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'audio/mp4,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -413,9 +444,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get Audio Metadata
-         * @param {string} audioId Audio ID
+         * Retrieve metadata for a single audio file.
+         * @summary Get audio metadata
+         * @param {string} audioId The unique identifier of the audio file.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -439,8 +470,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -454,9 +485,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get the GPS track for an audio file in GeoJSON format.
          * @summary Get GeoJSON Audio Track
-         * @param {string} audioId Audio ID
+         * @param {string} audioId The unique identifier of the audio file.
          * @param {string} [accept] 
          * @param {string} [type] Set value to &#x60;points&#x60; to fetch tracks as GeoJSON points
          * @param {*} [options] Override http request option.
@@ -485,8 +516,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['type'] = type;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -500,9 +531,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get the GPS track for an audio file in GPX format.
          * @summary Get GPX Audio Track
-         * @param {string} audioId Audio ID
+         * @param {string} audioId The unique identifier of the audio file.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -526,8 +557,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -541,9 +572,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get the GPS track for an audio file in JSON format.
          * @summary Get JSON Audio Track
-         * @param {string} audioId Audio ID
+         * @param {string} audioId The unique identifier of the audio file.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -567,8 +598,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -582,9 +613,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get the GPS track for an audio file in KML format.
          * @summary Get KML Audio Track
-         * @param {string} audioId Audio ID
+         * @param {string} audioId The unique identifier of the audio file.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -608,8 +639,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -623,8 +654,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Upload audio with optional track file
-         * @summary Upload Audio
+         * Upload audio with optional track file.
+         * @summary Upload audio
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {*} [options] Override http request option.
@@ -646,8 +677,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -665,13 +696,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get All Audit Logs
+         * @summary Get a list of audit logs
          * @param {string} [source] Valid options include: &#x60;export&#x60;, &#x60;data_export&#x60;, &#x60;membership&#x60;, &#x60;layer&#x60;, &#x60;project&#x60;, &#x60;audit_log&#x60;, &#x60;role&#x60;, &#x60;form&#x60;, &#x60;data_share&#x60;, &#x60;classification_set&#x60;, &#x60;authorization&#x60;, &#x60;choice_list&#x60;, &#x60;import&#x60;, &#x60;organization&#x60;, &#x60;workflow&#x60;, &#x60;webhook&#x60;
          * @param {string} [activity] The available actions vary by log type but a complete list of valid actions includes: &#x60;update&#x60;, &#x60;create&#x60;, &#x60;permission_update&#x60;, &#x60;download&#x60;, &#x60;delete&#x60;, &#x60;reset&#x60;, &#x60;share_enabled&#x60;, &#x60;share_disabled&#x60;, &#x60;update_credit_card&#x60;, &#x60;plan_change&#x60;, &#x60;billing_emails_change&#x60;, &#x60;update_storage&#x60;, &#x60;add_credit&#x60;, &#x60;change_default&#x60;.
          * @param {string} [ip] Filter by ip address of the of the audit log action. The ip address must be an exact match in order to return in values from this filter.
-         * @param {string} [user] Filter by user responsible for the logged changes. This parameter must be the Fulcrum resource id for the user in question, which can be obtained from the membership API.
-         * @param {string} [updatedSince] Returns log entries since the given unix timestamp.
-         * @param {string} [updatedBefore] Returns log entries before the given unix timestamp.
+         * @param {string} [user] Filter by user responsible for the logged changes. This parameter must be the Fulcrum ID for the user in question, which can be obtained from the membership API.
+         * @param {string} [updatedSince] Return log entries since the given unix timestamp.
+         * @param {string} [updatedBefore] Return log entries before the given unix timestamp.
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -730,8 +761,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -746,7 +777,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get Single Audit Log
+         * @summary Get an audit log
          * @param {string} auditLogId Audit Log ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -771,8 +802,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -787,7 +818,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Create Authorization
+         * @summary Create an authorization
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {AuthorizationRequest} [authorizationRequest] 
@@ -810,9 +841,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -832,7 +862,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Delete Authorization
+         * @summary Delete an authorization
          * @param {string} authorizationId Authorization ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -857,8 +887,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -873,7 +903,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get All Authorizations
+         * @summary Get a list of authorizations
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -904,8 +934,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -920,7 +950,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get Single Authorization
+         * @summary Get an authorization
          * @param {string} authorizationId Authorization ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -945,8 +975,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -988,9 +1018,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -1036,8 +1065,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -1055,7 +1084,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Create Changeset
+         * @summary Create a changeset
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {ChangesetCreateRequest} [changesetCreateRequest] 
@@ -1078,9 +1107,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -1100,7 +1128,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get All Changesets
+         * @summary Get a list of changesets
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -1131,8 +1159,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -1147,7 +1175,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get Single Changeset
+         * @summary Get a changeset
          * @param {string} changesetId Changeset ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -1172,8 +1200,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -1215,9 +1243,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -1237,7 +1264,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Create Choice List
+         * @summary Create a choice list
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {ChoiceListRequest} [choiceListRequest] 
@@ -1260,9 +1287,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -1282,7 +1308,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Delete Choice List
+         * @summary Delete a choice list
          * @param {string} choiceListId Choice List ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -1307,8 +1333,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -1323,7 +1349,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get All Choice Lists
+         * @summary Get a list of choice lists
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -1354,8 +1380,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -1370,7 +1396,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get Single Choice List
+         * @summary Get a choice list
          * @param {string} choiceListId Choice List ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -1395,8 +1421,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -1438,9 +1464,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -1460,7 +1485,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Create Classification Set
+         * @summary Create a classification set
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {ClassificationSetRequest} [classificationSetRequest] 
@@ -1483,9 +1508,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -1505,7 +1529,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Delete Classification Set
+         * @summary Delete a classification set
          * @param {string} classificationSetId Classification Set ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -1530,8 +1554,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -1546,7 +1570,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get All Classification Sets
+         * @summary Get a list of classification sets
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -1582,8 +1606,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['type'] = type;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -1598,7 +1622,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get Single Classification Set
+         * @summary Get a classification set
          * @param {string} classificationSetId Classification Set ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -1623,8 +1647,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -1666,9 +1690,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -1687,8 +1710,50 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * Copy all reference files from one form to another. Limits: 100 reference files per form, 1GB total per form.
+         * @summary Copy all reference files
+         * @param {AttachmentCopyAllRequest} attachmentCopyAllRequest 
+         * @param {string} [xApitoken] API Token. Required to authenticate the request.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        copyAllAttachments: async (attachmentCopyAllRequest: AttachmentCopyAllRequest, xApitoken?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'attachmentCopyAllRequest' is not null or undefined
+            assertParamExists('copyAllAttachments', 'attachmentCopyAllRequest', attachmentCopyAllRequest)
+            const localVarPath = `/v2/attachments/copy_all`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiToken required
+            await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (xApitoken != null) {
+                localVarHeaderParameter['x-apitoken'] = String(xApitoken);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(attachmentCopyAllRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * There is only one parameter that is required for creating an attachment: `owners`. You must specify at least one owner of type `record` or `form`. If you create a `record` attachment you can optionally include a `name` and `file_size`. The name will be the name of the file shown in the record information. The file_size is only used for verifying that uploading this attachment will not exceed your current storage limit. If no file_size is provided the attachment may be rejected once it has been uploaded. The response will provide the `url` to upload (PUT) the file to.
-         * @summary Create Attachment
+         * @summary Create an attachment
          * @param {string} [xApitoken] API Token. Required to authenticate the request.
          * @param {AttachmentCreateRequest} [attachmentCreateRequest] 
          * @param {*} [options] Override http request option.
@@ -1710,9 +1775,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (xApitoken != null) {
                 localVarHeaderParameter['x-apitoken'] = String(xApitoken);
@@ -1729,7 +1793,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * Using the batch operations API, you can bulk delete records from a form.
-         * @summary Create Batch to Bulk Delete Records
+         * @summary Create a batch
          * @param {BatchCreateRequest} [batchCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1750,9 +1814,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -1766,7 +1829,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Create Group
+         * @summary Create a group
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {GroupCreateRequest} [groupCreateRequest] 
@@ -1789,9 +1852,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json,text/plain';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -1811,14 +1873,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Create Member
+         * @summary Create a membership
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {MembershipCreateRequest} [membershipCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMember: async (accept?: string, contentType?: string, membershipCreateRequest?: MembershipCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createMembership: async (accept?: string, contentType?: string, membershipCreateRequest?: MembershipCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/memberships.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1834,9 +1896,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -1856,7 +1917,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Create Report Template
+         * @summary Create a report template
          * @param {ReportTemplateRequest} [reportTemplateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1877,9 +1938,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -1893,14 +1953,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Create Workflow
+         * @summary Create a workflow
          * @param {string} [accept] 
-         * @param {string} [contentTyoe] 
+         * @param {string} [contentType] 
          * @param {WorkflowCreateRequest} [workflowCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createWorkflow: async (accept?: string, contentTyoe?: string, workflowCreateRequest?: WorkflowCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createWorkflow: async (accept?: string, contentType?: string, workflowCreateRequest?: WorkflowCreateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/workflows.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1916,15 +1976,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
-            if (contentTyoe != null) {
-                localVarHeaderParameter['Content-Tyoe'] = String(contentTyoe);
+            if (contentType != null) {
+                localVarHeaderParameter['Content-Type'] = String(contentType);
             }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -1938,7 +1997,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * The delete endpoint only applies to Form attachments. Use this endpoint to delete an attachment. For record attachments, simply remove the association of an attachment from the record and the attachment will be deleted.
-         * @summary Delete Attachment
+         * @summary Delete an attachment
          * @param {string} attachmentId The attachment\&#39;s ID
          * @param {string} [xApitoken] API Token. Required to authenticate the request.
          * @param {*} [options] Override http request option.
@@ -1963,8 +2022,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (xApitoken != null) {
                 localVarHeaderParameter['x-apitoken'] = String(xApitoken);
             }
@@ -1979,7 +2038,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Delete Group
+         * @summary Delete a group
          * @param {string} groupId ID of the group
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -2004,8 +2063,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -2020,15 +2079,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Delete Member
+         * @summary Delete a membership
          * @param {string} membershipId The ID of the member
          * @param {MembershipDeleteRequest} [membershipDeleteRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteMember: async (membershipId: string, membershipDeleteRequest?: MembershipDeleteRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteMembership: async (membershipId: string, membershipDeleteRequest?: MembershipDeleteRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'membershipId' is not null or undefined
-            assertParamExists('deleteMember', 'membershipId', membershipId)
+            assertParamExists('deleteMembership', 'membershipId', membershipId)
             const localVarPath = `/v2/memberships/{membership_id}.json`
                 .replace(`{${"membership_id"}}`, encodeURIComponent(String(membershipId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2045,9 +2104,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -2061,7 +2119,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Delete Report Template
+         * @summary Delete a report template
          * @param {string} id The id of the report
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2085,8 +2143,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -2098,7 +2156,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Delete Workflow
+         * @summary Delete a workflow
          * @param {string} workflowId The ID of the workflow
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -2123,8 +2181,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -2161,9 +2219,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (xApitoken != null) {
                 localVarHeaderParameter['x-apitoken'] = String(xApitoken);
@@ -2180,7 +2237,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Create Form
+         * @summary Create a form
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {FormRequest} [formRequest] 
@@ -2203,9 +2260,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -2225,7 +2281,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Delete Form
+         * @summary Delete a form
          * @param {string} formId Form ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -2250,8 +2306,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -2266,16 +2322,17 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get All Forms
+         * @summary Get a list of forms
          * @param {boolean} [schema] schema&#x3D;false will only return the form metadata
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
          * @param {FormsGetAllTypeEnum} [type] Types of forms to return
+         * @param {FormsGetAllStatusEnum} [status] The status (active/inactive) of the forms to return.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        formsGetAll: async (schema?: boolean, page?: number, perPage?: number, accept?: string, type?: FormsGetAllTypeEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        formsGetAll: async (schema?: boolean, page?: number, perPage?: number, accept?: string, type?: FormsGetAllTypeEnum, status?: FormsGetAllStatusEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/forms.json`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2307,8 +2364,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['type'] = type;
             }
 
+            if (status !== undefined) {
+                localVarQueryParameter['status'] = status;
+            }
 
-    
+            localVarHeaderParameter['Accept'] = 'application/json';
+
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -2363,8 +2424,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -2379,7 +2440,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get Single Form
+         * @summary Get a form
          * @param {string} formId Form ID
          * @param {string} [accept] 
          * @param {boolean} [schema] schema&#x3D;false will only return the form metadata
@@ -2409,8 +2470,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['schema'] = schema;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -2452,9 +2513,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -2473,16 +2533,18 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get All Attachments
+         * Retrieve a list of attachments.
+         * @summary Get a list of attachment metadata
          * @param {string} [recordId] The ID of the record with which the attachment is associated. This is required when listing record attachments.
          * @param {string} [formId] The ID of the form with which the attachment is associated. This parameter will allow you to get all reference files within a form, NOT all of the record attachments in a form
          * @param {string} [ownerType] The type of attachment to query for. Must be either &#x60;form&#x60; or &#x60;record&#x60;.
+         * @param {GetAllAttachmentsSortEnum} [sort] The field to sort results by.
+         * @param {GetAllAttachmentsSortDirectionEnum} [sortDirection] The sort direction(asc, desc). Default is asc.
          * @param {string} [xApitoken] API Token. Required to authenticate the request.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllAttachments: async (recordId?: string, formId?: string, ownerType?: string, xApitoken?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAllAttachments: async (recordId?: string, formId?: string, ownerType?: string, sort?: GetAllAttachmentsSortEnum, sortDirection?: GetAllAttachmentsSortDirectionEnum, xApitoken?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/v2/attachments`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2510,8 +2572,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['owner_type'] = ownerType;
             }
 
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
 
-    
+            if (sortDirection !== undefined) {
+                localVarQueryParameter['sort_direction'] = sortDirection;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
             if (xApitoken != null) {
                 localVarHeaderParameter['x-apitoken'] = String(xApitoken);
             }
@@ -2526,7 +2596,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get All Batches
+         * @summary Get a list of batches
          * @param {string} [page] 
          * @param {string} [perPage] 
          * @param {string} [sort] 
@@ -2566,8 +2636,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['sort_direction'] = sortDirection;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -2579,7 +2649,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get All Groups
+         * @summary Get a list of groups
          * @param {string} [page] 
          * @param {string} [perPage] 
          * @param {boolean} [associations] Set to &#x60;true&#x60; in order to see each group\&#39;s assigned &#x60;member_ids&#x60;, &#x60;layer_ids&#x60;, &#x60;project_ids&#x60; and &#x60;form_ids&#x60;
@@ -2614,8 +2684,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['associations'] = associations;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -2672,8 +2742,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -2688,7 +2758,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get All Report Templates
+         * @summary Get a list of report templates
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [formId] The form to fetch reports for
@@ -2723,8 +2793,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['form_id'] = formId;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -2736,7 +2806,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get All Workflows
+         * @summary Get a list of workflows
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -2767,8 +2837,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -2822,8 +2892,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -2837,9 +2907,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get Single Attachment
-         * @param {string} attachmentId The attachment id.
+         * Retrieve metadata for a single attachment.
+         * @summary Get an attachment
+         * @param {string} attachmentId The unique identifier of the attachment.
          * @param {string} [xApitoken] API Token. Required to authenticate the request.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2863,8 +2933,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (xApitoken != null) {
                 localVarHeaderParameter['x-apitoken'] = String(xApitoken);
             }
@@ -2879,7 +2949,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get Single Batch
+         * @summary Get a batch
          * @param {string} batchId The ID of the batch
          * @param {string} [page] 
          * @param {string} [perPage] 
@@ -2913,8 +2983,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -2926,7 +2996,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get Single Group
+         * @summary Get a group
          * @param {string} groupId Group ID
          * @param {string} [accept] 
          * @param {boolean} [associations] Set to &#x60;true&#x60; in order to see each group\&#39;s assigned &#x60;member_ids&#x60;, &#x60;layer_ids&#x60;, &#x60;project_ids&#x60; and &#x60;form_ids&#x60;
@@ -2956,8 +3026,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['associations'] = associations;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -2972,7 +3042,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get Single Report Template
+         * @summary Get a report template
          * @param {string} id The id of the report
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2996,8 +3066,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -3009,7 +3079,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get Single Workflow
+         * @summary Get a workflow
          * @param {string} workflowId The id of the workflow
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -3034,8 +3104,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -3050,7 +3120,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Create Layer
+         * @summary Create a layer
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {LayerRequest} [layerRequest] 
@@ -3073,9 +3143,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -3095,7 +3164,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Delete Layer
+         * @summary Delete a layer
          * @param {string} layerId Layer ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -3120,8 +3189,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -3136,7 +3205,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get All Layers
+         * @summary Get a list of layers
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -3167,8 +3236,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -3183,7 +3252,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get Single Layer
+         * @summary Get a layer
          * @param {string} layerId Layer ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -3208,8 +3277,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -3251,9 +3320,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -3272,7 +3340,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Add or remove membership permissions from layers, forms, or projects
+         * Add or remove membership permissions from layers, forms, or projects.
          * @summary Change Permissions
          * @param {string} [accept] 
          * @param {string} [contentType] 
@@ -3296,9 +3364,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -3318,7 +3385,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get All Memberships
+         * @summary Get a list of memberships
          * @param {string} [formId] Limit members to a specific Form
          * @param {string} [projectId] Limit members to a specific Project
          * @param {string} [layerId] Limit members to a specific Layer
@@ -3364,8 +3431,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -3380,7 +3447,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get Single Membership
+         * @summary Get a membership
          * @param {string} membershipId Membership ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -3405,8 +3472,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -3420,16 +3487,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get All Photos
+         * Retrieve metadata for a list of photos.
+         * @summary Get a list of photo metadata
          * @param {string} [recordId] The ID of the record with which the photo is associated.
          * @param {string} [formId] The ID of the form with which the photo is associated. Leaving this blank will query against all of your photos.
          * @param {boolean} [newestFirst] If present, photos will be sorted by updated_at date.
-         * @param {boolean} [processed] Photo has been completely processed.
-         * @param {boolean} [stored] Photo has been completely stored.
-         * @param {boolean} [uploaded] Photo has been completely uploaded.
-         * @param {number} [page] The page number requested
-         * @param {number} [perPage] Number of items per page
+         * @param {boolean} [processed] Filter for photos that have been completely processed.
+         * @param {boolean} [stored] Filter for photos that have been completely stored.
+         * @param {boolean} [uploaded] Filter for photos that have been completely uploaded.
+         * @param {number} [page] The page number requested.
+         * @param {number} [perPage] The number of items to return per page.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3482,8 +3549,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -3497,14 +3564,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get Single Photo File
-         * @param {string} photoId Photo ID
-         * @param {string} [accept] 
+         * Download the original photo file.
+         * @summary Get a photo original file
+         * @param {string} photoId The unique identifier of the photo.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        photosGetSingleFile: async (photoId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        photosGetSingleFile: async (photoId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'photoId' is not null or undefined
             assertParamExists('photosGetSingleFile', 'photoId', photoId)
             const localVarPath = `/v2/photos/{photo_id}.jpg`
@@ -3523,11 +3589,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'image/jpeg,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -3538,9 +3601,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get Single Photo Metadata
-         * @param {string} photoId Photo ID
+         * Retrieve metadata for a single photo.
+         * @summary Get photo metadata
+         * @param {string} photoId The unique identifier of the photo.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3564,8 +3627,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -3579,14 +3642,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Photo Large File
-         * @param {string} photoId Photo ID
-         * @param {string} [accept] 
+         * Download the large variant of a photo.
+         * @summary Get a photo large file
+         * @param {string} photoId The unique identifier of the photo.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        photosLargeFile: async (photoId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        photosLargeFile: async (photoId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'photoId' is not null or undefined
             assertParamExists('photosLargeFile', 'photoId', photoId)
             const localVarPath = `/v2/photos/{photo_id}/large.jpg`
@@ -3605,11 +3667,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'image/jpeg,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -3620,9 +3679,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Retrieve metadata for a photo\'s large variant.
          * @summary Photo Large Metadata
-         * @param {string} photoId Photo ID
+         * @param {string} photoId The unique identifier of the photo.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3646,8 +3705,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -3661,14 +3720,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Photo Thumbnail File
-         * @param {string} photoId Photo ID
-         * @param {string} [accept] 
+         * Download the thumbnail variant of a photo.
+         * @summary Get a photo thumbnail file
+         * @param {string} photoId The unique identifier of the photo.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        photosThumbnailFile: async (photoId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        photosThumbnailFile: async (photoId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'photoId' is not null or undefined
             assertParamExists('photosThumbnailFile', 'photoId', photoId)
             const localVarPath = `/v2/photos/{photo_id}/thumbnail.jpg`
@@ -3687,11 +3745,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'image/jpeg,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -3702,9 +3757,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Retrieve metadata for a photo\'s thumbnail variant.
          * @summary Photo Thumbnail Metadata
-         * @param {string} photoId Photo ID
+         * @param {string} photoId The unique identifier of the photo.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3728,8 +3783,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -3743,8 +3798,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Upload Photo
+         * Upload a photo file to associate with a record.
+         * @summary Upload a photo
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {*} [options] Override http request option.
@@ -3766,8 +3821,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -3785,7 +3840,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Create Project
+         * @summary Create a project
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {ProjectRequest} [projectRequest] 
@@ -3808,9 +3863,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -3830,7 +3884,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Delete Project
+         * @summary Delete a project
          * @param {string} projectId Project ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -3855,8 +3909,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -3871,7 +3925,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get All Projects
+         * @summary Get a list of projects
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -3902,8 +3956,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -3918,7 +3972,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
-         * @summary Get Single Project
+         * @summary Get a project
          * @param {string} projectId Project ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -3943,8 +3997,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -3986,9 +4040,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -4007,9 +4060,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary GET Query
-         * @param {string} q The SQL query
+         * Execute a Query API request using HTTP GET. Provide a SQL like query to query against your organization\'s data.
+         * @summary Make a Query GET request
+         * @param {string} q The SQL query to execute.
          * @param {string} [format] The format of the results returned by the query. Options include &#x60;csv&#x60;, &#x60;json&#x60;, &#x60;geojson&#x60;, &#x60;postgres&#x60;.
          * @param {boolean} [headers] Include headers for csv format?
          * @param {boolean} [metadata] Include column metadata for &#x60;json&#x60; format?
@@ -4017,8 +4070,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} [tableName] Table name for &#x60;postgres&#x60; format. Defaults to query.
          * @param {string} [sortColumn] The name of the column used to sort on.
          * @param {string} [sortDirection] The sort direction (asc, desc).
-         * @param {number} [page] The page number requested
-         * @param {number} [perPage] Number of items per page
+         * @param {number} [page] The page number requested.
+         * @param {number} [perPage] The number of items to return per page.
          * @param {string} [accept] 
          * @param {string} [userAgent] 
          * @param {*} [options] Override http request option.
@@ -4082,8 +4135,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -4100,10 +4153,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary POST Query
-         * @param {number} [page] The page number requested
-         * @param {number} [perPage] Number of items per page
+         * Execute a Query API request using HTTP POST. Provide a SQL like query to query against your organization\'s data.
+         * @summary Make a Query POST request
+         * @param {number} [page] The page number requested.
+         * @param {number} [perPage] The number of items to return per page.
          * @param {string} [accept] 
          * @param {QueryRequest} [queryRequest] 
          * @param {*} [options] Override http request option.
@@ -4133,9 +4186,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -4151,8 +4203,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Create Record
+         * Create a new record in the specified form using the provided form values, location information, and any associated metadata.
+         * @summary Create a record
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {boolean} [xSkipWorkflows] Skips all app workflows
@@ -4177,9 +4229,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -4190,12 +4241,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             if (xSkipWorkflows != null) {
                 localVarHeaderParameter['X-SkipWorkflows'] = typeof xSkipWorkflows === 'string'
                     ? xSkipWorkflows
-                    : JSON.stringify(xSkipWorkflows);
+                    : JSON.stringify(xSkipWorkflows, replaceWithSerializableTypeIfNeeded);
             }
             if (xSkipWebhooks != null) {
                 localVarHeaderParameter['X-SkipWebhooks'] = typeof xSkipWebhooks === 'string'
                     ? xSkipWebhooks
-                    : JSON.stringify(xSkipWebhooks);
+                    : JSON.stringify(xSkipWebhooks, replaceWithSerializableTypeIfNeeded);
             }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4208,9 +4259,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Delete Record
-         * @param {string} recordId Record ID
+         * Delete a record from your organization.
+         * @summary Delete a record
+         * @param {string} recordId The unique identifier of the record to delete.
          * @param {string} [accept] 
          * @param {boolean} [xSkipWorkflows] Skips all app workflows
          * @param {boolean} [xSkipWebhooks] Skips all app webhooks
@@ -4236,20 +4287,20 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
             if (xSkipWorkflows != null) {
                 localVarHeaderParameter['X-SkipWorkflows'] = typeof xSkipWorkflows === 'string'
                     ? xSkipWorkflows
-                    : JSON.stringify(xSkipWorkflows);
+                    : JSON.stringify(xSkipWorkflows, replaceWithSerializableTypeIfNeeded);
             }
             if (xSkipWebhooks != null) {
                 localVarHeaderParameter['X-SkipWebhooks'] = typeof xSkipWebhooks === 'string'
                     ? xSkipWebhooks
-                    : JSON.stringify(xSkipWebhooks);
+                    : JSON.stringify(xSkipWebhooks, replaceWithSerializableTypeIfNeeded);
             }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4261,8 +4312,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get All Records
+         * Get a list of records from your organization that can be filtered by dimensions such as form, project, changeset, bounding box, and date ranges.
+         * @summary Get a list of records
          * @param {boolean} [newestFirst] If present, records will be sorted by updated_at date.
          * @param {string} [boundingBox] Bounding box of the records requested. Format should be: lat,long,lat,long (bottom, left, top, right).
          * @param {string} [changesetId] The id of the changeset associated with the record.
@@ -4374,8 +4425,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -4389,11 +4440,11 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * This endpoint can help you get records from a specific changeset, or retrieve records for a deleted form.
-         * @summary Get All Records History
+         * Retrieve historical record data from your organization. This endpoint is useful for accessing records from a specific changeset or retrieving records that belonged to a deleted form.
+         * @summary Get the history of a collection of records
          * @param {string} [accept] 
-         * @param {string} [changesetId] 
-         * @param {string} [deletedFormId] 
+         * @param {string} [changesetId] Filters records to only those associated with the specified changeset ID.
+         * @param {string} [deletedFormId] Filters records to only those that belonged to a form that has been deleted. Use this to retrieve data from removed forms.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -4421,8 +4472,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['deleted_form_id'] = deletedFormId;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -4436,9 +4487,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get Record History
-         * @param {string} recordId Record ID
+         * Retrieve the complete version history of a record.
+         * @summary Get the history of a record
+         * @param {string} recordId The unique identifier of the record whose history you want to retrieve.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4462,8 +4513,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -4477,9 +4528,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get Single Record
-         * @param {string} recordId Record ID
+         * Retrieve detailed information about a specific record by its ID. This includes all form field values, location data, timestamps, and associated metadata.
+         * @summary Get a record
+         * @param {string} recordId The unique identifier of the record to retrieve.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4503,8 +4554,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -4518,8 +4569,68 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Update Record
+         * Update specific fields of an existing record without requiring the complete record object. Only the fields included in the request body will be modified, while all other fields remain unchanged. This is useful for updating individual field values or metadata.
+         * @summary Partially update a record
+         * @param {string} recordId Record ID
+         * @param {string} [accept] 
+         * @param {string} [contentType] 
+         * @param {boolean} [xSkipWorkflows] Skips all app workflows
+         * @param {boolean} [xSkipWebhooks] Skips all app webhooks
+         * @param {RecordPatchRequest} [recordPatchRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        recordsPartialUpdate: async (recordId: string, accept?: string, contentType?: string, xSkipWorkflows?: boolean, xSkipWebhooks?: boolean, recordPatchRequest?: RecordPatchRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'recordId' is not null or undefined
+            assertParamExists('recordsPartialUpdate', 'recordId', recordId)
+            const localVarPath = `/v2/records/{record_id}.json`
+                .replace(`{${"record_id"}}`, encodeURIComponent(String(recordId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiToken required
+            await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (accept != null) {
+                localVarHeaderParameter['Accept'] = String(accept);
+            }
+            if (contentType != null) {
+                localVarHeaderParameter['Content-Type'] = String(contentType);
+            }
+            if (xSkipWorkflows != null) {
+                localVarHeaderParameter['X-SkipWorkflows'] = typeof xSkipWorkflows === 'string'
+                    ? xSkipWorkflows
+                    : JSON.stringify(xSkipWorkflows, replaceWithSerializableTypeIfNeeded);
+            }
+            if (xSkipWebhooks != null) {
+                localVarHeaderParameter['X-SkipWebhooks'] = typeof xSkipWebhooks === 'string'
+                    ? xSkipWebhooks
+                    : JSON.stringify(xSkipWebhooks, replaceWithSerializableTypeIfNeeded);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(recordPatchRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update a record with a provided record object. The record object is expected to be the complete representation of the record. Any fields not included are assumed null.
+         * @summary Update a record
          * @param {string} recordId Record ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
@@ -4548,9 +4659,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -4561,12 +4671,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             if (xSkipWorkflows != null) {
                 localVarHeaderParameter['X-SkipWorkflows'] = typeof xSkipWorkflows === 'string'
                     ? xSkipWorkflows
-                    : JSON.stringify(xSkipWorkflows);
+                    : JSON.stringify(xSkipWorkflows, replaceWithSerializableTypeIfNeeded);
             }
             if (xSkipWebhooks != null) {
                 localVarHeaderParameter['X-SkipWebhooks'] = typeof xSkipWebhooks === 'string'
                     ? xSkipWebhooks
-                    : JSON.stringify(xSkipWebhooks);
+                    : JSON.stringify(xSkipWebhooks, replaceWithSerializableTypeIfNeeded);
             }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -4579,8 +4689,87 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * Generate a new report for a specific record, optionally using a report template.
+         * @summary Create a report
+         * @param {ReportRequest} reportRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        reportsCreate: async (reportRequest: ReportRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'reportRequest' is not null or undefined
+            assertParamExists('reportsCreate', 'reportRequest', reportRequest)
+            const localVarPath = `/v2/reports.json`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiToken required
+            await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(reportRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Download the generated PDF report file.
+         * @summary Get a report file
+         * @param {string} reportId The unique identifier of the report.
+         * @param {string} [accept] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        reportsFile: async (reportId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'reportId' is not null or undefined
+            assertParamExists('reportsFile', 'reportId', reportId)
+            const localVarPath = `/v2/reports/{report_id}.pdf`
+                .replace(`{${"report_id"}}`, encodeURIComponent(String(reportId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiToken required
+            await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/pdf,application/json';
+
+            if (accept != null) {
+                localVarHeaderParameter['Accept'] = String(accept);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
-         * @summary Get All Roles
+         * @summary Get a list of roles
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -4621,8 +4810,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['sort_direction'] = sortDirection;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -4636,16 +4825,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get All Signatures
+         * Retrieve metadata for a list of signatures.
+         * @summary Get a list of signature metadata
          * @param {string} [recordId] The ID of the record with which the photo is associated.
          * @param {string} [formId] The ID of the form with which the photo is associated. Leaving this blank will query against all of your photos.
          * @param {boolean} [newestFirst] If present, photos will be sorted by updated_at date.
-         * @param {boolean} [processed] Signature has been completely processed.
-         * @param {boolean} [stored] Signature has been completely stored.
-         * @param {boolean} [uploaded] Signature has been completely uploaded.
-         * @param {number} [page] The page number requested
-         * @param {number} [perPage] Number of items per page
+         * @param {boolean} [processed] Filter for signatures that have been completely processed.
+         * @param {boolean} [stored] Filter for signatures that have been completely stored.
+         * @param {boolean} [uploaded] Filter for signatures that have been completely uploaded.
+         * @param {number} [page] The page number requested.
+         * @param {number} [perPage] The number of items to return per page.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4698,8 +4887,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -4713,14 +4902,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get Single Signature File
-         * @param {string} signatureId Signature ID
-         * @param {string} [accept] 
+         * Download the original signature file.
+         * @summary Get a signature original file
+         * @param {string} signatureId The unique identifier of the signature.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signaturesGetSingleFile: async (signatureId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        signaturesGetSingleFile: async (signatureId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'signatureId' is not null or undefined
             assertParamExists('signaturesGetSingleFile', 'signatureId', signatureId)
             const localVarPath = `/v2/signatures/{signature_id}.png`
@@ -4739,11 +4927,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'image/png,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -4754,9 +4939,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get Single Signature Metadata
-         * @param {string} signatureId Signature ID
+         * Retrieve metadata for a single signature.
+         * @summary Get signature metadata
+         * @param {string} signatureId The unique identifier of the signature.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4780,8 +4965,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -4795,14 +4980,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Signature Thumbnail File
-         * @param {string} signatureId Signature ID
-         * @param {string} [accept] 
+         * Download the thumbnail variant of a signature.
+         * @summary Get a signature thumbnail file
+         * @param {string} signatureId The unique identifier of the signature.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signaturesGetThumbnailFile: async (signatureId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        signaturesGetThumbnailFile: async (signatureId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'signatureId' is not null or undefined
             assertParamExists('signaturesGetThumbnailFile', 'signatureId', signatureId)
             const localVarPath = `/v2/signatures/{signature_id}/thumbnail.png`
@@ -4821,11 +5005,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'image/png,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -4836,9 +5017,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Retrieve metadata for a signature\'s thumbnail variant.
          * @summary Signature Thumbnail Metadata
-         * @param {string} signatureId Signature ID
+         * @param {string} signatureId The unique identifier of the signature.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -4862,8 +5043,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -4877,8 +5058,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Upload Signature
+         * Upload a signature file to associate with a record.
+         * @summary Upload a signature
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {*} [options] Override http request option.
@@ -4900,8 +5081,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -4918,7 +5099,359 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Start your pending batch
+         * Retrieve metadata for a list of sketches.
+         * @summary Get a list of sketch metadata
+         * @param {string} [recordId] The ID of the record with which the sketch is associated.
+         * @param {string} [formId] The ID of the form with which the sketch is associated. Leaving this blank will query against all of your sketches.
+         * @param {boolean} [newestFirst] If present, sketches will be sorted by updated_at date.
+         * @param {boolean} [processed] Sketch has been completely processed.
+         * @param {boolean} [stored] Sketch has been completely stored.
+         * @param {boolean} [uploaded] Sketch has been completely uploaded.
+         * @param {number} [page] The page number requested
+         * @param {number} [perPage] Number of items per page
+         * @param {string} [accept] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sketchesGetAllMetadata: async (recordId?: string, formId?: string, newestFirst?: boolean, processed?: boolean, stored?: boolean, uploaded?: boolean, page?: number, perPage?: number, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v2/sketches.json`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiToken required
+            await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
+
+            if (recordId !== undefined) {
+                localVarQueryParameter['record_id'] = recordId;
+            }
+
+            if (formId !== undefined) {
+                localVarQueryParameter['form_id'] = formId;
+            }
+
+            if (newestFirst !== undefined) {
+                localVarQueryParameter['newest_first'] = newestFirst;
+            }
+
+            if (processed !== undefined) {
+                localVarQueryParameter['processed'] = processed;
+            }
+
+            if (stored !== undefined) {
+                localVarQueryParameter['stored'] = stored;
+            }
+
+            if (uploaded !== undefined) {
+                localVarQueryParameter['uploaded'] = uploaded;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (perPage !== undefined) {
+                localVarQueryParameter['per_page'] = perPage;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (accept != null) {
+                localVarHeaderParameter['Accept'] = String(accept);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Download the original sketch file.
+         * @summary Get a sketch original file
+         * @param {string} sketchId Sketch ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sketchesGetSingleFile: async (sketchId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sketchId' is not null or undefined
+            assertParamExists('sketchesGetSingleFile', 'sketchId', sketchId)
+            const localVarPath = `/v2/sketches/{sketch_id}.jpg`
+                .replace(`{${"sketch_id"}}`, encodeURIComponent(String(sketchId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiToken required
+            await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
+
+            localVarHeaderParameter['Accept'] = 'image/jpeg,application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieve metadata for a single sketch.
+         * @summary Get sketch metadata
+         * @param {string} sketchId Sketch ID
+         * @param {string} [accept] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sketchesGetSingleMetadata: async (sketchId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sketchId' is not null or undefined
+            assertParamExists('sketchesGetSingleMetadata', 'sketchId', sketchId)
+            const localVarPath = `/v2/sketches/{sketch_id}.json`
+                .replace(`{${"sketch_id"}}`, encodeURIComponent(String(sketchId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiToken required
+            await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (accept != null) {
+                localVarHeaderParameter['Accept'] = String(accept);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Download the large variant of a sketch.
+         * @summary Get a sketch large file
+         * @param {string} sketchId Sketch ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sketchesLargeFile: async (sketchId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sketchId' is not null or undefined
+            assertParamExists('sketchesLargeFile', 'sketchId', sketchId)
+            const localVarPath = `/v2/sketches/{sketch_id}/large.jpg`
+                .replace(`{${"sketch_id"}}`, encodeURIComponent(String(sketchId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiToken required
+            await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
+
+            localVarHeaderParameter['Accept'] = 'image/jpeg,application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieve metadata for a sketch\'s large variant.
+         * @summary Sketch Large Metadata
+         * @param {string} sketchId Sketch ID
+         * @param {string} [accept] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sketchesLargeMetadata: async (sketchId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sketchId' is not null or undefined
+            assertParamExists('sketchesLargeMetadata', 'sketchId', sketchId)
+            const localVarPath = `/v2/sketches/{sketch_id}/large.json`
+                .replace(`{${"sketch_id"}}`, encodeURIComponent(String(sketchId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiToken required
+            await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (accept != null) {
+                localVarHeaderParameter['Accept'] = String(accept);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Download the thumbnail variant of a sketch.
+         * @summary Get a sketch thumbnail file
+         * @param {string} sketchId Sketch ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sketchesThumbnailFile: async (sketchId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sketchId' is not null or undefined
+            assertParamExists('sketchesThumbnailFile', 'sketchId', sketchId)
+            const localVarPath = `/v2/sketches/{sketch_id}/thumbnail.jpg`
+                .replace(`{${"sketch_id"}}`, encodeURIComponent(String(sketchId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiToken required
+            await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
+
+            localVarHeaderParameter['Accept'] = 'image/jpeg,application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieve metadata for a sketch\'s thumbnail variant.
+         * @summary Sketch Thumbnail Metadata
+         * @param {string} sketchId Sketch ID
+         * @param {string} [accept] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sketchesThumbnailMetadata: async (sketchId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sketchId' is not null or undefined
+            assertParamExists('sketchesThumbnailMetadata', 'sketchId', sketchId)
+            const localVarPath = `/v2/sketches/{sketch_id}/thumbnail.json`
+                .replace(`{${"sketch_id"}}`, encodeURIComponent(String(sketchId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiToken required
+            await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (accept != null) {
+                localVarHeaderParameter['Accept'] = String(accept);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Upload a sketch file to associate with a record.
+         * @summary Upload a sketch
+         * @param {string} [accept] 
+         * @param {string} [contentType] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sketchesUpload: async (accept?: string, contentType?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v2/sketches.json`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication ApiToken required
+            await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            if (accept != null) {
+                localVarHeaderParameter['Accept'] = String(accept);
+            }
+            if (contentType != null) {
+                localVarHeaderParameter['Content-Type'] = String(contentType);
+            }
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Start your pending batch.
          * @summary Start Batch
          * @param {string} batchId ID of the batch
          * @param {*} [options] Override http request option.
@@ -4943,8 +5476,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -4983,9 +5516,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json,text/plain';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -5028,9 +5560,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json,text/plain';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -5050,15 +5581,15 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * You can use this to update parameters of a member, but this will not work if the member is apart of multiple organizations.
-         * @summary Update Member
+         * @summary Update a membership
          * @param {string} membershipId The ID of the member
          * @param {MembershipUpdateRequest} [membershipUpdateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateMember: async (membershipId: string, membershipUpdateRequest?: MembershipUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateMembership: async (membershipId: string, membershipUpdateRequest?: MembershipUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'membershipId' is not null or undefined
-            assertParamExists('updateMember', 'membershipId', membershipId)
+            assertParamExists('updateMembership', 'membershipId', membershipId)
             const localVarPath = `/v2/memberships/{membership_id}.json`
                 .replace(`{${"membership_id"}}`, encodeURIComponent(String(membershipId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -5075,9 +5606,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -5116,9 +5646,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -5135,12 +5664,12 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          * @summary Update Workflow
          * @param {string} workflowId The ID of the workflow
          * @param {string} [accept] 
-         * @param {string} [contentTyoe] 
+         * @param {string} [contentType] 
          * @param {WorkflowUpdateRequest} [workflowUpdateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateWorkflow: async (workflowId: string, accept?: string, contentTyoe?: string, workflowUpdateRequest?: WorkflowUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateWorkflow: async (workflowId: string, accept?: string, contentType?: string, workflowUpdateRequest?: WorkflowUpdateRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'workflowId' is not null or undefined
             assertParamExists('updateWorkflow', 'workflowId', workflowId)
             const localVarPath = `/v2/workflows/{workflow_id}.json`
@@ -5159,15 +5688,14 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
-            if (contentTyoe != null) {
-                localVarHeaderParameter['Content-Tyoe'] = String(contentTyoe);
+            if (contentType != null) {
+                localVarHeaderParameter['Content-Type'] = String(contentType);
             }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -5212,8 +5740,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -5227,16 +5755,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get All Videos
+         * Retrieve metadata for a list of videos.
+         * @summary Get a list of video metadata
          * @param {string} [recordId] The ID of the record with which the video is associated.
          * @param {string} [formId] The ID of the form with which the video is associated. Leaving this blank will query against all of your videos.
          * @param {boolean} [newestFirst] If present, videos will be sorted by updated_at date.
-         * @param {boolean} [processed] Video has been completely processed.
-         * @param {boolean} [stored] Video has been completely stored.
-         * @param {boolean} [uploaded] Video has been completely uploaded.
-         * @param {number} [page] The page number requested
-         * @param {number} [perPage] Number of items per page
+         * @param {boolean} [processed] Filter for videos that have been completely processed.
+         * @param {boolean} [stored] Filter for videos that have been completely stored.
+         * @param {boolean} [uploaded] Filter for videos that have been completely uploaded.
+         * @param {number} [page] The page number requested.
+         * @param {number} [perPage] The number of items to return per page.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5289,8 +5817,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -5304,7 +5832,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get GPS tracks for videos in GeoJSON format.
          * @summary Get GeoJSON Tracks for All Videos
          * @param {string} [accept] 
          * @param {string} [type] Set value to &#x60;points&#x60; to fetch tracks as GeoJSON points
@@ -5331,8 +5859,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['type'] = type;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -5346,7 +5874,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get GPS tracks for videos in GPX format.
          * @summary Get GPX Tracks for All Videos
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -5368,8 +5896,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -5383,7 +5911,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get GPS tracks for videos in KML format.
          * @summary Get KML Tracks for All Videos
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -5405,8 +5933,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -5420,14 +5948,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get Medium Video File
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * Download a medium variant of the video.
+         * @summary Get a video medium file
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetMediumFile: async (videoId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        videosGetMediumFile: async (videoId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetMediumFile', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/medium.mp4`
@@ -5446,11 +5973,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'video/mp4,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5461,14 +5985,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get Original Video File
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * Download the original video file.
+         * @summary Get a video original file
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetOriginalFile: async (videoId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        videosGetOriginalFile: async (videoId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetOriginalFile', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}.mp4`
@@ -5487,11 +6010,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'video/mp4,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5502,9 +6022,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get Video Metadata
-         * @param {string} videoId Video ID
+         * Retrieve metadata for a specific video.
+         * @summary Get video metadata
+         * @param {string} videoId The unique identifier of the video.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5528,8 +6048,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -5543,9 +6063,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get the GPS track for a video in GeoJSON format.
          * @summary Get GeoJSON Video Track
-         * @param {string} videoId Video ID
+         * @param {string} videoId The unique identifier of the video.
          * @param {string} [accept] 
          * @param {string} [type] Set value to &#x60;points&#x60; to fetch tracks as GeoJSON points
          * @param {*} [options] Override http request option.
@@ -5574,8 +6094,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['type'] = type;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -5589,9 +6109,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get the GPS track for a video in GPX format.
          * @summary Get GPX Video Track
-         * @param {string} videoId Video ID
+         * @param {string} videoId The unique identifier of the video.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5615,8 +6135,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -5630,9 +6150,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get the GPS track for a video in JSON format.
          * @summary Get JSON Video Track
-         * @param {string} videoId Video ID
+         * @param {string} videoId The unique identifier of the video.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5656,8 +6176,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -5671,9 +6191,9 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Get the GPS track for a video in KML format.
          * @summary Get KML Video Track
-         * @param {string} videoId Video ID
+         * @param {string} videoId The unique identifier of the video.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5697,8 +6217,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -5712,14 +6232,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get Small Video File
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * Download the small variant of the video.
+         * @summary Get a video small file
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetSmallFile: async (videoId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        videosGetSmallFile: async (videoId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetSmallFile', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/small.mp4`
@@ -5738,11 +6257,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'video/mp4,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5753,14 +6269,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Download a huge thumbnail variant for a video.
          * @summary Get Huge Video Thumbnail
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetThumbnailHuge: async (videoId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        videosGetThumbnailHuge: async (videoId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetThumbnailHuge', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/thumbnail_huge.jpg`
@@ -5779,11 +6294,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'image/jpeg,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5794,14 +6306,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Download a huge square thumbnail variant for a video.
          * @summary Get Huge Square Video Thumbnail
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetThumbnailHugeSquare: async (videoId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        videosGetThumbnailHugeSquare: async (videoId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetThumbnailHugeSquare', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/thumbnail_huge_square.jpg`
@@ -5820,11 +6331,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'image/jpeg,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5835,14 +6343,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Download a large thumbnail variant for a video.
          * @summary Get Large Video Thumbnail
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetThumbnailLarge: async (videoId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        videosGetThumbnailLarge: async (videoId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetThumbnailLarge', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/thumbnail_large.jpg`
@@ -5861,11 +6368,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'image/jpeg,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5876,14 +6380,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Download a large square thumbnail variant for a video.
          * @summary Get Large Square Video Thumbnail
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetThumbnailLargeSquare: async (videoId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        videosGetThumbnailLargeSquare: async (videoId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetThumbnailLargeSquare', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/thumbnail_large_square.jpg`
@@ -5902,11 +6405,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'image/jpeg,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5917,14 +6417,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Download a medium thumbnail variant for a video.
          * @summary Get Medium Video Thumbnail
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetThumbnailMedium: async (videoId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        videosGetThumbnailMedium: async (videoId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetThumbnailMedium', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/thumbnail_medium.jpg`
@@ -5943,11 +6442,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'image/jpeg,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5958,14 +6454,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Download a medium square thumbnail variant for a video.
          * @summary Get Medium Square Video Thumbnail
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetThumbnailMediumSquare: async (videoId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        videosGetThumbnailMediumSquare: async (videoId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetThumbnailMediumSquare', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/thumbnail_medium_square.jpg`
@@ -5984,11 +6479,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'image/jpeg,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -5999,14 +6491,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Download the small thumbnail variant for a video.
          * @summary Get Small Video Thumbnail
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetThumbnailSmall: async (videoId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        videosGetThumbnailSmall: async (videoId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetThumbnailSmall', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/thumbnail_small.jpg`
@@ -6025,11 +6516,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'image/jpeg,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6040,14 +6528,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Download a small square thumbnail variant for a video.
          * @summary Get Small Square Video Thumbnail
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetThumbnailSmallSquare: async (videoId: string, accept?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        videosGetThumbnailSmallSquare: async (videoId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetThumbnailSmallSquare', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/thumbnail_small_square.jpg`
@@ -6066,11 +6553,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'image/jpeg,application/json';
 
-    
-            if (accept != null) {
-                localVarHeaderParameter['Accept'] = String(accept);
-            }
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
@@ -6081,8 +6565,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * Upload video with optional track file
-         * @summary Upload Video
+         * Upload video to be associated with a record.
+         * @summary Upload a video
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {*} [options] Override http request option.
@@ -6104,8 +6588,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -6122,8 +6606,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Create Webhook
+         * Create a webhook.
+         * @summary Create a webhook
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {WebhookRequest} [webhookRequest] 
@@ -6146,9 +6630,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -6167,8 +6650,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Delete Webhook
+         * Delete a webhook.
+         * @summary Delete a webhook
          * @param {string} webhookId Webhook ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -6193,8 +6676,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -6208,8 +6691,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get All Webhooks
+         * Get a list of webhooks.
+         * @summary Get a list of webhooks
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -6240,8 +6723,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
                 localVarQueryParameter['per_page'] = perPage;
             }
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -6255,8 +6738,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
-         * @summary Get Single Webhook
+         * Get a webhook.
+         * @summary Get a webhook
          * @param {string} webhookId Webhook ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -6281,8 +6764,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
-    
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
             }
@@ -6296,7 +6779,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 
+         * Update a webhook.
          * @summary Update Webhook
          * @param {string} webhookId Webhook ID
          * @param {string} [accept] 
@@ -6324,9 +6807,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // authentication ApiToken required
             await setApiKeyToObject(localVarHeaderParameter, "X-ApiToken", configuration)
 
-
-    
             localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             if (accept != null) {
                 localVarHeaderParameter['Accept'] = String(accept);
@@ -6368,28 +6850,28 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get All Audio
-         * @param {string} [recordId] The ID of the record with which the video is associated.
-         * @param {string} [formId] The ID of the form with which the video is associated. Leaving this blank will query against all of your videos.
-         * @param {boolean} [newestFirst] If present, videos will be sorted by updated_at date.
-         * @param {boolean} [processed] Video has been completely processed.
-         * @param {boolean} [stored] Video has been completely stored.
-         * @param {boolean} [uploaded] Video has been completely uploaded.
-         * @param {number} [page] The page number requested
-         * @param {number} [perPage] Number of items per page
+         * Retrieve metadata for a list of audio files.
+         * @summary Get a list of audio metadata
+         * @param {string} [recordId] The ID of the record with which the audio file is associated.
+         * @param {string} [formId] The ID of the form with which the audio file is associated. Leaving this blank will query against all of your audio files.
+         * @param {boolean} [newestFirst] If present, audio files will be sorted by updated_at date.
+         * @param {boolean} [processed] Filter for audio files that have been completely processed.
+         * @param {boolean} [stored] Filter for audio files that have been completely stored.
+         * @param {boolean} [uploaded] Filter for audio files that have been completely uploaded.
+         * @param {number} [page] The page number requested.
+         * @param {number} [perPage] The number of items to return per page.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async audioGetAll(recordId?: string, formId?: string, newestFirst?: boolean, processed?: boolean, stored?: boolean, uploaded?: boolean, page?: number, perPage?: number, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async audioGetAll(recordId?: string, formId?: string, newestFirst?: boolean, processed?: boolean, stored?: boolean, uploaded?: boolean, page?: number, perPage?: number, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AudiosResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.audioGetAll(recordId, formId, newestFirst, processed, stored, uploaded, page, perPage, accept, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.audioGetAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get GPS tracks for audio files in GeoJSON format.
          * @summary Get GeoJSON Tracks for All Audio
          * @param {string} [accept] 
          * @param {string} [type] Set value to &#x60;points&#x60; to fetch tracks as GeoJSON points
@@ -6403,7 +6885,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get GPS tracks for audio files in GPX format.
          * @summary Get GPX Tracks for All Audio
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -6416,7 +6898,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get GPS tracks for audio files in JSON format.
          * @summary Get JSON Tracks for All Audio
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -6429,7 +6911,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get GPS tracks for audio files in KML format.
          * @summary Get KML Tracks for All Audio
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -6442,37 +6924,36 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get Original Audio File
-         * @param {string} audioId Audio ID
-         * @param {string} [accept] 
+         * Download the original audio file.
+         * @summary Get an audio original file
+         * @param {string} audioId The unique identifier of the audio file.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async audioGetOriginalFile(audioId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.audioGetOriginalFile(audioId, accept, options);
+        async audioGetOriginalFile(audioId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.audioGetOriginalFile(audioId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.audioGetOriginalFile']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get Audio Metadata
-         * @param {string} audioId Audio ID
+         * Retrieve metadata for a single audio file.
+         * @summary Get audio metadata
+         * @param {string} audioId The unique identifier of the audio file.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async audioGetSingleMetadata(audioId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async audioGetSingleMetadata(audioId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SingleAudioResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.audioGetSingleMetadata(audioId, accept, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.audioGetSingleMetadata']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get the GPS track for an audio file in GeoJSON format.
          * @summary Get GeoJSON Audio Track
-         * @param {string} audioId Audio ID
+         * @param {string} audioId The unique identifier of the audio file.
          * @param {string} [accept] 
          * @param {string} [type] Set value to &#x60;points&#x60; to fetch tracks as GeoJSON points
          * @param {*} [options] Override http request option.
@@ -6485,9 +6966,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get the GPS track for an audio file in GPX format.
          * @summary Get GPX Audio Track
-         * @param {string} audioId Audio ID
+         * @param {string} audioId The unique identifier of the audio file.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6499,9 +6980,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get the GPS track for an audio file in JSON format.
          * @summary Get JSON Audio Track
-         * @param {string} audioId Audio ID
+         * @param {string} audioId The unique identifier of the audio file.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6513,9 +6994,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get the GPS track for an audio file in KML format.
          * @summary Get KML Audio Track
-         * @param {string} audioId Audio ID
+         * @param {string} audioId The unique identifier of the audio file.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6527,8 +7008,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Upload audio with optional track file
-         * @summary Upload Audio
+         * Upload audio with optional track file.
+         * @summary Upload audio
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {*} [options] Override http request option.
@@ -6542,13 +7023,13 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get All Audit Logs
+         * @summary Get a list of audit logs
          * @param {string} [source] Valid options include: &#x60;export&#x60;, &#x60;data_export&#x60;, &#x60;membership&#x60;, &#x60;layer&#x60;, &#x60;project&#x60;, &#x60;audit_log&#x60;, &#x60;role&#x60;, &#x60;form&#x60;, &#x60;data_share&#x60;, &#x60;classification_set&#x60;, &#x60;authorization&#x60;, &#x60;choice_list&#x60;, &#x60;import&#x60;, &#x60;organization&#x60;, &#x60;workflow&#x60;, &#x60;webhook&#x60;
          * @param {string} [activity] The available actions vary by log type but a complete list of valid actions includes: &#x60;update&#x60;, &#x60;create&#x60;, &#x60;permission_update&#x60;, &#x60;download&#x60;, &#x60;delete&#x60;, &#x60;reset&#x60;, &#x60;share_enabled&#x60;, &#x60;share_disabled&#x60;, &#x60;update_credit_card&#x60;, &#x60;plan_change&#x60;, &#x60;billing_emails_change&#x60;, &#x60;update_storage&#x60;, &#x60;add_credit&#x60;, &#x60;change_default&#x60;.
          * @param {string} [ip] Filter by ip address of the of the audit log action. The ip address must be an exact match in order to return in values from this filter.
-         * @param {string} [user] Filter by user responsible for the logged changes. This parameter must be the Fulcrum resource id for the user in question, which can be obtained from the membership API.
-         * @param {string} [updatedSince] Returns log entries since the given unix timestamp.
-         * @param {string} [updatedBefore] Returns log entries before the given unix timestamp.
+         * @param {string} [user] Filter by user responsible for the logged changes. This parameter must be the Fulcrum ID for the user in question, which can be obtained from the membership API.
+         * @param {string} [updatedSince] Return log entries since the given unix timestamp.
+         * @param {string} [updatedBefore] Return log entries before the given unix timestamp.
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -6563,7 +7044,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get Single Audit Log
+         * @summary Get an audit log
          * @param {string} auditLogId Audit Log ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -6577,7 +7058,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Create Authorization
+         * @summary Create an authorization
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {AuthorizationRequest} [authorizationRequest] 
@@ -6592,7 +7073,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Delete Authorization
+         * @summary Delete an authorization
          * @param {string} authorizationId Authorization ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -6606,7 +7087,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get All Authorizations
+         * @summary Get a list of authorizations
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -6621,7 +7102,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get Single Authorization
+         * @summary Get an authorization
          * @param {string} authorizationId Authorization ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -6666,7 +7147,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Create Changeset
+         * @summary Create a changeset
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {ChangesetCreateRequest} [changesetCreateRequest] 
@@ -6681,7 +7162,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get All Changesets
+         * @summary Get a list of changesets
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -6696,7 +7177,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get Single Changeset
+         * @summary Get a changeset
          * @param {string} changesetId Changeset ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -6726,7 +7207,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Create Choice List
+         * @summary Create a choice list
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {ChoiceListRequest} [choiceListRequest] 
@@ -6741,7 +7222,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Delete Choice List
+         * @summary Delete a choice list
          * @param {string} choiceListId Choice List ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -6755,7 +7236,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get All Choice Lists
+         * @summary Get a list of choice lists
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -6770,7 +7251,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get Single Choice List
+         * @summary Get a choice list
          * @param {string} choiceListId Choice List ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -6800,7 +7281,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Create Classification Set
+         * @summary Create a classification set
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {ClassificationSetRequest} [classificationSetRequest] 
@@ -6815,7 +7296,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Delete Classification Set
+         * @summary Delete a classification set
          * @param {string} classificationSetId Classification Set ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -6829,7 +7310,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get All Classification Sets
+         * @summary Get a list of classification sets
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -6845,7 +7326,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get Single Classification Set
+         * @summary Get a classification set
          * @param {string} classificationSetId Classification Set ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -6874,8 +7355,22 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Copy all reference files from one form to another. Limits: 100 reference files per form, 1GB total per form.
+         * @summary Copy all reference files
+         * @param {AttachmentCopyAllRequest} attachmentCopyAllRequest 
+         * @param {string} [xApitoken] API Token. Required to authenticate the request.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async copyAllAttachments(attachmentCopyAllRequest: AttachmentCopyAllRequest, xApitoken?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AttachmentCopyAllResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.copyAllAttachments(attachmentCopyAllRequest, xApitoken, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.copyAllAttachments']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * There is only one parameter that is required for creating an attachment: `owners`. You must specify at least one owner of type `record` or `form`. If you create a `record` attachment you can optionally include a `name` and `file_size`. The name will be the name of the file shown in the record information. The file_size is only used for verifying that uploading this attachment will not exceed your current storage limit. If no file_size is provided the attachment may be rejected once it has been uploaded. The response will provide the `url` to upload (PUT) the file to.
-         * @summary Create Attachment
+         * @summary Create an attachment
          * @param {string} [xApitoken] API Token. Required to authenticate the request.
          * @param {AttachmentCreateRequest} [attachmentCreateRequest] 
          * @param {*} [options] Override http request option.
@@ -6889,7 +7384,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * Using the batch operations API, you can bulk delete records from a form.
-         * @summary Create Batch to Bulk Delete Records
+         * @summary Create a batch
          * @param {BatchCreateRequest} [batchCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6902,7 +7397,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Create Group
+         * @summary Create a group
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {GroupCreateRequest} [groupCreateRequest] 
@@ -6917,22 +7412,22 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Create Member
+         * @summary Create a membership
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {MembershipCreateRequest} [membershipCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createMember(accept?: string, contentType?: string, membershipCreateRequest?: MembershipCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createMember(accept, contentType, membershipCreateRequest, options);
+        async createMembership(accept?: string, contentType?: string, membershipCreateRequest?: MembershipCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createMembership(accept, contentType, membershipCreateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.createMember']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.createMembership']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @summary Create Report Template
+         * @summary Create a report template
          * @param {ReportTemplateRequest} [reportTemplateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -6945,22 +7440,22 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Create Workflow
+         * @summary Create a workflow
          * @param {string} [accept] 
-         * @param {string} [contentTyoe] 
+         * @param {string} [contentType] 
          * @param {WorkflowCreateRequest} [workflowCreateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createWorkflow(accept?: string, contentTyoe?: string, workflowCreateRequest?: WorkflowCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.createWorkflow(accept, contentTyoe, workflowCreateRequest, options);
+        async createWorkflow(accept?: string, contentType?: string, workflowCreateRequest?: WorkflowCreateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createWorkflow(accept, contentType, workflowCreateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.createWorkflow']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * The delete endpoint only applies to Form attachments. Use this endpoint to delete an attachment. For record attachments, simply remove the association of an attachment from the record and the attachment will be deleted.
-         * @summary Delete Attachment
+         * @summary Delete an attachment
          * @param {string} attachmentId The attachment\&#39;s ID
          * @param {string} [xApitoken] API Token. Required to authenticate the request.
          * @param {*} [options] Override http request option.
@@ -6974,7 +7469,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Delete Group
+         * @summary Delete a group
          * @param {string} groupId ID of the group
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -6988,21 +7483,21 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Delete Member
+         * @summary Delete a membership
          * @param {string} membershipId The ID of the member
          * @param {MembershipDeleteRequest} [membershipDeleteRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteMember(membershipId: string, membershipDeleteRequest?: MembershipDeleteRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteMember(membershipId, membershipDeleteRequest, options);
+        async deleteMembership(membershipId: string, membershipDeleteRequest?: MembershipDeleteRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteMembership(membershipId, membershipDeleteRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.deleteMember']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.deleteMembership']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @summary Delete Report Template
+         * @summary Delete a report template
          * @param {string} id The id of the report
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7015,7 +7510,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Delete Workflow
+         * @summary Delete a workflow
          * @param {string} workflowId The ID of the workflow
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -7043,7 +7538,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Create Form
+         * @summary Create a form
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {FormRequest} [formRequest] 
@@ -7058,7 +7553,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Delete Form
+         * @summary Delete a form
          * @param {string} formId Form ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -7072,17 +7567,18 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get All Forms
+         * @summary Get a list of forms
          * @param {boolean} [schema] schema&#x3D;false will only return the form metadata
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
          * @param {FormsGetAllTypeEnum} [type] Types of forms to return
+         * @param {FormsGetAllStatusEnum} [status] The status (active/inactive) of the forms to return.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async formsGetAll(schema?: boolean, page?: number, perPage?: number, accept?: string, type?: FormsGetAllTypeEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.formsGetAll(schema, page, perPage, accept, type, options);
+        async formsGetAll(schema?: boolean, page?: number, perPage?: number, accept?: string, type?: FormsGetAllTypeEnum, status?: FormsGetAllStatusEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.formsGetAll(schema, page, perPage, accept, type, status, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.formsGetAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -7106,7 +7602,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get Single Form
+         * @summary Get a form
          * @param {string} formId Form ID
          * @param {string} [accept] 
          * @param {boolean} [schema] schema&#x3D;false will only return the form metadata
@@ -7136,24 +7632,26 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get All Attachments
+         * Retrieve a list of attachments.
+         * @summary Get a list of attachment metadata
          * @param {string} [recordId] The ID of the record with which the attachment is associated. This is required when listing record attachments.
          * @param {string} [formId] The ID of the form with which the attachment is associated. This parameter will allow you to get all reference files within a form, NOT all of the record attachments in a form
          * @param {string} [ownerType] The type of attachment to query for. Must be either &#x60;form&#x60; or &#x60;record&#x60;.
+         * @param {GetAllAttachmentsSortEnum} [sort] The field to sort results by.
+         * @param {GetAllAttachmentsSortDirectionEnum} [sortDirection] The sort direction(asc, desc). Default is asc.
          * @param {string} [xApitoken] API Token. Required to authenticate the request.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllAttachments(recordId?: string, formId?: string, ownerType?: string, xApitoken?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAllAttachments200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllAttachments(recordId, formId, ownerType, xApitoken, options);
+        async getAllAttachments(recordId?: string, formId?: string, ownerType?: string, sort?: GetAllAttachmentsSortEnum, sortDirection?: GetAllAttachmentsSortDirectionEnum, xApitoken?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AttachmentsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getAllAttachments(recordId, formId, ownerType, sort, sortDirection, xApitoken, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.getAllAttachments']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @summary Get All Batches
+         * @summary Get a list of batches
          * @param {string} [page] 
          * @param {string} [perPage] 
          * @param {string} [sort] 
@@ -7169,7 +7667,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get All Groups
+         * @summary Get a list of groups
          * @param {string} [page] 
          * @param {string} [perPage] 
          * @param {boolean} [associations] Set to &#x60;true&#x60; in order to see each group\&#39;s assigned &#x60;member_ids&#x60;, &#x60;layer_ids&#x60;, &#x60;project_ids&#x60; and &#x60;form_ids&#x60;
@@ -7201,7 +7699,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get All Report Templates
+         * @summary Get a list of report templates
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [formId] The form to fetch reports for
@@ -7216,7 +7714,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get All Workflows
+         * @summary Get a list of workflows
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -7247,14 +7745,14 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get Single Attachment
-         * @param {string} attachmentId The attachment id.
+         * Retrieve metadata for a single attachment.
+         * @summary Get an attachment
+         * @param {string} attachmentId The unique identifier of the attachment.
          * @param {string} [xApitoken] API Token. Required to authenticate the request.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSingleAttachment(attachmentId: string, xApitoken?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetSingleAttachment200Response>> {
+        async getSingleAttachment(attachmentId: string, xApitoken?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Attachment>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSingleAttachment(attachmentId, xApitoken, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.getSingleAttachment']?.[localVarOperationServerIndex]?.url;
@@ -7262,7 +7760,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get Single Batch
+         * @summary Get a batch
          * @param {string} batchId The ID of the batch
          * @param {string} [page] 
          * @param {string} [perPage] 
@@ -7277,7 +7775,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get Single Group
+         * @summary Get a group
          * @param {string} groupId Group ID
          * @param {string} [accept] 
          * @param {boolean} [associations] Set to &#x60;true&#x60; in order to see each group\&#39;s assigned &#x60;member_ids&#x60;, &#x60;layer_ids&#x60;, &#x60;project_ids&#x60; and &#x60;form_ids&#x60;
@@ -7292,7 +7790,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get Single Report Template
+         * @summary Get a report template
          * @param {string} id The id of the report
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7305,7 +7803,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get Single Workflow
+         * @summary Get a workflow
          * @param {string} workflowId The id of the workflow
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -7319,7 +7817,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Create Layer
+         * @summary Create a layer
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {LayerRequest} [layerRequest] 
@@ -7334,7 +7832,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Delete Layer
+         * @summary Delete a layer
          * @param {string} layerId Layer ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -7348,7 +7846,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get All Layers
+         * @summary Get a list of layers
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -7363,7 +7861,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get Single Layer
+         * @summary Get a layer
          * @param {string} layerId Layer ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -7392,7 +7890,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Add or remove membership permissions from layers, forms, or projects
+         * Add or remove membership permissions from layers, forms, or projects.
          * @summary Change Permissions
          * @param {string} [accept] 
          * @param {string} [contentType] 
@@ -7408,7 +7906,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get All Memberships
+         * @summary Get a list of memberships
          * @param {string} [formId] Limit members to a specific Form
          * @param {string} [projectId] Limit members to a specific Project
          * @param {string} [layerId] Limit members to a specific Layer
@@ -7426,7 +7924,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get Single Membership
+         * @summary Get a membership
          * @param {string} membershipId Membership ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -7439,72 +7937,70 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get All Photos
+         * Retrieve metadata for a list of photos.
+         * @summary Get a list of photo metadata
          * @param {string} [recordId] The ID of the record with which the photo is associated.
          * @param {string} [formId] The ID of the form with which the photo is associated. Leaving this blank will query against all of your photos.
          * @param {boolean} [newestFirst] If present, photos will be sorted by updated_at date.
-         * @param {boolean} [processed] Photo has been completely processed.
-         * @param {boolean} [stored] Photo has been completely stored.
-         * @param {boolean} [uploaded] Photo has been completely uploaded.
-         * @param {number} [page] The page number requested
-         * @param {number} [perPage] Number of items per page
+         * @param {boolean} [processed] Filter for photos that have been completely processed.
+         * @param {boolean} [stored] Filter for photos that have been completely stored.
+         * @param {boolean} [uploaded] Filter for photos that have been completely uploaded.
+         * @param {number} [page] The page number requested.
+         * @param {number} [perPage] The number of items to return per page.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async photosGetAllMetadata(recordId?: string, formId?: string, newestFirst?: boolean, processed?: boolean, stored?: boolean, uploaded?: boolean, page?: number, perPage?: number, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async photosGetAllMetadata(recordId?: string, formId?: string, newestFirst?: boolean, processed?: boolean, stored?: boolean, uploaded?: boolean, page?: number, perPage?: number, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PhotosResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.photosGetAllMetadata(recordId, formId, newestFirst, processed, stored, uploaded, page, perPage, accept, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.photosGetAllMetadata']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get Single Photo File
-         * @param {string} photoId Photo ID
-         * @param {string} [accept] 
+         * Download the original photo file.
+         * @summary Get a photo original file
+         * @param {string} photoId The unique identifier of the photo.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async photosGetSingleFile(photoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.photosGetSingleFile(photoId, accept, options);
+        async photosGetSingleFile(photoId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.photosGetSingleFile(photoId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.photosGetSingleFile']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get Single Photo Metadata
-         * @param {string} photoId Photo ID
+         * Retrieve metadata for a single photo.
+         * @summary Get photo metadata
+         * @param {string} photoId The unique identifier of the photo.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async photosGetSingleMetadata(photoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async photosGetSingleMetadata(photoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SinglePhotoResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.photosGetSingleMetadata(photoId, accept, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.photosGetSingleMetadata']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Photo Large File
-         * @param {string} photoId Photo ID
-         * @param {string} [accept] 
+         * Download the large variant of a photo.
+         * @summary Get a photo large file
+         * @param {string} photoId The unique identifier of the photo.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async photosLargeFile(photoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.photosLargeFile(photoId, accept, options);
+        async photosLargeFile(photoId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.photosLargeFile(photoId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.photosLargeFile']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Retrieve metadata for a photo\'s large variant.
          * @summary Photo Large Metadata
-         * @param {string} photoId Photo ID
+         * @param {string} photoId The unique identifier of the photo.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7516,23 +8012,22 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Photo Thumbnail File
-         * @param {string} photoId Photo ID
-         * @param {string} [accept] 
+         * Download the thumbnail variant of a photo.
+         * @summary Get a photo thumbnail file
+         * @param {string} photoId The unique identifier of the photo.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async photosThumbnailFile(photoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.photosThumbnailFile(photoId, accept, options);
+        async photosThumbnailFile(photoId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.photosThumbnailFile(photoId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.photosThumbnailFile']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Retrieve metadata for a photo\'s thumbnail variant.
          * @summary Photo Thumbnail Metadata
-         * @param {string} photoId Photo ID
+         * @param {string} photoId The unique identifier of the photo.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -7544,8 +8039,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Upload Photo
+         * Upload a photo file to associate with a record.
+         * @summary Upload a photo
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {*} [options] Override http request option.
@@ -7559,7 +8054,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Create Project
+         * @summary Create a project
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {ProjectRequest} [projectRequest] 
@@ -7574,7 +8069,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Delete Project
+         * @summary Delete a project
          * @param {string} projectId Project ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -7588,7 +8083,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get All Projects
+         * @summary Get a list of projects
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -7603,7 +8098,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get Single Project
+         * @summary Get a project
          * @param {string} projectId Project ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -7632,9 +8127,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary GET Query
-         * @param {string} q The SQL query
+         * Execute a Query API request using HTTP GET. Provide a SQL like query to query against your organization\'s data.
+         * @summary Make a Query GET request
+         * @param {string} q The SQL query to execute.
          * @param {string} [format] The format of the results returned by the query. Options include &#x60;csv&#x60;, &#x60;json&#x60;, &#x60;geojson&#x60;, &#x60;postgres&#x60;.
          * @param {boolean} [headers] Include headers for csv format?
          * @param {boolean} [metadata] Include column metadata for &#x60;json&#x60; format?
@@ -7642,8 +8137,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {string} [tableName] Table name for &#x60;postgres&#x60; format. Defaults to query.
          * @param {string} [sortColumn] The name of the column used to sort on.
          * @param {string} [sortDirection] The sort direction (asc, desc).
-         * @param {number} [page] The page number requested
-         * @param {number} [perPage] Number of items per page
+         * @param {number} [page] The page number requested.
+         * @param {number} [perPage] The number of items to return per page.
          * @param {string} [accept] 
          * @param {string} [userAgent] 
          * @param {*} [options] Override http request option.
@@ -7656,10 +8151,10 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary POST Query
-         * @param {number} [page] The page number requested
-         * @param {number} [perPage] Number of items per page
+         * Execute a Query API request using HTTP POST. Provide a SQL like query to query against your organization\'s data.
+         * @summary Make a Query POST request
+         * @param {number} [page] The page number requested.
+         * @param {number} [perPage] The number of items to return per page.
          * @param {string} [accept] 
          * @param {QueryRequest} [queryRequest] 
          * @param {*} [options] Override http request option.
@@ -7672,8 +8167,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Create Record
+         * Create a new record in the specified form using the provided form values, location information, and any associated metadata.
+         * @summary Create a record
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {boolean} [xSkipWorkflows] Skips all app workflows
@@ -7682,31 +8177,31 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async recordsCreate(accept?: string, contentType?: string, xSkipWorkflows?: boolean, xSkipWebhooks?: boolean, recordRequest?: RecordRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async recordsCreate(accept?: string, contentType?: string, xSkipWorkflows?: boolean, xSkipWebhooks?: boolean, recordRequest?: RecordRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SingleRecordResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.recordsCreate(accept, contentType, xSkipWorkflows, xSkipWebhooks, recordRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.recordsCreate']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Delete Record
-         * @param {string} recordId Record ID
+         * Delete a record from your organization.
+         * @summary Delete a record
+         * @param {string} recordId The unique identifier of the record to delete.
          * @param {string} [accept] 
          * @param {boolean} [xSkipWorkflows] Skips all app workflows
          * @param {boolean} [xSkipWebhooks] Skips all app webhooks
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async recordsDelete(recordId: string, accept?: string, xSkipWorkflows?: boolean, xSkipWebhooks?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async recordsDelete(recordId: string, accept?: string, xSkipWorkflows?: boolean, xSkipWebhooks?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SingleRecordResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.recordsDelete(recordId, accept, xSkipWorkflows, xSkipWebhooks, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.recordsDelete']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get All Records
+         * Get a list of records from your organization that can be filtered by dimensions such as form, project, changeset, bounding box, and date ranges.
+         * @summary Get a list of records
          * @param {boolean} [newestFirst] If present, records will be sorted by updated_at date.
          * @param {string} [boundingBox] Bounding box of the records requested. Format should be: lat,long,lat,long (bottom, left, top, right).
          * @param {string} [changesetId] The id of the changeset associated with the record.
@@ -7733,51 +8228,69 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * This endpoint can help you get records from a specific changeset, or retrieve records for a deleted form.
-         * @summary Get All Records History
+         * Retrieve historical record data from your organization. This endpoint is useful for accessing records from a specific changeset or retrieving records that belonged to a deleted form.
+         * @summary Get the history of a collection of records
          * @param {string} [accept] 
-         * @param {string} [changesetId] 
-         * @param {string} [deletedFormId] 
+         * @param {string} [changesetId] Filters records to only those associated with the specified changeset ID.
+         * @param {string} [deletedFormId] Filters records to only those that belonged to a form that has been deleted. Use this to retrieve data from removed forms.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async recordsGetAllHistory(accept?: string, changesetId?: string, deletedFormId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async recordsGetAllHistory(accept?: string, changesetId?: string, deletedFormId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecordHistoryResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.recordsGetAllHistory(accept, changesetId, deletedFormId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.recordsGetAllHistory']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get Record History
-         * @param {string} recordId Record ID
+         * Retrieve the complete version history of a record.
+         * @summary Get the history of a record
+         * @param {string} recordId The unique identifier of the record whose history you want to retrieve.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async recordsGetHistory(recordId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async recordsGetHistory(recordId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecordHistoryResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.recordsGetHistory(recordId, accept, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.recordsGetHistory']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get Single Record
-         * @param {string} recordId Record ID
+         * Retrieve detailed information about a specific record by its ID. This includes all form field values, location data, timestamps, and associated metadata.
+         * @summary Get a record
+         * @param {string} recordId The unique identifier of the record to retrieve.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async recordsGetSingle(recordId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ModelRecord>> {
+        async recordsGetSingle(recordId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SingleRecordResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.recordsGetSingle(recordId, accept, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.recordsGetSingle']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Update Record
+         * Update specific fields of an existing record without requiring the complete record object. Only the fields included in the request body will be modified, while all other fields remain unchanged. This is useful for updating individual field values or metadata.
+         * @summary Partially update a record
+         * @param {string} recordId Record ID
+         * @param {string} [accept] 
+         * @param {string} [contentType] 
+         * @param {boolean} [xSkipWorkflows] Skips all app workflows
+         * @param {boolean} [xSkipWebhooks] Skips all app webhooks
+         * @param {RecordPatchRequest} [recordPatchRequest] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async recordsPartialUpdate(recordId: string, accept?: string, contentType?: string, xSkipWorkflows?: boolean, xSkipWebhooks?: boolean, recordPatchRequest?: RecordPatchRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SingleRecordResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.recordsPartialUpdate(recordId, accept, contentType, xSkipWorkflows, xSkipWebhooks, recordPatchRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.recordsPartialUpdate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Update a record with a provided record object. The record object is expected to be the complete representation of the record. Any fields not included are assumed null.
+         * @summary Update a record
          * @param {string} recordId Record ID
          * @param {string} [accept] 
          * @param {string} [contentType] 
@@ -7794,8 +8307,35 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Generate a new report for a specific record, optionally using a report template.
+         * @summary Create a report
+         * @param {ReportRequest} reportRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async reportsCreate(reportRequest: ReportRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReportResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.reportsCreate(reportRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.reportsCreate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Download the generated PDF report file.
+         * @summary Get a report file
+         * @param {string} reportId The unique identifier of the report.
+         * @param {string} [accept] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async reportsFile(reportId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.reportsFile(reportId, accept, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.reportsFile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 
-         * @summary Get All Roles
+         * @summary Get a list of roles
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -7811,98 +8351,212 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get All Signatures
+         * Retrieve metadata for a list of signatures.
+         * @summary Get a list of signature metadata
          * @param {string} [recordId] The ID of the record with which the photo is associated.
          * @param {string} [formId] The ID of the form with which the photo is associated. Leaving this blank will query against all of your photos.
          * @param {boolean} [newestFirst] If present, photos will be sorted by updated_at date.
-         * @param {boolean} [processed] Signature has been completely processed.
-         * @param {boolean} [stored] Signature has been completely stored.
-         * @param {boolean} [uploaded] Signature has been completely uploaded.
-         * @param {number} [page] The page number requested
-         * @param {number} [perPage] Number of items per page
+         * @param {boolean} [processed] Filter for signatures that have been completely processed.
+         * @param {boolean} [stored] Filter for signatures that have been completely stored.
+         * @param {boolean} [uploaded] Filter for signatures that have been completely uploaded.
+         * @param {number} [page] The page number requested.
+         * @param {number} [perPage] The number of items to return per page.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async signaturesGetAll(recordId?: string, formId?: string, newestFirst?: boolean, processed?: boolean, stored?: boolean, uploaded?: boolean, page?: number, perPage?: number, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async signaturesGetAll(recordId?: string, formId?: string, newestFirst?: boolean, processed?: boolean, stored?: boolean, uploaded?: boolean, page?: number, perPage?: number, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SignaturesResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.signaturesGetAll(recordId, formId, newestFirst, processed, stored, uploaded, page, perPage, accept, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.signaturesGetAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get Single Signature File
-         * @param {string} signatureId Signature ID
-         * @param {string} [accept] 
+         * Download the original signature file.
+         * @summary Get a signature original file
+         * @param {string} signatureId The unique identifier of the signature.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async signaturesGetSingleFile(signatureId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.signaturesGetSingleFile(signatureId, accept, options);
+        async signaturesGetSingleFile(signatureId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.signaturesGetSingleFile(signatureId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.signaturesGetSingleFile']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get Single Signature Metadata
-         * @param {string} signatureId Signature ID
+         * Retrieve metadata for a single signature.
+         * @summary Get signature metadata
+         * @param {string} signatureId The unique identifier of the signature.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async signaturesGetSingleMetadata(signatureId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async signaturesGetSingleMetadata(signatureId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SingleSignatureResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.signaturesGetSingleMetadata(signatureId, accept, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.signaturesGetSingleMetadata']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Signature Thumbnail File
-         * @param {string} signatureId Signature ID
-         * @param {string} [accept] 
+         * Download the thumbnail variant of a signature.
+         * @summary Get a signature thumbnail file
+         * @param {string} signatureId The unique identifier of the signature.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async signaturesGetThumbnailFile(signatureId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.signaturesGetThumbnailFile(signatureId, accept, options);
+        async signaturesGetThumbnailFile(signatureId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.signaturesGetThumbnailFile(signatureId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.signaturesGetThumbnailFile']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Retrieve metadata for a signature\'s thumbnail variant.
          * @summary Signature Thumbnail Metadata
-         * @param {string} signatureId Signature ID
+         * @param {string} signatureId The unique identifier of the signature.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async signaturesGetThumbnailMetadata(signatureId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async signaturesGetThumbnailMetadata(signatureId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SingleSignatureResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.signaturesGetThumbnailMetadata(signatureId, accept, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.signaturesGetThumbnailMetadata']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Upload Signature
+         * Upload a signature file to associate with a record.
+         * @summary Upload a signature
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async signaturesUpload(accept?: string, contentType?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async signaturesUpload(accept?: string, contentType?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SingleSignatureResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.signaturesUpload(accept, contentType, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.signaturesUpload']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Start your pending batch
+         * Retrieve metadata for a list of sketches.
+         * @summary Get a list of sketch metadata
+         * @param {string} [recordId] The ID of the record with which the sketch is associated.
+         * @param {string} [formId] The ID of the form with which the sketch is associated. Leaving this blank will query against all of your sketches.
+         * @param {boolean} [newestFirst] If present, sketches will be sorted by updated_at date.
+         * @param {boolean} [processed] Sketch has been completely processed.
+         * @param {boolean} [stored] Sketch has been completely stored.
+         * @param {boolean} [uploaded] Sketch has been completely uploaded.
+         * @param {number} [page] The page number requested
+         * @param {number} [perPage] Number of items per page
+         * @param {string} [accept] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sketchesGetAllMetadata(recordId?: string, formId?: string, newestFirst?: boolean, processed?: boolean, stored?: boolean, uploaded?: boolean, page?: number, perPage?: number, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SketchesResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sketchesGetAllMetadata(recordId, formId, newestFirst, processed, stored, uploaded, page, perPage, accept, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.sketchesGetAllMetadata']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Download the original sketch file.
+         * @summary Get a sketch original file
+         * @param {string} sketchId Sketch ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sketchesGetSingleFile(sketchId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sketchesGetSingleFile(sketchId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.sketchesGetSingleFile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieve metadata for a single sketch.
+         * @summary Get sketch metadata
+         * @param {string} sketchId Sketch ID
+         * @param {string} [accept] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sketchesGetSingleMetadata(sketchId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SingleSketchResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sketchesGetSingleMetadata(sketchId, accept, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.sketchesGetSingleMetadata']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Download the large variant of a sketch.
+         * @summary Get a sketch large file
+         * @param {string} sketchId Sketch ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sketchesLargeFile(sketchId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sketchesLargeFile(sketchId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.sketchesLargeFile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieve metadata for a sketch\'s large variant.
+         * @summary Sketch Large Metadata
+         * @param {string} sketchId Sketch ID
+         * @param {string} [accept] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sketchesLargeMetadata(sketchId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sketchesLargeMetadata(sketchId, accept, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.sketchesLargeMetadata']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Download the thumbnail variant of a sketch.
+         * @summary Get a sketch thumbnail file
+         * @param {string} sketchId Sketch ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sketchesThumbnailFile(sketchId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sketchesThumbnailFile(sketchId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.sketchesThumbnailFile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieve metadata for a sketch\'s thumbnail variant.
+         * @summary Sketch Thumbnail Metadata
+         * @param {string} sketchId Sketch ID
+         * @param {string} [accept] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sketchesThumbnailMetadata(sketchId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sketchesThumbnailMetadata(sketchId, accept, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.sketchesThumbnailMetadata']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Upload a sketch file to associate with a record.
+         * @summary Upload a sketch
+         * @param {string} [accept] 
+         * @param {string} [contentType] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sketchesUpload(accept?: string, contentType?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sketchesUpload(accept, contentType, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.sketchesUpload']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Start your pending batch.
          * @summary Start Batch
          * @param {string} batchId ID of the batch
          * @param {*} [options] Override http request option.
@@ -7947,16 +8601,16 @@ export const DefaultApiFp = function(configuration?: Configuration) {
         },
         /**
          * You can use this to update parameters of a member, but this will not work if the member is apart of multiple organizations.
-         * @summary Update Member
+         * @summary Update a membership
          * @param {string} membershipId The ID of the member
          * @param {MembershipUpdateRequest} [membershipUpdateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateMember(membershipId: string, membershipUpdateRequest?: MembershipUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateMember(membershipId, membershipUpdateRequest, options);
+        async updateMembership(membershipId: string, membershipUpdateRequest?: MembershipUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateMembership(membershipId, membershipUpdateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['DefaultApi.updateMember']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.updateMembership']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -7978,13 +8632,13 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @summary Update Workflow
          * @param {string} workflowId The ID of the workflow
          * @param {string} [accept] 
-         * @param {string} [contentTyoe] 
+         * @param {string} [contentType] 
          * @param {WorkflowUpdateRequest} [workflowUpdateRequest] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateWorkflow(workflowId: string, accept?: string, contentTyoe?: string, workflowUpdateRequest?: WorkflowUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateWorkflow(workflowId, accept, contentTyoe, workflowUpdateRequest, options);
+        async updateWorkflow(workflowId: string, accept?: string, contentType?: string, workflowUpdateRequest?: WorkflowUpdateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateWorkflow(workflowId, accept, contentType, workflowUpdateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.updateWorkflow']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -8005,28 +8659,28 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get All Videos
+         * Retrieve metadata for a list of videos.
+         * @summary Get a list of video metadata
          * @param {string} [recordId] The ID of the record with which the video is associated.
          * @param {string} [formId] The ID of the form with which the video is associated. Leaving this blank will query against all of your videos.
          * @param {boolean} [newestFirst] If present, videos will be sorted by updated_at date.
-         * @param {boolean} [processed] Video has been completely processed.
-         * @param {boolean} [stored] Video has been completely stored.
-         * @param {boolean} [uploaded] Video has been completely uploaded.
-         * @param {number} [page] The page number requested
-         * @param {number} [perPage] Number of items per page
+         * @param {boolean} [processed] Filter for videos that have been completely processed.
+         * @param {boolean} [stored] Filter for videos that have been completely stored.
+         * @param {boolean} [uploaded] Filter for videos that have been completely uploaded.
+         * @param {number} [page] The page number requested.
+         * @param {number} [perPage] The number of items to return per page.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videosGetAll(recordId?: string, formId?: string, newestFirst?: boolean, processed?: boolean, stored?: boolean, uploaded?: boolean, page?: number, perPage?: number, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async videosGetAll(recordId?: string, formId?: string, newestFirst?: boolean, processed?: boolean, stored?: boolean, uploaded?: boolean, page?: number, perPage?: number, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VideosResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetAll(recordId, formId, newestFirst, processed, stored, uploaded, page, perPage, accept, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.videosGetAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get GPS tracks for videos in GeoJSON format.
          * @summary Get GeoJSON Tracks for All Videos
          * @param {string} [accept] 
          * @param {string} [type] Set value to &#x60;points&#x60; to fetch tracks as GeoJSON points
@@ -8040,7 +8694,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get GPS tracks for videos in GPX format.
          * @summary Get GPX Tracks for All Videos
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -8053,7 +8707,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get GPS tracks for videos in KML format.
          * @summary Get KML Tracks for All Videos
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -8066,51 +8720,49 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get Medium Video File
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * Download a medium variant of the video.
+         * @summary Get a video medium file
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videosGetMediumFile(videoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetMediumFile(videoId, accept, options);
+        async videosGetMediumFile(videoId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetMediumFile(videoId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.videosGetMediumFile']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get Original Video File
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * Download the original video file.
+         * @summary Get a video original file
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videosGetOriginalFile(videoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetOriginalFile(videoId, accept, options);
+        async videosGetOriginalFile(videoId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetOriginalFile(videoId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.videosGetOriginalFile']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get Video Metadata
-         * @param {string} videoId Video ID
+         * Retrieve metadata for a specific video.
+         * @summary Get video metadata
+         * @param {string} videoId The unique identifier of the video.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videosGetSingleMetadata(videoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async videosGetSingleMetadata(videoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SingleVideoResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetSingleMetadata(videoId, accept, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.videosGetSingleMetadata']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get the GPS track for a video in GeoJSON format.
          * @summary Get GeoJSON Video Track
-         * @param {string} videoId Video ID
+         * @param {string} videoId The unique identifier of the video.
          * @param {string} [accept] 
          * @param {string} [type] Set value to &#x60;points&#x60; to fetch tracks as GeoJSON points
          * @param {*} [options] Override http request option.
@@ -8123,9 +8775,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get the GPS track for a video in GPX format.
          * @summary Get GPX Video Track
-         * @param {string} videoId Video ID
+         * @param {string} videoId The unique identifier of the video.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8137,9 +8789,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get the GPS track for a video in JSON format.
          * @summary Get JSON Video Track
-         * @param {string} videoId Video ID
+         * @param {string} videoId The unique identifier of the video.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8151,9 +8803,9 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Get the GPS track for a video in KML format.
          * @summary Get KML Video Track
-         * @param {string} videoId Video ID
+         * @param {string} videoId The unique identifier of the video.
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8165,148 +8817,139 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get Small Video File
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * Download the small variant of the video.
+         * @summary Get a video small file
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videosGetSmallFile(videoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetSmallFile(videoId, accept, options);
+        async videosGetSmallFile(videoId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetSmallFile(videoId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.videosGetSmallFile']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Download a huge thumbnail variant for a video.
          * @summary Get Huge Video Thumbnail
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videosGetThumbnailHuge(videoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetThumbnailHuge(videoId, accept, options);
+        async videosGetThumbnailHuge(videoId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetThumbnailHuge(videoId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.videosGetThumbnailHuge']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Download a huge square thumbnail variant for a video.
          * @summary Get Huge Square Video Thumbnail
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videosGetThumbnailHugeSquare(videoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetThumbnailHugeSquare(videoId, accept, options);
+        async videosGetThumbnailHugeSquare(videoId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetThumbnailHugeSquare(videoId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.videosGetThumbnailHugeSquare']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Download a large thumbnail variant for a video.
          * @summary Get Large Video Thumbnail
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videosGetThumbnailLarge(videoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetThumbnailLarge(videoId, accept, options);
+        async videosGetThumbnailLarge(videoId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetThumbnailLarge(videoId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.videosGetThumbnailLarge']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Download a large square thumbnail variant for a video.
          * @summary Get Large Square Video Thumbnail
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videosGetThumbnailLargeSquare(videoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetThumbnailLargeSquare(videoId, accept, options);
+        async videosGetThumbnailLargeSquare(videoId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetThumbnailLargeSquare(videoId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.videosGetThumbnailLargeSquare']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Download a medium thumbnail variant for a video.
          * @summary Get Medium Video Thumbnail
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videosGetThumbnailMedium(videoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetThumbnailMedium(videoId, accept, options);
+        async videosGetThumbnailMedium(videoId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetThumbnailMedium(videoId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.videosGetThumbnailMedium']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Download a medium square thumbnail variant for a video.
          * @summary Get Medium Square Video Thumbnail
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videosGetThumbnailMediumSquare(videoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetThumbnailMediumSquare(videoId, accept, options);
+        async videosGetThumbnailMediumSquare(videoId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetThumbnailMediumSquare(videoId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.videosGetThumbnailMediumSquare']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Download the small thumbnail variant for a video.
          * @summary Get Small Video Thumbnail
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videosGetThumbnailSmall(videoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetThumbnailSmall(videoId, accept, options);
+        async videosGetThumbnailSmall(videoId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetThumbnailSmall(videoId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.videosGetThumbnailSmall']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Download a small square thumbnail variant for a video.
          * @summary Get Small Square Video Thumbnail
-         * @param {string} videoId Video ID
-         * @param {string} [accept] 
+         * @param {string} videoId The unique identifier of the video.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videosGetThumbnailSmallSquare(videoId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetThumbnailSmallSquare(videoId, accept, options);
+        async videosGetThumbnailSmallSquare(videoId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.videosGetThumbnailSmallSquare(videoId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.videosGetThumbnailSmallSquare']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Upload video with optional track file
-         * @summary Upload Video
+         * Upload video to be associated with a record.
+         * @summary Upload a video
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async videosUpload(accept?: string, contentType?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async videosUpload(accept?: string, contentType?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SingleVideoResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.videosUpload(accept, contentType, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.videosUpload']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Create Webhook
+         * Create a webhook.
+         * @summary Create a webhook
          * @param {string} [accept] 
          * @param {string} [contentType] 
          * @param {WebhookRequest} [webhookRequest] 
@@ -8320,8 +8963,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Delete Webhook
+         * Delete a webhook.
+         * @summary Delete a webhook
          * @param {string} webhookId Webhook ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -8334,8 +8977,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get All Webhooks
+         * Get a list of webhooks.
+         * @summary Get a list of webhooks
          * @param {number} [page] The page number requested
          * @param {number} [perPage] Number of items per page
          * @param {string} [accept] 
@@ -8349,8 +8992,8 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Get Single Webhook
+         * Get a webhook.
+         * @summary Get a webhook
          * @param {string} webhookId Webhook ID
          * @param {string} [accept] 
          * @param {*} [options] Override http request option.
@@ -8363,7 +9006,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Update a webhook.
          * @summary Update Webhook
          * @param {string} webhookId Webhook ID
          * @param {string} [accept] 
@@ -8398,17 +9041,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.addBatchOperations(requestParameters.batchId, requestParameters.batchAddOperationsRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get All Audio
+         * Retrieve metadata for a list of audio files.
+         * @summary Get a list of audio metadata
          * @param {DefaultApiAudioGetAllRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        audioGetAll(requestParameters: DefaultApiAudioGetAllRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        audioGetAll(requestParameters: DefaultApiAudioGetAllRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<AudiosResponse> {
             return localVarFp.audioGetAll(requestParameters.recordId, requestParameters.formId, requestParameters.newestFirst, requestParameters.processed, requestParameters.stored, requestParameters.uploaded, requestParameters.page, requestParameters.perPage, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get GPS tracks for audio files in GeoJSON format.
          * @summary Get GeoJSON Tracks for All Audio
          * @param {DefaultApiAudioGetAllTracksGeojsonRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -8418,7 +9061,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.audioGetAllTracksGeojson(requestParameters.accept, requestParameters.type, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get GPS tracks for audio files in GPX format.
          * @summary Get GPX Tracks for All Audio
          * @param {DefaultApiAudioGetAllTracksGpxRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -8428,7 +9071,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.audioGetAllTracksGpx(requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get GPS tracks for audio files in JSON format.
          * @summary Get JSON Tracks for All Audio
          * @param {DefaultApiAudioGetAllTracksJsonRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -8438,7 +9081,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.audioGetAllTracksJson(requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get GPS tracks for audio files in KML format.
          * @summary Get KML Tracks for All Audio
          * @param {DefaultApiAudioGetAllTracksKmlRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -8448,27 +9091,27 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.audioGetAllTracksKml(requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get Original Audio File
+         * Download the original audio file.
+         * @summary Get an audio original file
          * @param {DefaultApiAudioGetOriginalFileRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        audioGetOriginalFile(requestParameters: DefaultApiAudioGetOriginalFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.audioGetOriginalFile(requestParameters.audioId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        audioGetOriginalFile(requestParameters: DefaultApiAudioGetOriginalFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.audioGetOriginalFile(requestParameters.audioId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get Audio Metadata
+         * Retrieve metadata for a single audio file.
+         * @summary Get audio metadata
          * @param {DefaultApiAudioGetSingleMetadataRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        audioGetSingleMetadata(requestParameters: DefaultApiAudioGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        audioGetSingleMetadata(requestParameters: DefaultApiAudioGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleAudioResponse> {
             return localVarFp.audioGetSingleMetadata(requestParameters.audioId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get the GPS track for an audio file in GeoJSON format.
          * @summary Get GeoJSON Audio Track
          * @param {DefaultApiAudioGetSingleTrackGeojsonRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -8478,7 +9121,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.audioGetSingleTrackGeojson(requestParameters.audioId, requestParameters.accept, requestParameters.type, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get the GPS track for an audio file in GPX format.
          * @summary Get GPX Audio Track
          * @param {DefaultApiAudioGetSingleTrackGpxRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -8488,7 +9131,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.audioGetSingleTrackGpx(requestParameters.audioId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get the GPS track for an audio file in JSON format.
          * @summary Get JSON Audio Track
          * @param {DefaultApiAudioGetSingleTrackJsonRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -8498,7 +9141,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.audioGetSingleTrackJson(requestParameters.audioId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get the GPS track for an audio file in KML format.
          * @summary Get KML Audio Track
          * @param {DefaultApiAudioGetSingleTrackKmlRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -8508,8 +9151,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.audioGetSingleTrackKml(requestParameters.audioId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * Upload audio with optional track file
-         * @summary Upload Audio
+         * Upload audio with optional track file.
+         * @summary Upload audio
          * @param {DefaultApiAudioUploadRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8519,7 +9162,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get All Audit Logs
+         * @summary Get a list of audit logs
          * @param {DefaultApiAuditLogsGetAllRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8529,7 +9172,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get Single Audit Log
+         * @summary Get an audit log
          * @param {DefaultApiAuditLogsGetSingleRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8539,7 +9182,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Create Authorization
+         * @summary Create an authorization
          * @param {DefaultApiAuthorizationsCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8549,7 +9192,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Delete Authorization
+         * @summary Delete an authorization
          * @param {DefaultApiAuthorizationsDeleteRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8559,7 +9202,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get All Authorizations
+         * @summary Get a list of authorizations
          * @param {DefaultApiAuthorizationsGetAllRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8569,7 +9212,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get Single Authorization
+         * @summary Get an authorization
          * @param {DefaultApiAuthorizationsGetSingleRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8599,7 +9242,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Create Changeset
+         * @summary Create a changeset
          * @param {DefaultApiChangesetsCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8609,7 +9252,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get All Changesets
+         * @summary Get a list of changesets
          * @param {DefaultApiChangesetsGetAllRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8619,7 +9262,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get Single Changeset
+         * @summary Get a changeset
          * @param {DefaultApiChangesetsGetSingleRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8639,7 +9282,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Create Choice List
+         * @summary Create a choice list
          * @param {DefaultApiChoiceListsCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8649,7 +9292,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Delete Choice List
+         * @summary Delete a choice list
          * @param {DefaultApiChoiceListsDeleteRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8659,7 +9302,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get All Choice Lists
+         * @summary Get a list of choice lists
          * @param {DefaultApiChoiceListsGetAllRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8669,7 +9312,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get Single Choice List
+         * @summary Get a choice list
          * @param {DefaultApiChoiceListsGetSingleRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8689,7 +9332,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Create Classification Set
+         * @summary Create a classification set
          * @param {DefaultApiClassificationSetsCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8699,7 +9342,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Delete Classification Set
+         * @summary Delete a classification set
          * @param {DefaultApiClassificationSetsDeleteRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8709,7 +9352,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get All Classification Sets
+         * @summary Get a list of classification sets
          * @param {DefaultApiClassificationSetsGetAllRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8719,7 +9362,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get Single Classification Set
+         * @summary Get a classification set
          * @param {DefaultApiClassificationSetsGetSingleRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8738,8 +9381,18 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.classificationSetsUpdate(requestParameters.classificationSetId, requestParameters.accept, requestParameters.contentType, requestParameters.classificationSetRequest, options).then((request) => request(axios, basePath));
         },
         /**
+         * Copy all reference files from one form to another. Limits: 100 reference files per form, 1GB total per form.
+         * @summary Copy all reference files
+         * @param {DefaultApiCopyAllAttachmentsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        copyAllAttachments(requestParameters: DefaultApiCopyAllAttachmentsRequest, options?: RawAxiosRequestConfig): AxiosPromise<AttachmentCopyAllResponse> {
+            return localVarFp.copyAllAttachments(requestParameters.attachmentCopyAllRequest, requestParameters.xApitoken, options).then((request) => request(axios, basePath));
+        },
+        /**
          * There is only one parameter that is required for creating an attachment: `owners`. You must specify at least one owner of type `record` or `form`. If you create a `record` attachment you can optionally include a `name` and `file_size`. The name will be the name of the file shown in the record information. The file_size is only used for verifying that uploading this attachment will not exceed your current storage limit. If no file_size is provided the attachment may be rejected once it has been uploaded. The response will provide the `url` to upload (PUT) the file to.
-         * @summary Create Attachment
+         * @summary Create an attachment
          * @param {DefaultApiCreateAttachmentRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8749,7 +9402,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * Using the batch operations API, you can bulk delete records from a form.
-         * @summary Create Batch to Bulk Delete Records
+         * @summary Create a batch
          * @param {DefaultApiCreateBatchRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8759,7 +9412,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Create Group
+         * @summary Create a group
          * @param {DefaultApiCreateGroupRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8769,17 +9422,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Create Member
-         * @param {DefaultApiCreateMemberRequest} requestParameters Request parameters.
+         * @summary Create a membership
+         * @param {DefaultApiCreateMembershipRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createMember(requestParameters: DefaultApiCreateMemberRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.createMember(requestParameters.accept, requestParameters.contentType, requestParameters.membershipCreateRequest, options).then((request) => request(axios, basePath));
+        createMembership(requestParameters: DefaultApiCreateMembershipRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.createMembership(requestParameters.accept, requestParameters.contentType, requestParameters.membershipCreateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary Create Report Template
+         * @summary Create a report template
          * @param {DefaultApiCreateReportTemplateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8789,17 +9442,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Create Workflow
+         * @summary Create a workflow
          * @param {DefaultApiCreateWorkflowRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         createWorkflow(requestParameters: DefaultApiCreateWorkflowRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.createWorkflow(requestParameters.accept, requestParameters.contentTyoe, requestParameters.workflowCreateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.createWorkflow(requestParameters.accept, requestParameters.contentType, requestParameters.workflowCreateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * The delete endpoint only applies to Form attachments. Use this endpoint to delete an attachment. For record attachments, simply remove the association of an attachment from the record and the attachment will be deleted.
-         * @summary Delete Attachment
+         * @summary Delete an attachment
          * @param {DefaultApiDeleteAttachmentRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8809,7 +9462,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Delete Group
+         * @summary Delete a group
          * @param {DefaultApiDeleteGroupRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8819,17 +9472,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Delete Member
-         * @param {DefaultApiDeleteMemberRequest} requestParameters Request parameters.
+         * @summary Delete a membership
+         * @param {DefaultApiDeleteMembershipRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteMember(requestParameters: DefaultApiDeleteMemberRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.deleteMember(requestParameters.membershipId, requestParameters.membershipDeleteRequest, options).then((request) => request(axios, basePath));
+        deleteMembership(requestParameters: DefaultApiDeleteMembershipRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.deleteMembership(requestParameters.membershipId, requestParameters.membershipDeleteRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary Delete Report Template
+         * @summary Delete a report template
          * @param {DefaultApiDeleteReportTemplateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8839,7 +9492,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Delete Workflow
+         * @summary Delete a workflow
          * @param {DefaultApiDeleteWorkflowRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8859,7 +9512,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Create Form
+         * @summary Create a form
          * @param {DefaultApiFormsCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8869,7 +9522,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Delete Form
+         * @summary Delete a form
          * @param {DefaultApiFormsDeleteRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8879,13 +9532,13 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get All Forms
+         * @summary Get a list of forms
          * @param {DefaultApiFormsGetAllRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         formsGetAll(requestParameters: DefaultApiFormsGetAllRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.formsGetAll(requestParameters.schema, requestParameters.page, requestParameters.perPage, requestParameters.accept, requestParameters.type, options).then((request) => request(axios, basePath));
+            return localVarFp.formsGetAll(requestParameters.schema, requestParameters.page, requestParameters.perPage, requestParameters.accept, requestParameters.type, requestParameters.status, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -8899,7 +9552,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get Single Form
+         * @summary Get a form
          * @param {DefaultApiFormsGetSingleRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8918,18 +9571,18 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.formsUpdate(requestParameters.formId, requestParameters.accept, requestParameters.contentType, requestParameters.formRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get All Attachments
+         * Retrieve a list of attachments.
+         * @summary Get a list of attachment metadata
          * @param {DefaultApiGetAllAttachmentsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllAttachments(requestParameters: DefaultApiGetAllAttachmentsRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<GetAllAttachments200Response> {
-            return localVarFp.getAllAttachments(requestParameters.recordId, requestParameters.formId, requestParameters.ownerType, requestParameters.xApitoken, options).then((request) => request(axios, basePath));
+        getAllAttachments(requestParameters: DefaultApiGetAllAttachmentsRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<AttachmentsResponse> {
+            return localVarFp.getAllAttachments(requestParameters.recordId, requestParameters.formId, requestParameters.ownerType, requestParameters.sort, requestParameters.sortDirection, requestParameters.xApitoken, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary Get All Batches
+         * @summary Get a list of batches
          * @param {DefaultApiGetAllBatchesRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8939,7 +9592,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get All Groups
+         * @summary Get a list of groups
          * @param {DefaultApiGetAllGroupsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8959,7 +9612,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get All Report Templates
+         * @summary Get a list of report templates
          * @param {DefaultApiGetAllReportTemplatesRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8969,7 +9622,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get All Workflows
+         * @summary Get a list of workflows
          * @param {DefaultApiGetAllWorkflowsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -8988,18 +9641,18 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.getGroupResource(requestParameters.groupId, requestParameters.resource, requestParameters.accept, requestParameters.page, requestParameters.perPage, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get Single Attachment
+         * Retrieve metadata for a single attachment.
+         * @summary Get an attachment
          * @param {DefaultApiGetSingleAttachmentRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSingleAttachment(requestParameters: DefaultApiGetSingleAttachmentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetSingleAttachment200Response> {
+        getSingleAttachment(requestParameters: DefaultApiGetSingleAttachmentRequest, options?: RawAxiosRequestConfig): AxiosPromise<Attachment> {
             return localVarFp.getSingleAttachment(requestParameters.attachmentId, requestParameters.xApitoken, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary Get Single Batch
+         * @summary Get a batch
          * @param {DefaultApiGetSingleBatchRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9009,7 +9662,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get Single Group
+         * @summary Get a group
          * @param {DefaultApiGetSingleGroupRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9019,7 +9672,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get Single Report Template
+         * @summary Get a report template
          * @param {DefaultApiGetSingleReportTemplateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9029,7 +9682,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get Single Workflow
+         * @summary Get a workflow
          * @param {DefaultApiGetSingleWorkflowRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9039,7 +9692,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Create Layer
+         * @summary Create a layer
          * @param {DefaultApiLayersCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9049,7 +9702,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Delete Layer
+         * @summary Delete a layer
          * @param {DefaultApiLayersDeleteRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9059,7 +9712,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get All Layers
+         * @summary Get a list of layers
          * @param {DefaultApiLayersGetAllRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9069,7 +9722,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get Single Layer
+         * @summary Get a layer
          * @param {DefaultApiLayersGetSingleRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9088,7 +9741,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.layersUpdate(requestParameters.layerId, requestParameters.accept, requestParameters.contentType, requestParameters.layerRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * Add or remove membership permissions from layers, forms, or projects
+         * Add or remove membership permissions from layers, forms, or projects.
          * @summary Change Permissions
          * @param {DefaultApiMembershipsChangePermissionsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -9099,7 +9752,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get All Memberships
+         * @summary Get a list of memberships
          * @param {DefaultApiMembershipsGetAllRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9109,7 +9762,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get Single Membership
+         * @summary Get a membership
          * @param {DefaultApiMembershipsGetSingleRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9118,47 +9771,47 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.membershipsGetSingle(requestParameters.membershipId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get All Photos
+         * Retrieve metadata for a list of photos.
+         * @summary Get a list of photo metadata
          * @param {DefaultApiPhotosGetAllMetadataRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        photosGetAllMetadata(requestParameters: DefaultApiPhotosGetAllMetadataRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        photosGetAllMetadata(requestParameters: DefaultApiPhotosGetAllMetadataRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<PhotosResponse> {
             return localVarFp.photosGetAllMetadata(requestParameters.recordId, requestParameters.formId, requestParameters.newestFirst, requestParameters.processed, requestParameters.stored, requestParameters.uploaded, requestParameters.page, requestParameters.perPage, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get Single Photo File
+         * Download the original photo file.
+         * @summary Get a photo original file
          * @param {DefaultApiPhotosGetSingleFileRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        photosGetSingleFile(requestParameters: DefaultApiPhotosGetSingleFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.photosGetSingleFile(requestParameters.photoId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        photosGetSingleFile(requestParameters: DefaultApiPhotosGetSingleFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.photosGetSingleFile(requestParameters.photoId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get Single Photo Metadata
+         * Retrieve metadata for a single photo.
+         * @summary Get photo metadata
          * @param {DefaultApiPhotosGetSingleMetadataRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        photosGetSingleMetadata(requestParameters: DefaultApiPhotosGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        photosGetSingleMetadata(requestParameters: DefaultApiPhotosGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<SinglePhotoResponse> {
             return localVarFp.photosGetSingleMetadata(requestParameters.photoId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Photo Large File
+         * Download the large variant of a photo.
+         * @summary Get a photo large file
          * @param {DefaultApiPhotosLargeFileRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        photosLargeFile(requestParameters: DefaultApiPhotosLargeFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.photosLargeFile(requestParameters.photoId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        photosLargeFile(requestParameters: DefaultApiPhotosLargeFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.photosLargeFile(requestParameters.photoId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Retrieve metadata for a photo\'s large variant.
          * @summary Photo Large Metadata
          * @param {DefaultApiPhotosLargeMetadataRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -9168,17 +9821,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.photosLargeMetadata(requestParameters.photoId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Photo Thumbnail File
+         * Download the thumbnail variant of a photo.
+         * @summary Get a photo thumbnail file
          * @param {DefaultApiPhotosThumbnailFileRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        photosThumbnailFile(requestParameters: DefaultApiPhotosThumbnailFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.photosThumbnailFile(requestParameters.photoId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        photosThumbnailFile(requestParameters: DefaultApiPhotosThumbnailFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.photosThumbnailFile(requestParameters.photoId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Retrieve metadata for a photo\'s thumbnail variant.
          * @summary Photo Thumbnail Metadata
          * @param {DefaultApiPhotosThumbnailMetadataRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -9188,8 +9841,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.photosThumbnailMetadata(requestParameters.photoId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Upload Photo
+         * Upload a photo file to associate with a record.
+         * @summary Upload a photo
          * @param {DefaultApiPhotosUploadRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9199,7 +9852,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Create Project
+         * @summary Create a project
          * @param {DefaultApiProjectsCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9209,7 +9862,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Delete Project
+         * @summary Delete a project
          * @param {DefaultApiProjectsDeleteRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9219,7 +9872,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get All Projects
+         * @summary Get a list of projects
          * @param {DefaultApiProjectsGetAllRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9229,7 +9882,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get Single Project
+         * @summary Get a project
          * @param {DefaultApiProjectsGetSingleRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9248,8 +9901,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.projectsUpdate(requestParameters.projectId, requestParameters.accept, requestParameters.contentType, requestParameters.projectRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary GET Query
+         * Execute a Query API request using HTTP GET. Provide a SQL like query to query against your organization\'s data.
+         * @summary Make a Query GET request
          * @param {DefaultApiQueryGetRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9258,8 +9911,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.queryGet(requestParameters.q, requestParameters.format, requestParameters.headers, requestParameters.metadata, requestParameters.arrays, requestParameters.tableName, requestParameters.sortColumn, requestParameters.sortDirection, requestParameters.page, requestParameters.perPage, requestParameters.accept, requestParameters.userAgent, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary POST Query
+         * Execute a Query API request using HTTP POST. Provide a SQL like query to query against your organization\'s data.
+         * @summary Make a Query POST request
          * @param {DefaultApiQueryPostRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9268,28 +9921,28 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.queryPost(requestParameters.page, requestParameters.perPage, requestParameters.accept, requestParameters.queryRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Create Record
+         * Create a new record in the specified form using the provided form values, location information, and any associated metadata.
+         * @summary Create a record
          * @param {DefaultApiRecordsCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        recordsCreate(requestParameters: DefaultApiRecordsCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        recordsCreate(requestParameters: DefaultApiRecordsCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<SingleRecordResponse> {
             return localVarFp.recordsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.xSkipWorkflows, requestParameters.xSkipWebhooks, requestParameters.recordRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Delete Record
+         * Delete a record from your organization.
+         * @summary Delete a record
          * @param {DefaultApiRecordsDeleteRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        recordsDelete(requestParameters: DefaultApiRecordsDeleteRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        recordsDelete(requestParameters: DefaultApiRecordsDeleteRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleRecordResponse> {
             return localVarFp.recordsDelete(requestParameters.recordId, requestParameters.accept, requestParameters.xSkipWorkflows, requestParameters.xSkipWebhooks, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get All Records
+         * Get a list of records from your organization that can be filtered by dimensions such as form, project, changeset, bounding box, and date ranges.
+         * @summary Get a list of records
          * @param {DefaultApiRecordsGetAllRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9298,38 +9951,48 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.recordsGetAll(requestParameters.newestFirst, requestParameters.boundingBox, requestParameters.changesetId, requestParameters.formId, requestParameters.projectId, requestParameters.clientCreatedBefore, requestParameters.clientCreatedSince, requestParameters.clientUpdatedBefore, requestParameters.clientUpdatedSince, requestParameters.createdBefore, requestParameters.createdSince, requestParameters.updatedBefore, requestParameters.updatedSince, requestParameters.page, requestParameters.perPage, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * This endpoint can help you get records from a specific changeset, or retrieve records for a deleted form.
-         * @summary Get All Records History
+         * Retrieve historical record data from your organization. This endpoint is useful for accessing records from a specific changeset or retrieving records that belonged to a deleted form.
+         * @summary Get the history of a collection of records
          * @param {DefaultApiRecordsGetAllHistoryRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        recordsGetAllHistory(requestParameters: DefaultApiRecordsGetAllHistoryRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        recordsGetAllHistory(requestParameters: DefaultApiRecordsGetAllHistoryRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<RecordHistoryResponse> {
             return localVarFp.recordsGetAllHistory(requestParameters.accept, requestParameters.changesetId, requestParameters.deletedFormId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get Record History
+         * Retrieve the complete version history of a record.
+         * @summary Get the history of a record
          * @param {DefaultApiRecordsGetHistoryRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        recordsGetHistory(requestParameters: DefaultApiRecordsGetHistoryRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        recordsGetHistory(requestParameters: DefaultApiRecordsGetHistoryRequest, options?: RawAxiosRequestConfig): AxiosPromise<RecordHistoryResponse> {
             return localVarFp.recordsGetHistory(requestParameters.recordId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get Single Record
+         * Retrieve detailed information about a specific record by its ID. This includes all form field values, location data, timestamps, and associated metadata.
+         * @summary Get a record
          * @param {DefaultApiRecordsGetSingleRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        recordsGetSingle(requestParameters: DefaultApiRecordsGetSingleRequest, options?: RawAxiosRequestConfig): AxiosPromise<ModelRecord> {
+        recordsGetSingle(requestParameters: DefaultApiRecordsGetSingleRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleRecordResponse> {
             return localVarFp.recordsGetSingle(requestParameters.recordId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Update Record
+         * Update specific fields of an existing record without requiring the complete record object. Only the fields included in the request body will be modified, while all other fields remain unchanged. This is useful for updating individual field values or metadata.
+         * @summary Partially update a record
+         * @param {DefaultApiRecordsPartialUpdateRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        recordsPartialUpdate(requestParameters: DefaultApiRecordsPartialUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleRecordResponse> {
+            return localVarFp.recordsPartialUpdate(requestParameters.recordId, requestParameters.accept, requestParameters.contentType, requestParameters.xSkipWorkflows, requestParameters.xSkipWebhooks, requestParameters.recordPatchRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update a record with a provided record object. The record object is expected to be the complete representation of the record. Any fields not included are assumed null.
+         * @summary Update a record
          * @param {DefaultApiRecordsUpdateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9338,8 +10001,28 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.recordsUpdate(requestParameters.recordId, requestParameters.accept, requestParameters.contentType, requestParameters.xSkipWorkflows, requestParameters.xSkipWebhooks, requestParameters.recordRequest, options).then((request) => request(axios, basePath));
         },
         /**
+         * Generate a new report for a specific record, optionally using a report template.
+         * @summary Create a report
+         * @param {DefaultApiReportsCreateRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        reportsCreate(requestParameters: DefaultApiReportsCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportResponse> {
+            return localVarFp.reportsCreate(requestParameters.reportRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Download the generated PDF report file.
+         * @summary Get a report file
+         * @param {DefaultApiReportsFileRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        reportsFile(requestParameters: DefaultApiReportsFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.reportsFile(requestParameters.reportId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
-         * @summary Get All Roles
+         * @summary Get a list of roles
          * @param {DefaultApiRolesGetAllRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9348,67 +10031,147 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.rolesGetAll(requestParameters.page, requestParameters.perPage, requestParameters.accept, requestParameters.sort, requestParameters.sortDirection, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get All Signatures
+         * Retrieve metadata for a list of signatures.
+         * @summary Get a list of signature metadata
          * @param {DefaultApiSignaturesGetAllRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signaturesGetAll(requestParameters: DefaultApiSignaturesGetAllRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        signaturesGetAll(requestParameters: DefaultApiSignaturesGetAllRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<SignaturesResponse> {
             return localVarFp.signaturesGetAll(requestParameters.recordId, requestParameters.formId, requestParameters.newestFirst, requestParameters.processed, requestParameters.stored, requestParameters.uploaded, requestParameters.page, requestParameters.perPage, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get Single Signature File
+         * Download the original signature file.
+         * @summary Get a signature original file
          * @param {DefaultApiSignaturesGetSingleFileRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signaturesGetSingleFile(requestParameters: DefaultApiSignaturesGetSingleFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.signaturesGetSingleFile(requestParameters.signatureId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        signaturesGetSingleFile(requestParameters: DefaultApiSignaturesGetSingleFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.signaturesGetSingleFile(requestParameters.signatureId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get Single Signature Metadata
+         * Retrieve metadata for a single signature.
+         * @summary Get signature metadata
          * @param {DefaultApiSignaturesGetSingleMetadataRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signaturesGetSingleMetadata(requestParameters: DefaultApiSignaturesGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        signaturesGetSingleMetadata(requestParameters: DefaultApiSignaturesGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleSignatureResponse> {
             return localVarFp.signaturesGetSingleMetadata(requestParameters.signatureId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Signature Thumbnail File
+         * Download the thumbnail variant of a signature.
+         * @summary Get a signature thumbnail file
          * @param {DefaultApiSignaturesGetThumbnailFileRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signaturesGetThumbnailFile(requestParameters: DefaultApiSignaturesGetThumbnailFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.signaturesGetThumbnailFile(requestParameters.signatureId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        signaturesGetThumbnailFile(requestParameters: DefaultApiSignaturesGetThumbnailFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.signaturesGetThumbnailFile(requestParameters.signatureId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Retrieve metadata for a signature\'s thumbnail variant.
          * @summary Signature Thumbnail Metadata
          * @param {DefaultApiSignaturesGetThumbnailMetadataRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signaturesGetThumbnailMetadata(requestParameters: DefaultApiSignaturesGetThumbnailMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        signaturesGetThumbnailMetadata(requestParameters: DefaultApiSignaturesGetThumbnailMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleSignatureResponse> {
             return localVarFp.signaturesGetThumbnailMetadata(requestParameters.signatureId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Upload Signature
+         * Upload a signature file to associate with a record.
+         * @summary Upload a signature
          * @param {DefaultApiSignaturesUploadRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signaturesUpload(requestParameters: DefaultApiSignaturesUploadRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        signaturesUpload(requestParameters: DefaultApiSignaturesUploadRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<SingleSignatureResponse> {
             return localVarFp.signaturesUpload(requestParameters.accept, requestParameters.contentType, options).then((request) => request(axios, basePath));
         },
         /**
-         * Start your pending batch
+         * Retrieve metadata for a list of sketches.
+         * @summary Get a list of sketch metadata
+         * @param {DefaultApiSketchesGetAllMetadataRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sketchesGetAllMetadata(requestParameters: DefaultApiSketchesGetAllMetadataRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<SketchesResponse> {
+            return localVarFp.sketchesGetAllMetadata(requestParameters.recordId, requestParameters.formId, requestParameters.newestFirst, requestParameters.processed, requestParameters.stored, requestParameters.uploaded, requestParameters.page, requestParameters.perPage, requestParameters.accept, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Download the original sketch file.
+         * @summary Get a sketch original file
+         * @param {DefaultApiSketchesGetSingleFileRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sketchesGetSingleFile(requestParameters: DefaultApiSketchesGetSingleFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.sketchesGetSingleFile(requestParameters.sketchId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieve metadata for a single sketch.
+         * @summary Get sketch metadata
+         * @param {DefaultApiSketchesGetSingleMetadataRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sketchesGetSingleMetadata(requestParameters: DefaultApiSketchesGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleSketchResponse> {
+            return localVarFp.sketchesGetSingleMetadata(requestParameters.sketchId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Download the large variant of a sketch.
+         * @summary Get a sketch large file
+         * @param {DefaultApiSketchesLargeFileRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sketchesLargeFile(requestParameters: DefaultApiSketchesLargeFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.sketchesLargeFile(requestParameters.sketchId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieve metadata for a sketch\'s large variant.
+         * @summary Sketch Large Metadata
+         * @param {DefaultApiSketchesLargeMetadataRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sketchesLargeMetadata(requestParameters: DefaultApiSketchesLargeMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.sketchesLargeMetadata(requestParameters.sketchId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Download the thumbnail variant of a sketch.
+         * @summary Get a sketch thumbnail file
+         * @param {DefaultApiSketchesThumbnailFileRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sketchesThumbnailFile(requestParameters: DefaultApiSketchesThumbnailFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.sketchesThumbnailFile(requestParameters.sketchId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieve metadata for a sketch\'s thumbnail variant.
+         * @summary Sketch Thumbnail Metadata
+         * @param {DefaultApiSketchesThumbnailMetadataRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sketchesThumbnailMetadata(requestParameters: DefaultApiSketchesThumbnailMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.sketchesThumbnailMetadata(requestParameters.sketchId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Upload a sketch file to associate with a record.
+         * @summary Upload a sketch
+         * @param {DefaultApiSketchesUploadRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sketchesUpload(requestParameters: DefaultApiSketchesUploadRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.sketchesUpload(requestParameters.accept, requestParameters.contentType, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Start your pending batch.
          * @summary Start Batch
          * @param {DefaultApiStartBatchRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -9439,13 +10202,13 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * You can use this to update parameters of a member, but this will not work if the member is apart of multiple organizations.
-         * @summary Update Member
-         * @param {DefaultApiUpdateMemberRequest} requestParameters Request parameters.
+         * @summary Update a membership
+         * @param {DefaultApiUpdateMembershipRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateMember(requestParameters: DefaultApiUpdateMemberRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.updateMember(requestParameters.membershipId, requestParameters.membershipUpdateRequest, options).then((request) => request(axios, basePath));
+        updateMembership(requestParameters: DefaultApiUpdateMembershipRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.updateMembership(requestParameters.membershipId, requestParameters.membershipUpdateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9465,7 +10228,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @throws {RequiredError}
          */
         updateWorkflow(requestParameters: DefaultApiUpdateWorkflowRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.updateWorkflow(requestParameters.workflowId, requestParameters.accept, requestParameters.contentTyoe, requestParameters.workflowUpdateRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.updateWorkflow(requestParameters.workflowId, requestParameters.accept, requestParameters.contentType, requestParameters.workflowUpdateRequest, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9478,17 +10241,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.usersGetUser(requestParameters.page, requestParameters.perPage, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get All Videos
+         * Retrieve metadata for a list of videos.
+         * @summary Get a list of video metadata
          * @param {DefaultApiVideosGetAllRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetAll(requestParameters: DefaultApiVideosGetAllRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        videosGetAll(requestParameters: DefaultApiVideosGetAllRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<VideosResponse> {
             return localVarFp.videosGetAll(requestParameters.recordId, requestParameters.formId, requestParameters.newestFirst, requestParameters.processed, requestParameters.stored, requestParameters.uploaded, requestParameters.page, requestParameters.perPage, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get GPS tracks for videos in GeoJSON format.
          * @summary Get GeoJSON Tracks for All Videos
          * @param {DefaultApiVideosGetAllTracksGeojsonRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -9498,7 +10261,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.videosGetAllTracksGeojson(requestParameters.accept, requestParameters.type, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get GPS tracks for videos in GPX format.
          * @summary Get GPX Tracks for All Videos
          * @param {DefaultApiVideosGetAllTracksGpxRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -9508,7 +10271,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.videosGetAllTracksGpx(requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get GPS tracks for videos in KML format.
          * @summary Get KML Tracks for All Videos
          * @param {DefaultApiVideosGetAllTracksKmlRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -9518,37 +10281,37 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.videosGetAllTracksKml(requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get Medium Video File
+         * Download a medium variant of the video.
+         * @summary Get a video medium file
          * @param {DefaultApiVideosGetMediumFileRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetMediumFile(requestParameters: DefaultApiVideosGetMediumFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.videosGetMediumFile(requestParameters.videoId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        videosGetMediumFile(requestParameters: DefaultApiVideosGetMediumFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.videosGetMediumFile(requestParameters.videoId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get Original Video File
+         * Download the original video file.
+         * @summary Get a video original file
          * @param {DefaultApiVideosGetOriginalFileRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetOriginalFile(requestParameters: DefaultApiVideosGetOriginalFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.videosGetOriginalFile(requestParameters.videoId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        videosGetOriginalFile(requestParameters: DefaultApiVideosGetOriginalFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.videosGetOriginalFile(requestParameters.videoId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get Video Metadata
+         * Retrieve metadata for a specific video.
+         * @summary Get video metadata
          * @param {DefaultApiVideosGetSingleMetadataRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetSingleMetadata(requestParameters: DefaultApiVideosGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        videosGetSingleMetadata(requestParameters: DefaultApiVideosGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleVideoResponse> {
             return localVarFp.videosGetSingleMetadata(requestParameters.videoId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get the GPS track for a video in GeoJSON format.
          * @summary Get GeoJSON Video Track
          * @param {DefaultApiVideosGetSingleTrackGeojsonRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -9558,7 +10321,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.videosGetSingleTrackGeojson(requestParameters.videoId, requestParameters.accept, requestParameters.type, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get the GPS track for a video in GPX format.
          * @summary Get GPX Video Track
          * @param {DefaultApiVideosGetSingleTrackGpxRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -9568,7 +10331,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.videosGetSingleTrackGpx(requestParameters.videoId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get the GPS track for a video in JSON format.
          * @summary Get JSON Video Track
          * @param {DefaultApiVideosGetSingleTrackJsonRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -9578,7 +10341,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.videosGetSingleTrackJson(requestParameters.videoId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Get the GPS track for a video in KML format.
          * @summary Get KML Video Track
          * @param {DefaultApiVideosGetSingleTrackKmlRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -9588,108 +10351,108 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.videosGetSingleTrackKml(requestParameters.videoId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get Small Video File
+         * Download the small variant of the video.
+         * @summary Get a video small file
          * @param {DefaultApiVideosGetSmallFileRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetSmallFile(requestParameters: DefaultApiVideosGetSmallFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.videosGetSmallFile(requestParameters.videoId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        videosGetSmallFile(requestParameters: DefaultApiVideosGetSmallFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.videosGetSmallFile(requestParameters.videoId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Download a huge thumbnail variant for a video.
          * @summary Get Huge Video Thumbnail
          * @param {DefaultApiVideosGetThumbnailHugeRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetThumbnailHuge(requestParameters: DefaultApiVideosGetThumbnailHugeRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.videosGetThumbnailHuge(requestParameters.videoId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        videosGetThumbnailHuge(requestParameters: DefaultApiVideosGetThumbnailHugeRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.videosGetThumbnailHuge(requestParameters.videoId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Download a huge square thumbnail variant for a video.
          * @summary Get Huge Square Video Thumbnail
          * @param {DefaultApiVideosGetThumbnailHugeSquareRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetThumbnailHugeSquare(requestParameters: DefaultApiVideosGetThumbnailHugeSquareRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.videosGetThumbnailHugeSquare(requestParameters.videoId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        videosGetThumbnailHugeSquare(requestParameters: DefaultApiVideosGetThumbnailHugeSquareRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.videosGetThumbnailHugeSquare(requestParameters.videoId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Download a large thumbnail variant for a video.
          * @summary Get Large Video Thumbnail
          * @param {DefaultApiVideosGetThumbnailLargeRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetThumbnailLarge(requestParameters: DefaultApiVideosGetThumbnailLargeRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.videosGetThumbnailLarge(requestParameters.videoId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        videosGetThumbnailLarge(requestParameters: DefaultApiVideosGetThumbnailLargeRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.videosGetThumbnailLarge(requestParameters.videoId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Download a large square thumbnail variant for a video.
          * @summary Get Large Square Video Thumbnail
          * @param {DefaultApiVideosGetThumbnailLargeSquareRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetThumbnailLargeSquare(requestParameters: DefaultApiVideosGetThumbnailLargeSquareRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.videosGetThumbnailLargeSquare(requestParameters.videoId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        videosGetThumbnailLargeSquare(requestParameters: DefaultApiVideosGetThumbnailLargeSquareRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.videosGetThumbnailLargeSquare(requestParameters.videoId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Download a medium thumbnail variant for a video.
          * @summary Get Medium Video Thumbnail
          * @param {DefaultApiVideosGetThumbnailMediumRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetThumbnailMedium(requestParameters: DefaultApiVideosGetThumbnailMediumRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.videosGetThumbnailMedium(requestParameters.videoId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        videosGetThumbnailMedium(requestParameters: DefaultApiVideosGetThumbnailMediumRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.videosGetThumbnailMedium(requestParameters.videoId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Download a medium square thumbnail variant for a video.
          * @summary Get Medium Square Video Thumbnail
          * @param {DefaultApiVideosGetThumbnailMediumSquareRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetThumbnailMediumSquare(requestParameters: DefaultApiVideosGetThumbnailMediumSquareRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.videosGetThumbnailMediumSquare(requestParameters.videoId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        videosGetThumbnailMediumSquare(requestParameters: DefaultApiVideosGetThumbnailMediumSquareRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.videosGetThumbnailMediumSquare(requestParameters.videoId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Download the small thumbnail variant for a video.
          * @summary Get Small Video Thumbnail
          * @param {DefaultApiVideosGetThumbnailSmallRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetThumbnailSmall(requestParameters: DefaultApiVideosGetThumbnailSmallRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.videosGetThumbnailSmall(requestParameters.videoId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        videosGetThumbnailSmall(requestParameters: DefaultApiVideosGetThumbnailSmallRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.videosGetThumbnailSmall(requestParameters.videoId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Download a small square thumbnail variant for a video.
          * @summary Get Small Square Video Thumbnail
          * @param {DefaultApiVideosGetThumbnailSmallSquareRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosGetThumbnailSmallSquare(requestParameters: DefaultApiVideosGetThumbnailSmallSquareRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.videosGetThumbnailSmallSquare(requestParameters.videoId, requestParameters.accept, options).then((request) => request(axios, basePath));
+        videosGetThumbnailSmallSquare(requestParameters: DefaultApiVideosGetThumbnailSmallSquareRequest, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.videosGetThumbnailSmallSquare(requestParameters.videoId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Upload video with optional track file
-         * @summary Upload Video
+         * Upload video to be associated with a record.
+         * @summary Upload a video
          * @param {DefaultApiVideosUploadRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        videosUpload(requestParameters: DefaultApiVideosUploadRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        videosUpload(requestParameters: DefaultApiVideosUploadRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<SingleVideoResponse> {
             return localVarFp.videosUpload(requestParameters.accept, requestParameters.contentType, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Create Webhook
+         * Create a webhook.
+         * @summary Create a webhook
          * @param {DefaultApiWebhooksCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9698,8 +10461,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.webhooksCreate(requestParameters.accept, requestParameters.contentType, requestParameters.webhookRequest, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Delete Webhook
+         * Delete a webhook.
+         * @summary Delete a webhook
          * @param {DefaultApiWebhooksDeleteRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9708,8 +10471,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.webhooksDelete(requestParameters.webhookId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get All Webhooks
+         * Get a list of webhooks.
+         * @summary Get a list of webhooks
          * @param {DefaultApiWebhooksGetAllRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9718,8 +10481,8 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.webhooksGetAll(requestParameters.page, requestParameters.perPage, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Get Single Webhook
+         * Get a webhook.
+         * @summary Get a webhook
          * @param {DefaultApiWebhooksGetSingleRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -9728,7 +10491,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.webhooksGetSingle(requestParameters.webhookId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Update a webhook.
          * @summary Update Webhook
          * @param {DefaultApiWebhooksUpdateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -9754,16 +10517,16 @@ export interface DefaultApiInterface {
     addBatchOperations(requestParameters: DefaultApiAddBatchOperationsRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
-     * @summary Get All Audio
+     * Retrieve metadata for a list of audio files.
+     * @summary Get a list of audio metadata
      * @param {DefaultApiAudioGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    audioGetAll(requestParameters?: DefaultApiAudioGetAllRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    audioGetAll(requestParameters?: DefaultApiAudioGetAllRequest, options?: RawAxiosRequestConfig): AxiosPromise<AudiosResponse>;
 
     /**
-     * 
+     * Get GPS tracks for audio files in GeoJSON format.
      * @summary Get GeoJSON Tracks for All Audio
      * @param {DefaultApiAudioGetAllTracksGeojsonRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -9772,7 +10535,7 @@ export interface DefaultApiInterface {
     audioGetAllTracksGeojson(requestParameters?: DefaultApiAudioGetAllTracksGeojsonRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
+     * Get GPS tracks for audio files in GPX format.
      * @summary Get GPX Tracks for All Audio
      * @param {DefaultApiAudioGetAllTracksGpxRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -9781,7 +10544,7 @@ export interface DefaultApiInterface {
     audioGetAllTracksGpx(requestParameters?: DefaultApiAudioGetAllTracksGpxRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
+     * Get GPS tracks for audio files in JSON format.
      * @summary Get JSON Tracks for All Audio
      * @param {DefaultApiAudioGetAllTracksJsonRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -9790,7 +10553,7 @@ export interface DefaultApiInterface {
     audioGetAllTracksJson(requestParameters?: DefaultApiAudioGetAllTracksJsonRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
+     * Get GPS tracks for audio files in KML format.
      * @summary Get KML Tracks for All Audio
      * @param {DefaultApiAudioGetAllTracksKmlRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -9799,25 +10562,25 @@ export interface DefaultApiInterface {
     audioGetAllTracksKml(requestParameters?: DefaultApiAudioGetAllTracksKmlRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
-     * @summary Get Original Audio File
+     * Download the original audio file.
+     * @summary Get an audio original file
      * @param {DefaultApiAudioGetOriginalFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    audioGetOriginalFile(requestParameters: DefaultApiAudioGetOriginalFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    audioGetOriginalFile(requestParameters: DefaultApiAudioGetOriginalFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * 
-     * @summary Get Audio Metadata
+     * Retrieve metadata for a single audio file.
+     * @summary Get audio metadata
      * @param {DefaultApiAudioGetSingleMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    audioGetSingleMetadata(requestParameters: DefaultApiAudioGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    audioGetSingleMetadata(requestParameters: DefaultApiAudioGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleAudioResponse>;
 
     /**
-     * 
+     * Get the GPS track for an audio file in GeoJSON format.
      * @summary Get GeoJSON Audio Track
      * @param {DefaultApiAudioGetSingleTrackGeojsonRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -9826,7 +10589,7 @@ export interface DefaultApiInterface {
     audioGetSingleTrackGeojson(requestParameters: DefaultApiAudioGetSingleTrackGeojsonRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
+     * Get the GPS track for an audio file in GPX format.
      * @summary Get GPX Audio Track
      * @param {DefaultApiAudioGetSingleTrackGpxRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -9835,7 +10598,7 @@ export interface DefaultApiInterface {
     audioGetSingleTrackGpx(requestParameters: DefaultApiAudioGetSingleTrackGpxRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
+     * Get the GPS track for an audio file in JSON format.
      * @summary Get JSON Audio Track
      * @param {DefaultApiAudioGetSingleTrackJsonRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -9844,7 +10607,7 @@ export interface DefaultApiInterface {
     audioGetSingleTrackJson(requestParameters: DefaultApiAudioGetSingleTrackJsonRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
+     * Get the GPS track for an audio file in KML format.
      * @summary Get KML Audio Track
      * @param {DefaultApiAudioGetSingleTrackKmlRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -9853,8 +10616,8 @@ export interface DefaultApiInterface {
     audioGetSingleTrackKml(requestParameters: DefaultApiAudioGetSingleTrackKmlRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * Upload audio with optional track file
-     * @summary Upload Audio
+     * Upload audio with optional track file.
+     * @summary Upload audio
      * @param {DefaultApiAudioUploadRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -9863,7 +10626,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Audit Logs
+     * @summary Get a list of audit logs
      * @param {DefaultApiAuditLogsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -9872,7 +10635,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Audit Log
+     * @summary Get an audit log
      * @param {DefaultApiAuditLogsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -9881,7 +10644,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Authorization
+     * @summary Create an authorization
      * @param {DefaultApiAuthorizationsCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -9890,7 +10653,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Authorization
+     * @summary Delete an authorization
      * @param {DefaultApiAuthorizationsDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -9899,7 +10662,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Authorizations
+     * @summary Get a list of authorizations
      * @param {DefaultApiAuthorizationsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -9908,7 +10671,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Authorization
+     * @summary Get an authorization
      * @param {DefaultApiAuthorizationsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -9935,7 +10698,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Changeset
+     * @summary Create a changeset
      * @param {DefaultApiChangesetsCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -9944,7 +10707,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Changesets
+     * @summary Get a list of changesets
      * @param {DefaultApiChangesetsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -9953,7 +10716,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Changeset
+     * @summary Get a changeset
      * @param {DefaultApiChangesetsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -9971,7 +10734,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Choice List
+     * @summary Create a choice list
      * @param {DefaultApiChoiceListsCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -9980,7 +10743,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Choice List
+     * @summary Delete a choice list
      * @param {DefaultApiChoiceListsDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -9989,7 +10752,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Choice Lists
+     * @summary Get a list of choice lists
      * @param {DefaultApiChoiceListsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -9998,7 +10761,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Choice List
+     * @summary Get a choice list
      * @param {DefaultApiChoiceListsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10016,7 +10779,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Classification Set
+     * @summary Create a classification set
      * @param {DefaultApiClassificationSetsCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10025,7 +10788,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Classification Set
+     * @summary Delete a classification set
      * @param {DefaultApiClassificationSetsDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10034,7 +10797,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Classification Sets
+     * @summary Get a list of classification sets
      * @param {DefaultApiClassificationSetsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10043,7 +10806,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Classification Set
+     * @summary Get a classification set
      * @param {DefaultApiClassificationSetsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10060,8 +10823,17 @@ export interface DefaultApiInterface {
     classificationSetsUpdate(requestParameters: DefaultApiClassificationSetsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
+     * Copy all reference files from one form to another. Limits: 100 reference files per form, 1GB total per form.
+     * @summary Copy all reference files
+     * @param {DefaultApiCopyAllAttachmentsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    copyAllAttachments(requestParameters: DefaultApiCopyAllAttachmentsRequest, options?: RawAxiosRequestConfig): AxiosPromise<AttachmentCopyAllResponse>;
+
+    /**
      * There is only one parameter that is required for creating an attachment: `owners`. You must specify at least one owner of type `record` or `form`. If you create a `record` attachment you can optionally include a `name` and `file_size`. The name will be the name of the file shown in the record information. The file_size is only used for verifying that uploading this attachment will not exceed your current storage limit. If no file_size is provided the attachment may be rejected once it has been uploaded. The response will provide the `url` to upload (PUT) the file to.
-     * @summary Create Attachment
+     * @summary Create an attachment
      * @param {DefaultApiCreateAttachmentRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10070,7 +10842,7 @@ export interface DefaultApiInterface {
 
     /**
      * Using the batch operations API, you can bulk delete records from a form.
-     * @summary Create Batch to Bulk Delete Records
+     * @summary Create a batch
      * @param {DefaultApiCreateBatchRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10079,7 +10851,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Group
+     * @summary Create a group
      * @param {DefaultApiCreateGroupRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10088,16 +10860,16 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Member
-     * @param {DefaultApiCreateMemberRequest} requestParameters Request parameters.
+     * @summary Create a membership
+     * @param {DefaultApiCreateMembershipRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createMember(requestParameters?: DefaultApiCreateMemberRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    createMembership(requestParameters?: DefaultApiCreateMembershipRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
      * 
-     * @summary Create Report Template
+     * @summary Create a report template
      * @param {DefaultApiCreateReportTemplateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10106,7 +10878,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Workflow
+     * @summary Create a workflow
      * @param {DefaultApiCreateWorkflowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10115,7 +10887,7 @@ export interface DefaultApiInterface {
 
     /**
      * The delete endpoint only applies to Form attachments. Use this endpoint to delete an attachment. For record attachments, simply remove the association of an attachment from the record and the attachment will be deleted.
-     * @summary Delete Attachment
+     * @summary Delete an attachment
      * @param {DefaultApiDeleteAttachmentRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10124,7 +10896,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Group
+     * @summary Delete a group
      * @param {DefaultApiDeleteGroupRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10133,16 +10905,16 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Member
-     * @param {DefaultApiDeleteMemberRequest} requestParameters Request parameters.
+     * @summary Delete a membership
+     * @param {DefaultApiDeleteMembershipRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteMember(requestParameters: DefaultApiDeleteMemberRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    deleteMembership(requestParameters: DefaultApiDeleteMembershipRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
      * 
-     * @summary Delete Report Template
+     * @summary Delete a report template
      * @param {DefaultApiDeleteReportTemplateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10151,7 +10923,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Workflow
+     * @summary Delete a workflow
      * @param {DefaultApiDeleteWorkflowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10169,7 +10941,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Form
+     * @summary Create a form
      * @param {DefaultApiFormsCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10178,7 +10950,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Form
+     * @summary Delete a form
      * @param {DefaultApiFormsDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10187,7 +10959,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Forms
+     * @summary Get a list of forms
      * @param {DefaultApiFormsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10205,7 +10977,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Form
+     * @summary Get a form
      * @param {DefaultApiFormsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10222,17 +10994,17 @@ export interface DefaultApiInterface {
     formsUpdate(requestParameters: DefaultApiFormsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
-     * @summary Get All Attachments
+     * Retrieve a list of attachments.
+     * @summary Get a list of attachment metadata
      * @param {DefaultApiGetAllAttachmentsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getAllAttachments(requestParameters?: DefaultApiGetAllAttachmentsRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetAllAttachments200Response>;
+    getAllAttachments(requestParameters?: DefaultApiGetAllAttachmentsRequest, options?: RawAxiosRequestConfig): AxiosPromise<AttachmentsResponse>;
 
     /**
      * 
-     * @summary Get All Batches
+     * @summary Get a list of batches
      * @param {DefaultApiGetAllBatchesRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10241,7 +11013,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Groups
+     * @summary Get a list of groups
      * @param {DefaultApiGetAllGroupsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10259,7 +11031,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Report Templates
+     * @summary Get a list of report templates
      * @param {DefaultApiGetAllReportTemplatesRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10268,7 +11040,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Workflows
+     * @summary Get a list of workflows
      * @param {DefaultApiGetAllWorkflowsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10285,17 +11057,17 @@ export interface DefaultApiInterface {
     getGroupResource(requestParameters: DefaultApiGetGroupResourceRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
-     * @summary Get Single Attachment
+     * Retrieve metadata for a single attachment.
+     * @summary Get an attachment
      * @param {DefaultApiGetSingleAttachmentRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getSingleAttachment(requestParameters: DefaultApiGetSingleAttachmentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetSingleAttachment200Response>;
+    getSingleAttachment(requestParameters: DefaultApiGetSingleAttachmentRequest, options?: RawAxiosRequestConfig): AxiosPromise<Attachment>;
 
     /**
      * 
-     * @summary Get Single Batch
+     * @summary Get a batch
      * @param {DefaultApiGetSingleBatchRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10304,7 +11076,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Group
+     * @summary Get a group
      * @param {DefaultApiGetSingleGroupRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10313,7 +11085,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Report Template
+     * @summary Get a report template
      * @param {DefaultApiGetSingleReportTemplateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10322,7 +11094,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Workflow
+     * @summary Get a workflow
      * @param {DefaultApiGetSingleWorkflowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10331,7 +11103,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Layer
+     * @summary Create a layer
      * @param {DefaultApiLayersCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10340,7 +11112,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Layer
+     * @summary Delete a layer
      * @param {DefaultApiLayersDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10349,7 +11121,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Layers
+     * @summary Get a list of layers
      * @param {DefaultApiLayersGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10358,7 +11130,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Layer
+     * @summary Get a layer
      * @param {DefaultApiLayersGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10375,7 +11147,7 @@ export interface DefaultApiInterface {
     layersUpdate(requestParameters: DefaultApiLayersUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * Add or remove membership permissions from layers, forms, or projects
+     * Add or remove membership permissions from layers, forms, or projects.
      * @summary Change Permissions
      * @param {DefaultApiMembershipsChangePermissionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -10385,7 +11157,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Memberships
+     * @summary Get a list of memberships
      * @param {DefaultApiMembershipsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10394,7 +11166,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Membership
+     * @summary Get a membership
      * @param {DefaultApiMembershipsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10402,43 +11174,43 @@ export interface DefaultApiInterface {
     membershipsGetSingle(requestParameters: DefaultApiMembershipsGetSingleRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
-     * @summary Get All Photos
+     * Retrieve metadata for a list of photos.
+     * @summary Get a list of photo metadata
      * @param {DefaultApiPhotosGetAllMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    photosGetAllMetadata(requestParameters?: DefaultApiPhotosGetAllMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    photosGetAllMetadata(requestParameters?: DefaultApiPhotosGetAllMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<PhotosResponse>;
 
     /**
-     * 
-     * @summary Get Single Photo File
+     * Download the original photo file.
+     * @summary Get a photo original file
      * @param {DefaultApiPhotosGetSingleFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    photosGetSingleFile(requestParameters: DefaultApiPhotosGetSingleFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    photosGetSingleFile(requestParameters: DefaultApiPhotosGetSingleFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * 
-     * @summary Get Single Photo Metadata
+     * Retrieve metadata for a single photo.
+     * @summary Get photo metadata
      * @param {DefaultApiPhotosGetSingleMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    photosGetSingleMetadata(requestParameters: DefaultApiPhotosGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    photosGetSingleMetadata(requestParameters: DefaultApiPhotosGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<SinglePhotoResponse>;
 
     /**
-     * 
-     * @summary Photo Large File
+     * Download the large variant of a photo.
+     * @summary Get a photo large file
      * @param {DefaultApiPhotosLargeFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    photosLargeFile(requestParameters: DefaultApiPhotosLargeFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    photosLargeFile(requestParameters: DefaultApiPhotosLargeFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * 
+     * Retrieve metadata for a photo\'s large variant.
      * @summary Photo Large Metadata
      * @param {DefaultApiPhotosLargeMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -10447,16 +11219,16 @@ export interface DefaultApiInterface {
     photosLargeMetadata(requestParameters: DefaultApiPhotosLargeMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
-     * @summary Photo Thumbnail File
+     * Download the thumbnail variant of a photo.
+     * @summary Get a photo thumbnail file
      * @param {DefaultApiPhotosThumbnailFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    photosThumbnailFile(requestParameters: DefaultApiPhotosThumbnailFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    photosThumbnailFile(requestParameters: DefaultApiPhotosThumbnailFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * 
+     * Retrieve metadata for a photo\'s thumbnail variant.
      * @summary Photo Thumbnail Metadata
      * @param {DefaultApiPhotosThumbnailMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -10465,8 +11237,8 @@ export interface DefaultApiInterface {
     photosThumbnailMetadata(requestParameters: DefaultApiPhotosThumbnailMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
-     * @summary Upload Photo
+     * Upload a photo file to associate with a record.
+     * @summary Upload a photo
      * @param {DefaultApiPhotosUploadRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10475,7 +11247,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Project
+     * @summary Create a project
      * @param {DefaultApiProjectsCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10484,7 +11256,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Project
+     * @summary Delete a project
      * @param {DefaultApiProjectsDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10493,7 +11265,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Projects
+     * @summary Get a list of projects
      * @param {DefaultApiProjectsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10502,7 +11274,7 @@ export interface DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Project
+     * @summary Get a project
      * @param {DefaultApiProjectsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10519,8 +11291,8 @@ export interface DefaultApiInterface {
     projectsUpdate(requestParameters: DefaultApiProjectsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
-     * @summary GET Query
+     * Execute a Query API request using HTTP GET. Provide a SQL like query to query against your organization\'s data.
+     * @summary Make a Query GET request
      * @param {DefaultApiQueryGetRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10528,8 +11300,8 @@ export interface DefaultApiInterface {
     queryGet(requestParameters: DefaultApiQueryGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
-     * @summary POST Query
+     * Execute a Query API request using HTTP POST. Provide a SQL like query to query against your organization\'s data.
+     * @summary Make a Query POST request
      * @param {DefaultApiQueryPostRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10537,26 +11309,26 @@ export interface DefaultApiInterface {
     queryPost(requestParameters?: DefaultApiQueryPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
-     * @summary Create Record
+     * Create a new record in the specified form using the provided form values, location information, and any associated metadata.
+     * @summary Create a record
      * @param {DefaultApiRecordsCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    recordsCreate(requestParameters?: DefaultApiRecordsCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    recordsCreate(requestParameters?: DefaultApiRecordsCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleRecordResponse>;
 
     /**
-     * 
-     * @summary Delete Record
+     * Delete a record from your organization.
+     * @summary Delete a record
      * @param {DefaultApiRecordsDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    recordsDelete(requestParameters: DefaultApiRecordsDeleteRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    recordsDelete(requestParameters: DefaultApiRecordsDeleteRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleRecordResponse>;
 
     /**
-     * 
-     * @summary Get All Records
+     * Get a list of records from your organization that can be filtered by dimensions such as form, project, changeset, bounding box, and date ranges.
+     * @summary Get a list of records
      * @param {DefaultApiRecordsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10564,35 +11336,44 @@ export interface DefaultApiInterface {
     recordsGetAll(requestParameters?: DefaultApiRecordsGetAllRequest, options?: RawAxiosRequestConfig): AxiosPromise<RecordsResponse>;
 
     /**
-     * This endpoint can help you get records from a specific changeset, or retrieve records for a deleted form.
-     * @summary Get All Records History
+     * Retrieve historical record data from your organization. This endpoint is useful for accessing records from a specific changeset or retrieving records that belonged to a deleted form.
+     * @summary Get the history of a collection of records
      * @param {DefaultApiRecordsGetAllHistoryRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    recordsGetAllHistory(requestParameters?: DefaultApiRecordsGetAllHistoryRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    recordsGetAllHistory(requestParameters?: DefaultApiRecordsGetAllHistoryRequest, options?: RawAxiosRequestConfig): AxiosPromise<RecordHistoryResponse>;
 
     /**
-     * 
-     * @summary Get Record History
+     * Retrieve the complete version history of a record.
+     * @summary Get the history of a record
      * @param {DefaultApiRecordsGetHistoryRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    recordsGetHistory(requestParameters: DefaultApiRecordsGetHistoryRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    recordsGetHistory(requestParameters: DefaultApiRecordsGetHistoryRequest, options?: RawAxiosRequestConfig): AxiosPromise<RecordHistoryResponse>;
 
     /**
-     * 
-     * @summary Get Single Record
+     * Retrieve detailed information about a specific record by its ID. This includes all form field values, location data, timestamps, and associated metadata.
+     * @summary Get a record
      * @param {DefaultApiRecordsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    recordsGetSingle(requestParameters: DefaultApiRecordsGetSingleRequest, options?: RawAxiosRequestConfig): AxiosPromise<ModelRecord>;
+    recordsGetSingle(requestParameters: DefaultApiRecordsGetSingleRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleRecordResponse>;
 
     /**
-     * 
-     * @summary Update Record
+     * Update specific fields of an existing record without requiring the complete record object. Only the fields included in the request body will be modified, while all other fields remain unchanged. This is useful for updating individual field values or metadata.
+     * @summary Partially update a record
+     * @param {DefaultApiRecordsPartialUpdateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    recordsPartialUpdate(requestParameters: DefaultApiRecordsPartialUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleRecordResponse>;
+
+    /**
+     * Update a record with a provided record object. The record object is expected to be the complete representation of the record. Any fields not included are assumed null.
+     * @summary Update a record
      * @param {DefaultApiRecordsUpdateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10600,8 +11381,26 @@ export interface DefaultApiInterface {
     recordsUpdate(requestParameters: DefaultApiRecordsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
+     * Generate a new report for a specific record, optionally using a report template.
+     * @summary Create a report
+     * @param {DefaultApiReportsCreateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    reportsCreate(requestParameters: DefaultApiReportsCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportResponse>;
+
+    /**
+     * Download the generated PDF report file.
+     * @summary Get a report file
+     * @param {DefaultApiReportsFileRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    reportsFile(requestParameters: DefaultApiReportsFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
+
+    /**
      * 
-     * @summary Get All Roles
+     * @summary Get a list of roles
      * @param {DefaultApiRolesGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10609,61 +11408,133 @@ export interface DefaultApiInterface {
     rolesGetAll(requestParameters?: DefaultApiRolesGetAllRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
-     * @summary Get All Signatures
+     * Retrieve metadata for a list of signatures.
+     * @summary Get a list of signature metadata
      * @param {DefaultApiSignaturesGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    signaturesGetAll(requestParameters?: DefaultApiSignaturesGetAllRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    signaturesGetAll(requestParameters?: DefaultApiSignaturesGetAllRequest, options?: RawAxiosRequestConfig): AxiosPromise<SignaturesResponse>;
 
     /**
-     * 
-     * @summary Get Single Signature File
+     * Download the original signature file.
+     * @summary Get a signature original file
      * @param {DefaultApiSignaturesGetSingleFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    signaturesGetSingleFile(requestParameters: DefaultApiSignaturesGetSingleFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    signaturesGetSingleFile(requestParameters: DefaultApiSignaturesGetSingleFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * 
-     * @summary Get Single Signature Metadata
+     * Retrieve metadata for a single signature.
+     * @summary Get signature metadata
      * @param {DefaultApiSignaturesGetSingleMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    signaturesGetSingleMetadata(requestParameters: DefaultApiSignaturesGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    signaturesGetSingleMetadata(requestParameters: DefaultApiSignaturesGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleSignatureResponse>;
 
     /**
-     * 
-     * @summary Signature Thumbnail File
+     * Download the thumbnail variant of a signature.
+     * @summary Get a signature thumbnail file
      * @param {DefaultApiSignaturesGetThumbnailFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    signaturesGetThumbnailFile(requestParameters: DefaultApiSignaturesGetThumbnailFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    signaturesGetThumbnailFile(requestParameters: DefaultApiSignaturesGetThumbnailFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * 
+     * Retrieve metadata for a signature\'s thumbnail variant.
      * @summary Signature Thumbnail Metadata
      * @param {DefaultApiSignaturesGetThumbnailMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    signaturesGetThumbnailMetadata(requestParameters: DefaultApiSignaturesGetThumbnailMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    signaturesGetThumbnailMetadata(requestParameters: DefaultApiSignaturesGetThumbnailMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleSignatureResponse>;
 
     /**
-     * 
-     * @summary Upload Signature
+     * Upload a signature file to associate with a record.
+     * @summary Upload a signature
      * @param {DefaultApiSignaturesUploadRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    signaturesUpload(requestParameters?: DefaultApiSignaturesUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    signaturesUpload(requestParameters?: DefaultApiSignaturesUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleSignatureResponse>;
 
     /**
-     * Start your pending batch
+     * Retrieve metadata for a list of sketches.
+     * @summary Get a list of sketch metadata
+     * @param {DefaultApiSketchesGetAllMetadataRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    sketchesGetAllMetadata(requestParameters?: DefaultApiSketchesGetAllMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<SketchesResponse>;
+
+    /**
+     * Download the original sketch file.
+     * @summary Get a sketch original file
+     * @param {DefaultApiSketchesGetSingleFileRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    sketchesGetSingleFile(requestParameters: DefaultApiSketchesGetSingleFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
+
+    /**
+     * Retrieve metadata for a single sketch.
+     * @summary Get sketch metadata
+     * @param {DefaultApiSketchesGetSingleMetadataRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    sketchesGetSingleMetadata(requestParameters: DefaultApiSketchesGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleSketchResponse>;
+
+    /**
+     * Download the large variant of a sketch.
+     * @summary Get a sketch large file
+     * @param {DefaultApiSketchesLargeFileRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    sketchesLargeFile(requestParameters: DefaultApiSketchesLargeFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
+
+    /**
+     * Retrieve metadata for a sketch\'s large variant.
+     * @summary Sketch Large Metadata
+     * @param {DefaultApiSketchesLargeMetadataRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    sketchesLargeMetadata(requestParameters: DefaultApiSketchesLargeMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+    /**
+     * Download the thumbnail variant of a sketch.
+     * @summary Get a sketch thumbnail file
+     * @param {DefaultApiSketchesThumbnailFileRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    sketchesThumbnailFile(requestParameters: DefaultApiSketchesThumbnailFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
+
+    /**
+     * Retrieve metadata for a sketch\'s thumbnail variant.
+     * @summary Sketch Thumbnail Metadata
+     * @param {DefaultApiSketchesThumbnailMetadataRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    sketchesThumbnailMetadata(requestParameters: DefaultApiSketchesThumbnailMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+    /**
+     * Upload a sketch file to associate with a record.
+     * @summary Upload a sketch
+     * @param {DefaultApiSketchesUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    sketchesUpload(requestParameters?: DefaultApiSketchesUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+    /**
+     * Start your pending batch.
      * @summary Start Batch
      * @param {DefaultApiStartBatchRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -10691,12 +11562,12 @@ export interface DefaultApiInterface {
 
     /**
      * You can use this to update parameters of a member, but this will not work if the member is apart of multiple organizations.
-     * @summary Update Member
-     * @param {DefaultApiUpdateMemberRequest} requestParameters Request parameters.
+     * @summary Update a membership
+     * @param {DefaultApiUpdateMembershipRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    updateMember(requestParameters: DefaultApiUpdateMemberRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    updateMembership(requestParameters: DefaultApiUpdateMembershipRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
      * 
@@ -10726,16 +11597,16 @@ export interface DefaultApiInterface {
     usersGetUser(requestParameters?: DefaultApiUsersGetUserRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
-     * @summary Get All Videos
+     * Retrieve metadata for a list of videos.
+     * @summary Get a list of video metadata
      * @param {DefaultApiVideosGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    videosGetAll(requestParameters?: DefaultApiVideosGetAllRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    videosGetAll(requestParameters?: DefaultApiVideosGetAllRequest, options?: RawAxiosRequestConfig): AxiosPromise<VideosResponse>;
 
     /**
-     * 
+     * Get GPS tracks for videos in GeoJSON format.
      * @summary Get GeoJSON Tracks for All Videos
      * @param {DefaultApiVideosGetAllTracksGeojsonRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -10744,7 +11615,7 @@ export interface DefaultApiInterface {
     videosGetAllTracksGeojson(requestParameters?: DefaultApiVideosGetAllTracksGeojsonRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
+     * Get GPS tracks for videos in GPX format.
      * @summary Get GPX Tracks for All Videos
      * @param {DefaultApiVideosGetAllTracksGpxRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -10753,7 +11624,7 @@ export interface DefaultApiInterface {
     videosGetAllTracksGpx(requestParameters?: DefaultApiVideosGetAllTracksGpxRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
+     * Get GPS tracks for videos in KML format.
      * @summary Get KML Tracks for All Videos
      * @param {DefaultApiVideosGetAllTracksKmlRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -10762,34 +11633,34 @@ export interface DefaultApiInterface {
     videosGetAllTracksKml(requestParameters?: DefaultApiVideosGetAllTracksKmlRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
-     * @summary Get Medium Video File
+     * Download a medium variant of the video.
+     * @summary Get a video medium file
      * @param {DefaultApiVideosGetMediumFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    videosGetMediumFile(requestParameters: DefaultApiVideosGetMediumFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    videosGetMediumFile(requestParameters: DefaultApiVideosGetMediumFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * 
-     * @summary Get Original Video File
+     * Download the original video file.
+     * @summary Get a video original file
      * @param {DefaultApiVideosGetOriginalFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    videosGetOriginalFile(requestParameters: DefaultApiVideosGetOriginalFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    videosGetOriginalFile(requestParameters: DefaultApiVideosGetOriginalFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * 
-     * @summary Get Video Metadata
+     * Retrieve metadata for a specific video.
+     * @summary Get video metadata
      * @param {DefaultApiVideosGetSingleMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    videosGetSingleMetadata(requestParameters: DefaultApiVideosGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    videosGetSingleMetadata(requestParameters: DefaultApiVideosGetSingleMetadataRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleVideoResponse>;
 
     /**
-     * 
+     * Get the GPS track for a video in GeoJSON format.
      * @summary Get GeoJSON Video Track
      * @param {DefaultApiVideosGetSingleTrackGeojsonRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -10798,7 +11669,7 @@ export interface DefaultApiInterface {
     videosGetSingleTrackGeojson(requestParameters: DefaultApiVideosGetSingleTrackGeojsonRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
+     * Get the GPS track for a video in GPX format.
      * @summary Get GPX Video Track
      * @param {DefaultApiVideosGetSingleTrackGpxRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -10807,7 +11678,7 @@ export interface DefaultApiInterface {
     videosGetSingleTrackGpx(requestParameters: DefaultApiVideosGetSingleTrackGpxRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
+     * Get the GPS track for a video in JSON format.
      * @summary Get JSON Video Track
      * @param {DefaultApiVideosGetSingleTrackJsonRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -10816,7 +11687,7 @@ export interface DefaultApiInterface {
     videosGetSingleTrackJson(requestParameters: DefaultApiVideosGetSingleTrackJsonRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
+     * Get the GPS track for a video in KML format.
      * @summary Get KML Video Track
      * @param {DefaultApiVideosGetSingleTrackKmlRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -10825,98 +11696,98 @@ export interface DefaultApiInterface {
     videosGetSingleTrackKml(requestParameters: DefaultApiVideosGetSingleTrackKmlRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
-     * @summary Get Small Video File
+     * Download the small variant of the video.
+     * @summary Get a video small file
      * @param {DefaultApiVideosGetSmallFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    videosGetSmallFile(requestParameters: DefaultApiVideosGetSmallFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    videosGetSmallFile(requestParameters: DefaultApiVideosGetSmallFileRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * 
+     * Download a huge thumbnail variant for a video.
      * @summary Get Huge Video Thumbnail
      * @param {DefaultApiVideosGetThumbnailHugeRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    videosGetThumbnailHuge(requestParameters: DefaultApiVideosGetThumbnailHugeRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    videosGetThumbnailHuge(requestParameters: DefaultApiVideosGetThumbnailHugeRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * 
+     * Download a huge square thumbnail variant for a video.
      * @summary Get Huge Square Video Thumbnail
      * @param {DefaultApiVideosGetThumbnailHugeSquareRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    videosGetThumbnailHugeSquare(requestParameters: DefaultApiVideosGetThumbnailHugeSquareRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    videosGetThumbnailHugeSquare(requestParameters: DefaultApiVideosGetThumbnailHugeSquareRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * 
+     * Download a large thumbnail variant for a video.
      * @summary Get Large Video Thumbnail
      * @param {DefaultApiVideosGetThumbnailLargeRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    videosGetThumbnailLarge(requestParameters: DefaultApiVideosGetThumbnailLargeRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    videosGetThumbnailLarge(requestParameters: DefaultApiVideosGetThumbnailLargeRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * 
+     * Download a large square thumbnail variant for a video.
      * @summary Get Large Square Video Thumbnail
      * @param {DefaultApiVideosGetThumbnailLargeSquareRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    videosGetThumbnailLargeSquare(requestParameters: DefaultApiVideosGetThumbnailLargeSquareRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    videosGetThumbnailLargeSquare(requestParameters: DefaultApiVideosGetThumbnailLargeSquareRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * 
+     * Download a medium thumbnail variant for a video.
      * @summary Get Medium Video Thumbnail
      * @param {DefaultApiVideosGetThumbnailMediumRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    videosGetThumbnailMedium(requestParameters: DefaultApiVideosGetThumbnailMediumRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    videosGetThumbnailMedium(requestParameters: DefaultApiVideosGetThumbnailMediumRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * 
+     * Download a medium square thumbnail variant for a video.
      * @summary Get Medium Square Video Thumbnail
      * @param {DefaultApiVideosGetThumbnailMediumSquareRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    videosGetThumbnailMediumSquare(requestParameters: DefaultApiVideosGetThumbnailMediumSquareRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    videosGetThumbnailMediumSquare(requestParameters: DefaultApiVideosGetThumbnailMediumSquareRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * 
+     * Download the small thumbnail variant for a video.
      * @summary Get Small Video Thumbnail
      * @param {DefaultApiVideosGetThumbnailSmallRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    videosGetThumbnailSmall(requestParameters: DefaultApiVideosGetThumbnailSmallRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    videosGetThumbnailSmall(requestParameters: DefaultApiVideosGetThumbnailSmallRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * 
+     * Download a small square thumbnail variant for a video.
      * @summary Get Small Square Video Thumbnail
      * @param {DefaultApiVideosGetThumbnailSmallSquareRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    videosGetThumbnailSmallSquare(requestParameters: DefaultApiVideosGetThumbnailSmallSquareRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    videosGetThumbnailSmallSquare(requestParameters: DefaultApiVideosGetThumbnailSmallSquareRequest, options?: RawAxiosRequestConfig): AxiosPromise<File>;
 
     /**
-     * Upload video with optional track file
-     * @summary Upload Video
+     * Upload video to be associated with a record.
+     * @summary Upload a video
      * @param {DefaultApiVideosUploadRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    videosUpload(requestParameters?: DefaultApiVideosUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    videosUpload(requestParameters?: DefaultApiVideosUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<SingleVideoResponse>;
 
     /**
-     * 
-     * @summary Create Webhook
+     * Create a webhook.
+     * @summary Create a webhook
      * @param {DefaultApiWebhooksCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10924,8 +11795,8 @@ export interface DefaultApiInterface {
     webhooksCreate(requestParameters?: DefaultApiWebhooksCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<WebhooksCreate201Response>;
 
     /**
-     * 
-     * @summary Delete Webhook
+     * Delete a webhook.
+     * @summary Delete a webhook
      * @param {DefaultApiWebhooksDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10933,8 +11804,8 @@ export interface DefaultApiInterface {
     webhooksDelete(requestParameters: DefaultApiWebhooksDeleteRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
-     * @summary Get All Webhooks
+     * Get a list of webhooks.
+     * @summary Get a list of webhooks
      * @param {DefaultApiWebhooksGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10942,8 +11813,8 @@ export interface DefaultApiInterface {
     webhooksGetAll(requestParameters?: DefaultApiWebhooksGetAllRequest, options?: RawAxiosRequestConfig): AxiosPromise<WebhooksGetAll200Response>;
 
     /**
-     * 
-     * @summary Get Single Webhook
+     * Get a webhook.
+     * @summary Get a webhook
      * @param {DefaultApiWebhooksGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10951,7 +11822,7 @@ export interface DefaultApiInterface {
     webhooksGetSingle(requestParameters: DefaultApiWebhooksGetSingleRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 
+     * Update a webhook.
      * @summary Update Webhook
      * @param {DefaultApiWebhooksUpdateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -10978,42 +11849,42 @@ export interface DefaultApiAddBatchOperationsRequest {
  */
 export interface DefaultApiAudioGetAllRequest {
     /**
-     * The ID of the record with which the video is associated.
+     * The ID of the record with which the audio file is associated.
      */
     readonly recordId?: string
 
     /**
-     * The ID of the form with which the video is associated. Leaving this blank will query against all of your videos.
+     * The ID of the form with which the audio file is associated. Leaving this blank will query against all of your audio files.
      */
     readonly formId?: string
 
     /**
-     * If present, videos will be sorted by updated_at date.
+     * If present, audio files will be sorted by updated_at date.
      */
     readonly newestFirst?: boolean
 
     /**
-     * Video has been completely processed.
+     * Filter for audio files that have been completely processed.
      */
     readonly processed?: boolean
 
     /**
-     * Video has been completely stored.
+     * Filter for audio files that have been completely stored.
      */
     readonly stored?: boolean
 
     /**
-     * Video has been completely uploaded.
+     * Filter for audio files that have been completely uploaded.
      */
     readonly uploaded?: boolean
 
     /**
-     * The page number requested
+     * The page number requested.
      */
     readonly page?: number
 
     /**
-     * Number of items per page
+     * The number of items to return per page.
      */
     readonly perPage?: number
 
@@ -11058,11 +11929,9 @@ export interface DefaultApiAudioGetAllTracksKmlRequest {
  */
 export interface DefaultApiAudioGetOriginalFileRequest {
     /**
-     * Audio ID
+     * The unique identifier of the audio file.
      */
     readonly audioId: string
-
-    readonly accept?: string
 }
 
 /**
@@ -11070,7 +11939,7 @@ export interface DefaultApiAudioGetOriginalFileRequest {
  */
 export interface DefaultApiAudioGetSingleMetadataRequest {
     /**
-     * Audio ID
+     * The unique identifier of the audio file.
      */
     readonly audioId: string
 
@@ -11082,7 +11951,7 @@ export interface DefaultApiAudioGetSingleMetadataRequest {
  */
 export interface DefaultApiAudioGetSingleTrackGeojsonRequest {
     /**
-     * Audio ID
+     * The unique identifier of the audio file.
      */
     readonly audioId: string
 
@@ -11099,7 +11968,7 @@ export interface DefaultApiAudioGetSingleTrackGeojsonRequest {
  */
 export interface DefaultApiAudioGetSingleTrackGpxRequest {
     /**
-     * Audio ID
+     * The unique identifier of the audio file.
      */
     readonly audioId: string
 
@@ -11111,7 +11980,7 @@ export interface DefaultApiAudioGetSingleTrackGpxRequest {
  */
 export interface DefaultApiAudioGetSingleTrackJsonRequest {
     /**
-     * Audio ID
+     * The unique identifier of the audio file.
      */
     readonly audioId: string
 
@@ -11123,7 +11992,7 @@ export interface DefaultApiAudioGetSingleTrackJsonRequest {
  */
 export interface DefaultApiAudioGetSingleTrackKmlRequest {
     /**
-     * Audio ID
+     * The unique identifier of the audio file.
      */
     readonly audioId: string
 
@@ -11159,17 +12028,17 @@ export interface DefaultApiAuditLogsGetAllRequest {
     readonly ip?: string
 
     /**
-     * Filter by user responsible for the logged changes. This parameter must be the Fulcrum resource id for the user in question, which can be obtained from the membership API.
+     * Filter by user responsible for the logged changes. This parameter must be the Fulcrum ID for the user in question, which can be obtained from the membership API.
      */
     readonly user?: string
 
     /**
-     * Returns log entries since the given unix timestamp.
+     * Return log entries since the given unix timestamp.
      */
     readonly updatedSince?: string
 
     /**
-     * Returns log entries before the given unix timestamp.
+     * Return log entries before the given unix timestamp.
      */
     readonly updatedBefore?: string
 
@@ -11478,6 +12347,18 @@ export interface DefaultApiClassificationSetsUpdateRequest {
 }
 
 /**
+ * Request parameters for copyAllAttachments operation in DefaultApi.
+ */
+export interface DefaultApiCopyAllAttachmentsRequest {
+    readonly attachmentCopyAllRequest: AttachmentCopyAllRequest
+
+    /**
+     * API Token. Required to authenticate the request.
+     */
+    readonly xApitoken?: string
+}
+
+/**
  * Request parameters for createAttachment operation in DefaultApi.
  */
 export interface DefaultApiCreateAttachmentRequest {
@@ -11508,9 +12389,9 @@ export interface DefaultApiCreateGroupRequest {
 }
 
 /**
- * Request parameters for createMember operation in DefaultApi.
+ * Request parameters for createMembership operation in DefaultApi.
  */
-export interface DefaultApiCreateMemberRequest {
+export interface DefaultApiCreateMembershipRequest {
     readonly accept?: string
 
     readonly contentType?: string
@@ -11531,7 +12412,7 @@ export interface DefaultApiCreateReportTemplateRequest {
 export interface DefaultApiCreateWorkflowRequest {
     readonly accept?: string
 
-    readonly contentTyoe?: string
+    readonly contentType?: string
 
     readonly workflowCreateRequest?: WorkflowCreateRequest
 }
@@ -11564,9 +12445,9 @@ export interface DefaultApiDeleteGroupRequest {
 }
 
 /**
- * Request parameters for deleteMember operation in DefaultApi.
+ * Request parameters for deleteMembership operation in DefaultApi.
  */
-export interface DefaultApiDeleteMemberRequest {
+export interface DefaultApiDeleteMembershipRequest {
     /**
      * The ID of the member
      */
@@ -11657,6 +12538,11 @@ export interface DefaultApiFormsGetAllRequest {
      * Types of forms to return
      */
     readonly type?: FormsGetAllTypeEnum
+
+    /**
+     * The status (active/inactive) of the forms to return.
+     */
+    readonly status?: FormsGetAllStatusEnum
 }
 
 /**
@@ -11737,6 +12623,16 @@ export interface DefaultApiGetAllAttachmentsRequest {
      * The type of attachment to query for. Must be either &#x60;form&#x60; or &#x60;record&#x60;.
      */
     readonly ownerType?: string
+
+    /**
+     * The field to sort results by.
+     */
+    readonly sort?: GetAllAttachmentsSortEnum
+
+    /**
+     * The sort direction(asc, desc). Default is asc.
+     */
+    readonly sortDirection?: GetAllAttachmentsSortDirectionEnum
 
     /**
      * API Token. Required to authenticate the request.
@@ -11870,7 +12766,7 @@ export interface DefaultApiGetGroupResourceRequest {
  */
 export interface DefaultApiGetSingleAttachmentRequest {
     /**
-     * The attachment id.
+     * The unique identifier of the attachment.
      */
     readonly attachmentId: string
 
@@ -12076,27 +12972,27 @@ export interface DefaultApiPhotosGetAllMetadataRequest {
     readonly newestFirst?: boolean
 
     /**
-     * Photo has been completely processed.
+     * Filter for photos that have been completely processed.
      */
     readonly processed?: boolean
 
     /**
-     * Photo has been completely stored.
+     * Filter for photos that have been completely stored.
      */
     readonly stored?: boolean
 
     /**
-     * Photo has been completely uploaded.
+     * Filter for photos that have been completely uploaded.
      */
     readonly uploaded?: boolean
 
     /**
-     * The page number requested
+     * The page number requested.
      */
     readonly page?: number
 
     /**
-     * Number of items per page
+     * The number of items to return per page.
      */
     readonly perPage?: number
 
@@ -12108,11 +13004,9 @@ export interface DefaultApiPhotosGetAllMetadataRequest {
  */
 export interface DefaultApiPhotosGetSingleFileRequest {
     /**
-     * Photo ID
+     * The unique identifier of the photo.
      */
     readonly photoId: string
-
-    readonly accept?: string
 }
 
 /**
@@ -12120,7 +13014,7 @@ export interface DefaultApiPhotosGetSingleFileRequest {
  */
 export interface DefaultApiPhotosGetSingleMetadataRequest {
     /**
-     * Photo ID
+     * The unique identifier of the photo.
      */
     readonly photoId: string
 
@@ -12132,11 +13026,9 @@ export interface DefaultApiPhotosGetSingleMetadataRequest {
  */
 export interface DefaultApiPhotosLargeFileRequest {
     /**
-     * Photo ID
+     * The unique identifier of the photo.
      */
     readonly photoId: string
-
-    readonly accept?: string
 }
 
 /**
@@ -12144,7 +13036,7 @@ export interface DefaultApiPhotosLargeFileRequest {
  */
 export interface DefaultApiPhotosLargeMetadataRequest {
     /**
-     * Photo ID
+     * The unique identifier of the photo.
      */
     readonly photoId: string
 
@@ -12156,11 +13048,9 @@ export interface DefaultApiPhotosLargeMetadataRequest {
  */
 export interface DefaultApiPhotosThumbnailFileRequest {
     /**
-     * Photo ID
+     * The unique identifier of the photo.
      */
     readonly photoId: string
-
-    readonly accept?: string
 }
 
 /**
@@ -12168,7 +13058,7 @@ export interface DefaultApiPhotosThumbnailFileRequest {
  */
 export interface DefaultApiPhotosThumbnailMetadataRequest {
     /**
-     * Photo ID
+     * The unique identifier of the photo.
      */
     readonly photoId: string
 
@@ -12257,7 +13147,7 @@ export interface DefaultApiProjectsUpdateRequest {
  */
 export interface DefaultApiQueryGetRequest {
     /**
-     * The SQL query
+     * The SQL query to execute.
      */
     readonly q: string
 
@@ -12297,12 +13187,12 @@ export interface DefaultApiQueryGetRequest {
     readonly sortDirection?: string
 
     /**
-     * The page number requested
+     * The page number requested.
      */
     readonly page?: number
 
     /**
-     * Number of items per page
+     * The number of items to return per page.
      */
     readonly perPage?: number
 
@@ -12316,12 +13206,12 @@ export interface DefaultApiQueryGetRequest {
  */
 export interface DefaultApiQueryPostRequest {
     /**
-     * The page number requested
+     * The page number requested.
      */
     readonly page?: number
 
     /**
-     * Number of items per page
+     * The number of items to return per page.
      */
     readonly perPage?: number
 
@@ -12356,7 +13246,7 @@ export interface DefaultApiRecordsCreateRequest {
  */
 export interface DefaultApiRecordsDeleteRequest {
     /**
-     * Record ID
+     * The unique identifier of the record to delete.
      */
     readonly recordId: string
 
@@ -12461,8 +13351,14 @@ export interface DefaultApiRecordsGetAllRequest {
 export interface DefaultApiRecordsGetAllHistoryRequest {
     readonly accept?: string
 
+    /**
+     * Filters records to only those associated with the specified changeset ID.
+     */
     readonly changesetId?: string
 
+    /**
+     * Filters records to only those that belonged to a form that has been deleted. Use this to retrieve data from removed forms.
+     */
     readonly deletedFormId?: string
 }
 
@@ -12471,7 +13367,7 @@ export interface DefaultApiRecordsGetAllHistoryRequest {
  */
 export interface DefaultApiRecordsGetHistoryRequest {
     /**
-     * Record ID
+     * The unique identifier of the record whose history you want to retrieve.
      */
     readonly recordId: string
 
@@ -12483,11 +13379,37 @@ export interface DefaultApiRecordsGetHistoryRequest {
  */
 export interface DefaultApiRecordsGetSingleRequest {
     /**
+     * The unique identifier of the record to retrieve.
+     */
+    readonly recordId: string
+
+    readonly accept?: string
+}
+
+/**
+ * Request parameters for recordsPartialUpdate operation in DefaultApi.
+ */
+export interface DefaultApiRecordsPartialUpdateRequest {
+    /**
      * Record ID
      */
     readonly recordId: string
 
     readonly accept?: string
+
+    readonly contentType?: string
+
+    /**
+     * Skips all app workflows
+     */
+    readonly xSkipWorkflows?: boolean
+
+    /**
+     * Skips all app webhooks
+     */
+    readonly xSkipWebhooks?: boolean
+
+    readonly recordPatchRequest?: RecordPatchRequest
 }
 
 /**
@@ -12514,6 +13436,25 @@ export interface DefaultApiRecordsUpdateRequest {
     readonly xSkipWebhooks?: boolean
 
     readonly recordRequest?: RecordRequest
+}
+
+/**
+ * Request parameters for reportsCreate operation in DefaultApi.
+ */
+export interface DefaultApiReportsCreateRequest {
+    readonly reportRequest: ReportRequest
+}
+
+/**
+ * Request parameters for reportsFile operation in DefaultApi.
+ */
+export interface DefaultApiReportsFileRequest {
+    /**
+     * The unique identifier of the report.
+     */
+    readonly reportId: string
+
+    readonly accept?: string
 }
 
 /**
@@ -12563,17 +13504,117 @@ export interface DefaultApiSignaturesGetAllRequest {
     readonly newestFirst?: boolean
 
     /**
-     * Signature has been completely processed.
+     * Filter for signatures that have been completely processed.
      */
     readonly processed?: boolean
 
     /**
-     * Signature has been completely stored.
+     * Filter for signatures that have been completely stored.
      */
     readonly stored?: boolean
 
     /**
-     * Signature has been completely uploaded.
+     * Filter for signatures that have been completely uploaded.
+     */
+    readonly uploaded?: boolean
+
+    /**
+     * The page number requested.
+     */
+    readonly page?: number
+
+    /**
+     * The number of items to return per page.
+     */
+    readonly perPage?: number
+
+    readonly accept?: string
+}
+
+/**
+ * Request parameters for signaturesGetSingleFile operation in DefaultApi.
+ */
+export interface DefaultApiSignaturesGetSingleFileRequest {
+    /**
+     * The unique identifier of the signature.
+     */
+    readonly signatureId: string
+}
+
+/**
+ * Request parameters for signaturesGetSingleMetadata operation in DefaultApi.
+ */
+export interface DefaultApiSignaturesGetSingleMetadataRequest {
+    /**
+     * The unique identifier of the signature.
+     */
+    readonly signatureId: string
+
+    readonly accept?: string
+}
+
+/**
+ * Request parameters for signaturesGetThumbnailFile operation in DefaultApi.
+ */
+export interface DefaultApiSignaturesGetThumbnailFileRequest {
+    /**
+     * The unique identifier of the signature.
+     */
+    readonly signatureId: string
+}
+
+/**
+ * Request parameters for signaturesGetThumbnailMetadata operation in DefaultApi.
+ */
+export interface DefaultApiSignaturesGetThumbnailMetadataRequest {
+    /**
+     * The unique identifier of the signature.
+     */
+    readonly signatureId: string
+
+    readonly accept?: string
+}
+
+/**
+ * Request parameters for signaturesUpload operation in DefaultApi.
+ */
+export interface DefaultApiSignaturesUploadRequest {
+    readonly accept?: string
+
+    readonly contentType?: string
+}
+
+/**
+ * Request parameters for sketchesGetAllMetadata operation in DefaultApi.
+ */
+export interface DefaultApiSketchesGetAllMetadataRequest {
+    /**
+     * The ID of the record with which the sketch is associated.
+     */
+    readonly recordId?: string
+
+    /**
+     * The ID of the form with which the sketch is associated. Leaving this blank will query against all of your sketches.
+     */
+    readonly formId?: string
+
+    /**
+     * If present, sketches will be sorted by updated_at date.
+     */
+    readonly newestFirst?: boolean
+
+    /**
+     * Sketch has been completely processed.
+     */
+    readonly processed?: boolean
+
+    /**
+     * Sketch has been completely stored.
+     */
+    readonly stored?: boolean
+
+    /**
+     * Sketch has been completely uploaded.
      */
     readonly uploaded?: boolean
 
@@ -12591,57 +13632,75 @@ export interface DefaultApiSignaturesGetAllRequest {
 }
 
 /**
- * Request parameters for signaturesGetSingleFile operation in DefaultApi.
+ * Request parameters for sketchesGetSingleFile operation in DefaultApi.
  */
-export interface DefaultApiSignaturesGetSingleFileRequest {
+export interface DefaultApiSketchesGetSingleFileRequest {
     /**
-     * Signature ID
+     * Sketch ID
      */
-    readonly signatureId: string
+    readonly sketchId: string
+}
+
+/**
+ * Request parameters for sketchesGetSingleMetadata operation in DefaultApi.
+ */
+export interface DefaultApiSketchesGetSingleMetadataRequest {
+    /**
+     * Sketch ID
+     */
+    readonly sketchId: string
 
     readonly accept?: string
 }
 
 /**
- * Request parameters for signaturesGetSingleMetadata operation in DefaultApi.
+ * Request parameters for sketchesLargeFile operation in DefaultApi.
  */
-export interface DefaultApiSignaturesGetSingleMetadataRequest {
+export interface DefaultApiSketchesLargeFileRequest {
     /**
-     * Signature ID
+     * Sketch ID
      */
-    readonly signatureId: string
+    readonly sketchId: string
+}
+
+/**
+ * Request parameters for sketchesLargeMetadata operation in DefaultApi.
+ */
+export interface DefaultApiSketchesLargeMetadataRequest {
+    /**
+     * Sketch ID
+     */
+    readonly sketchId: string
 
     readonly accept?: string
 }
 
 /**
- * Request parameters for signaturesGetThumbnailFile operation in DefaultApi.
+ * Request parameters for sketchesThumbnailFile operation in DefaultApi.
  */
-export interface DefaultApiSignaturesGetThumbnailFileRequest {
+export interface DefaultApiSketchesThumbnailFileRequest {
     /**
-     * Signature ID
+     * Sketch ID
      */
-    readonly signatureId: string
+    readonly sketchId: string
+}
+
+/**
+ * Request parameters for sketchesThumbnailMetadata operation in DefaultApi.
+ */
+export interface DefaultApiSketchesThumbnailMetadataRequest {
+    /**
+     * Sketch ID
+     */
+    readonly sketchId: string
 
     readonly accept?: string
 }
 
 /**
- * Request parameters for signaturesGetThumbnailMetadata operation in DefaultApi.
+ * Request parameters for sketchesUpload operation in DefaultApi.
  */
-export interface DefaultApiSignaturesGetThumbnailMetadataRequest {
-    /**
-     * Signature ID
-     */
-    readonly signatureId: string
-
-    readonly accept?: string
-}
-
-/**
- * Request parameters for signaturesUpload operation in DefaultApi.
- */
-export interface DefaultApiSignaturesUploadRequest {
+export interface DefaultApiSketchesUploadRequest {
     readonly accept?: string
 
     readonly contentType?: string
@@ -12685,9 +13744,9 @@ export interface DefaultApiUpdateGroupPermissionsRequest {
 }
 
 /**
- * Request parameters for updateMember operation in DefaultApi.
+ * Request parameters for updateMembership operation in DefaultApi.
  */
-export interface DefaultApiUpdateMemberRequest {
+export interface DefaultApiUpdateMembershipRequest {
     /**
      * The ID of the member
      */
@@ -12719,7 +13778,7 @@ export interface DefaultApiUpdateWorkflowRequest {
 
     readonly accept?: string
 
-    readonly contentTyoe?: string
+    readonly contentType?: string
 
     readonly workflowUpdateRequest?: WorkflowUpdateRequest
 }
@@ -12761,27 +13820,27 @@ export interface DefaultApiVideosGetAllRequest {
     readonly newestFirst?: boolean
 
     /**
-     * Video has been completely processed.
+     * Filter for videos that have been completely processed.
      */
     readonly processed?: boolean
 
     /**
-     * Video has been completely stored.
+     * Filter for videos that have been completely stored.
      */
     readonly stored?: boolean
 
     /**
-     * Video has been completely uploaded.
+     * Filter for videos that have been completely uploaded.
      */
     readonly uploaded?: boolean
 
     /**
-     * The page number requested
+     * The page number requested.
      */
     readonly page?: number
 
     /**
-     * Number of items per page
+     * The number of items to return per page.
      */
     readonly perPage?: number
 
@@ -12819,11 +13878,9 @@ export interface DefaultApiVideosGetAllTracksKmlRequest {
  */
 export interface DefaultApiVideosGetMediumFileRequest {
     /**
-     * Video ID
+     * The unique identifier of the video.
      */
     readonly videoId: string
-
-    readonly accept?: string
 }
 
 /**
@@ -12831,11 +13888,9 @@ export interface DefaultApiVideosGetMediumFileRequest {
  */
 export interface DefaultApiVideosGetOriginalFileRequest {
     /**
-     * Video ID
+     * The unique identifier of the video.
      */
     readonly videoId: string
-
-    readonly accept?: string
 }
 
 /**
@@ -12843,7 +13898,7 @@ export interface DefaultApiVideosGetOriginalFileRequest {
  */
 export interface DefaultApiVideosGetSingleMetadataRequest {
     /**
-     * Video ID
+     * The unique identifier of the video.
      */
     readonly videoId: string
 
@@ -12855,7 +13910,7 @@ export interface DefaultApiVideosGetSingleMetadataRequest {
  */
 export interface DefaultApiVideosGetSingleTrackGeojsonRequest {
     /**
-     * Video ID
+     * The unique identifier of the video.
      */
     readonly videoId: string
 
@@ -12872,7 +13927,7 @@ export interface DefaultApiVideosGetSingleTrackGeojsonRequest {
  */
 export interface DefaultApiVideosGetSingleTrackGpxRequest {
     /**
-     * Video ID
+     * The unique identifier of the video.
      */
     readonly videoId: string
 
@@ -12884,7 +13939,7 @@ export interface DefaultApiVideosGetSingleTrackGpxRequest {
  */
 export interface DefaultApiVideosGetSingleTrackJsonRequest {
     /**
-     * Video ID
+     * The unique identifier of the video.
      */
     readonly videoId: string
 
@@ -12896,7 +13951,7 @@ export interface DefaultApiVideosGetSingleTrackJsonRequest {
  */
 export interface DefaultApiVideosGetSingleTrackKmlRequest {
     /**
-     * Video ID
+     * The unique identifier of the video.
      */
     readonly videoId: string
 
@@ -12908,11 +13963,9 @@ export interface DefaultApiVideosGetSingleTrackKmlRequest {
  */
 export interface DefaultApiVideosGetSmallFileRequest {
     /**
-     * Video ID
+     * The unique identifier of the video.
      */
     readonly videoId: string
-
-    readonly accept?: string
 }
 
 /**
@@ -12920,11 +13973,9 @@ export interface DefaultApiVideosGetSmallFileRequest {
  */
 export interface DefaultApiVideosGetThumbnailHugeRequest {
     /**
-     * Video ID
+     * The unique identifier of the video.
      */
     readonly videoId: string
-
-    readonly accept?: string
 }
 
 /**
@@ -12932,11 +13983,9 @@ export interface DefaultApiVideosGetThumbnailHugeRequest {
  */
 export interface DefaultApiVideosGetThumbnailHugeSquareRequest {
     /**
-     * Video ID
+     * The unique identifier of the video.
      */
     readonly videoId: string
-
-    readonly accept?: string
 }
 
 /**
@@ -12944,11 +13993,9 @@ export interface DefaultApiVideosGetThumbnailHugeSquareRequest {
  */
 export interface DefaultApiVideosGetThumbnailLargeRequest {
     /**
-     * Video ID
+     * The unique identifier of the video.
      */
     readonly videoId: string
-
-    readonly accept?: string
 }
 
 /**
@@ -12956,11 +14003,9 @@ export interface DefaultApiVideosGetThumbnailLargeRequest {
  */
 export interface DefaultApiVideosGetThumbnailLargeSquareRequest {
     /**
-     * Video ID
+     * The unique identifier of the video.
      */
     readonly videoId: string
-
-    readonly accept?: string
 }
 
 /**
@@ -12968,11 +14013,9 @@ export interface DefaultApiVideosGetThumbnailLargeSquareRequest {
  */
 export interface DefaultApiVideosGetThumbnailMediumRequest {
     /**
-     * Video ID
+     * The unique identifier of the video.
      */
     readonly videoId: string
-
-    readonly accept?: string
 }
 
 /**
@@ -12980,11 +14023,9 @@ export interface DefaultApiVideosGetThumbnailMediumRequest {
  */
 export interface DefaultApiVideosGetThumbnailMediumSquareRequest {
     /**
-     * Video ID
+     * The unique identifier of the video.
      */
     readonly videoId: string
-
-    readonly accept?: string
 }
 
 /**
@@ -12992,11 +14033,9 @@ export interface DefaultApiVideosGetThumbnailMediumSquareRequest {
  */
 export interface DefaultApiVideosGetThumbnailSmallRequest {
     /**
-     * Video ID
+     * The unique identifier of the video.
      */
     readonly videoId: string
-
-    readonly accept?: string
 }
 
 /**
@@ -13004,11 +14043,9 @@ export interface DefaultApiVideosGetThumbnailSmallRequest {
  */
 export interface DefaultApiVideosGetThumbnailSmallSquareRequest {
     /**
-     * Video ID
+     * The unique identifier of the video.
      */
     readonly videoId: string
-
-    readonly accept?: string
 }
 
 /**
@@ -13104,8 +14141,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Get All Audio
+     * Retrieve metadata for a list of audio files.
+     * @summary Get a list of audio metadata
      * @param {DefaultApiAudioGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13115,7 +14152,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     * Get GPS tracks for audio files in GeoJSON format.
      * @summary Get GeoJSON Tracks for All Audio
      * @param {DefaultApiAudioGetAllTracksGeojsonRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -13126,7 +14163,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     * Get GPS tracks for audio files in GPX format.
      * @summary Get GPX Tracks for All Audio
      * @param {DefaultApiAudioGetAllTracksGpxRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -13137,7 +14174,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     * Get GPS tracks for audio files in JSON format.
      * @summary Get JSON Tracks for All Audio
      * @param {DefaultApiAudioGetAllTracksJsonRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -13148,7 +14185,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     * Get GPS tracks for audio files in KML format.
      * @summary Get KML Tracks for All Audio
      * @param {DefaultApiAudioGetAllTracksKmlRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -13159,19 +14196,19 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Get Original Audio File
+     * Download the original audio file.
+     * @summary Get an audio original file
      * @param {DefaultApiAudioGetOriginalFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public audioGetOriginalFile(requestParameters: DefaultApiAudioGetOriginalFileRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).audioGetOriginalFile(requestParameters.audioId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).audioGetOriginalFile(requestParameters.audioId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
-     * @summary Get Audio Metadata
+     * Retrieve metadata for a single audio file.
+     * @summary Get audio metadata
      * @param {DefaultApiAudioGetSingleMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13181,7 +14218,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     * Get the GPS track for an audio file in GeoJSON format.
      * @summary Get GeoJSON Audio Track
      * @param {DefaultApiAudioGetSingleTrackGeojsonRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -13192,7 +14229,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     * Get the GPS track for an audio file in GPX format.
      * @summary Get GPX Audio Track
      * @param {DefaultApiAudioGetSingleTrackGpxRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -13203,7 +14240,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     * Get the GPS track for an audio file in JSON format.
      * @summary Get JSON Audio Track
      * @param {DefaultApiAudioGetSingleTrackJsonRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -13214,7 +14251,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     * Get the GPS track for an audio file in KML format.
      * @summary Get KML Audio Track
      * @param {DefaultApiAudioGetSingleTrackKmlRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -13225,8 +14262,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * Upload audio with optional track file
-     * @summary Upload Audio
+     * Upload audio with optional track file.
+     * @summary Upload audio
      * @param {DefaultApiAudioUploadRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13237,7 +14274,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Audit Logs
+     * @summary Get a list of audit logs
      * @param {DefaultApiAuditLogsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13248,7 +14285,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Audit Log
+     * @summary Get an audit log
      * @param {DefaultApiAuditLogsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13259,7 +14296,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Authorization
+     * @summary Create an authorization
      * @param {DefaultApiAuthorizationsCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13270,7 +14307,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Authorization
+     * @summary Delete an authorization
      * @param {DefaultApiAuthorizationsDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13281,7 +14318,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Authorizations
+     * @summary Get a list of authorizations
      * @param {DefaultApiAuthorizationsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13292,7 +14329,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Authorization
+     * @summary Get an authorization
      * @param {DefaultApiAuthorizationsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13325,7 +14362,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Changeset
+     * @summary Create a changeset
      * @param {DefaultApiChangesetsCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13336,7 +14373,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Changesets
+     * @summary Get a list of changesets
      * @param {DefaultApiChangesetsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13347,7 +14384,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Changeset
+     * @summary Get a changeset
      * @param {DefaultApiChangesetsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13369,7 +14406,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Choice List
+     * @summary Create a choice list
      * @param {DefaultApiChoiceListsCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13380,7 +14417,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Choice List
+     * @summary Delete a choice list
      * @param {DefaultApiChoiceListsDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13391,7 +14428,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Choice Lists
+     * @summary Get a list of choice lists
      * @param {DefaultApiChoiceListsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13402,7 +14439,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Choice List
+     * @summary Get a choice list
      * @param {DefaultApiChoiceListsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13424,7 +14461,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Classification Set
+     * @summary Create a classification set
      * @param {DefaultApiClassificationSetsCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13435,7 +14472,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Classification Set
+     * @summary Delete a classification set
      * @param {DefaultApiClassificationSetsDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13446,7 +14483,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Classification Sets
+     * @summary Get a list of classification sets
      * @param {DefaultApiClassificationSetsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13457,7 +14494,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Classification Set
+     * @summary Get a classification set
      * @param {DefaultApiClassificationSetsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13478,8 +14515,19 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
+     * Copy all reference files from one form to another. Limits: 100 reference files per form, 1GB total per form.
+     * @summary Copy all reference files
+     * @param {DefaultApiCopyAllAttachmentsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public copyAllAttachments(requestParameters: DefaultApiCopyAllAttachmentsRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).copyAllAttachments(requestParameters.attachmentCopyAllRequest, requestParameters.xApitoken, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * There is only one parameter that is required for creating an attachment: `owners`. You must specify at least one owner of type `record` or `form`. If you create a `record` attachment you can optionally include a `name` and `file_size`. The name will be the name of the file shown in the record information. The file_size is only used for verifying that uploading this attachment will not exceed your current storage limit. If no file_size is provided the attachment may be rejected once it has been uploaded. The response will provide the `url` to upload (PUT) the file to.
-     * @summary Create Attachment
+     * @summary Create an attachment
      * @param {DefaultApiCreateAttachmentRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13490,7 +14538,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * Using the batch operations API, you can bulk delete records from a form.
-     * @summary Create Batch to Bulk Delete Records
+     * @summary Create a batch
      * @param {DefaultApiCreateBatchRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13501,7 +14549,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Group
+     * @summary Create a group
      * @param {DefaultApiCreateGroupRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13512,18 +14560,18 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Member
-     * @param {DefaultApiCreateMemberRequest} requestParameters Request parameters.
+     * @summary Create a membership
+     * @param {DefaultApiCreateMembershipRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public createMember(requestParameters: DefaultApiCreateMemberRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).createMember(requestParameters.accept, requestParameters.contentType, requestParameters.membershipCreateRequest, options).then((request) => request(this.axios, this.basePath));
+    public createMembership(requestParameters: DefaultApiCreateMembershipRequest = {}, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).createMembership(requestParameters.accept, requestParameters.contentType, requestParameters.membershipCreateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @summary Create Report Template
+     * @summary Create a report template
      * @param {DefaultApiCreateReportTemplateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13534,18 +14582,18 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Workflow
+     * @summary Create a workflow
      * @param {DefaultApiCreateWorkflowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public createWorkflow(requestParameters: DefaultApiCreateWorkflowRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).createWorkflow(requestParameters.accept, requestParameters.contentTyoe, requestParameters.workflowCreateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).createWorkflow(requestParameters.accept, requestParameters.contentType, requestParameters.workflowCreateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * The delete endpoint only applies to Form attachments. Use this endpoint to delete an attachment. For record attachments, simply remove the association of an attachment from the record and the attachment will be deleted.
-     * @summary Delete Attachment
+     * @summary Delete an attachment
      * @param {DefaultApiDeleteAttachmentRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13556,7 +14604,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Group
+     * @summary Delete a group
      * @param {DefaultApiDeleteGroupRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13567,18 +14615,18 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Member
-     * @param {DefaultApiDeleteMemberRequest} requestParameters Request parameters.
+     * @summary Delete a membership
+     * @param {DefaultApiDeleteMembershipRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public deleteMember(requestParameters: DefaultApiDeleteMemberRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).deleteMember(requestParameters.membershipId, requestParameters.membershipDeleteRequest, options).then((request) => request(this.axios, this.basePath));
+    public deleteMembership(requestParameters: DefaultApiDeleteMembershipRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).deleteMembership(requestParameters.membershipId, requestParameters.membershipDeleteRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @summary Delete Report Template
+     * @summary Delete a report template
      * @param {DefaultApiDeleteReportTemplateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13589,7 +14637,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Workflow
+     * @summary Delete a workflow
      * @param {DefaultApiDeleteWorkflowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13611,7 +14659,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Form
+     * @summary Create a form
      * @param {DefaultApiFormsCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13622,7 +14670,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Form
+     * @summary Delete a form
      * @param {DefaultApiFormsDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13633,13 +14681,13 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Forms
+     * @summary Get a list of forms
      * @param {DefaultApiFormsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public formsGetAll(requestParameters: DefaultApiFormsGetAllRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).formsGetAll(requestParameters.schema, requestParameters.page, requestParameters.perPage, requestParameters.accept, requestParameters.type, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).formsGetAll(requestParameters.schema, requestParameters.page, requestParameters.perPage, requestParameters.accept, requestParameters.type, requestParameters.status, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13655,7 +14703,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Form
+     * @summary Get a form
      * @param {DefaultApiFormsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13676,19 +14724,19 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Get All Attachments
+     * Retrieve a list of attachments.
+     * @summary Get a list of attachment metadata
      * @param {DefaultApiGetAllAttachmentsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public getAllAttachments(requestParameters: DefaultApiGetAllAttachmentsRequest = {}, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).getAllAttachments(requestParameters.recordId, requestParameters.formId, requestParameters.ownerType, requestParameters.xApitoken, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).getAllAttachments(requestParameters.recordId, requestParameters.formId, requestParameters.ownerType, requestParameters.sort, requestParameters.sortDirection, requestParameters.xApitoken, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @summary Get All Batches
+     * @summary Get a list of batches
      * @param {DefaultApiGetAllBatchesRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13699,7 +14747,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Groups
+     * @summary Get a list of groups
      * @param {DefaultApiGetAllGroupsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13721,7 +14769,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Report Templates
+     * @summary Get a list of report templates
      * @param {DefaultApiGetAllReportTemplatesRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13732,7 +14780,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Workflows
+     * @summary Get a list of workflows
      * @param {DefaultApiGetAllWorkflowsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13753,8 +14801,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Get Single Attachment
+     * Retrieve metadata for a single attachment.
+     * @summary Get an attachment
      * @param {DefaultApiGetSingleAttachmentRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13765,7 +14813,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Batch
+     * @summary Get a batch
      * @param {DefaultApiGetSingleBatchRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13776,7 +14824,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Group
+     * @summary Get a group
      * @param {DefaultApiGetSingleGroupRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13787,7 +14835,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Report Template
+     * @summary Get a report template
      * @param {DefaultApiGetSingleReportTemplateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13798,7 +14846,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Workflow
+     * @summary Get a workflow
      * @param {DefaultApiGetSingleWorkflowRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13809,7 +14857,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Layer
+     * @summary Create a layer
      * @param {DefaultApiLayersCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13820,7 +14868,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Layer
+     * @summary Delete a layer
      * @param {DefaultApiLayersDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13831,7 +14879,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Layers
+     * @summary Get a list of layers
      * @param {DefaultApiLayersGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13842,7 +14890,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Layer
+     * @summary Get a layer
      * @param {DefaultApiLayersGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13863,7 +14911,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * Add or remove membership permissions from layers, forms, or projects
+     * Add or remove membership permissions from layers, forms, or projects.
      * @summary Change Permissions
      * @param {DefaultApiMembershipsChangePermissionsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -13875,7 +14923,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Memberships
+     * @summary Get a list of memberships
      * @param {DefaultApiMembershipsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13886,7 +14934,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Membership
+     * @summary Get a membership
      * @param {DefaultApiMembershipsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13896,8 +14944,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Get All Photos
+     * Retrieve metadata for a list of photos.
+     * @summary Get a list of photo metadata
      * @param {DefaultApiPhotosGetAllMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13907,19 +14955,19 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Get Single Photo File
+     * Download the original photo file.
+     * @summary Get a photo original file
      * @param {DefaultApiPhotosGetSingleFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public photosGetSingleFile(requestParameters: DefaultApiPhotosGetSingleFileRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).photosGetSingleFile(requestParameters.photoId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).photosGetSingleFile(requestParameters.photoId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
-     * @summary Get Single Photo Metadata
+     * Retrieve metadata for a single photo.
+     * @summary Get photo metadata
      * @param {DefaultApiPhotosGetSingleMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13929,18 +14977,18 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Photo Large File
+     * Download the large variant of a photo.
+     * @summary Get a photo large file
      * @param {DefaultApiPhotosLargeFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public photosLargeFile(requestParameters: DefaultApiPhotosLargeFileRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).photosLargeFile(requestParameters.photoId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).photosLargeFile(requestParameters.photoId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Retrieve metadata for a photo\'s large variant.
      * @summary Photo Large Metadata
      * @param {DefaultApiPhotosLargeMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -13951,18 +14999,18 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Photo Thumbnail File
+     * Download the thumbnail variant of a photo.
+     * @summary Get a photo thumbnail file
      * @param {DefaultApiPhotosThumbnailFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public photosThumbnailFile(requestParameters: DefaultApiPhotosThumbnailFileRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).photosThumbnailFile(requestParameters.photoId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).photosThumbnailFile(requestParameters.photoId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Retrieve metadata for a photo\'s thumbnail variant.
      * @summary Photo Thumbnail Metadata
      * @param {DefaultApiPhotosThumbnailMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -13973,8 +15021,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Upload Photo
+     * Upload a photo file to associate with a record.
+     * @summary Upload a photo
      * @param {DefaultApiPhotosUploadRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13985,7 +15033,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Create Project
+     * @summary Create a project
      * @param {DefaultApiProjectsCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13996,7 +15044,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Delete Project
+     * @summary Delete a project
      * @param {DefaultApiProjectsDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14007,7 +15055,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get All Projects
+     * @summary Get a list of projects
      * @param {DefaultApiProjectsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14018,7 +15066,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * 
-     * @summary Get Single Project
+     * @summary Get a project
      * @param {DefaultApiProjectsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14039,8 +15087,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary GET Query
+     * Execute a Query API request using HTTP GET. Provide a SQL like query to query against your organization\'s data.
+     * @summary Make a Query GET request
      * @param {DefaultApiQueryGetRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14050,8 +15098,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary POST Query
+     * Execute a Query API request using HTTP POST. Provide a SQL like query to query against your organization\'s data.
+     * @summary Make a Query POST request
      * @param {DefaultApiQueryPostRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14061,8 +15109,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Create Record
+     * Create a new record in the specified form using the provided form values, location information, and any associated metadata.
+     * @summary Create a record
      * @param {DefaultApiRecordsCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14072,8 +15120,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Delete Record
+     * Delete a record from your organization.
+     * @summary Delete a record
      * @param {DefaultApiRecordsDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14083,8 +15131,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Get All Records
+     * Get a list of records from your organization that can be filtered by dimensions such as form, project, changeset, bounding box, and date ranges.
+     * @summary Get a list of records
      * @param {DefaultApiRecordsGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14094,8 +15142,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * This endpoint can help you get records from a specific changeset, or retrieve records for a deleted form.
-     * @summary Get All Records History
+     * Retrieve historical record data from your organization. This endpoint is useful for accessing records from a specific changeset or retrieving records that belonged to a deleted form.
+     * @summary Get the history of a collection of records
      * @param {DefaultApiRecordsGetAllHistoryRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14105,8 +15153,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Get Record History
+     * Retrieve the complete version history of a record.
+     * @summary Get the history of a record
      * @param {DefaultApiRecordsGetHistoryRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14116,8 +15164,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Get Single Record
+     * Retrieve detailed information about a specific record by its ID. This includes all form field values, location data, timestamps, and associated metadata.
+     * @summary Get a record
      * @param {DefaultApiRecordsGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14127,8 +15175,19 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Update Record
+     * Update specific fields of an existing record without requiring the complete record object. Only the fields included in the request body will be modified, while all other fields remain unchanged. This is useful for updating individual field values or metadata.
+     * @summary Partially update a record
+     * @param {DefaultApiRecordsPartialUpdateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public recordsPartialUpdate(requestParameters: DefaultApiRecordsPartialUpdateRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).recordsPartialUpdate(requestParameters.recordId, requestParameters.accept, requestParameters.contentType, requestParameters.xSkipWorkflows, requestParameters.xSkipWebhooks, requestParameters.recordPatchRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update a record with a provided record object. The record object is expected to be the complete representation of the record. Any fields not included are assumed null.
+     * @summary Update a record
      * @param {DefaultApiRecordsUpdateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14138,8 +15197,30 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
+     * Generate a new report for a specific record, optionally using a report template.
+     * @summary Create a report
+     * @param {DefaultApiReportsCreateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public reportsCreate(requestParameters: DefaultApiReportsCreateRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).reportsCreate(requestParameters.reportRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Download the generated PDF report file.
+     * @summary Get a report file
+     * @param {DefaultApiReportsFileRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public reportsFile(requestParameters: DefaultApiReportsFileRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).reportsFile(requestParameters.reportId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 
-     * @summary Get All Roles
+     * @summary Get a list of roles
      * @param {DefaultApiRolesGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14149,8 +15230,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Get All Signatures
+     * Retrieve metadata for a list of signatures.
+     * @summary Get a list of signature metadata
      * @param {DefaultApiSignaturesGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14160,19 +15241,19 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Get Single Signature File
+     * Download the original signature file.
+     * @summary Get a signature original file
      * @param {DefaultApiSignaturesGetSingleFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public signaturesGetSingleFile(requestParameters: DefaultApiSignaturesGetSingleFileRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).signaturesGetSingleFile(requestParameters.signatureId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).signaturesGetSingleFile(requestParameters.signatureId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
-     * @summary Get Single Signature Metadata
+     * Retrieve metadata for a single signature.
+     * @summary Get signature metadata
      * @param {DefaultApiSignaturesGetSingleMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14182,18 +15263,18 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Signature Thumbnail File
+     * Download the thumbnail variant of a signature.
+     * @summary Get a signature thumbnail file
      * @param {DefaultApiSignaturesGetThumbnailFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public signaturesGetThumbnailFile(requestParameters: DefaultApiSignaturesGetThumbnailFileRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).signaturesGetThumbnailFile(requestParameters.signatureId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).signaturesGetThumbnailFile(requestParameters.signatureId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Retrieve metadata for a signature\'s thumbnail variant.
      * @summary Signature Thumbnail Metadata
      * @param {DefaultApiSignaturesGetThumbnailMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -14204,8 +15285,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Upload Signature
+     * Upload a signature file to associate with a record.
+     * @summary Upload a signature
      * @param {DefaultApiSignaturesUploadRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14215,7 +15296,95 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * Start your pending batch
+     * Retrieve metadata for a list of sketches.
+     * @summary Get a list of sketch metadata
+     * @param {DefaultApiSketchesGetAllMetadataRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public sketchesGetAllMetadata(requestParameters: DefaultApiSketchesGetAllMetadataRequest = {}, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).sketchesGetAllMetadata(requestParameters.recordId, requestParameters.formId, requestParameters.newestFirst, requestParameters.processed, requestParameters.stored, requestParameters.uploaded, requestParameters.page, requestParameters.perPage, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Download the original sketch file.
+     * @summary Get a sketch original file
+     * @param {DefaultApiSketchesGetSingleFileRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public sketchesGetSingleFile(requestParameters: DefaultApiSketchesGetSingleFileRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).sketchesGetSingleFile(requestParameters.sketchId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieve metadata for a single sketch.
+     * @summary Get sketch metadata
+     * @param {DefaultApiSketchesGetSingleMetadataRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public sketchesGetSingleMetadata(requestParameters: DefaultApiSketchesGetSingleMetadataRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).sketchesGetSingleMetadata(requestParameters.sketchId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Download the large variant of a sketch.
+     * @summary Get a sketch large file
+     * @param {DefaultApiSketchesLargeFileRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public sketchesLargeFile(requestParameters: DefaultApiSketchesLargeFileRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).sketchesLargeFile(requestParameters.sketchId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieve metadata for a sketch\'s large variant.
+     * @summary Sketch Large Metadata
+     * @param {DefaultApiSketchesLargeMetadataRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public sketchesLargeMetadata(requestParameters: DefaultApiSketchesLargeMetadataRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).sketchesLargeMetadata(requestParameters.sketchId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Download the thumbnail variant of a sketch.
+     * @summary Get a sketch thumbnail file
+     * @param {DefaultApiSketchesThumbnailFileRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public sketchesThumbnailFile(requestParameters: DefaultApiSketchesThumbnailFileRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).sketchesThumbnailFile(requestParameters.sketchId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieve metadata for a sketch\'s thumbnail variant.
+     * @summary Sketch Thumbnail Metadata
+     * @param {DefaultApiSketchesThumbnailMetadataRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public sketchesThumbnailMetadata(requestParameters: DefaultApiSketchesThumbnailMetadataRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).sketchesThumbnailMetadata(requestParameters.sketchId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Upload a sketch file to associate with a record.
+     * @summary Upload a sketch
+     * @param {DefaultApiSketchesUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public sketchesUpload(requestParameters: DefaultApiSketchesUploadRequest = {}, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).sketchesUpload(requestParameters.accept, requestParameters.contentType, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Start your pending batch.
      * @summary Start Batch
      * @param {DefaultApiStartBatchRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -14249,13 +15418,13 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
     /**
      * You can use this to update parameters of a member, but this will not work if the member is apart of multiple organizations.
-     * @summary Update Member
-     * @param {DefaultApiUpdateMemberRequest} requestParameters Request parameters.
+     * @summary Update a membership
+     * @param {DefaultApiUpdateMembershipRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public updateMember(requestParameters: DefaultApiUpdateMemberRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).updateMember(requestParameters.membershipId, requestParameters.membershipUpdateRequest, options).then((request) => request(this.axios, this.basePath));
+    public updateMembership(requestParameters: DefaultApiUpdateMembershipRequest, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).updateMembership(requestParameters.membershipId, requestParameters.membershipUpdateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14277,7 +15446,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
      * @throws {RequiredError}
      */
     public updateWorkflow(requestParameters: DefaultApiUpdateWorkflowRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).updateWorkflow(requestParameters.workflowId, requestParameters.accept, requestParameters.contentTyoe, requestParameters.workflowUpdateRequest, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).updateWorkflow(requestParameters.workflowId, requestParameters.accept, requestParameters.contentType, requestParameters.workflowUpdateRequest, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14292,8 +15461,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Get All Videos
+     * Retrieve metadata for a list of videos.
+     * @summary Get a list of video metadata
      * @param {DefaultApiVideosGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14303,7 +15472,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     * Get GPS tracks for videos in GeoJSON format.
      * @summary Get GeoJSON Tracks for All Videos
      * @param {DefaultApiVideosGetAllTracksGeojsonRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -14314,7 +15483,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     * Get GPS tracks for videos in GPX format.
      * @summary Get GPX Tracks for All Videos
      * @param {DefaultApiVideosGetAllTracksGpxRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -14325,7 +15494,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     * Get GPS tracks for videos in KML format.
      * @summary Get KML Tracks for All Videos
      * @param {DefaultApiVideosGetAllTracksKmlRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -14336,30 +15505,30 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Get Medium Video File
+     * Download a medium variant of the video.
+     * @summary Get a video medium file
      * @param {DefaultApiVideosGetMediumFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public videosGetMediumFile(requestParameters: DefaultApiVideosGetMediumFileRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).videosGetMediumFile(requestParameters.videoId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).videosGetMediumFile(requestParameters.videoId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
-     * @summary Get Original Video File
+     * Download the original video file.
+     * @summary Get a video original file
      * @param {DefaultApiVideosGetOriginalFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public videosGetOriginalFile(requestParameters: DefaultApiVideosGetOriginalFileRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).videosGetOriginalFile(requestParameters.videoId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).videosGetOriginalFile(requestParameters.videoId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
-     * @summary Get Video Metadata
+     * Retrieve metadata for a specific video.
+     * @summary Get video metadata
      * @param {DefaultApiVideosGetSingleMetadataRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14369,7 +15538,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     * Get the GPS track for a video in GeoJSON format.
      * @summary Get GeoJSON Video Track
      * @param {DefaultApiVideosGetSingleTrackGeojsonRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -14380,7 +15549,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     * Get the GPS track for a video in GPX format.
      * @summary Get GPX Video Track
      * @param {DefaultApiVideosGetSingleTrackGpxRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -14391,7 +15560,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     * Get the GPS track for a video in JSON format.
      * @summary Get JSON Video Track
      * @param {DefaultApiVideosGetSingleTrackJsonRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -14402,7 +15571,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     * Get the GPS track for a video in KML format.
      * @summary Get KML Video Track
      * @param {DefaultApiVideosGetSingleTrackKmlRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -14413,107 +15582,107 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Get Small Video File
+     * Download the small variant of the video.
+     * @summary Get a video small file
      * @param {DefaultApiVideosGetSmallFileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public videosGetSmallFile(requestParameters: DefaultApiVideosGetSmallFileRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).videosGetSmallFile(requestParameters.videoId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).videosGetSmallFile(requestParameters.videoId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Download a huge thumbnail variant for a video.
      * @summary Get Huge Video Thumbnail
      * @param {DefaultApiVideosGetThumbnailHugeRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public videosGetThumbnailHuge(requestParameters: DefaultApiVideosGetThumbnailHugeRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).videosGetThumbnailHuge(requestParameters.videoId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).videosGetThumbnailHuge(requestParameters.videoId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Download a huge square thumbnail variant for a video.
      * @summary Get Huge Square Video Thumbnail
      * @param {DefaultApiVideosGetThumbnailHugeSquareRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public videosGetThumbnailHugeSquare(requestParameters: DefaultApiVideosGetThumbnailHugeSquareRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).videosGetThumbnailHugeSquare(requestParameters.videoId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).videosGetThumbnailHugeSquare(requestParameters.videoId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Download a large thumbnail variant for a video.
      * @summary Get Large Video Thumbnail
      * @param {DefaultApiVideosGetThumbnailLargeRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public videosGetThumbnailLarge(requestParameters: DefaultApiVideosGetThumbnailLargeRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).videosGetThumbnailLarge(requestParameters.videoId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).videosGetThumbnailLarge(requestParameters.videoId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Download a large square thumbnail variant for a video.
      * @summary Get Large Square Video Thumbnail
      * @param {DefaultApiVideosGetThumbnailLargeSquareRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public videosGetThumbnailLargeSquare(requestParameters: DefaultApiVideosGetThumbnailLargeSquareRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).videosGetThumbnailLargeSquare(requestParameters.videoId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).videosGetThumbnailLargeSquare(requestParameters.videoId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Download a medium thumbnail variant for a video.
      * @summary Get Medium Video Thumbnail
      * @param {DefaultApiVideosGetThumbnailMediumRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public videosGetThumbnailMedium(requestParameters: DefaultApiVideosGetThumbnailMediumRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).videosGetThumbnailMedium(requestParameters.videoId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).videosGetThumbnailMedium(requestParameters.videoId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Download a medium square thumbnail variant for a video.
      * @summary Get Medium Square Video Thumbnail
      * @param {DefaultApiVideosGetThumbnailMediumSquareRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public videosGetThumbnailMediumSquare(requestParameters: DefaultApiVideosGetThumbnailMediumSquareRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).videosGetThumbnailMediumSquare(requestParameters.videoId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).videosGetThumbnailMediumSquare(requestParameters.videoId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Download the small thumbnail variant for a video.
      * @summary Get Small Video Thumbnail
      * @param {DefaultApiVideosGetThumbnailSmallRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public videosGetThumbnailSmall(requestParameters: DefaultApiVideosGetThumbnailSmallRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).videosGetThumbnailSmall(requestParameters.videoId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).videosGetThumbnailSmall(requestParameters.videoId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Download a small square thumbnail variant for a video.
      * @summary Get Small Square Video Thumbnail
      * @param {DefaultApiVideosGetThumbnailSmallSquareRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public videosGetThumbnailSmallSquare(requestParameters: DefaultApiVideosGetThumbnailSmallSquareRequest, options?: RawAxiosRequestConfig) {
-        return DefaultApiFp(this.configuration).videosGetThumbnailSmallSquare(requestParameters.videoId, requestParameters.accept, options).then((request) => request(this.axios, this.basePath));
+        return DefaultApiFp(this.configuration).videosGetThumbnailSmallSquare(requestParameters.videoId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Upload video with optional track file
-     * @summary Upload Video
+     * Upload video to be associated with a record.
+     * @summary Upload a video
      * @param {DefaultApiVideosUploadRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14523,8 +15692,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Create Webhook
+     * Create a webhook.
+     * @summary Create a webhook
      * @param {DefaultApiWebhooksCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14534,8 +15703,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Delete Webhook
+     * Delete a webhook.
+     * @summary Delete a webhook
      * @param {DefaultApiWebhooksDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14545,8 +15714,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Get All Webhooks
+     * Get a list of webhooks.
+     * @summary Get a list of webhooks
      * @param {DefaultApiWebhooksGetAllRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14556,8 +15725,8 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
-     * @summary Get Single Webhook
+     * Get a webhook.
+     * @summary Get a webhook
      * @param {DefaultApiWebhooksGetSingleRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14567,7 +15736,7 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     }
 
     /**
-     * 
+     * Update a webhook.
      * @summary Update Webhook
      * @param {DefaultApiWebhooksUpdateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -14587,4 +15756,18 @@ export enum FormsGetAllTypeEnum {
     Organization = 'organization',
     System = 'system',
     All = 'all'
+}
+export enum FormsGetAllStatusEnum {
+    Active = 'active',
+    Inactive = 'inactive',
+    All = 'all'
+}
+export enum GetAllAttachmentsSortEnum {
+    Name = 'name',
+    FileSize = 'file_size',
+    UploadedAt = 'uploaded_at'
+}
+export enum GetAllAttachmentsSortDirectionEnum {
+    Asc = 'asc',
+    Desc = 'desc'
 }

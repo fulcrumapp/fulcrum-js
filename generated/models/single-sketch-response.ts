@@ -13,15 +13,11 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import type { Sketch } from './sketch.js';
 
-/**
- * Optional metadata describing the changeset
- */
-export interface ChangesetCreateRequestChangesetMetadata {
-    [key: string]: any;
-
-    'comment'?: string;
-    'app_created_by'?: string;
-    'app_name'?: string;
+export interface SingleSketchResponse {
+    'sketch': Sketch;
 }
 
