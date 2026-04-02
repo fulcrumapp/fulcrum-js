@@ -17,11 +17,7 @@
 // @ts-ignore
 import type { Geometry } from './geometry.js';
 
-export interface RecordRequestRecord {
-    /**
-     * ID of the form this record belongs to
-     */
-    'form_id': string;
+export interface RecordPatchRequestRecord {
     /**
      * Latitude coordinate
      */

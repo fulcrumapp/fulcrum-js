@@ -15,42 +15,45 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
+import type { AuditLocation } from './audit-location.js';
+// May contain unused imports in some cases
+// @ts-ignore
 import type { Geometry } from './geometry.js';
 
 export interface ModelRecord {
-    'status'?: string | null;
+    'status'?: string;
     'version'?: number;
     'id'?: string;
     'created_at'?: string;
     'updated_at'?: string;
-    'client_created_at'?: string | null;
-    'client_updated_at'?: string | null;
+    'client_created_at'?: string;
+    'client_updated_at'?: string;
     'created_by'?: string;
     'created_by_id'?: string;
     'updated_by'?: string;
     'updated_by_id'?: string;
-    'created_location'?: string | null;
-    'updated_location'?: string | null;
-    'created_duration'?: number | null;
-    'updated_duration'?: number | null;
-    'edited_duration'?: number | null;
+    'created_location'?: AuditLocation;
+    'updated_location'?: AuditLocation;
+    'created_duration'?: number;
+    'updated_duration'?: number;
+    'edited_duration'?: number;
     'form_id'?: string;
-    'project_id'?: string | null;
-    'record_series_id'?: string | null;
-    'assigned_to'?: string | null;
-    'assigned_to_id'?: string | null;
+    'project_id'?: string;
+    'record_series_id'?: string;
+    'assigned_to'?: string;
+    'assigned_to_id'?: string;
     /**
      * Field values keyed by field key - values can be strings, objects, or arrays depending on field type
      */
-    'form_values'?: object;
-    'latitude'?: number | null;
-    'longitude'?: number | null;
-    'altitude'?: number | null;
+    'form_values'?: { [key: string]: any; };
+    'latitude'?: number;
+    'longitude'?: number;
+    'altitude'?: number;
     'geometry'?: Geometry;
-    'speed'?: number | null;
-    'course'?: number | null;
-    'horizontal_accuracy'?: number | null;
-    'vertical_accuracy'?: number | null;
-    'system_status'?: string | null;
+    'speed'?: number;
+    'course'?: number;
+    'horizontal_accuracy'?: number;
+    'vertical_accuracy'?: number;
+    'system_status'?: string;
 }
 

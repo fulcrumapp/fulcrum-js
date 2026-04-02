@@ -72,9 +72,9 @@ jest.mock('../generated/dist/index.js', () => {
     membershipsGetAll: jest.fn().mockResolvedValue({ data: { memberships: [] } }),
     membershipsGetSingle: jest.fn().mockResolvedValue({ data: { membership: {} } }),
     membershipsChangePermissions: jest.fn().mockResolvedValue({ data: {} }),
-    createMember: jest.fn().mockResolvedValue({ data: { member: {} } }),
-    updateMember: jest.fn().mockResolvedValue({ data: { member: {} } }),
-    deleteMember: jest.fn().mockResolvedValue({ data: {} }),
+    createMembership: jest.fn().mockResolvedValue({ data: { member: {} } }),
+    updateMembership: jest.fn().mockResolvedValue({ data: { member: {} } }),
+    deleteMembership: jest.fn().mockResolvedValue({ data: {} }),
     getAllMemberships: jest.fn().mockResolvedValue({ data: { memberships: [] } }),
 
     // Roles
@@ -811,13 +811,13 @@ describe('FulcrumClient', () => {
         expect(client.client.membershipsChangePermissions).toHaveBeenCalled();
 
         await client.memberships.create({});
-        expect(client.client.createMember).toHaveBeenCalled();
+        expect(client.client.createMembership).toHaveBeenCalled();
 
         await client.memberships.update('member-123', {});
-        expect(client.client.updateMember).toHaveBeenCalled();
+        expect(client.client.updateMembership).toHaveBeenCalled();
 
         await client.memberships.delete('member-123', {});
-        expect(client.client.deleteMember).toHaveBeenCalled();
+        expect(client.client.deleteMembership).toHaveBeenCalled();
 
         await client.memberships.getAllForObject('member_forms', 'user-123');
         expect(client.client.getAllMemberships).toHaveBeenCalled();

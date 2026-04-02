@@ -14,14 +14,7 @@
 
 
 
-/**
- * Optional metadata describing the changeset
- */
-export interface ChangesetCreateRequestChangesetMetadata {
-    [key: string]: any;
-
-    'comment'?: string;
-    'app_created_by'?: string;
-    'app_name'?: string;
+export interface CopyAllAttachments400Response {
+    'error'?: string;
 }
 

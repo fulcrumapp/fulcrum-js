@@ -33,6 +33,6 @@ export interface AttachmentCreateRequestAttachment {
     /**
      * Optional metadata for the attachment
      */
-    'metadata'?: object;
+    'metadata'?: { [key: string]: any; };
 }
 

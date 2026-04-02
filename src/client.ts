@@ -49,9 +49,9 @@ import type {
   DefaultApiMembershipsGetAllRequest,
   DefaultApiMembershipsGetSingleRequest,
   DefaultApiMembershipsChangePermissionsRequest,
-  DefaultApiCreateMemberRequest,
-  DefaultApiDeleteMemberRequest,
-  DefaultApiUpdateMemberRequest,
+  DefaultApiCreateMembershipRequest,
+  DefaultApiDeleteMembershipRequest,
+  DefaultApiUpdateMembershipRequest,
   DefaultApiGetAllMembershipsRequest,
   DefaultApiRolesGetAllRequest,
   DefaultApiGetAllGroupsRequest,
@@ -965,9 +965,9 @@ export class FulcrumClient {
     getAll: (params?: Omit<DefaultApiMembershipsGetAllRequest, 'accept'>) => Promise<unknown>;
     getById: (membershipId: string, params?: Omit<DefaultApiMembershipsGetSingleRequest, 'membershipId' | 'accept'>) => Promise<unknown>;
     changePermissions: (params?: Omit<DefaultApiMembershipsChangePermissionsRequest, 'accept' | 'contentType'>) => Promise<unknown>;
-    create: (params?: Omit<DefaultApiCreateMemberRequest, 'accept' | 'contentType'>) => Promise<unknown>;
-    update: (membershipId: string, params?: Omit<DefaultApiUpdateMemberRequest, 'membershipId'>) => Promise<unknown>;
-    delete: (membershipId: string, params?: Omit<DefaultApiDeleteMemberRequest, 'membershipId'>) => Promise<unknown>;
+    create: (params?: Omit<DefaultApiCreateMembershipRequest, 'accept' | 'contentType'>) => Promise<unknown>;
+    update: (membershipId: string, params?: Omit<DefaultApiUpdateMembershipRequest, 'membershipId'>) => Promise<unknown>;
+    delete: (membershipId: string, params?: Omit<DefaultApiDeleteMembershipRequest, 'membershipId'>) => Promise<unknown>;
     getAllForObject: (type: string, objectId: string, params?: Omit<DefaultApiGetAllMembershipsRequest, 'type' | 'objectId' | 'accept'>) => Promise<unknown>;
   } {
     const api = this.api;
@@ -999,27 +999,27 @@ export class FulcrumClient {
           }),
         ),
 
-      create: (params: Omit<DefaultApiCreateMemberRequest, 'accept' | 'contentType'> = {}) =>
+      create: (params: Omit<DefaultApiCreateMembershipRequest, 'accept' | 'contentType'> = {}) =>
         this.withSpan('Memberships.create', () =>
-          api.createMember({
+          api.createMembership({
             accept: 'application/json',
             contentType: 'application/json',
             ...params,
           }),
         ),
 
-      update: (membershipId: string, params: Omit<DefaultApiUpdateMemberRequest, 'membershipId'> = {}) =>
+      update: (membershipId: string, params: Omit<DefaultApiUpdateMembershipRequest, 'membershipId'> = {}) =>
         this.withSpan('Memberships.update', () =>
-          api.updateMember({
+          api.updateMembership({
             membershipId,
             ...params,
           }),
           { 'fulcrum.membership_id': membershipId },
         ),
 
-      delete: (membershipId: string, params: Omit<DefaultApiDeleteMemberRequest, 'membershipId'> = {}) =>
+      delete: (membershipId: string, params: Omit<DefaultApiDeleteMembershipRequest, 'membershipId'> = {}) =>
         this.withSpan('Memberships.delete', () =>
-          api.deleteMember({
+          api.deleteMembership({
             membershipId,
             ...params,
           }),
@@ -1167,20 +1167,20 @@ export class FulcrumClient {
           { 'fulcrum.workflow_id': workflowId },
         ),
 
-      create: (params: Omit<DefaultApiCreateWorkflowRequest, 'accept' | 'contentTyoe'> = {}) =>
+      create: (params: Omit<DefaultApiCreateWorkflowRequest, 'accept' | 'contentType'> = {}) =>
         this.withSpan('Workflows.create', () =>
           api.createWorkflow({
             accept: 'application/json',
-            contentTyoe: 'application/json',
+            contentType: 'application/json',
             ...params,
           }),
         ),
 
-      update: (workflowId: string, params: Omit<DefaultApiUpdateWorkflowRequest, 'workflowId' | 'accept' | 'contentTyoe'> = {}) =>
+      update: (workflowId: string, params: Omit<DefaultApiUpdateWorkflowRequest, 'workflowId' | 'accept' | 'contentType'> = {}) =>
         this.withSpan('Workflows.update', () =>
           api.updateWorkflow({
             accept: 'application/json',
-            contentTyoe: 'application/json',
+            contentType: 'application/json',
             workflowId,
             ...params,
           }),
@@ -1389,10 +1389,9 @@ export class FulcrumClient {
           }),
         ),
 
-      getSingleFile: (photoId: string, params: Omit<DefaultApiPhotosGetSingleFileRequest, 'photoId' | 'accept'> = {}) =>
+      getSingleFile: (photoId: string, params: Omit<DefaultApiPhotosGetSingleFileRequest, 'photoId'> = {}) =>
         this.withSpan('Photos.getSingleFile', () =>
           api.photosGetSingleFile({
-            accept: 'application/json',
             photoId,
             ...params,
           }),
@@ -1409,10 +1408,9 @@ export class FulcrumClient {
           { 'fulcrum.photo_id': photoId },
         ),
 
-      getLargeFile: (photoId: string, params: Omit<DefaultApiPhotosLargeFileRequest, 'photoId' | 'accept'> = {}) =>
+      getLargeFile: (photoId: string, params: Omit<DefaultApiPhotosLargeFileRequest, 'photoId'> = {}) =>
         this.withSpan('Photos.getLargeFile', () =>
           api.photosLargeFile({
-            accept: 'application/json',
             photoId,
             ...params,
           }),
@@ -1429,10 +1427,9 @@ export class FulcrumClient {
           { 'fulcrum.photo_id': photoId },
         ),
 
-      getThumbnailFile: (photoId: string, params: Omit<DefaultApiPhotosThumbnailFileRequest, 'photoId' | 'accept'> = {}) =>
+      getThumbnailFile: (photoId: string, params: Omit<DefaultApiPhotosThumbnailFileRequest, 'photoId'> = {}) =>
         this.withSpan('Photos.getThumbnailFile', () =>
           api.photosThumbnailFile({
-            accept: 'application/json',
             photoId,
             ...params,
           }),
@@ -1481,10 +1478,9 @@ export class FulcrumClient {
           }),
         ),
 
-      getSingleFile: (signatureId: string, params: Omit<DefaultApiSignaturesGetSingleFileRequest, 'signatureId' | 'accept'> = {}) =>
+      getSingleFile: (signatureId: string, params: Omit<DefaultApiSignaturesGetSingleFileRequest, 'signatureId'> = {}) =>
         this.withSpan('Signatures.getSingleFile', () =>
           api.signaturesGetSingleFile({
-            accept: 'application/json',
             signatureId,
             ...params,
           }),
@@ -1501,10 +1497,9 @@ export class FulcrumClient {
           { 'fulcrum.signature_id': signatureId },
         ),
 
-      getThumbnailFile: (signatureId: string, params: Omit<DefaultApiSignaturesGetThumbnailFileRequest, 'signatureId' | 'accept'> = {}) =>
+      getThumbnailFile: (signatureId: string, params: Omit<DefaultApiSignaturesGetThumbnailFileRequest, 'signatureId'> = {}) =>
         this.withSpan('Signatures.getThumbnailFile', () =>
           api.signaturesGetThumbnailFile({
-            accept: 'application/json',
             signatureId,
             ...params,
           }),
@@ -1592,20 +1587,18 @@ export class FulcrumClient {
           }),
         ),
 
-      getMediumFile: (videoId: string, params: Omit<DefaultApiVideosGetMediumFileRequest, 'videoId' | 'accept'> = {}) =>
+      getMediumFile: (videoId: string, params: Omit<DefaultApiVideosGetMediumFileRequest, 'videoId'> = {}) =>
         this.withSpan('Videos.getMediumFile', () =>
           api.videosGetMediumFile({
-            accept: 'application/json',
             videoId,
             ...params,
           }),
           { 'fulcrum.video_id': videoId },
         ),
 
-      getOriginalFile: (videoId: string, params: Omit<DefaultApiVideosGetOriginalFileRequest, 'videoId' | 'accept'> = {}) =>
+      getOriginalFile: (videoId: string, params: Omit<DefaultApiVideosGetOriginalFileRequest, 'videoId'> = {}) =>
         this.withSpan('Videos.getOriginalFile', () =>
           api.videosGetOriginalFile({
-            accept: 'application/json',
             videoId,
             ...params,
           }),
@@ -1662,90 +1655,81 @@ export class FulcrumClient {
           { 'fulcrum.video_id': videoId },
         ),
 
-      getSmallFile: (videoId: string, params: Omit<DefaultApiVideosGetSmallFileRequest, 'videoId' | 'accept'> = {}) =>
+      getSmallFile: (videoId: string, params: Omit<DefaultApiVideosGetSmallFileRequest, 'videoId'> = {}) =>
         this.withSpan('Videos.getSmallFile', () =>
           api.videosGetSmallFile({
-            accept: 'application/json',
             videoId,
             ...params,
           }),
           { 'fulcrum.video_id': videoId },
         ),
 
-      getThumbnailHuge: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailHugeRequest, 'videoId' | 'accept'> = {}) =>
+      getThumbnailHuge: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailHugeRequest, 'videoId'> = {}) =>
         this.withSpan('Videos.getThumbnailHuge', () =>
           api.videosGetThumbnailHuge({
-            accept: 'application/json',
             videoId,
             ...params,
           }),
           { 'fulcrum.video_id': videoId },
         ),
 
-      getThumbnailHugeSquare: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailHugeSquareRequest, 'videoId' | 'accept'> = {}) =>
+      getThumbnailHugeSquare: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailHugeSquareRequest, 'videoId'> = {}) =>
         this.withSpan('Videos.getThumbnailHugeSquare', () =>
           api.videosGetThumbnailHugeSquare({
-            accept: 'application/json',
             videoId,
             ...params,
           }),
           { 'fulcrum.video_id': videoId },
         ),
 
-      getThumbnailLarge: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailLargeRequest, 'videoId' | 'accept'> = {}) =>
+      getThumbnailLarge: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailLargeRequest, 'videoId'> = {}) =>
         this.withSpan('Videos.getThumbnailLarge', () =>
           api.videosGetThumbnailLarge({
-            accept: 'application/json',
             videoId,
             ...params,
           }),
           { 'fulcrum.video_id': videoId },
         ),
 
-      getThumbnailLargeSquare: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailLargeSquareRequest, 'videoId' | 'accept'> = {}) =>
+      getThumbnailLargeSquare: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailLargeSquareRequest, 'videoId'> = {}) =>
         this.withSpan('Videos.getThumbnailLargeSquare', () =>
           api.videosGetThumbnailLargeSquare({
-            accept: 'application/json',
             videoId,
             ...params,
           }),
           { 'fulcrum.video_id': videoId },
         ),
 
-      getThumbnailMedium: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailMediumRequest, 'videoId' | 'accept'> = {}) =>
+      getThumbnailMedium: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailMediumRequest, 'videoId'> = {}) =>
         this.withSpan('Videos.getThumbnailMedium', () =>
           api.videosGetThumbnailMedium({
-            accept: 'application/json',
             videoId,
             ...params,
           }),
           { 'fulcrum.video_id': videoId },
         ),
 
-      getThumbnailMediumSquare: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailMediumSquareRequest, 'videoId' | 'accept'> = {}) =>
+      getThumbnailMediumSquare: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailMediumSquareRequest, 'videoId'> = {}) =>
         this.withSpan('Videos.getThumbnailMediumSquare', () =>
           api.videosGetThumbnailMediumSquare({
-            accept: 'application/json',
             videoId,
             ...params,
           }),
           { 'fulcrum.video_id': videoId },
         ),
 
-      getThumbnailSmall: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailSmallRequest, 'videoId' | 'accept'> = {}) =>
+      getThumbnailSmall: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailSmallRequest, 'videoId'> = {}) =>
         this.withSpan('Videos.getThumbnailSmall', () =>
           api.videosGetThumbnailSmall({
-            accept: 'application/json',
             videoId,
             ...params,
           }),
           { 'fulcrum.video_id': videoId },
         ),
 
-      getThumbnailSmallSquare: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailSmallSquareRequest, 'videoId' | 'accept'> = {}) =>
+      getThumbnailSmallSquare: (videoId: string, params: Omit<DefaultApiVideosGetThumbnailSmallSquareRequest, 'videoId'> = {}) =>
         this.withSpan('Videos.getThumbnailSmallSquare', () =>
           api.videosGetThumbnailSmallSquare({
-            accept: 'application/json',
             videoId,
             ...params,
           }),
@@ -1822,10 +1806,9 @@ export class FulcrumClient {
           }),
         ),
 
-      getOriginalFile: (audioId: string, params: Omit<DefaultApiAudioGetOriginalFileRequest, 'audioId' | 'accept'> = {}) =>
+      getOriginalFile: (audioId: string, params: Omit<DefaultApiAudioGetOriginalFileRequest, 'audioId'> = {}) =>
         this.withSpan('Audio.getOriginalFile', () =>
           api.audioGetOriginalFile({
-            accept: 'application/json',
             audioId,
             ...params,
           }),

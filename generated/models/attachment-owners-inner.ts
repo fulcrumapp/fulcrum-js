@@ -14,14 +14,14 @@
 
 
 
-/**
- * Optional metadata describing the changeset
- */
-export interface ChangesetCreateRequestChangesetMetadata {
-    [key: string]: any;
-
-    'comment'?: string;
-    'app_created_by'?: string;
-    'app_name'?: string;
+export interface AttachmentOwnersInner {
+    /**
+     * Type of owner (e.g., \'record\' or \'form\')
+     */
+    'type'?: string;
+    /**
+     * ID of the owner
+     */
+    'id'?: string;
 }
 
