@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - "v*"
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
       tag:
@@ -17,7 +15,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: publish-npmjs-${{ inputs.tag || github.event.release.tag_name || github.ref_name }}
+  group: publish-npmjs-${{ inputs.tag || github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -29,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.tag || github.event.release.tag_name || github.ref }}
+          ref: ${{ inputs.tag && format('refs/tags/{0}', inputs.tag) || github.ref }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -47,15 +45,12 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           INPUT_TAG: ${{ inputs.tag }}
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
           REF_NAME: ${{ github.ref_name }}
           REF_TYPE: ${{ github.ref_type }}
         run: |
           set -euo pipefail
           if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
             TAG="$INPUT_TAG"
-          elif [[ "$EVENT_NAME" == "release" ]]; then
-            TAG="$RELEASE_TAG"
           elif [[ "$REF_TYPE" == "tag" ]]; then
             TAG="$REF_NAME"
           else
@@ -78,9 +73,6 @@ jobs:
 
       - name: Install dependencies
         run: YARN_IGNORE_SCRIPTS=1 yarn install --frozen-lockfile --ignore-scripts
-
-      - name: Build
-        run: YARN_IGNORE_SCRIPTS=1 yarn build
 
       - name: Skip an existing npm version
         id: existing-version
