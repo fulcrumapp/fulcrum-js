@@ -5,17 +5,7 @@ A JavaScript and TypeScript library for the Fulcrum API.
 
 ## Installation
 
-This package is hosted on the GitHub Package Registry. To install it, you must configure your package manager to use the GitHub registry for the `@fulcrumapp` scope.
-
-### 1. Configure Registry
-
-Add a `.npmrc` file to your project root:
-
-```text
-@fulcrumapp:registry=https://npm.pkg.github.com
-```
-
-### 2. Install Package
+This package is publicly available from npm.
 
 ```bash
 yarn add @fulcrumapp/fulcrum-js
@@ -1056,7 +1046,7 @@ await api.changesetsClose(changesetId);
 
 The v3 wrapper client (`FulcrumClient`) provides a clean, resource-oriented API similar to v2:
 
-1. Install v3 (ensure you have [configured the GitHub registry](#1-configure-registry)):
+1. Install v3:
 
   ```bash
   yarn add @fulcrumapp/fulcrum-js@latest
@@ -1342,8 +1332,8 @@ Search for resources. The single parameter is an options object. The options obj
 
 This method returns a Promise containing a page. The page object has 5 properties.
 
-|property|description|
-|-|-|
+| property | description |
+| - | - |
 | `objects` | An array of the resources requested |
 | `currentPage` | The current page |
 | `perPage` | The number of resources returned per page |
@@ -1936,7 +1926,35 @@ describe('Forms', () => {
 
 ## Publishing
 
-To publish a new version:
+### Automated Deployment
+
+Normal releases are automated after a merge to `main`:
+
+1. The Tekton pipeline determines and writes the next package version, publishes it to GitHub Packages, and pushes a matching `vX.Y.Z` tag.
+2. The `Publish to npmjs.org` GitHub Actions workflow runs for that tag, verifies that the tag and `package.json` versions match, builds the package, and publishes it to public npm with provenance.
+
+The public npm workflow skips a version that is already published, so it is safe for both tag and GitHub Release events to trigger it.
+
+### Initial npm Setup
+
+The first public release of this scoped package must be published manually by an npm account with permission to create `@fulcrumapp/fulcrum-js`:
+
+```bash
+yarn publish:npm
+```
+
+After the package exists on npm, configure an npm Trusted Publisher for `@fulcrumapp/fulcrum-js` with these values:
+
+- GitHub organization: `fulcrumapp`
+- Repository: `fulcrum-js`
+- Workflow filename: `publish-npmjs.yml`
+- Allowed action: `npm publish`
+
+This allows GitHub Actions to publish through OpenID Connect without an npm token. The repository must remain public, and every automated release tag must match the `package.json` version.
+
+### Manual Publishing
+
+Use these commands only for the initial release or a deliberate manual recovery:
 
 ```bash
 # Ensure all tests pass
@@ -1948,6 +1966,12 @@ yarn version --patch  # or --minor/--major
 # Build the project
 yarn build
 
+# Publish to public npm
+yarn publish:npm
+
 # Publish to GitHub Packages
-yarn publish
+yarn publish:github
+
+# Publish to both registries
+yarn publish:all
 ```

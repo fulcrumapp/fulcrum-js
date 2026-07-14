@@ -1,0 +1,79 @@
+name: Publish to npmjs.org
+
+on:
+  push:
+    tags:
+      - "v*"
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Tag to publish. If empty, uses the current ref.
+        required: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.event.release.tag_name || github.ref }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.14.0"
+          registry-url: "https://registry.npmjs.org/"
+
+      - name: Install package managers
+        run: |
+          npm install --global npm@11.5.1 yarn@1.22.22 --ignore-scripts
+          npm --version
+          yarn --version
+
+      - name: Verify tag version
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_TAG: ${{ inputs.tag }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if [[ "$EVENT_NAME" == "workflow_dispatch" && -z "$INPUT_TAG" ]]; then
+            exit 0
+          fi
+
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          TAG="${INPUT_TAG:-${RELEASE_TAG:-$REF_NAME}}"
+          TAG_VERSION="${TAG#v}"
+
+          if [[ "$PACKAGE_VERSION" != "$TAG_VERSION" ]]; then
+            echo "package.json version $PACKAGE_VERSION does not match tag $TAG."
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: YARN_IGNORE_SCRIPTS=1 yarn install --frozen-lockfile --ignore-scripts
+
+      - name: Build
+        run: YARN_IGNORE_SCRIPTS=1 yarn build
+
+      - name: Skip an existing npm version
+        id: existing-version
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          if npm view "$PACKAGE_NAME@$PACKAGE_VERSION" version --registry=https://registry.npmjs.org/ >/dev/null 2>&1; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish to npmjs.org
+        if: steps.existing-version.outputs.published != 'true'
+        run: npm publish --registry=https://registry.npmjs.org/ --@fulcrumapp:registry=https://registry.npmjs.org/ --provenance --access public
