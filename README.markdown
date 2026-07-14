@@ -1934,27 +1934,11 @@ Normal releases are automated after a merge to `main`:
 2. The `Publish to npmjs.org` GitHub Actions workflow runs for that tag, verifies that the tag and `package.json` versions match, builds the package, and publishes it to public npm with provenance.
 
 The public npm workflow skips a version that is already published, so it is safe for both tag and GitHub Release events to trigger it.
-
-### Initial npm Setup
-
-The first public release of this scoped package must be published manually by an npm account with permission to create `@fulcrumapp/fulcrum-js`:
-
-```bash
-yarn publish:npm
-```
-
-After the package exists on npm, configure an npm Trusted Publisher for `@fulcrumapp/fulcrum-js` with these values:
-
-- GitHub organization: `fulcrumapp`
-- Repository: `fulcrum-js`
-- Workflow filename: `publish-npmjs.yml`
-- Allowed action: `npm publish`
-
-This allows GitHub Actions to publish through OpenID Connect without an npm token. The repository must remain public, and every automated release tag must match the `package.json` version.
+When manually dispatching the workflow, provide the exact `vX.Y.Z` tag; publishing from a branch is rejected.
 
 ### Manual Publishing
 
-Use these commands only for the initial release or a deliberate manual recovery:
+Use these commands only for a deliberate manual recovery:
 
 ```bash
 # Ensure all tests pass
@@ -1972,6 +1956,6 @@ yarn publish:npm
 # Publish to GitHub Packages
 yarn publish:github
 
-# Publish to both registries
+# Alternatively, publish to both registries
 yarn publish:all
 ```

@@ -9,15 +9,20 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Tag to publish. If empty, uses the current ref.
-        required: false
+        description: Version tag to publish, for example v3.0.0.
+        required: true
 
 permissions:
   contents: read
   id-token: write
 
+concurrency:
+  group: publish-npmjs-${{ inputs.tag || github.event.release.tag_name || github.ref_name }}
+  cancel-in-progress: false
+
 jobs:
   publish:
+    environment: "CI: Deploy Public NPM Package"
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -44,14 +49,26 @@ jobs:
           INPUT_TAG: ${{ inputs.tag }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
           REF_NAME: ${{ github.ref_name }}
+          REF_TYPE: ${{ github.ref_type }}
         run: |
           set -euo pipefail
-          if [[ "$EVENT_NAME" == "workflow_dispatch" && -z "$INPUT_TAG" ]]; then
-            exit 0
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            TAG="$INPUT_TAG"
+          elif [[ "$EVENT_NAME" == "release" ]]; then
+            TAG="$RELEASE_TAG"
+          elif [[ "$REF_TYPE" == "tag" ]]; then
+            TAG="$REF_NAME"
+          else
+            echo "Publishing requires a version tag."
+            exit 1
+          fi
+
+          if [[ ! "$TAG" =~ ^v.+ ]]; then
+            echo "Publishing tag $TAG must start with v."
+            exit 1
           fi
 
           PACKAGE_VERSION=$(node -p "require('./package.json').version")
-          TAG="${INPUT_TAG:-${RELEASE_TAG:-$REF_NAME}}"
           TAG_VERSION="${TAG#v}"
 
           if [[ "$PACKAGE_VERSION" != "$TAG_VERSION" ]]; then
