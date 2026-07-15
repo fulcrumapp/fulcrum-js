@@ -1,0 +1,88 @@
+name: Publish to npmjs.org
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Version tag to publish, for example v3.0.0.
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: publish-npmjs-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    environment: "CI: Deploy Public NPM Package"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag && format('refs/tags/{0}', inputs.tag) || github.ref }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.14.0"
+          registry-url: "https://registry.npmjs.org/"
+
+      - name: Install package managers
+        run: |
+          npm install --global npm@11.5.1 yarn@1.22.22 --ignore-scripts
+          npm --version
+          yarn --version
+
+      - name: Verify tag version
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_TAG: ${{ inputs.tag }}
+          REF_NAME: ${{ github.ref_name }}
+          REF_TYPE: ${{ github.ref_type }}
+        run: |
+          set -euo pipefail
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            TAG="$INPUT_TAG"
+          elif [[ "$REF_TYPE" == "tag" ]]; then
+            TAG="$REF_NAME"
+          else
+            echo "Publishing requires a version tag."
+            exit 1
+          fi
+
+          if [[ ! "$TAG" =~ ^v.+ ]]; then
+            echo "Publishing tag $TAG must start with v."
+            exit 1
+          fi
+
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          TAG_VERSION="${TAG#v}"
+
+          if [[ "$PACKAGE_VERSION" != "$TAG_VERSION" ]]; then
+            echo "package.json version $PACKAGE_VERSION does not match tag $TAG."
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: YARN_IGNORE_SCRIPTS=1 yarn install --frozen-lockfile --ignore-scripts
+
+      - name: Skip an existing npm version
+        id: existing-version
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          if npm view "$PACKAGE_NAME@$PACKAGE_VERSION" version --registry=https://registry.npmjs.org/ >/dev/null 2>&1; then
+            echo "published=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish to npmjs.org
+        if: steps.existing-version.outputs.published != 'true'
+        run: npm publish --registry=https://registry.npmjs.org/ --@fulcrumapp:registry=https://registry.npmjs.org/ --provenance --access public
