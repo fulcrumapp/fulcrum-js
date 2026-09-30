@@ -242,12 +242,14 @@ yarn test:coverage
 #### Updating generated client
 
 ```bash
-# Regenerate from the latest OpenAPI spec, refresh generated dependencies,
-# and build both clients. The generated client currently requires Axios 1.18.1
-# and TypeScript 5.9 because newer versions report errors in generated source.
-# The wrapper build uses TypeScript 6 with its legacy module resolution
-# deprecation explicitly acknowledged.
-yarn generate:full
+# Download the latest OpenAPI spec and regenerate the client.
+yarn run download:spec
+yarn run generate
+
+# Pin generated-client dependencies before building. These versions compile
+# the generated source without changing the dependency manifests in this PR.
+yarn --cwd generated add axios@1.18.1 @types/node@26.1.1 typescript@5.9.3 --ignore-scripts
+yarn run build
 
 # 5. Check for breaking changes in generated API
 # Compare method signatures in generated/dist/api/default-api.d.ts

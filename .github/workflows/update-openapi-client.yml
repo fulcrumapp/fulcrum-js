@@ -42,7 +42,11 @@ jobs:
         run: YARN_IGNORE_SCRIPTS=1 yarn install --frozen-lockfile --ignore-scripts
 
       - name: Regenerate and build client
-        run: yarn generate:full
+        run: |
+          yarn run download:spec
+          yarn run generate
+          yarn --cwd generated add axios@1.18.1 @types/node@26.1.1 typescript@5.9.3 --ignore-scripts
+          yarn run build
 
       - name: Run tests and lint
         run: yarn test:coverage && yarn lint
@@ -59,25 +63,25 @@ jobs:
 
           cat > "$body_file" <<'EOF'
           ## What?
-          Regenerates the committed TypeScript client from the latest Fulcrum OpenAPI spec and refreshes its dependencies.
+          Regenerates the committed TypeScript client from the latest Fulcrum OpenAPI spec. Dependency manifest changes are handled separately.
 
           ## Why?
           Keep the generated client current with the API definition.
 
           ## Resolution
-          Generated the client and its dependency lockfile, then built and validated the wrapper.
+          Generated the API and model files, then built and validated the wrapper without including generated dependency manifest changes.
 
           ## Code Review
           Review generated API and model changes for compatibility with the wrapper.
 
           ## Testing
-          `yarn generate:full`, `yarn test:coverage`, and `yarn lint` passed.
+          `yarn run download:spec`, `yarn run generate`, `yarn run build`, `yarn test:coverage`, and `yarn lint` passed.
           EOF
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git switch -c "$branch"
-          git add generated/
+          git add generated/api/ generated/models/ generated/.openapi-generator/FILES generated/README.md
           if git diff --cached --quiet; then
             echo "No generated client changes."
             exit 0
