@@ -11,7 +11,7 @@ permissions:
 
 concurrency:
   group: update-openapi-client
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   update:
