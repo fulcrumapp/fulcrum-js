@@ -46,30 +46,28 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@openapitools/openapi-generator-cli": "^2.39.1",
+    "@openapitools/openapi-generator-cli": "^2.41.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^26.1.1",
-    "eslint": "^10.7.0",
-    "globals": "^17.7.0",
-    "jest": "^30.4.2",
-    "ts-jest": "^29.4.11",
-    "tsx": "^4.23.1",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.64.0"
+    "@types/node": "^26.6.3",
+    "eslint": "^10.11.0",
+    "globals": "^17.12.0",
+    "jest": "^30.5.2",
+    "ts-jest": "^29.4.14",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.0"
   },
   "dependencies": {
     "@opentelemetry/api": "^1.9.1",
-    "axios": "1.19.0"
+    "axios": "1.20.0"
   },
   "resolutions": {
-    "@istanbuljs/load-nyc-config/js-yaml": "3.15.0",
-    "glob/minimatch": "9.0.7",
-    "**/test-exclude/minimatch": "3.1.4",
+    "@istanbuljs/load-nyc-config/js-yaml": "3.15.2",
     "anymatch/picomatch": "2.3.2",
-    "jest-haste-map/picomatch": "4.0.4",
-    "jest-message-util/picomatch": "4.0.4",
-    "jest-util/picomatch": "4.0.4",
-    "tinyglobby/picomatch": "4.0.4"
+    "jest-haste-map/picomatch": "4.0.7",
+    "jest-message-util/picomatch": "4.0.7",
+    "jest-util/picomatch": "4.0.7",
+    "tinyglobby/picomatch": "4.0.7"
   },
   "packageManager": "yarn@1.22.22"
 }
