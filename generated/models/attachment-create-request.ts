@@ -15,9 +15,24 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import type { AttachmentCreateRequestAttachment } from './attachment-create-request-attachment.js';
+import type { AttachmentCreateRequestOwnersInner } from './attachment-create-request-owners-inner.js';
 
 export interface AttachmentCreateRequest {
-    'attachment': AttachmentCreateRequestAttachment;
+    /**
+     * Array of owner objects for the attachment
+     */
+    'owners': Array<AttachmentCreateRequestOwnersInner>;
+    /**
+     * Name of the attachment
+     */
+    'name'?: string;
+    /**
+     * Size of the file in bytes
+     */
+    'file_size'?: number;
+    /**
+     * Optional metadata for the attachment
+     */
+    'metadata'?: { [key: string]: any; };
 }
 

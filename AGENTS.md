@@ -242,25 +242,12 @@ yarn test:coverage
 #### Updating generated client
 
 ```bash
-# 1. Download latest OpenAPI spec
-yarn download:spec
-
-# 2. Regenerate client
-yarn generate
-
-# 3. Update dependencies in generated/package.json to current versions
-# This is the ONE thing you ARE allowed to edit in generated/
-# Use npm-check-updates to find and update to latest versions:
-cd generated
-yarn dlx npm-check-updates
-# Review the proposed updates, then apply them:
-yarn dlx npm-check-updates -u
-# Or manually update specific packages:
-yarn add axios@latest @types/node@latest typescript@latest
-cd ..
-
-# 4. Build generated client
-yarn build:generated
+# Regenerate from the latest OpenAPI spec, refresh generated dependencies,
+# and build both clients. The generated client currently requires Axios 1.18.1
+# and TypeScript 5.9 because newer versions report errors in generated source.
+# The wrapper build uses TypeScript 6 with its legacy module resolution
+# deprecation explicitly acknowledged.
+yarn generate:full
 
 # 5. Check for breaking changes in generated API
 # Compare method signatures in generated/dist/api/default-api.d.ts

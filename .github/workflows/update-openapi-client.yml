@@ -1,0 +1,73 @@
+name: Update OpenAPI client
+
+on:
+  schedule:
+    - cron: "0 8 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: update-openapi-client
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.14.0"
+          cache: yarn
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Yarn
+        run: npm install --global yarn@1.22.22 --ignore-scripts
+
+      - name: Install root dependencies
+        run: YARN_IGNORE_SCRIPTS=1 yarn install --frozen-lockfile --ignore-scripts
+
+      - name: Regenerate and build client
+        run: yarn generate:full
+
+      - name: Run tests and lint
+        run: yarn test:coverage && yarn lint
+
+      - name: Create or update pull request
+        uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7
+        with:
+          branch: automation/update-openapi-client
+          base: main
+          delete-branch: true
+          add-paths: generated/**
+          commit-message: "chore: refresh generated OpenAPI client"
+          title: "chore: refresh generated OpenAPI client"
+          body: |
+            ## What?
+            Regenerates the committed TypeScript client from the latest Fulcrum OpenAPI spec and refreshes its dependencies.
+
+            ## Why?
+            Keep the generated client current with the API definition.
+
+            ## Resolution
+            Generated the client and its dependency lockfile, then built and validated the wrapper.
+
+            ## Code Review
+            Review generated API and model changes for compatibility with the wrapper.
+
+            ## Testing
+            `yarn generate:full`, `yarn test:coverage`, and `yarn lint` passed.
