@@ -75,6 +75,12 @@ import type { FormLocationFieldElement } from './form-location-field-element.js'
 import type { FormPhotoFieldElement } from './form-photo-field-element.js';
 // May contain unused imports in some cases
 // @ts-ignore
+import type { FormRecordLinkCondition } from './form-record-link-condition.js';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { FormRecordLinkDefault } from './form-record-link-default.js';
+// May contain unused imports in some cases
+// @ts-ignore
 import type { FormRecordLinkFieldElement } from './form-record-link-field-element.js';
 // May contain unused imports in some cases
 // @ts-ignore

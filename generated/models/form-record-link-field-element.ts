@@ -19,10 +19,16 @@ import type { FormBaseElement } from './form-base-element.js';
 // May contain unused imports in some cases
 // @ts-ignore
 import type { FormElementCondition } from './form-element-condition.js';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { FormRecordLinkCondition } from './form-record-link-condition.js';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { FormRecordLinkDefault } from './form-record-link-default.js';
 
 /**
  * @type FormRecordLinkFieldElement
- * A field that links to records in another Fulcrum form.
+ * A field linking records from another form. form_id is required and must identify an existing form by resource id. At least one of allow_existing_records or allow_creating_records must be true; the API does not enable either when omitted. This shared schema permits unknown element properties on input; Rails accepts then drops them, including linked_form_id and allow_empty_records. Responses serialize only declared properties. Saving without a link is controlled by the common required property. The account plan must have record links enabled.
  */
 export type FormRecordLinkFieldElement = FormBaseElement;
 

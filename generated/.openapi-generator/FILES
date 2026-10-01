@@ -68,6 +68,9 @@ docs/FormHyperlinkFieldElement.md
 docs/FormLabelElement.md
 docs/FormLocationFieldElement.md
 docs/FormPhotoFieldElement.md
+docs/FormRecordLinkCondition.md
+docs/FormRecordLinkConditionValue.md
+docs/FormRecordLinkDefault.md
 docs/FormRecordLinkFieldElement.md
 docs/FormRepeatableElement.md
 docs/FormRequest.md
@@ -224,6 +227,9 @@ models/form-hyperlink-field-element.ts
 models/form-label-element.ts
 models/form-location-field-element.ts
 models/form-photo-field-element.ts
+models/form-record-link-condition-value.ts
+models/form-record-link-condition.ts
+models/form-record-link-default.ts
 models/form-record-link-field-element.ts
 models/form-repeatable-element.ts
 models/form-request.ts
