@@ -16,6 +16,9 @@
 // May contain unused imports in some cases
 // @ts-ignore
 import type { Geometry } from './geometry.js';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { GpsDeviceCaptureRequest } from './gps-device-capture-request.js';
 
 export interface RecordPatchRequestRecord {
     /**
@@ -30,6 +33,10 @@ export interface RecordPatchRequestRecord {
      * Optional GeoJSON geometry (Point, LineString, Polygon, MultiLineString, or MultiPolygon). If provided, latitude/longitude will be updated to reflect this geometry.
      */
     'geometry'?: Geometry;
+    /**
+     * Flexible GPS device metadata captured with the record. Set null to clear metadata.
+     */
+    'gps_device_capture'?: GpsDeviceCaptureRequest;
     /**
      * Field values keyed by field key
      */

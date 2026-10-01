@@ -58,7 +58,13 @@ import type { CreateAttachment200Response } from '../models/index.js';
 // @ts-ignore
 import type { CreateGroup201Response } from '../models/index.js';
 // @ts-ignore
+import type { CreateReportTemplate422Response } from '../models/index.js';
+// @ts-ignore
 import type { FormRequest } from '../models/index.js';
+// @ts-ignore
+import type { FormResponse } from '../models/index.js';
+// @ts-ignore
+import type { FormValidationErrorResponse } from '../models/index.js';
 // @ts-ignore
 import type { GetAllAttachments401Response } from '../models/index.js';
 // @ts-ignore
@@ -68,7 +74,11 @@ import type { GroupPermissionChangeRequest } from '../models/index.js';
 // @ts-ignore
 import type { GroupUpdateRequest } from '../models/index.js';
 // @ts-ignore
+import type { LayerListResponse } from '../models/index.js';
+// @ts-ignore
 import type { LayerRequest } from '../models/index.js';
+// @ts-ignore
+import type { LayerResponse } from '../models/index.js';
 // @ts-ignore
 import type { MembershipCreateRequest } from '../models/index.js';
 // @ts-ignore
@@ -99,6 +109,10 @@ import type { ReportRequest } from '../models/index.js';
 import type { ReportResponse } from '../models/index.js';
 // @ts-ignore
 import type { ReportTemplateRequest } from '../models/index.js';
+// @ts-ignore
+import type { ReportTemplateResponse } from '../models/index.js';
+// @ts-ignore
+import type { ReportTemplatesResponse } from '../models/index.js';
 // @ts-ignore
 import type { SignaturesResponse } from '../models/index.js';
 // @ts-ignore
@@ -7432,7 +7446,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createReportTemplate(reportTemplateRequest?: ReportTemplateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async createReportTemplate(reportTemplateRequest?: ReportTemplateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReportTemplateResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createReportTemplate(reportTemplateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.createReportTemplate']?.[localVarOperationServerIndex]?.url;
@@ -7502,7 +7516,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteReportTemplate(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async deleteReportTemplate(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReportTemplateResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteReportTemplate(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.deleteReportTemplate']?.[localVarOperationServerIndex]?.url;
@@ -7545,7 +7559,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async formsCreate(accept?: string, contentType?: string, formRequest?: FormRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async formsCreate(accept?: string, contentType?: string, formRequest?: FormRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FormResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.formsCreate(accept, contentType, formRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.formsCreate']?.[localVarOperationServerIndex]?.url;
@@ -7625,7 +7639,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async formsUpdate(formId: string, accept?: string, contentType?: string, formRequest?: FormRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async formsUpdate(formId: string, accept?: string, contentType?: string, formRequest?: FormRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FormResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.formsUpdate(formId, accept, contentType, formRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.formsUpdate']?.[localVarOperationServerIndex]?.url;
@@ -7706,7 +7720,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllReportTemplates(page?: number, perPage?: number, formId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async getAllReportTemplates(page?: number, perPage?: number, formId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReportTemplatesResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAllReportTemplates(page, perPage, formId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.getAllReportTemplates']?.[localVarOperationServerIndex]?.url;
@@ -7795,7 +7809,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSingleReportTemplate(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async getSingleReportTemplate(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReportTemplateResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSingleReportTemplate(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.getSingleReportTemplate']?.[localVarOperationServerIndex]?.url;
@@ -7824,7 +7838,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async layersCreate(accept?: string, contentType?: string, layerRequest?: LayerRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async layersCreate(accept?: string, contentType?: string, layerRequest?: LayerRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LayerResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.layersCreate(accept, contentType, layerRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.layersCreate']?.[localVarOperationServerIndex]?.url;
@@ -7853,7 +7867,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async layersGetAll(page?: number, perPage?: number, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async layersGetAll(page?: number, perPage?: number, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LayerListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.layersGetAll(page, perPage, accept, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.layersGetAll']?.[localVarOperationServerIndex]?.url;
@@ -7867,7 +7881,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async layersGetSingle(layerId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async layersGetSingle(layerId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LayerResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.layersGetSingle(layerId, accept, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.layersGetSingle']?.[localVarOperationServerIndex]?.url;
@@ -7883,7 +7897,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async layersUpdate(layerId: string, accept?: string, contentType?: string, layerRequest?: LayerRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async layersUpdate(layerId: string, accept?: string, contentType?: string, layerRequest?: LayerRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LayerResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.layersUpdate(layerId, accept, contentType, layerRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.layersUpdate']?.[localVarOperationServerIndex]?.url;
@@ -8621,7 +8635,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateReportTemplate(id: string, reportTemplateRequest?: ReportTemplateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async updateReportTemplate(id: string, reportTemplateRequest?: ReportTemplateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReportTemplateResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateReportTemplate(id, reportTemplateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.updateReportTemplate']?.[localVarOperationServerIndex]?.url;
@@ -9437,7 +9451,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createReportTemplate(requestParameters: DefaultApiCreateReportTemplateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        createReportTemplate(requestParameters: DefaultApiCreateReportTemplateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplateResponse> {
             return localVarFp.createReportTemplate(requestParameters.reportTemplateRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9487,7 +9501,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteReportTemplate(requestParameters: DefaultApiDeleteReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        deleteReportTemplate(requestParameters: DefaultApiDeleteReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplateResponse> {
             return localVarFp.deleteReportTemplate(requestParameters.id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9517,7 +9531,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        formsCreate(requestParameters: DefaultApiFormsCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        formsCreate(requestParameters: DefaultApiFormsCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<FormResponse> {
             return localVarFp.formsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.formRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9567,7 +9581,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        formsUpdate(requestParameters: DefaultApiFormsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        formsUpdate(requestParameters: DefaultApiFormsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<FormResponse> {
             return localVarFp.formsUpdate(requestParameters.formId, requestParameters.accept, requestParameters.contentType, requestParameters.formRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9617,7 +9631,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllReportTemplates(requestParameters: DefaultApiGetAllReportTemplatesRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        getAllReportTemplates(requestParameters: DefaultApiGetAllReportTemplatesRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplatesResponse> {
             return localVarFp.getAllReportTemplates(requestParameters.page, requestParameters.perPage, requestParameters.formId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9677,7 +9691,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSingleReportTemplate(requestParameters: DefaultApiGetSingleReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        getSingleReportTemplate(requestParameters: DefaultApiGetSingleReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplateResponse> {
             return localVarFp.getSingleReportTemplate(requestParameters.id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9697,7 +9711,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        layersCreate(requestParameters: DefaultApiLayersCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        layersCreate(requestParameters: DefaultApiLayersCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<LayerResponse> {
             return localVarFp.layersCreate(requestParameters.accept, requestParameters.contentType, requestParameters.layerRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9717,7 +9731,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        layersGetAll(requestParameters: DefaultApiLayersGetAllRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        layersGetAll(requestParameters: DefaultApiLayersGetAllRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<LayerListResponse> {
             return localVarFp.layersGetAll(requestParameters.page, requestParameters.perPage, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9727,7 +9741,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        layersGetSingle(requestParameters: DefaultApiLayersGetSingleRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        layersGetSingle(requestParameters: DefaultApiLayersGetSingleRequest, options?: RawAxiosRequestConfig): AxiosPromise<LayerResponse> {
             return localVarFp.layersGetSingle(requestParameters.layerId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9737,7 +9751,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        layersUpdate(requestParameters: DefaultApiLayersUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        layersUpdate(requestParameters: DefaultApiLayersUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<LayerResponse> {
             return localVarFp.layersUpdate(requestParameters.layerId, requestParameters.accept, requestParameters.contentType, requestParameters.layerRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -10217,7 +10231,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateReportTemplate(requestParameters: DefaultApiUpdateReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        updateReportTemplate(requestParameters: DefaultApiUpdateReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplateResponse> {
             return localVarFp.updateReportTemplate(requestParameters.id, requestParameters.reportTemplateRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -10874,7 +10888,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createReportTemplate(requestParameters?: DefaultApiCreateReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    createReportTemplate(requestParameters?: DefaultApiCreateReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplateResponse>;
 
     /**
      * 
@@ -10919,7 +10933,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteReportTemplate(requestParameters: DefaultApiDeleteReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    deleteReportTemplate(requestParameters: DefaultApiDeleteReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplateResponse>;
 
     /**
      * 
@@ -10946,7 +10960,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    formsCreate(requestParameters?: DefaultApiFormsCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    formsCreate(requestParameters?: DefaultApiFormsCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<FormResponse>;
 
     /**
      * 
@@ -10991,7 +11005,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    formsUpdate(requestParameters: DefaultApiFormsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    formsUpdate(requestParameters: DefaultApiFormsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<FormResponse>;
 
     /**
      * Retrieve a list of attachments.
@@ -11036,7 +11050,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getAllReportTemplates(requestParameters?: DefaultApiGetAllReportTemplatesRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    getAllReportTemplates(requestParameters?: DefaultApiGetAllReportTemplatesRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplatesResponse>;
 
     /**
      * 
@@ -11090,7 +11104,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getSingleReportTemplate(requestParameters: DefaultApiGetSingleReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    getSingleReportTemplate(requestParameters: DefaultApiGetSingleReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplateResponse>;
 
     /**
      * 
@@ -11108,7 +11122,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    layersCreate(requestParameters?: DefaultApiLayersCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    layersCreate(requestParameters?: DefaultApiLayersCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<LayerResponse>;
 
     /**
      * 
@@ -11126,7 +11140,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    layersGetAll(requestParameters?: DefaultApiLayersGetAllRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    layersGetAll(requestParameters?: DefaultApiLayersGetAllRequest, options?: RawAxiosRequestConfig): AxiosPromise<LayerListResponse>;
 
     /**
      * 
@@ -11135,7 +11149,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    layersGetSingle(requestParameters: DefaultApiLayersGetSingleRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    layersGetSingle(requestParameters: DefaultApiLayersGetSingleRequest, options?: RawAxiosRequestConfig): AxiosPromise<LayerResponse>;
 
     /**
      * 
@@ -11144,7 +11158,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    layersUpdate(requestParameters: DefaultApiLayersUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    layersUpdate(requestParameters: DefaultApiLayersUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<LayerResponse>;
 
     /**
      * Add or remove membership permissions from layers, forms, or projects.
@@ -11576,7 +11590,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    updateReportTemplate(requestParameters: DefaultApiUpdateReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    updateReportTemplate(requestParameters: DefaultApiUpdateReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplateResponse>;
 
     /**
      * 

@@ -242,25 +242,14 @@ yarn test:coverage
 #### Updating generated client
 
 ```bash
-# 1. Download latest OpenAPI spec
-yarn download:spec
+# Download the latest OpenAPI spec and regenerate the client.
+yarn run download:spec
+yarn run generate
 
-# 2. Regenerate client
-yarn generate
-
-# 3. Update dependencies in generated/package.json to current versions
-# This is the ONE thing you ARE allowed to edit in generated/
-# Use npm-check-updates to find and update to latest versions:
-cd generated
-yarn dlx npm-check-updates
-# Review the proposed updates, then apply them:
-yarn dlx npm-check-updates -u
-# Or manually update specific packages:
-yarn add axios@latest @types/node@latest typescript@latest
-cd ..
-
-# 4. Build generated client
-yarn build:generated
+# Generation rewrites the generated package manifests. Keep dependency updates
+# in their separate PR and build against the committed manifests and lockfile.
+git restore -- generated/package.json generated/yarn.lock
+yarn run build
 
 # 5. Check for breaking changes in generated API
 # Compare method signatures in generated/dist/api/default-api.d.ts
