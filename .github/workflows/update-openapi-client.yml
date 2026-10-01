@@ -69,10 +69,10 @@ jobs:
           Keep the generated client current with the API definition.
 
           ## Resolution
-          Generated the API and model files, then built and validated the wrapper without including generated dependency manifest changes.
+          Regenerated and staged all generated client outputs, then built and validated the wrapper against committed dependency manifests.
 
           ## Code Review
-          Review generated API and model changes for compatibility with the wrapper.
+          Review generated API, model, and other generated client changes for compatibility with the wrapper.
 
           ## Testing
           `yarn run download:spec`, `yarn run generate`, `yarn run build`, `yarn test:coverage`, and `yarn lint` passed.
@@ -81,7 +81,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git switch -c "$branch"
-          git add generated/api/ generated/models/ generated/.openapi-generator/FILES generated/README.md
+          git add generated/
           if git diff --cached --quiet; then
             echo "No generated client changes."
             exit 0

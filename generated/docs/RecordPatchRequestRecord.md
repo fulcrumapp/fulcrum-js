@@ -1,0 +1,34 @@
+# RecordPatchRequestRecord
+
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**latitude** | **number** | Latitude coordinate | [optional] [default to undefined]
+**longitude** | **number** | Longitude coordinate | [optional] [default to undefined]
+**geometry** | [**Geometry**](Geometry.md) | Optional GeoJSON geometry (Point, LineString, Polygon, MultiLineString, or MultiPolygon). If provided, latitude/longitude will be updated to reflect this geometry. | [optional] [default to undefined]
+**gps_device_capture** | [**GpsDeviceCaptureRequest**](GpsDeviceCaptureRequest.md) | Flexible GPS device metadata captured with the record. Set null to clear metadata. | [optional] [default to undefined]
+**form_values** | **{ [key: string]: any; }** | Field values keyed by field key | [optional] [default to undefined]
+**status** | **string** | Status of the record | [optional] [default to undefined]
+**project_id** | **string** | ID of the project | [optional] [default to undefined]
+**assigned_to_id** | **string** | ID of user assigned to this record | [optional] [default to undefined]
+
+## Example
+
+```typescript
+import { RecordPatchRequestRecord } from 'fulcrum-generated';
+
+const instance: RecordPatchRequestRecord = {
+    latitude,
+    longitude,
+    geometry,
+    gps_device_capture,
+    form_values,
+    status,
+    project_id,
+    assigned_to_id,
+};
+```
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
