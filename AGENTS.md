@@ -246,9 +246,9 @@ yarn test:coverage
 yarn run download:spec
 yarn run generate
 
-# Pin generated-client dependencies before building. These versions compile
-# the generated source without changing the dependency manifests in this PR.
-yarn --cwd generated add axios@1.18.1 @types/node@26.1.1 typescript@5.9.3 --ignore-scripts
+# Generation rewrites the generated package manifests. Keep dependency updates
+# in their separate PR and build against the committed manifests and lockfile.
+git restore -- generated/package.json generated/yarn.lock
 yarn run build
 
 # 5. Check for breaking changes in generated API

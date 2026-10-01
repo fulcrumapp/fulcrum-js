@@ -45,7 +45,7 @@ jobs:
         run: |
           yarn run download:spec
           yarn run generate
-          yarn --cwd generated add axios@1.18.1 @types/node@26.1.1 typescript@5.9.3 --ignore-scripts
+          git restore -- generated/package.json generated/yarn.lock
           yarn run build
 
       - name: Run tests and lint
