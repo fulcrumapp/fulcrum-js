@@ -24,10 +24,10 @@
     "prepare": "yarn run build"
   },
   "dependencies": {
-    "axios": "1.20.0"
+    "axios": "1.18.1"
   },
   "devDependencies": {
-    "@types/node": "26.1.1",
-    "typescript": "^5.9.3"
+    "@types/node": "^26.6.3",
+    "typescript": "5.9.3"
   }
 }
