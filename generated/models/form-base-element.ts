@@ -53,6 +53,9 @@ export interface FormBaseElement {
      * Whether the field is hidden by default
      */
     'hidden'?: boolean;
+    /**
+     * Default value pre-populated when a new record is created. Type depends on the element type.
+     */
     'default_value'?: any;
     /**
      * Whether ALL or ANY visible conditions must be met. Null means no conditions.

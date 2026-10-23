@@ -56,6 +56,9 @@ export interface FormClassificationFieldElement {
      * Whether the field is hidden by default
      */
     'hidden'?: boolean;
+    /**
+     * Default value pre-populated when a new record is created. Type depends on the element type.
+     */
     'default_value'?: any;
     /**
      * Whether ALL or ANY visible conditions must be met. Null means no conditions.
@@ -81,6 +84,9 @@ export interface FormClassificationFieldElement {
      * ID of a shared Classification Set resource
      */
     'classification_set_id'?: string | null;
+    /**
+     * Inline classification set definition (alternative to classification_set_id)
+     */
     'classification_set_schema'?: FormClassificationSetSchema | null;
 }
 

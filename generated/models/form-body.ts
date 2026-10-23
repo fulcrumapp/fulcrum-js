@@ -36,6 +36,9 @@ export interface FormBody {
      * Ordered list of form elements (fields, sections, repeatables, labels, etc.)
      */
     'elements': Array<FormElement>;
+    /**
+     * Configuration for the built-in status field. For new forms, omit this property to use the default status field settings. For updates, omit this property to preserve the form\'s existing status field configuration. Set it to null to clear the status field.
+     */
     'status_field'?: FormStatusField | null;
     /**
      * Keys of the fields whose values are combined to form the record title
