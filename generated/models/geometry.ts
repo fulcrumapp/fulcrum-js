@@ -19,6 +19,9 @@ export interface Geometry {
      * GeoJSON geometry type
      */
     'type': GeometryTypeEnum;
+    /**
+     * Coordinates for the geometry. Format varies by type: Point uses [longitude, latitude], LineString uses array of positions, Polygon uses array of linear rings (first is exterior, rest are holes), Multi* types use arrays of their respective coordinate structures.
+     */
     'coordinates': any;
 }
 

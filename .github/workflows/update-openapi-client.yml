@@ -1,0 +1,104 @@
+name: Update OpenAPI client
+
+on:
+  schedule:
+    - cron: "0 8 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: update-openapi-client
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: gha-runner-set-iops
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.14.0"
+          cache: yarn
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Yarn
+        run: npm install --global yarn@1.22.22 --ignore-scripts
+
+      - name: Install root dependencies
+        run: YARN_IGNORE_SCRIPTS=1 yarn install --frozen-lockfile --ignore-scripts
+
+      - name: Regenerate and build client
+        run: |
+          yarn run download:spec
+          yarn run generate
+          git restore -- generated/package.json generated/yarn.lock
+          yarn run build
+
+      - name: Run tests and lint
+        run: yarn test:coverage && yarn lint
+
+      - name: Create or update pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          branch="automation/update-openapi-client"
+          body_file="$(mktemp)"
+          trap 'rm -f "$body_file"' EXIT
+
+          cat > "$body_file" <<'EOF'
+          ## What?
+          Regenerates the committed TypeScript client from the latest Fulcrum OpenAPI spec. Dependency manifest changes are handled separately.
+
+          ## Why?
+          Keep the generated client current with the API definition.
+
+          ## Resolution
+          Regenerated and staged all generated client outputs, then built and validated the wrapper against committed dependency manifests.
+
+          ## Code Review
+          Review generated API, model, and other generated client changes for compatibility with the wrapper.
+
+          ## Testing
+          `yarn run download:spec`, `yarn run generate`, `yarn run build`, `yarn test:coverage`, and `yarn lint` passed.
+          EOF
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add generated/
+          if git diff --cached --quiet; then
+            echo "No generated client changes."
+            exit 0
+          fi
+
+          git commit -m "chore: refresh generated OpenAPI client"
+          git push --force origin "$branch"
+
+          pull_request="$(gh pr list --state open --head "$branch" --base main --json number --jq '.[0].number // empty')"
+          if [[ -n "$pull_request" ]]; then
+            gh pr edit "$pull_request" \
+              --title "chore: refresh generated OpenAPI client" \
+              --body-file "$body_file"
+          else
+            gh pr create \
+              --base main \
+              --head "$branch" \
+              --title "chore: refresh generated OpenAPI client" \
+              --body-file "$body_file"
+          fi
