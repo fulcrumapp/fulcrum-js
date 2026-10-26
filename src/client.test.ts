@@ -468,7 +468,7 @@ describe('FulcrumClient', () => {
       });
 
       it('should call create method', async () => {
-        const payload = { form: { name: 'Test' } };
+        const payload = { form: { name: 'Test', elements: [] } };
         await client.forms.create(payload);
         expect(client.client.formsCreate).toHaveBeenCalledWith({
           accept: 'application/json',
@@ -478,7 +478,7 @@ describe('FulcrumClient', () => {
       });
 
       it('should call update method', async () => {
-        const payload = { form: { name: 'Updated' } };
+        const payload = { form: { name: 'Updated', elements: [] } };
         await client.forms.update('form-123', payload);
         expect(client.client.formsUpdate).toHaveBeenCalledWith({
           accept: 'application/json',

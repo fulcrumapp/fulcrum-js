@@ -58,7 +58,13 @@ import type { CreateAttachment200Response } from '../models/index.js';
 // @ts-ignore
 import type { CreateGroup201Response } from '../models/index.js';
 // @ts-ignore
+import type { CreateReportTemplate422Response } from '../models/index.js';
+// @ts-ignore
 import type { FormRequest } from '../models/index.js';
+// @ts-ignore
+import type { FormResponse } from '../models/index.js';
+// @ts-ignore
+import type { FormValidationErrorResponse } from '../models/index.js';
 // @ts-ignore
 import type { GetAllAttachments401Response } from '../models/index.js';
 // @ts-ignore
@@ -68,7 +74,11 @@ import type { GroupPermissionChangeRequest } from '../models/index.js';
 // @ts-ignore
 import type { GroupUpdateRequest } from '../models/index.js';
 // @ts-ignore
+import type { LayerListResponse } from '../models/index.js';
+// @ts-ignore
 import type { LayerRequest } from '../models/index.js';
+// @ts-ignore
+import type { LayerResponse } from '../models/index.js';
 // @ts-ignore
 import type { MembershipCreateRequest } from '../models/index.js';
 // @ts-ignore
@@ -99,6 +109,10 @@ import type { ReportRequest } from '../models/index.js';
 import type { ReportResponse } from '../models/index.js';
 // @ts-ignore
 import type { ReportTemplateRequest } from '../models/index.js';
+// @ts-ignore
+import type { ReportTemplateResponse } from '../models/index.js';
+// @ts-ignore
+import type { ReportTemplatesResponse } from '../models/index.js';
 // @ts-ignore
 import type { SignaturesResponse } from '../models/index.js';
 // @ts-ignore
@@ -148,7 +162,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'batchId' is not null or undefined
             assertParamExists('addBatchOperations', 'batchId', batchId)
             const localVarPath = `/v2/batch/{batch_id}/operations.json`
-                .replace(`{${"batch_id"}}`, encodeURIComponent(String(batchId)));
+                .replace('{batch_id}', encodeURIComponent(String(batchId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -417,7 +431,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'audioId' is not null or undefined
             assertParamExists('audioGetOriginalFile', 'audioId', audioId)
             const localVarPath = `/v2/audio/{audio_id}.mp4`
-                .replace(`{${"audio_id"}}`, encodeURIComponent(String(audioId)));
+                .replace('{audio_id}', encodeURIComponent(String(audioId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -455,7 +469,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'audioId' is not null or undefined
             assertParamExists('audioGetSingleMetadata', 'audioId', audioId)
             const localVarPath = `/v2/audio/{audio_id}.json`
-                .replace(`{${"audio_id"}}`, encodeURIComponent(String(audioId)));
+                .replace('{audio_id}', encodeURIComponent(String(audioId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -497,7 +511,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'audioId' is not null or undefined
             assertParamExists('audioGetSingleTrackGeojson', 'audioId', audioId)
             const localVarPath = `/v2/audio/{audio_id}/track.geojson`
-                .replace(`{${"audio_id"}}`, encodeURIComponent(String(audioId)));
+                .replace('{audio_id}', encodeURIComponent(String(audioId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -542,7 +556,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'audioId' is not null or undefined
             assertParamExists('audioGetSingleTrackGpx', 'audioId', audioId)
             const localVarPath = `/v2/audio/{audio_id}/track.gpx`
-                .replace(`{${"audio_id"}}`, encodeURIComponent(String(audioId)));
+                .replace('{audio_id}', encodeURIComponent(String(audioId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -583,7 +597,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'audioId' is not null or undefined
             assertParamExists('audioGetSingleTrackJson', 'audioId', audioId)
             const localVarPath = `/v2/audio/{audio_id}/track.json`
-                .replace(`{${"audio_id"}}`, encodeURIComponent(String(audioId)));
+                .replace('{audio_id}', encodeURIComponent(String(audioId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -624,7 +638,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'audioId' is not null or undefined
             assertParamExists('audioGetSingleTrackKml', 'audioId', audioId)
             const localVarPath = `/v2/audio/{audio_id}/track.kml`
-                .replace(`{${"audio_id"}}`, encodeURIComponent(String(audioId)));
+                .replace('{audio_id}', encodeURIComponent(String(audioId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -787,7 +801,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'auditLogId' is not null or undefined
             assertParamExists('auditLogsGetSingle', 'auditLogId', auditLogId)
             const localVarPath = `/v2/audit_logs/{audit_log_id}.json`
-                .replace(`{${"audit_log_id"}}`, encodeURIComponent(String(auditLogId)));
+                .replace('{audit_log_id}', encodeURIComponent(String(auditLogId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -872,7 +886,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'authorizationId' is not null or undefined
             assertParamExists('authorizationsDelete', 'authorizationId', authorizationId)
             const localVarPath = `/v2/authorizations/{authorization_id}.json`
-                .replace(`{${"authorization_id"}}`, encodeURIComponent(String(authorizationId)));
+                .replace('{authorization_id}', encodeURIComponent(String(authorizationId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -960,7 +974,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'authorizationId' is not null or undefined
             assertParamExists('authorizationsGetSingle', 'authorizationId', authorizationId)
             const localVarPath = `/v2/authorizations/{authorization_id}.json`
-                .replace(`{${"authorization_id"}}`, encodeURIComponent(String(authorizationId)));
+                .replace('{authorization_id}', encodeURIComponent(String(authorizationId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1003,7 +1017,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'authorizationId' is not null or undefined
             assertParamExists('authorizationsUpdate', 'authorizationId', authorizationId)
             const localVarPath = `/v2/authorizations/{authorization_id}.json`
-                .replace(`{${"authorization_id"}}`, encodeURIComponent(String(authorizationId)));
+                .replace('{authorization_id}', encodeURIComponent(String(authorizationId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1050,7 +1064,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'changesetId' is not null or undefined
             assertParamExists('changesetsClose', 'changesetId', changesetId)
             const localVarPath = `/v2/changesets/{changeset_id}/close.json`
-                .replace(`{${"changeset_id"}}`, encodeURIComponent(String(changesetId)));
+                .replace('{changeset_id}', encodeURIComponent(String(changesetId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1185,7 +1199,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'changesetId' is not null or undefined
             assertParamExists('changesetsGetSingle', 'changesetId', changesetId)
             const localVarPath = `/v2/changesets/{changeset_id}.json`
-                .replace(`{${"changeset_id"}}`, encodeURIComponent(String(changesetId)));
+                .replace('{changeset_id}', encodeURIComponent(String(changesetId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1228,7 +1242,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'changesetId' is not null or undefined
             assertParamExists('changesetsUpdate', 'changesetId', changesetId)
             const localVarPath = `/v2/changesets/{changeset_id}.json`
-                .replace(`{${"changeset_id"}}`, encodeURIComponent(String(changesetId)));
+                .replace('{changeset_id}', encodeURIComponent(String(changesetId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1318,7 +1332,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'choiceListId' is not null or undefined
             assertParamExists('choiceListsDelete', 'choiceListId', choiceListId)
             const localVarPath = `/v2/choice_lists/{choice_list_id}.json`
-                .replace(`{${"choice_list_id"}}`, encodeURIComponent(String(choiceListId)));
+                .replace('{choice_list_id}', encodeURIComponent(String(choiceListId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1406,7 +1420,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'choiceListId' is not null or undefined
             assertParamExists('choiceListsGetSingle', 'choiceListId', choiceListId)
             const localVarPath = `/v2/choice_lists/{choice_list_id}.json`
-                .replace(`{${"choice_list_id"}}`, encodeURIComponent(String(choiceListId)));
+                .replace('{choice_list_id}', encodeURIComponent(String(choiceListId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1449,7 +1463,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'choiceListId' is not null or undefined
             assertParamExists('choiceListsUpdate', 'choiceListId', choiceListId)
             const localVarPath = `/v2/choice_lists/{choice_list_id}.json`
-                .replace(`{${"choice_list_id"}}`, encodeURIComponent(String(choiceListId)));
+                .replace('{choice_list_id}', encodeURIComponent(String(choiceListId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1539,7 +1553,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'classificationSetId' is not null or undefined
             assertParamExists('classificationSetsDelete', 'classificationSetId', classificationSetId)
             const localVarPath = `/v2/classification_sets/{classification_set_id}.json`
-                .replace(`{${"classification_set_id"}}`, encodeURIComponent(String(classificationSetId)));
+                .replace('{classification_set_id}', encodeURIComponent(String(classificationSetId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1632,7 +1646,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'classificationSetId' is not null or undefined
             assertParamExists('classificationSetsGetSingle', 'classificationSetId', classificationSetId)
             const localVarPath = `/v2/classification_sets/{classification_set_id}.json`
-                .replace(`{${"classification_set_id"}}`, encodeURIComponent(String(classificationSetId)));
+                .replace('{classification_set_id}', encodeURIComponent(String(classificationSetId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1675,7 +1689,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'classificationSetId' is not null or undefined
             assertParamExists('classificationSetsUpdate', 'classificationSetId', classificationSetId)
             const localVarPath = `/v2/classification_sets/{classification_set_id}.json`
-                .replace(`{${"classification_set_id"}}`, encodeURIComponent(String(classificationSetId)));
+                .replace('{classification_set_id}', encodeURIComponent(String(classificationSetId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2007,7 +2021,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'attachmentId' is not null or undefined
             assertParamExists('deleteAttachment', 'attachmentId', attachmentId)
             const localVarPath = `/v2/attachments/{attachment_id}`
-                .replace(`{${"attachment_id"}}`, encodeURIComponent(String(attachmentId)));
+                .replace('{attachment_id}', encodeURIComponent(String(attachmentId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2048,7 +2062,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'groupId' is not null or undefined
             assertParamExists('deleteGroup', 'groupId', groupId)
             const localVarPath = `/v2/groups/{group_id}.json`
-                .replace(`{${"group_id"}}`, encodeURIComponent(String(groupId)));
+                .replace('{group_id}', encodeURIComponent(String(groupId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2089,7 +2103,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'membershipId' is not null or undefined
             assertParamExists('deleteMembership', 'membershipId', membershipId)
             const localVarPath = `/v2/memberships/{membership_id}.json`
-                .replace(`{${"membership_id"}}`, encodeURIComponent(String(membershipId)));
+                .replace('{membership_id}', encodeURIComponent(String(membershipId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2128,7 +2142,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'id' is not null or undefined
             assertParamExists('deleteReportTemplate', 'id', id)
             const localVarPath = `/v2/report_templates/{id}.json`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2166,7 +2180,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'workflowId' is not null or undefined
             assertParamExists('deleteWorkflow', 'workflowId', workflowId)
             const localVarPath = `/v2/workflows/{workflow_id}.json`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)));
+                .replace('{workflow_id}', encodeURIComponent(String(workflowId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2291,7 +2305,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'formId' is not null or undefined
             assertParamExists('formsDelete', 'formId', formId)
             const localVarPath = `/v2/forms/{form_id}.json`
-                .replace(`{${"form_id"}}`, encodeURIComponent(String(formId)));
+                .replace('{form_id}', encodeURIComponent(String(formId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2397,7 +2411,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'formId' is not null or undefined
             assertParamExists('formsGetHistory', 'formId', formId)
             const localVarPath = `/v2/forms/{form_id}/history.json`
-                .replace(`{${"form_id"}}`, encodeURIComponent(String(formId)));
+                .replace('{form_id}', encodeURIComponent(String(formId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2451,7 +2465,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'formId' is not null or undefined
             assertParamExists('formsGetSingle', 'formId', formId)
             const localVarPath = `/v2/forms/{form_id}.json`
-                .replace(`{${"form_id"}}`, encodeURIComponent(String(formId)));
+                .replace('{form_id}', encodeURIComponent(String(formId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2498,7 +2512,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'formId' is not null or undefined
             assertParamExists('formsUpdate', 'formId', formId)
             const localVarPath = `/v2/forms/{form_id}.json`
-                .replace(`{${"form_id"}}`, encodeURIComponent(String(formId)));
+                .replace('{form_id}', encodeURIComponent(String(formId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2868,8 +2882,8 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'resource' is not null or undefined
             assertParamExists('getGroupResource', 'resource', resource)
             const localVarPath = `/v2/groups/{group_id}/{resource}.json`
-                .replace(`{${"group_id"}}`, encodeURIComponent(String(groupId)))
-                .replace(`{${"resource"}}`, encodeURIComponent(String(resource)));
+                .replace('{group_id}', encodeURIComponent(String(groupId)))
+                .replace('{resource}', encodeURIComponent(String(resource)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2918,7 +2932,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'attachmentId' is not null or undefined
             assertParamExists('getSingleAttachment', 'attachmentId', attachmentId)
             const localVarPath = `/v2/attachments/{attachment_id}`
-                .replace(`{${"attachment_id"}}`, encodeURIComponent(String(attachmentId)));
+                .replace('{attachment_id}', encodeURIComponent(String(attachmentId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2960,7 +2974,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'batchId' is not null or undefined
             assertParamExists('getSingleBatch', 'batchId', batchId)
             const localVarPath = `/v2/batch/{batch_id}.json`
-                .replace(`{${"batch_id"}}`, encodeURIComponent(String(batchId)));
+                .replace('{batch_id}', encodeURIComponent(String(batchId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3007,7 +3021,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'groupId' is not null or undefined
             assertParamExists('getSingleGroup', 'groupId', groupId)
             const localVarPath = `/v2/groups/{group_id}.json`
-                .replace(`{${"group_id"}}`, encodeURIComponent(String(groupId)));
+                .replace('{group_id}', encodeURIComponent(String(groupId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3051,7 +3065,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'id' is not null or undefined
             assertParamExists('getSingleReportTemplate', 'id', id)
             const localVarPath = `/v2/report_templates/{id}.json`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3089,7 +3103,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'workflowId' is not null or undefined
             assertParamExists('getSingleWorkflow', 'workflowId', workflowId)
             const localVarPath = `/v2/workflows/{workflow_id}.json`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)));
+                .replace('{workflow_id}', encodeURIComponent(String(workflowId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3174,7 +3188,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'layerId' is not null or undefined
             assertParamExists('layersDelete', 'layerId', layerId)
             const localVarPath = `/v2/layers/{layer_id}.json`
-                .replace(`{${"layer_id"}}`, encodeURIComponent(String(layerId)));
+                .replace('{layer_id}', encodeURIComponent(String(layerId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3262,7 +3276,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'layerId' is not null or undefined
             assertParamExists('layersGetSingle', 'layerId', layerId)
             const localVarPath = `/v2/layers/{layer_id}.json`
-                .replace(`{${"layer_id"}}`, encodeURIComponent(String(layerId)));
+                .replace('{layer_id}', encodeURIComponent(String(layerId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3305,7 +3319,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'layerId' is not null or undefined
             assertParamExists('layersUpdate', 'layerId', layerId)
             const localVarPath = `/v2/layers/{layer_id}.json`
-                .replace(`{${"layer_id"}}`, encodeURIComponent(String(layerId)));
+                .replace('{layer_id}', encodeURIComponent(String(layerId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3457,7 +3471,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'membershipId' is not null or undefined
             assertParamExists('membershipsGetSingle', 'membershipId', membershipId)
             const localVarPath = `/v2/memberships/{membership_id}.json`
-                .replace(`{${"membership_id"}}`, encodeURIComponent(String(membershipId)));
+                .replace('{membership_id}', encodeURIComponent(String(membershipId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3574,7 +3588,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'photoId' is not null or undefined
             assertParamExists('photosGetSingleFile', 'photoId', photoId)
             const localVarPath = `/v2/photos/{photo_id}.jpg`
-                .replace(`{${"photo_id"}}`, encodeURIComponent(String(photoId)));
+                .replace('{photo_id}', encodeURIComponent(String(photoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3612,7 +3626,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'photoId' is not null or undefined
             assertParamExists('photosGetSingleMetadata', 'photoId', photoId)
             const localVarPath = `/v2/photos/{photo_id}.json`
-                .replace(`{${"photo_id"}}`, encodeURIComponent(String(photoId)));
+                .replace('{photo_id}', encodeURIComponent(String(photoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3652,7 +3666,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'photoId' is not null or undefined
             assertParamExists('photosLargeFile', 'photoId', photoId)
             const localVarPath = `/v2/photos/{photo_id}/large.jpg`
-                .replace(`{${"photo_id"}}`, encodeURIComponent(String(photoId)));
+                .replace('{photo_id}', encodeURIComponent(String(photoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3690,7 +3704,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'photoId' is not null or undefined
             assertParamExists('photosLargeMetadata', 'photoId', photoId)
             const localVarPath = `/v2/photos/{photo_id}/large.json`
-                .replace(`{${"photo_id"}}`, encodeURIComponent(String(photoId)));
+                .replace('{photo_id}', encodeURIComponent(String(photoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3730,7 +3744,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'photoId' is not null or undefined
             assertParamExists('photosThumbnailFile', 'photoId', photoId)
             const localVarPath = `/v2/photos/{photo_id}/thumbnail.jpg`
-                .replace(`{${"photo_id"}}`, encodeURIComponent(String(photoId)));
+                .replace('{photo_id}', encodeURIComponent(String(photoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3768,7 +3782,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'photoId' is not null or undefined
             assertParamExists('photosThumbnailMetadata', 'photoId', photoId)
             const localVarPath = `/v2/photos/{photo_id}/thumbnail.json`
-                .replace(`{${"photo_id"}}`, encodeURIComponent(String(photoId)));
+                .replace('{photo_id}', encodeURIComponent(String(photoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3894,7 +3908,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'projectId' is not null or undefined
             assertParamExists('projectsDelete', 'projectId', projectId)
             const localVarPath = `/v2/projects/{project_id}.json`
-                .replace(`{${"project_id"}}`, encodeURIComponent(String(projectId)));
+                .replace('{project_id}', encodeURIComponent(String(projectId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3982,7 +3996,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'projectId' is not null or undefined
             assertParamExists('projectsGetSingle', 'projectId', projectId)
             const localVarPath = `/v2/projects/{project_id}.json`
-                .replace(`{${"project_id"}}`, encodeURIComponent(String(projectId)));
+                .replace('{project_id}', encodeURIComponent(String(projectId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4025,7 +4039,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'projectId' is not null or undefined
             assertParamExists('projectsUpdate', 'projectId', projectId)
             const localVarPath = `/v2/projects/{project_id}.json`
-                .replace(`{${"project_id"}}`, encodeURIComponent(String(projectId)));
+                .replace('{project_id}', encodeURIComponent(String(projectId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4272,7 +4286,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'recordId' is not null or undefined
             assertParamExists('recordsDelete', 'recordId', recordId)
             const localVarPath = `/v2/records/{record_id}.json`
-                .replace(`{${"record_id"}}`, encodeURIComponent(String(recordId)));
+                .replace('{record_id}', encodeURIComponent(String(recordId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4498,7 +4512,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'recordId' is not null or undefined
             assertParamExists('recordsGetHistory', 'recordId', recordId)
             const localVarPath = `/v2/records/{record_id}/history.json`
-                .replace(`{${"record_id"}}`, encodeURIComponent(String(recordId)));
+                .replace('{record_id}', encodeURIComponent(String(recordId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4539,7 +4553,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'recordId' is not null or undefined
             assertParamExists('recordsGetSingle', 'recordId', recordId)
             const localVarPath = `/v2/records/{record_id}.json`
-                .replace(`{${"record_id"}}`, encodeURIComponent(String(recordId)));
+                .replace('{record_id}', encodeURIComponent(String(recordId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4584,7 +4598,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'recordId' is not null or undefined
             assertParamExists('recordsPartialUpdate', 'recordId', recordId)
             const localVarPath = `/v2/records/{record_id}.json`
-                .replace(`{${"record_id"}}`, encodeURIComponent(String(recordId)));
+                .replace('{record_id}', encodeURIComponent(String(recordId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4644,7 +4658,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'recordId' is not null or undefined
             assertParamExists('recordsUpdate', 'recordId', recordId)
             const localVarPath = `/v2/records/{record_id}.json`
-                .replace(`{${"record_id"}}`, encodeURIComponent(String(recordId)));
+                .replace('{record_id}', encodeURIComponent(String(recordId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4738,7 +4752,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'reportId' is not null or undefined
             assertParamExists('reportsFile', 'reportId', reportId)
             const localVarPath = `/v2/reports/{report_id}.pdf`
-                .replace(`{${"report_id"}}`, encodeURIComponent(String(reportId)));
+                .replace('{report_id}', encodeURIComponent(String(reportId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4912,7 +4926,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'signatureId' is not null or undefined
             assertParamExists('signaturesGetSingleFile', 'signatureId', signatureId)
             const localVarPath = `/v2/signatures/{signature_id}.png`
-                .replace(`{${"signature_id"}}`, encodeURIComponent(String(signatureId)));
+                .replace('{signature_id}', encodeURIComponent(String(signatureId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4950,7 +4964,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'signatureId' is not null or undefined
             assertParamExists('signaturesGetSingleMetadata', 'signatureId', signatureId)
             const localVarPath = `/v2/signatures/{signature_id}.json`
-                .replace(`{${"signature_id"}}`, encodeURIComponent(String(signatureId)));
+                .replace('{signature_id}', encodeURIComponent(String(signatureId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -4990,7 +5004,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'signatureId' is not null or undefined
             assertParamExists('signaturesGetThumbnailFile', 'signatureId', signatureId)
             const localVarPath = `/v2/signatures/{signature_id}/thumbnail.png`
-                .replace(`{${"signature_id"}}`, encodeURIComponent(String(signatureId)));
+                .replace('{signature_id}', encodeURIComponent(String(signatureId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5028,7 +5042,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'signatureId' is not null or undefined
             assertParamExists('signaturesGetThumbnailMetadata', 'signatureId', signatureId)
             const localVarPath = `/v2/signatures/{signature_id}/thumbnail.json`
-                .replace(`{${"signature_id"}}`, encodeURIComponent(String(signatureId)));
+                .replace('{signature_id}', encodeURIComponent(String(signatureId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5186,7 +5200,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'sketchId' is not null or undefined
             assertParamExists('sketchesGetSingleFile', 'sketchId', sketchId)
             const localVarPath = `/v2/sketches/{sketch_id}.jpg`
-                .replace(`{${"sketch_id"}}`, encodeURIComponent(String(sketchId)));
+                .replace('{sketch_id}', encodeURIComponent(String(sketchId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5224,7 +5238,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'sketchId' is not null or undefined
             assertParamExists('sketchesGetSingleMetadata', 'sketchId', sketchId)
             const localVarPath = `/v2/sketches/{sketch_id}.json`
-                .replace(`{${"sketch_id"}}`, encodeURIComponent(String(sketchId)));
+                .replace('{sketch_id}', encodeURIComponent(String(sketchId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5264,7 +5278,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'sketchId' is not null or undefined
             assertParamExists('sketchesLargeFile', 'sketchId', sketchId)
             const localVarPath = `/v2/sketches/{sketch_id}/large.jpg`
-                .replace(`{${"sketch_id"}}`, encodeURIComponent(String(sketchId)));
+                .replace('{sketch_id}', encodeURIComponent(String(sketchId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5302,7 +5316,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'sketchId' is not null or undefined
             assertParamExists('sketchesLargeMetadata', 'sketchId', sketchId)
             const localVarPath = `/v2/sketches/{sketch_id}/large.json`
-                .replace(`{${"sketch_id"}}`, encodeURIComponent(String(sketchId)));
+                .replace('{sketch_id}', encodeURIComponent(String(sketchId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5342,7 +5356,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'sketchId' is not null or undefined
             assertParamExists('sketchesThumbnailFile', 'sketchId', sketchId)
             const localVarPath = `/v2/sketches/{sketch_id}/thumbnail.jpg`
-                .replace(`{${"sketch_id"}}`, encodeURIComponent(String(sketchId)));
+                .replace('{sketch_id}', encodeURIComponent(String(sketchId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5380,7 +5394,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'sketchId' is not null or undefined
             assertParamExists('sketchesThumbnailMetadata', 'sketchId', sketchId)
             const localVarPath = `/v2/sketches/{sketch_id}/thumbnail.json`
-                .replace(`{${"sketch_id"}}`, encodeURIComponent(String(sketchId)));
+                .replace('{sketch_id}', encodeURIComponent(String(sketchId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5461,7 +5475,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'batchId' is not null or undefined
             assertParamExists('startBatch', 'batchId', batchId)
             const localVarPath = `/v2/batch/{batch_id}/start.json`
-                .replace(`{${"batch_id"}}`, encodeURIComponent(String(batchId)));
+                .replace('{batch_id}', encodeURIComponent(String(batchId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5501,7 +5515,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'groupId' is not null or undefined
             assertParamExists('updateGroupNameDescription', 'groupId', groupId)
             const localVarPath = `/v2/groups/{group_id}.json`
-                .replace(`{${"group_id"}}`, encodeURIComponent(String(groupId)));
+                .replace('{group_id}', encodeURIComponent(String(groupId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5591,7 +5605,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'membershipId' is not null or undefined
             assertParamExists('updateMembership', 'membershipId', membershipId)
             const localVarPath = `/v2/memberships/{membership_id}.json`
-                .replace(`{${"membership_id"}}`, encodeURIComponent(String(membershipId)));
+                .replace('{membership_id}', encodeURIComponent(String(membershipId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5631,7 +5645,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'id' is not null or undefined
             assertParamExists('updateReportTemplate', 'id', id)
             const localVarPath = `/v2/report_templates/{id}.json`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+                .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5673,7 +5687,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'workflowId' is not null or undefined
             assertParamExists('updateWorkflow', 'workflowId', workflowId)
             const localVarPath = `/v2/workflows/{workflow_id}.json`
-                .replace(`{${"workflow_id"}}`, encodeURIComponent(String(workflowId)));
+                .replace('{workflow_id}', encodeURIComponent(String(workflowId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5958,7 +5972,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetMediumFile', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/medium.mp4`
-                .replace(`{${"video_id"}}`, encodeURIComponent(String(videoId)));
+                .replace('{video_id}', encodeURIComponent(String(videoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5995,7 +6009,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetOriginalFile', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}.mp4`
-                .replace(`{${"video_id"}}`, encodeURIComponent(String(videoId)));
+                .replace('{video_id}', encodeURIComponent(String(videoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6033,7 +6047,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetSingleMetadata', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}.json`
-                .replace(`{${"video_id"}}`, encodeURIComponent(String(videoId)));
+                .replace('{video_id}', encodeURIComponent(String(videoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6075,7 +6089,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetSingleTrackGeojson', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/track.geojson`
-                .replace(`{${"video_id"}}`, encodeURIComponent(String(videoId)));
+                .replace('{video_id}', encodeURIComponent(String(videoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6120,7 +6134,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetSingleTrackGpx', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/track.gpx`
-                .replace(`{${"video_id"}}`, encodeURIComponent(String(videoId)));
+                .replace('{video_id}', encodeURIComponent(String(videoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6161,7 +6175,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetSingleTrackJson', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/track.json`
-                .replace(`{${"video_id"}}`, encodeURIComponent(String(videoId)));
+                .replace('{video_id}', encodeURIComponent(String(videoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6202,7 +6216,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetSingleTrackKml', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/track.kml`
-                .replace(`{${"video_id"}}`, encodeURIComponent(String(videoId)));
+                .replace('{video_id}', encodeURIComponent(String(videoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6242,7 +6256,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetSmallFile', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/small.mp4`
-                .replace(`{${"video_id"}}`, encodeURIComponent(String(videoId)));
+                .replace('{video_id}', encodeURIComponent(String(videoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6279,7 +6293,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetThumbnailHuge', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/thumbnail_huge.jpg`
-                .replace(`{${"video_id"}}`, encodeURIComponent(String(videoId)));
+                .replace('{video_id}', encodeURIComponent(String(videoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6316,7 +6330,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetThumbnailHugeSquare', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/thumbnail_huge_square.jpg`
-                .replace(`{${"video_id"}}`, encodeURIComponent(String(videoId)));
+                .replace('{video_id}', encodeURIComponent(String(videoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6353,7 +6367,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetThumbnailLarge', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/thumbnail_large.jpg`
-                .replace(`{${"video_id"}}`, encodeURIComponent(String(videoId)));
+                .replace('{video_id}', encodeURIComponent(String(videoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6390,7 +6404,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetThumbnailLargeSquare', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/thumbnail_large_square.jpg`
-                .replace(`{${"video_id"}}`, encodeURIComponent(String(videoId)));
+                .replace('{video_id}', encodeURIComponent(String(videoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6427,7 +6441,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetThumbnailMedium', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/thumbnail_medium.jpg`
-                .replace(`{${"video_id"}}`, encodeURIComponent(String(videoId)));
+                .replace('{video_id}', encodeURIComponent(String(videoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6464,7 +6478,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetThumbnailMediumSquare', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/thumbnail_medium_square.jpg`
-                .replace(`{${"video_id"}}`, encodeURIComponent(String(videoId)));
+                .replace('{video_id}', encodeURIComponent(String(videoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6501,7 +6515,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetThumbnailSmall', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/thumbnail_small.jpg`
-                .replace(`{${"video_id"}}`, encodeURIComponent(String(videoId)));
+                .replace('{video_id}', encodeURIComponent(String(videoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6538,7 +6552,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'videoId' is not null or undefined
             assertParamExists('videosGetThumbnailSmallSquare', 'videoId', videoId)
             const localVarPath = `/v2/videos/{video_id}/thumbnail_small_square.jpg`
-                .replace(`{${"video_id"}}`, encodeURIComponent(String(videoId)));
+                .replace('{video_id}', encodeURIComponent(String(videoId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6661,7 +6675,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'webhookId' is not null or undefined
             assertParamExists('webhooksDelete', 'webhookId', webhookId)
             const localVarPath = `/v2/webhooks/{webhook_id}.json`
-                .replace(`{${"webhook_id"}}`, encodeURIComponent(String(webhookId)));
+                .replace('{webhook_id}', encodeURIComponent(String(webhookId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6749,7 +6763,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'webhookId' is not null or undefined
             assertParamExists('webhooksGetSingle', 'webhookId', webhookId)
             const localVarPath = `/v2/webhooks/{webhook_id}.json`
-                .replace(`{${"webhook_id"}}`, encodeURIComponent(String(webhookId)));
+                .replace('{webhook_id}', encodeURIComponent(String(webhookId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -6792,7 +6806,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             // verify required parameter 'webhookId' is not null or undefined
             assertParamExists('webhooksUpdate', 'webhookId', webhookId)
             const localVarPath = `/v2/webhooks/{webhook_id}.json`
-                .replace(`{${"webhook_id"}}`, encodeURIComponent(String(webhookId)));
+                .replace('{webhook_id}', encodeURIComponent(String(webhookId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -7432,7 +7446,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createReportTemplate(reportTemplateRequest?: ReportTemplateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async createReportTemplate(reportTemplateRequest?: ReportTemplateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReportTemplateResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.createReportTemplate(reportTemplateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.createReportTemplate']?.[localVarOperationServerIndex]?.url;
@@ -7502,7 +7516,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteReportTemplate(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async deleteReportTemplate(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReportTemplateResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.deleteReportTemplate(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.deleteReportTemplate']?.[localVarOperationServerIndex]?.url;
@@ -7545,7 +7559,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async formsCreate(accept?: string, contentType?: string, formRequest?: FormRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async formsCreate(accept?: string, contentType?: string, formRequest?: FormRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FormResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.formsCreate(accept, contentType, formRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.formsCreate']?.[localVarOperationServerIndex]?.url;
@@ -7625,7 +7639,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async formsUpdate(formId: string, accept?: string, contentType?: string, formRequest?: FormRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async formsUpdate(formId: string, accept?: string, contentType?: string, formRequest?: FormRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FormResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.formsUpdate(formId, accept, contentType, formRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.formsUpdate']?.[localVarOperationServerIndex]?.url;
@@ -7706,7 +7720,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllReportTemplates(page?: number, perPage?: number, formId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async getAllReportTemplates(page?: number, perPage?: number, formId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReportTemplatesResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAllReportTemplates(page, perPage, formId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.getAllReportTemplates']?.[localVarOperationServerIndex]?.url;
@@ -7795,7 +7809,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSingleReportTemplate(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async getSingleReportTemplate(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReportTemplateResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getSingleReportTemplate(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.getSingleReportTemplate']?.[localVarOperationServerIndex]?.url;
@@ -7824,7 +7838,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async layersCreate(accept?: string, contentType?: string, layerRequest?: LayerRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async layersCreate(accept?: string, contentType?: string, layerRequest?: LayerRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LayerResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.layersCreate(accept, contentType, layerRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.layersCreate']?.[localVarOperationServerIndex]?.url;
@@ -7853,7 +7867,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async layersGetAll(page?: number, perPage?: number, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async layersGetAll(page?: number, perPage?: number, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LayerListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.layersGetAll(page, perPage, accept, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.layersGetAll']?.[localVarOperationServerIndex]?.url;
@@ -7867,7 +7881,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async layersGetSingle(layerId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async layersGetSingle(layerId: string, accept?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LayerResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.layersGetSingle(layerId, accept, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.layersGetSingle']?.[localVarOperationServerIndex]?.url;
@@ -7883,7 +7897,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async layersUpdate(layerId: string, accept?: string, contentType?: string, layerRequest?: LayerRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async layersUpdate(layerId: string, accept?: string, contentType?: string, layerRequest?: LayerRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LayerResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.layersUpdate(layerId, accept, contentType, layerRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.layersUpdate']?.[localVarOperationServerIndex]?.url;
@@ -8621,7 +8635,7 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateReportTemplate(id: string, reportTemplateRequest?: ReportTemplateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+        async updateReportTemplate(id: string, reportTemplateRequest?: ReportTemplateRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReportTemplateResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.updateReportTemplate(id, reportTemplateRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DefaultApi.updateReportTemplate']?.[localVarOperationServerIndex]?.url;
@@ -9437,7 +9451,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createReportTemplate(requestParameters: DefaultApiCreateReportTemplateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        createReportTemplate(requestParameters: DefaultApiCreateReportTemplateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplateResponse> {
             return localVarFp.createReportTemplate(requestParameters.reportTemplateRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9487,7 +9501,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteReportTemplate(requestParameters: DefaultApiDeleteReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        deleteReportTemplate(requestParameters: DefaultApiDeleteReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplateResponse> {
             return localVarFp.deleteReportTemplate(requestParameters.id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9517,7 +9531,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        formsCreate(requestParameters: DefaultApiFormsCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        formsCreate(requestParameters: DefaultApiFormsCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<FormResponse> {
             return localVarFp.formsCreate(requestParameters.accept, requestParameters.contentType, requestParameters.formRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9567,7 +9581,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        formsUpdate(requestParameters: DefaultApiFormsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        formsUpdate(requestParameters: DefaultApiFormsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<FormResponse> {
             return localVarFp.formsUpdate(requestParameters.formId, requestParameters.accept, requestParameters.contentType, requestParameters.formRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9617,7 +9631,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllReportTemplates(requestParameters: DefaultApiGetAllReportTemplatesRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        getAllReportTemplates(requestParameters: DefaultApiGetAllReportTemplatesRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplatesResponse> {
             return localVarFp.getAllReportTemplates(requestParameters.page, requestParameters.perPage, requestParameters.formId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9677,7 +9691,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSingleReportTemplate(requestParameters: DefaultApiGetSingleReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        getSingleReportTemplate(requestParameters: DefaultApiGetSingleReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplateResponse> {
             return localVarFp.getSingleReportTemplate(requestParameters.id, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9697,7 +9711,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        layersCreate(requestParameters: DefaultApiLayersCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        layersCreate(requestParameters: DefaultApiLayersCreateRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<LayerResponse> {
             return localVarFp.layersCreate(requestParameters.accept, requestParameters.contentType, requestParameters.layerRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9717,7 +9731,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        layersGetAll(requestParameters: DefaultApiLayersGetAllRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        layersGetAll(requestParameters: DefaultApiLayersGetAllRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<LayerListResponse> {
             return localVarFp.layersGetAll(requestParameters.page, requestParameters.perPage, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9727,7 +9741,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        layersGetSingle(requestParameters: DefaultApiLayersGetSingleRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        layersGetSingle(requestParameters: DefaultApiLayersGetSingleRequest, options?: RawAxiosRequestConfig): AxiosPromise<LayerResponse> {
             return localVarFp.layersGetSingle(requestParameters.layerId, requestParameters.accept, options).then((request) => request(axios, basePath));
         },
         /**
@@ -9737,7 +9751,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        layersUpdate(requestParameters: DefaultApiLayersUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        layersUpdate(requestParameters: DefaultApiLayersUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<LayerResponse> {
             return localVarFp.layersUpdate(requestParameters.layerId, requestParameters.accept, requestParameters.contentType, requestParameters.layerRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -10217,7 +10231,7 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateReportTemplate(requestParameters: DefaultApiUpdateReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+        updateReportTemplate(requestParameters: DefaultApiUpdateReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplateResponse> {
             return localVarFp.updateReportTemplate(requestParameters.id, requestParameters.reportTemplateRequest, options).then((request) => request(axios, basePath));
         },
         /**
@@ -10874,7 +10888,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    createReportTemplate(requestParameters?: DefaultApiCreateReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    createReportTemplate(requestParameters?: DefaultApiCreateReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplateResponse>;
 
     /**
      * 
@@ -10919,7 +10933,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteReportTemplate(requestParameters: DefaultApiDeleteReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    deleteReportTemplate(requestParameters: DefaultApiDeleteReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplateResponse>;
 
     /**
      * 
@@ -10946,7 +10960,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    formsCreate(requestParameters?: DefaultApiFormsCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    formsCreate(requestParameters?: DefaultApiFormsCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<FormResponse>;
 
     /**
      * 
@@ -10991,7 +11005,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    formsUpdate(requestParameters: DefaultApiFormsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    formsUpdate(requestParameters: DefaultApiFormsUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<FormResponse>;
 
     /**
      * Retrieve a list of attachments.
@@ -11036,7 +11050,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getAllReportTemplates(requestParameters?: DefaultApiGetAllReportTemplatesRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    getAllReportTemplates(requestParameters?: DefaultApiGetAllReportTemplatesRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplatesResponse>;
 
     /**
      * 
@@ -11090,7 +11104,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getSingleReportTemplate(requestParameters: DefaultApiGetSingleReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    getSingleReportTemplate(requestParameters: DefaultApiGetSingleReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplateResponse>;
 
     /**
      * 
@@ -11108,7 +11122,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    layersCreate(requestParameters?: DefaultApiLayersCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    layersCreate(requestParameters?: DefaultApiLayersCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<LayerResponse>;
 
     /**
      * 
@@ -11126,7 +11140,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    layersGetAll(requestParameters?: DefaultApiLayersGetAllRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    layersGetAll(requestParameters?: DefaultApiLayersGetAllRequest, options?: RawAxiosRequestConfig): AxiosPromise<LayerListResponse>;
 
     /**
      * 
@@ -11135,7 +11149,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    layersGetSingle(requestParameters: DefaultApiLayersGetSingleRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    layersGetSingle(requestParameters: DefaultApiLayersGetSingleRequest, options?: RawAxiosRequestConfig): AxiosPromise<LayerResponse>;
 
     /**
      * 
@@ -11144,7 +11158,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    layersUpdate(requestParameters: DefaultApiLayersUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    layersUpdate(requestParameters: DefaultApiLayersUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<LayerResponse>;
 
     /**
      * Add or remove membership permissions from layers, forms, or projects.
@@ -11576,7 +11590,7 @@ export interface DefaultApiInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    updateReportTemplate(requestParameters: DefaultApiUpdateReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    updateReportTemplate(requestParameters: DefaultApiUpdateReportTemplateRequest, options?: RawAxiosRequestConfig): AxiosPromise<ReportTemplateResponse>;
 
     /**
      * 
