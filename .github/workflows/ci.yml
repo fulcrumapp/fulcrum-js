@@ -6,31 +6,41 @@ on:
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened, ready_for_review]
+  merge_group:
+    types: [checks_requested]
 
-# Read-only token; no secrets are used. Never switch to pull_request_target.
+# PR validation uses a read-only token. Never switch to pull_request_target.
 permissions:
   contents: read
 
 concurrency:
   group: ci-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
+  queue: max
 
 jobs:
   build-and-test:
-    if: github.event_name == 'push' || !github.event.pull_request.draft
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           persist-credentials: false
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "22.14.0"
           cache: yarn
+
+      - name: Preserve CI configuration
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: npm-ci-config-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ci/config.yaml
+          if-no-files-found: error
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile --ignore-scripts
@@ -43,3 +53,61 @@ jobs:
 
       - name: Test with coverage
         run: yarn test:coverage
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: npm-coverage-${{ github.run_id }}-${{ github.run_attempt }}
+          path: coverage/
+          if-no-files-found: error
+
+  sonar:
+    name: SonarQube analysis
+    needs: build-and-test
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Scan trusted revision
+        uses: ./.github/actions/npm-sonar
+        with:
+          artifact-name: npm-coverage-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-path: coverage
+          token: ${{ secrets.ACTIONS_SONAR_TOKEN }}
+          host-url: ${{ secrets.ACTIONS_SONAR_URL || 'https://sonarcloud.io' }}
+
+  tag:
+    name: Create npm release tag
+    needs: [build-and-test, sonar]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.repository }}-npm-release-tag
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22.14.0'
+      - name: Create scoped GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
+        with:
+          app-id: ${{ secrets.FULCRUM_CI_APP_ID }}
+          private-key: ${{ secrets.FULCRUM_CI_APP_PRIVATE_KEY }}
+          permission-contents: write
+      - name: Create release-only commit and tag
+        uses: ./.github/actions/npm-create-tag
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          CHECK_NPMJS: 'true'
