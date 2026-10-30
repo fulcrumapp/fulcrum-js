@@ -17,6 +17,7 @@ permissions:
 concurrency:
   group: publish-npmjs-${{ inputs.tag || github.ref_name }}
   cancel-in-progress: false
+  queue: max
 
 jobs:
   publish:
@@ -25,12 +26,14 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           ref: ${{ inputs.tag && format('refs/tags/{0}', inputs.tag) || github.ref }}
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "22.14.0"
           registry-url: "https://registry.npmjs.org/"
@@ -41,7 +44,7 @@ jobs:
           npm --version
           yarn --version
 
-      - name: Verify tag version
+      - name: Verify release tag and commit
         env:
           EVENT_NAME: ${{ github.event_name }}
           INPUT_TAG: ${{ inputs.tag }}
@@ -58,8 +61,8 @@ jobs:
             exit 1
           fi
 
-          if [[ ! "$TAG" =~ ^v.+ ]]; then
-            echo "Publishing tag $TAG must start with v."
+          if [[ ! "$TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "Publishing tag $TAG must be a stable SemVer tag."
             exit 1
           fi
 
@@ -70,19 +73,53 @@ jobs:
             echo "package.json version $PACKAGE_VERSION does not match tag $TAG."
             exit 1
           fi
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            export GITHUB_REF="refs/tags/$TAG"
+            export GITHUB_SHA="$(git rev-parse --verify "refs/tags/$TAG^{commit}")"
+          fi
+          node .github/actions/npm-publish-github/publish.js verify
 
       - name: Install dependencies
         run: YARN_IGNORE_SCRIPTS=1 yarn install --frozen-lockfile --ignore-scripts
 
-      - name: Skip an existing npm version
-        id: existing-version
+      - name: Build package
+        run: yarn build
+
+      - name: Pack package
+        id: pack
+        env:
+          TAG: ${{ inputs.tag || github.ref_name }}
         run: |
+          set -euo pipefail
+          npm pack --ignore-scripts --json --pack-destination "$RUNNER_TEMP" > "$RUNNER_TEMP/npm-pack.json"
+          file=$(node -e 'const p=require(process.argv[1]); if (!Array.isArray(p) || p.length !== 1 || !/^[A-Za-z0-9._-]+\.tgz$/.test(p[0].filename)) process.exit(1); console.log(p[0].filename)' "$RUNNER_TEMP/npm-pack.json")
+          tar -xOzf "$RUNNER_TEMP/$file" package/package.json > "$RUNNER_TEMP/npm-pack-package.json"
+          node -e 'const p=require(process.argv[1]); if(p.name !== "@fulcrumapp/fulcrum-js" || p.version !== process.env.TAG.slice(1)) { console.error("Packed package does not match the tag"); process.exit(1); }' "$RUNNER_TEMP/npm-pack-package.json"
+          echo "file=$RUNNER_TEMP/$file" >> "$GITHUB_OUTPUT"
+
+      - name: Check existing npm version
+        id: existing-version
+        env:
+          TARBALL: ${{ steps.pack.outputs.file }}
+        run: |
+          set -euo pipefail
           PACKAGE_NAME=$(node -p "require('./package.json').name")
           PACKAGE_VERSION=$(node -p "require('./package.json').version")
-          if npm view "$PACKAGE_NAME@$PACKAGE_VERSION" version --registry=https://registry.npmjs.org/ >/dev/null 2>&1; then
+          if response=$(npm view "$PACKAGE_NAME@$PACKAGE_VERSION" version --json --registry=https://registry.npmjs.org/ --@fulcrumapp:registry=https://registry.npmjs.org/); then
+            [[ "$(jq -r . <<<"$response")" == "$PACKAGE_VERSION" ]] || { echo "::error::Registry returned a mismatched version"; exit 1; }
+            stored=$(npm view "$PACKAGE_NAME@$PACKAGE_VERSION" dist.integrity --json --registry=https://registry.npmjs.org/ --@fulcrumapp:registry=https://registry.npmjs.org/)
+            expected=$(node -e 'const fs=require("fs"),c=require("crypto"); console.log("sha512-"+c.createHash("sha512").update(fs.readFileSync(process.env.TARBALL)).digest("base64"))')
+            [[ "$(jq -r . <<<"$stored")" == "$expected" ]] || { echo "::error::Existing npm version has different package contents"; exit 1; }
             echo "published=true" >> "$GITHUB_OUTPUT"
+          elif jq -e '.error.code == "E404"' <<<"$response" >/dev/null 2>&1; then
+            echo "published=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::Unable to query npmjs.org for $PACKAGE_NAME@$PACKAGE_VERSION"
+            exit 1
           fi
 
       - name: Publish to npmjs.org
         if: steps.existing-version.outputs.published != 'true'
-        run: npm publish --registry=https://registry.npmjs.org/ --@fulcrumapp:registry=https://registry.npmjs.org/ --provenance --access public
+        env:
+          TARBALL: ${{ steps.pack.outputs.file }}
+        run: npm publish "$TARBALL" --ignore-scripts --registry=https://registry.npmjs.org/ --@fulcrumapp:registry=https://registry.npmjs.org/ --provenance --access public
