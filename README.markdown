@@ -1940,6 +1940,13 @@ parent is the validated main commit. This commit changes only the version in
 the release commit. Before creating the tag, CI checks that the proposed
 version is newer than every stable version on npmjs.org.
 
+Do not manually change the root `package.json` version. PR, merge-queue and
+main validation compare it with the event's base commit and fail if it
+changes; revert only that field if the check fails. The release-only commit
+is tagged outside `main` and is not subject to this check. Configure the CI
+check as required and protect workflow changes with trusted review: a PR can
+otherwise alter or remove its own workflow check.
+
 The tag starts two independent workflows:
 
 - [Publish npm package to GitHub Packages](.github/workflows/publish-npm.yml)
