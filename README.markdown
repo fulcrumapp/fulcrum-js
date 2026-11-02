@@ -1963,6 +1963,43 @@ matches the newly built tarball; a mismatch fails rather than overwriting it.
 Check both workflow runs: success in one registry does not imply success in
 the other.
 
+### Release flow
+
+The diagram shows the automated path for this repository. Fork approval and
+runner isolation are repository and organization prerequisites, not steps
+enforced by this workflow. Validation, scans and publishing must succeed
+before their downstream steps run.
+
+```mermaid
+flowchart TD
+    PR["Ready pull request"] --> Validate
+    Queue["Merge-queue candidate"] --> Validate
+    Main["Push to main"] --> Validate
+
+    Validate["Check version policy; install, lint, build and test<br/>flcrm-gh-standard"]
+    Validate --> Artifacts["Upload CI configuration and coverage artifacts"]
+    Artifacts --> SonarDecision{"Main push or<br/>same-repository PR?"}
+    SonarDecision -- Yes --> Sonar["Sonar analysis<br/>flcrm-gh-standard"]
+    SonarDecision -- No --> ChecksOnly["Validation only; no release"]
+    Sonar --> MainDecision{"Main push?"}
+    MainDecision -- No --> ChecksOnly
+    MainDecision -- Yes --> Serialize["Queue release tagging<br/>flcrm-gh-small"]
+
+    Serialize --> Current{"Is main still the<br/>validated commit?"}
+    Current -- Yes --> Version["Calculate SemVer from tags and commits;<br/>check npmjs.org version history"]
+    Version --> Commit["App creates signed version-only commit on main<br/>with [skip ci]"]
+    Commit --> Tag["App creates vX.Y.Z tag"]
+    Current -- No --> Recovery["Supersede older run or recover<br/>a verified missing release tag"]
+    Recovery -- "Recovered version commit" --> Tag
+    Recovery -- "Newer merge" --> Wait["Newer validated main run releases combined changes"]
+
+    Tag --> GitHubPublish["Verify tag and release commit;<br/>build and pack<br/>flcrm-gh-standard"]
+    Tag --> NpmPublish["Verify tag and release commit;<br/>build and pack<br/>GitHub-hosted runner"]
+    GitHubPublish --> GitHubPackages["Publish or confirm matching<br/>GitHub Packages version"]
+    GitHubPackages --> Notes["Create GitHub Release notes<br/>flcrm-gh-small"]
+    NpmPublish --> NpmRegistry["Publish with provenance or confirm<br/>matching npmjs.org version"]
+```
+
 ### Release design and tradeoffs
 
 - **Validate before releasing.** PRs, merge-queue candidates and main pushes
