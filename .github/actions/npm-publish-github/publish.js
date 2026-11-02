@@ -4,6 +4,7 @@ const { execFileSync, spawnSync } = require("node:child_process");
 const { readFileSync } = require("node:fs");
 const { createHash } = require("node:crypto");
 const { isDeepStrictEqual } = require("node:util");
+const { verifyRemoteIdentity } = require("../npm-release-identity/identity.js");
 
 const registry = "https://npm.pkg.github.com/";
 const stableTag = /^refs\/tags\/v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
@@ -73,6 +74,10 @@ if (require.main === module) {
     const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
     verifyRelease(process.env.GITHUB_REF, packageJson, git);
     if (git("rev-parse", "HEAD") !== process.env.GITHUB_SHA) throw new Error("Checked-out tag differs from the triggering revision");
+    if (!process.env.GH_TOKEN) throw new Error("GH_TOKEN is required to verify the release commit");
+    verifyRemoteIdentity((args, input) => execFileSync("gh", args, {
+      encoding: "utf8", input, stdio: ["pipe", "pipe", "pipe"]
+    }), process.env.GITHUB_REPOSITORY, process.env.GITHUB_SHA);
     if (process.argv[2] === "verify") {
       console.log(`Verified ${packageJson.name}@${packageJson.version}`);
     } else if (process.argv[2] === "publish" && process.argv[3]) {

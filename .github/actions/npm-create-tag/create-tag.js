@@ -5,12 +5,13 @@ const { appendFileSync } = require("node:fs");
 const { devNull } = require("node:os");
 const { isDeepStrictEqual } = require("node:util");
 const { calculateVersion } = require("../npm-next-version/next-version.js");
+const { verifyIdentity, verifyRemoteIdentity } = require("../npm-release-identity/identity.js");
 
 const releaseMessage = /^chore\(release\): (v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)) \[skip ci\]$/;
 const commitMutation = `
   mutation($input: CreateCommitOnBranchInput!) {
     createCommitOnBranch(input: $input) {
-      commit { oid signature { isValid } }
+      commit { oid author { user { databaseId login } } signature { isValid wasSignedByGitHub } }
     }
   }
 `;
@@ -87,6 +88,7 @@ function recoverRelease(options, currentHead) {
       detail.files[0].status !== "modified" || detail.commit.message !== child.commit.message) {
     throw new Error("Cannot recover an unverified or non-version-only release commit");
   }
+  verifyRemoteIdentity(gh, repository, child.sha);
   const response = JSON.parse(gh(["api", `repos/${repository}/contents/package.json?ref=${child.sha}`]));
   if (response.encoding !== "base64" || typeof response.content !== "string") {
     throw new Error("Cannot read the release commit package.json");
@@ -187,6 +189,7 @@ function createReleaseTag(options) {
   if (!commit || !/^[0-9a-f]{40}$/i.test(commit.oid) || commit.signature?.isValid !== true) {
     throw new Error("GitHub did not return a valid release commit signature; rerun this workflow to investigate");
   }
+  verifyIdentity(commit, repository, commit.oid);
   gh(["api", "--method", "POST", endpoint, "-f", `ref=refs/tags/${plan.tag}`, "-f", `sha=${commit.oid}`]);
   return { tag: plan.tag, commit: commit.oid, alreadyReleased: false };
 }

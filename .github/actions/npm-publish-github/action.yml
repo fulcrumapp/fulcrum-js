@@ -9,6 +9,8 @@ runs:
   steps:
     - name: Verify release tag and commit
       shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
       run: node "$GITHUB_ACTION_PATH/publish.js" verify
     - name: Enable the configured Yarn version
       shell: bash
@@ -34,6 +36,7 @@ runs:
       shell: bash
       env:
         NODE_AUTH_TOKEN: ${{ inputs.token }}
+        GH_TOKEN: ${{ github.token }}
         PACKAGE_FILE: ${{ steps.pack.outputs.file }}
       run: |
         set -euo pipefail
