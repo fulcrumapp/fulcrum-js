@@ -3,8 +3,10 @@
 const { execFileSync, spawnSync } = require("node:child_process");
 const { appendFileSync } = require("node:fs");
 const { devNull } = require("node:os");
+const { isDeepStrictEqual } = require("node:util");
 const { calculateVersion } = require("../npm-next-version/next-version.js");
 
+const releaseMessage = /^chore\(release\): (v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)) \[skip ci\]$/;
 const commitMutation = `
   mutation($input: CreateCommitOnBranchInput!) {
     createCommitOnBranch(input: $input) {
@@ -17,6 +19,7 @@ function command(program, args, input) {
   return execFileSync(program, args, {
     encoding: "utf8",
     input,
+    maxBuffer: 16 * 1024 * 1024,
     stdio: [input === undefined ? "ignore" : "pipe", "pipe", "pipe"]
   }).trim();
 }
@@ -48,6 +51,72 @@ function checkPublicRegistry(name, version, npm) {
   }
 }
 
+function mainHead(gh, repository) {
+  const result = JSON.parse(gh(["api", `repos/${repository}/git/ref/heads/main`]));
+  const sha = result.object?.sha;
+  if (!/^[0-9a-f]{40}$/i.test(sha || "")) throw new Error("Unable to determine the current main commit");
+  return sha;
+}
+
+function recoverRelease(options, currentHead) {
+  const { head, repository, git, gh } = options;
+  const pages = gh([
+    "api", "--paginate", `repos/${repository}/compare/${head}...${currentHead}?per_page=100`,
+    "--jq", "{base: .merge_base_commit.sha, commits: [.commits[] | {sha, parents: [.parents[] | {sha}], commit: {message: .commit.message}}]}"
+  ]).split("\n").filter(Boolean).map((page) => JSON.parse(page));
+  if (!pages.length || pages.some((page) => page.base !== head || !Array.isArray(page.commits))) {
+    throw new Error("The tested commit is no longer an ancestor of main");
+  }
+  const commits = new Map(pages.flatMap((page) => page.commits).map((commit) => [commit.sha, commit]));
+  let cursor = currentHead;
+  let child;
+  while (cursor !== head) {
+    const commit = commits.get(cursor);
+    if (!commit?.parents?.length) throw new Error("Cannot verify the first-parent main history for release recovery");
+    if (commit.parents[0].sha === head) child = commit;
+    cursor = commit.parents[0].sha;
+  }
+  if (child?.parents.length !== 1) return null;
+  const match = releaseMessage.exec(child.commit?.message || "");
+  if (!match) return null;
+  if (!/^[0-9a-f]{40}$/i.test(child.sha || "")) throw new Error("Invalid release commit SHA");
+  const detail = JSON.parse(gh(["api", `repos/${repository}/commits/${child.sha}`]));
+  if (detail.commit?.verification?.verified !== true || detail.author?.type !== "Bot" ||
+      detail.parents?.length !== 1 || detail.parents[0].sha !== head ||
+      detail.files?.length !== 1 || detail.files[0].filename !== "package.json" ||
+      detail.files[0].status !== "modified" || detail.commit.message !== child.commit.message) {
+    throw new Error("Cannot recover an unverified or non-version-only release commit");
+  }
+  const response = JSON.parse(gh(["api", `repos/${repository}/contents/package.json?ref=${child.sha}`]));
+  if (response.encoding !== "base64" || typeof response.content !== "string") {
+    throw new Error("Cannot read the release commit package.json");
+  }
+  const before = JSON.parse(git("show", `${head}:package.json`));
+  const after = JSON.parse(Buffer.from(response.content, "base64").toString("utf8"));
+  if (after.version !== match[1].slice(1) || before.version === after.version) {
+    throw new Error("Recovered release commit has an invalid package version");
+  }
+  delete before.version;
+  delete after.version;
+  if (!isDeepStrictEqual(before, after)) throw new Error("Recovered release commit changes more than the package version");
+  const tag = match[1];
+  const refs = JSON.parse(gh(["api", `repos/${repository}/git/matching-refs/tags/${tag}`]));
+  if (!Array.isArray(refs)) throw new Error("Unable to inspect the release tag");
+  const existing = refs.find((ref) => ref.ref === `refs/tags/${tag}`);
+  if (existing) {
+    if (existing.object?.type !== "commit" || existing.object.sha !== child.sha) {
+      throw new Error(`Existing ${tag} does not point to the release commit`);
+    }
+    return { tag, commit: child.sha, alreadyReleased: true };
+  }
+  const plan = options.calculateVersion(head);
+  if (plan.head !== head || plan.alreadyReleased || plan.tag !== tag) {
+    throw new Error(`Cannot recover ${tag}: the calculated version does not match`);
+  }
+  gh(["api", "--method", "POST", `repos/${repository}/git/refs`, "-f", `ref=refs/tags/${tag}`, "-f", `sha=${child.sha}`]);
+  return { tag, commit: child.sha, alreadyReleased: false, recovered: true };
+}
+
 function createReleaseTag(options) {
   const { head, repository, runId, attempt, eventName, ref, git, gh } = options;
   if (!/^[0-9a-f]{40}$/i.test(head) ||
@@ -57,7 +126,10 @@ function createReleaseTag(options) {
     throw new Error("Release tagging requires a tested main push and valid GitHub run metadata");
   }
 
-  git("merge-base", "--is-ancestor", head, "refs/remotes/origin/main");
+  const currentHead = mainHead(gh, repository);
+  if (currentHead !== head) {
+    return recoverRelease(options, currentHead) || { superseded: true, alreadyReleased: false };
+  }
   const plan = options.calculateVersion(head);
   if (plan.head !== head) throw new Error("Version plan does not match the tested commit");
   if (plan.alreadyReleased) return { tag: plan.tag, alreadyReleased: true };
@@ -65,54 +137,58 @@ function createReleaseTag(options) {
       plan.tag !== `v${plan.version}`) {
     throw new Error("Version plan does not contain a matching stable SemVer tag");
   }
+  const range = plan.base ? `${plan.base}..${head}` : head;
+  if (git("log", "--format=%s", range).split("\n").some((subject) => releaseMessage.test(subject))) {
+    throw new Error("An earlier release commit has no tag; rerun its original main CI workflow before releasing newer changes");
+  }
 
   const packageJson = JSON.parse(git("show", `${head}:package.json`));
-  if (typeof packageJson.version !== "string" ||
+  if (!/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(packageJson.version || "") ||
       !/^@fulcrumapp\/[a-z0-9][a-z0-9._-]*$/.test(packageJson.name || "")) {
-    throw new Error("package.json must contain a version and an @fulcrumapp package name");
+    throw new Error("package.json must contain a stable version and an @fulcrumapp package name");
   }
   if (!/^yarn@1\.\d+\.\d+$/.test(packageJson.packageManager || "") || packageJson.workspaces ||
       git("ls-tree", "--name-only", head, "--", "package-lock.json", "npm-shrinkwrap.json", "pnpm-lock.yaml")) {
     throw new Error("Release tagging supports single-package Yarn classic repositories only");
   }
+  const previous = packageJson.version.split(".").map(BigInt);
+  const next = plan.version.split(".").map(BigInt);
+  const difference = next.findIndex((part, index) => part !== previous[index]);
+  if (difference === -1 || next[difference] < previous[difference]) {
+    throw new Error("The planned version must be newer than the version on main; reconcile tags before releasing");
+  }
   if (options.checkPublicRegistry) options.checkPublicRegistry(packageJson.name, plan.version);
   packageJson.version = plan.version;
   const contents = Buffer.from(`${JSON.stringify(packageJson, null, 2)}\n`).toString("base64");
-  const temporaryBranch = `ci/npm-release/${runId}-${attempt}`;
   const endpoint = `repos/${repository}/git/refs`;
   const mutation = {
     query: commitMutation,
     variables: {
       input: {
-        branch: { repositoryNameWithOwner: repository, branchName: temporaryBranch },
+        branch: { repositoryNameWithOwner: repository, branchName: "main" },
         expectedHeadOid: head,
-        message: { headline: `chore(release): ${plan.tag}` },
+        message: { headline: `chore(release): ${plan.tag} [skip ci]` },
         fileChanges: { additions: [{ path: "package.json", contents }] }
       }
     }
   };
-  gh(["api", "--method", "POST", endpoint, "-f", `ref=refs/heads/${temporaryBranch}`, "-f", `sha=${head}`]);
-  let failure;
+  let response;
   try {
-    const response = JSON.parse(gh(["api", "graphql", "--input", "-"], JSON.stringify(mutation)));
+    response = JSON.parse(gh(["api", "graphql", "--input", "-"], JSON.stringify(mutation)));
     if (response.errors?.length) throw new Error(`GitHub rejected the release commit: ${JSON.stringify(response.errors)}`);
-    const commit = response.data?.createCommitOnBranch?.commit;
-    if (!commit || !/^[0-9a-f]{40}$/i.test(commit.oid) || commit.signature?.isValid !== true) {
-      throw new Error("GitHub did not return a valid release commit signature");
-    }
-    gh(["api", "--method", "POST", endpoint, "-f", `ref=refs/tags/${plan.tag}`, "-f", `sha=${commit.oid}`]);
-    return { tag: plan.tag, commit: commit.oid, alreadyReleased: false };
   } catch (error) {
-    failure = error;
-    throw error;
-  } finally {
-    try {
-      gh(["api", "--method", "DELETE", `${endpoint}/heads/${temporaryBranch}`]);
-    } catch (error) {
-      if (failure) throw new AggregateError([failure, error], "Release tagging failed and temporary branch cleanup failed");
-      throw error;
+    const latestHead = mainHead(gh, repository);
+    if (latestHead !== head) {
+      return recoverRelease(options, latestHead) || { superseded: true, alreadyReleased: false };
     }
+    throw error;
   }
+  const commit = response.data?.createCommitOnBranch?.commit;
+  if (!commit || !/^[0-9a-f]{40}$/i.test(commit.oid) || commit.signature?.isValid !== true) {
+    throw new Error("GitHub did not return a valid release commit signature; rerun this workflow to investigate");
+  }
+  gh(["api", "--method", "POST", endpoint, "-f", `ref=refs/tags/${plan.tag}`, "-f", `sha=${commit.oid}`]);
+  return { tag: plan.tag, commit: commit.oid, alreadyReleased: false };
 }
 
 if (require.main === module) {

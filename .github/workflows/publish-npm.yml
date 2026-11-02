@@ -1,8 +1,7 @@
 name: Publish npm package to GitHub Packages
 
 on:
-  push:
-    tags: ['v*.*.*']
+  create:
   workflow_dispatch:
 
 permissions:
@@ -16,6 +15,7 @@ concurrency:
 jobs:
   publish:
     name: Publish to GitHub Packages
+    if: (github.event_name == 'create' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')) || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       contents: read

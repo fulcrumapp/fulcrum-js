@@ -26,6 +26,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7.0.1
         with:
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Setup Node
@@ -33,6 +34,37 @@ jobs:
         with:
           node-version: "22.14.0"
           cache: yarn
+
+      - name: Protect release-managed version
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha || github.event.before }}
+        run: |
+          node <<'NODE'
+          const { execFileSync } = require('node:child_process');
+          const base = process.env.BASE_SHA || '';
+          if (!/^[0-9a-f]{40,64}$/.test(base) || /^0+$/.test(base)) {
+            console.error('::error::Cannot determine the base commit for the release version check.');
+            process.exit(1);
+          }
+          function version(ref) {
+            let manifest;
+            try {
+              manifest = JSON.parse(execFileSync('git', ['show', `${ref}:package.json`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }));
+            } catch (error) {
+              console.error(`::error::Cannot read or parse package.json at ${ref}: ${error.message}`);
+              process.exit(1);
+            }
+            if (!manifest || typeof manifest.version !== 'string' || !manifest.version.trim()) {
+              console.error(`::error::package.json at ${ref} must have a nonempty version string.`);
+              process.exit(1);
+            }
+            return manifest.version;
+          }
+          if (version(base) !== version('HEAD')) {
+            console.error('::error file=package.json::Do not manually change the root package.json version. Revert that version change; GitHub Actions manages release versions.');
+            process.exit(1);
+          }
+          NODE
 
       - name: Preserve CI configuration
         uses: actions/upload-artifact@v7.0.2
@@ -108,7 +140,7 @@ jobs:
           app-id: ${{ secrets.FULCRUM_CI_APP_ID }}
           private-key: ${{ secrets.FULCRUM_CI_APP_PRIVATE_KEY }}
           permission-contents: write
-      - name: Create release-only commit and tag
+      - name: Commit release version to main and tag it
         uses: $/.github/actions/npm-create-tag
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}

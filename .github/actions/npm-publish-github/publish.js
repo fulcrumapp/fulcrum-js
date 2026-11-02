@@ -19,7 +19,7 @@ function verifyRelease(ref, packageJson, git) {
   }
   const commits = git("rev-list", "--parents", "-n", "1", "HEAD").split(/\s+/);
   if (commits.length !== 2) throw new Error("The release commit must have exactly one parent");
-  git("merge-base", "--is-ancestor", commits[1], "refs/remotes/origin/main");
+  git("merge-base", "--is-ancestor", "HEAD", "refs/remotes/origin/main");
   if (git("diff", "--name-only", `${commits[1]}..HEAD`) !== "package.json") {
     throw new Error("The release commit must only change package.json");
   }
