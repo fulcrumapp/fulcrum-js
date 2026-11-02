@@ -1,9 +1,7 @@
 name: Publish to npmjs.org
 
 on:
-  push:
-    tags:
-      - "v*"
+  create:
   workflow_dispatch:
     inputs:
       tag:
@@ -21,6 +19,7 @@ concurrency:
 
 jobs:
   publish:
+    if: (github.event_name == 'create' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')) || github.event_name == 'workflow_dispatch'
     environment: "CI: Deploy Public NPM Package"
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -54,7 +53,7 @@ jobs:
           set -euo pipefail
           if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
             TAG="$INPUT_TAG"
-          elif [[ "$REF_TYPE" == "tag" ]]; then
+          elif [[ "$EVENT_NAME" == "create" && "$REF_TYPE" == "tag" ]]; then
             TAG="$REF_NAME"
           else
             echo "Publishing requires a version tag."

@@ -1,5 +1,5 @@
 name: Create npm release tag
-description: Create a signed release-only commit and SemVer tag for a tested main push.
+description: Commit the release version to main and create its SemVer tag after validation.
 outputs:
   tag:
     description: Created or previously released tag.
@@ -7,6 +7,9 @@ outputs:
   alreadyReleased:
     description: Whether the tested commit was already covered by a tag.
     value: ${{ steps.create.outputs.alreadyReleased }}
+  superseded:
+    description: Whether a newer main commit superseded the tested commit.
+    value: ${{ steps.create.outputs.superseded }}
 runs:
   using: composite
   steps:

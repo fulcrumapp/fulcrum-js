@@ -137,7 +137,7 @@ jobs:
           app-id: ${{ secrets.FULCRUM_CI_APP_ID }}
           private-key: ${{ secrets.FULCRUM_CI_APP_PRIVATE_KEY }}
           permission-contents: write
-      - name: Create release-only commit and tag
+      - name: Commit release version to main and tag it
         uses: ./.github/actions/npm-create-tag
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}

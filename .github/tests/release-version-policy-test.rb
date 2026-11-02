@@ -44,6 +44,15 @@ class ReleaseVersionPolicyTest < Minitest::Test
     assert_includes output, "base"
   end
 
+  def test_publish_workflows_use_tag_creation_without_suppressing_skip_ci_commits
+    %w[publish-npm publish-npmjs].each do |name|
+      workflow = YAML.load_file(File.expand_path("../workflows/#{name}.yml", __dir__))
+      assert workflow.fetch(true).key?("create")
+      refute workflow.fetch(true).key?("push")
+      assert_includes workflow.fetch("jobs").fetch("publish").fetch("if"), "github.ref_type == 'tag'"
+    end
+  end
+
   private
 
   def run_check(base, head, sha = "a" * 40)
