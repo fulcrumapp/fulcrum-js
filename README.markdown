@@ -1973,8 +1973,11 @@ the other.
   concurrency groups so they cannot interrupt one another's release work.
 - **Keep public CI isolated.** This public repository uses self-contained
   workflows on GitHub-hosted runners rather than the private `gh-workflows`
-  reusable workflows. PR validation uses a read-only token; fork PRs do not
-  run the secret-backed Sonar job. GitHub's fork-approval settings and
+  reusable workflows. PR validation uses a read-only token; fork PRs and
+  merge-queue candidates do not run the secret-backed Sonar job, because a
+  merge group can contain fork-controlled code. Sonar runs on trusted
+  same-repository PRs and main pushes. Required-check settings must not
+  require Sonar to run on merge groups. GitHub's fork-approval settings and
   repository rules are separate from this workflow. The desired requirement
   for write-authorized approval before public PR CI is not fully enforced by
   this workflow and must be addressed before relying on it.

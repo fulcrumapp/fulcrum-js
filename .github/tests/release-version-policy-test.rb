@@ -51,6 +51,21 @@ class ReleaseVersionPolicyTest < Minitest::Test
       refute workflow.fetch(true).key?("push")
       assert_includes workflow.fetch("jobs").fetch("publish").fetch("if"), "github.ref_type == 'tag'"
     end
+
+    def test_npmjs_manual_dispatch_requires_the_matching_tag_ref
+      workflow = YAML.load_file(File.expand_path("../workflows/publish-npmjs.yml", __dir__))
+      step = workflow.fetch("jobs").fetch("publish").fetch("steps").find { |item| item["name"] == "Verify release tag and commit" }
+      script = step.fetch("run").sub("node .github/actions/npm-publish-github/publish.js verify", "exit 0")
+      Dir.mktmpdir do |dir|
+        File.write(File.join(dir, "node"), "#!/bin/sh\necho 1.2.3\n")
+        File.chmod(0o755, File.join(dir, "node"))
+        [["tag", "v1.2.3", true], ["tag", "v1.2.4", false], ["branch", "main", false]].each do |type, ref, expected|
+          env = { "PATH" => "#{dir}:#{ENV.fetch("PATH")}", "EVENT_NAME" => "workflow_dispatch", "INPUT_TAG" => "v1.2.3", "REF_NAME" => ref, "REF_TYPE" => type }
+          out, err, status = Open3.capture3(env, "bash", "-e", "-o", "pipefail", "-c", script)
+          assert_equal expected, status.success?, "#{type}/#{ref}: #{out}#{err}"
+        end
+      end
+    end
   end
 
   private

@@ -66,6 +66,9 @@ jobs:
           }
           NODE
 
+      - name: Test release workflow contracts
+        run: ruby .github/tests/release-version-policy-test.rb
+
       - name: Preserve CI configuration
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
@@ -95,7 +98,7 @@ jobs:
   sonar:
     name: SonarQube analysis
     needs: build-and-test
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
