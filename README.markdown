@@ -1926,36 +1926,69 @@ describe('Forms', () => {
 
 ## Publishing
 
-### Automated Deployment
+### Automated releases
 
-Normal releases are automated after a merge to `main`:
+After a change is merged to `main`, the [CI workflow](.github/workflows/ci.yml)
+runs lint, build, tests and Sonar analysis. If all succeed, it calculates the
+next stable version from Git tags and commit messages: a Conventional Commit
+breaking change takes precedence over `feat`, which takes precedence over a
+patch release.
 
-1. The Tekton pipeline determines and writes the next package version, publishes it to GitHub Packages, and pushes a matching `vX.Y.Z` tag.
-2. The `Publish to npmjs.org` GitHub Actions workflow runs for that tag, verifies that the tag and `package.json` versions match, builds the package, and publishes it to public npm with provenance.
+The workflow uses a GitHub App to create a signed release-only commit whose
+parent is the validated main commit. This commit changes only the version in
+`package.json`; it does not change `main`. The App creates a `vX.Y.Z` tag on
+the release commit. Before creating the tag, CI checks that the proposed
+version is newer than every stable version on npmjs.org.
 
-The public npm workflow skips a version that is already published, so it is safe for both tag and GitHub Release events to trigger it.
-When manually dispatching the workflow, provide the exact `vX.Y.Z` tag; publishing from a branch is rejected.
+The tag starts two independent workflows:
 
-### Manual Publishing
+- [Publish npm package to GitHub Packages](.github/workflows/publish-npm.yml)
+  verifies the tag and release commit, builds and publishes the package, then
+  creates a GitHub Release with generated notes.
+- [Publish to npmjs.org](.github/workflows/publish-npmjs.yml) verifies the
+  same tag and release commit, builds and publishes the public package with
+  provenance.
 
-Use these commands only for a deliberate manual recovery:
+Both workflows verify that the packaged version matches the tag. A published
+version is considered successfully recovered only if its registry integrity
+matches the newly built tarball; a mismatch fails rather than overwriting it.
+Check both workflow runs: success in one registry does not imply success in
+the other.
+
+### Release prerequisites
+
+- Disable the Tekton release path before enabling this one so only one system
+  creates releases.
+- Configure `FULCRUM_CI_APP_ID` and `FULCRUM_CI_APP_PRIVATE_KEY` for the
+  repository. The installed App needs contents write access and permission to
+  create the temporary release branch and protected tags. Configure
+  `ACTIONS_SONAR_TOKEN` for validation; `ACTIONS_SONAR_URL` is optional.
+- Give the workflow token permission to publish the package to GitHub Packages.
+  Configure an npm trusted publisher for `fulcrumapp/fulcrum-js`, workflow
+  `publish-npmjs.yml`, and environment `CI: Deploy Public NPM Package`, with
+  direct `npm publish` allowed. Any environment approval rules must also pass.
+- Reconcile Git tags and versions already published to npmjs.org before
+  enabling releases. If the proposed version is not newer than the public
+  registry, tagging fails; do not overwrite or move an existing release tag.
+
+### Recovery
+
+If validation or tagging fails, inspect the failed `CI` run and correct the
+cause before rerunning it. A PR or merge-queue run does not publish or create
+a release tag.
+
+If a tag exists but a registry publish fails, rerun the corresponding failed
+workflow run from GitHub Actions. For a new manual dispatch, use an existing
+stable release tag created by this release process:
 
 ```bash
-# Ensure all tests pass
-yarn test
-
-# Update version in package.json
-yarn version --patch  # or --minor/--major
-
-# Build the project
-yarn build
-
-# Publish to public npm
-yarn publish:npm
-
-# Publish to GitHub Packages
-yarn publish:github
-
-# Alternatively, publish to both registries
-yarn publish:all
+gh workflow run publish-npm.yml --repo fulcrumapp/fulcrum-js --ref vX.Y.Z
+gh workflow run publish-npmjs.yml --repo fulcrumapp/fulcrum-js --ref vX.Y.Z -f tag=vX.Y.Z
 ```
+
+The GitHub Packages dispatch must use the tag as its ref; a branch ref fails
+verification. For npmjs.org, use the same tag as both the workflow ref and
+the required input so the run and its provenance correspond to the release.
+Both paths verify the release commit and the package version.
+If an existing package has a different integrity, investigate the existing
+release and build before retrying; do not attempt to replace the version.
