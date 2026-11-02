@@ -24,21 +24,22 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
       - name: Setup Node
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@v7.1.0
         with:
           node-version: "22.14.0"
           cache: yarn
 
       - name: Preserve CI configuration
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: npm-ci-config-${{ github.run_id }}-${{ github.run_attempt }}
           path: ci/config.yaml
+          archive: true
           if-no-files-found: error
 
       - name: Install dependencies
@@ -54,10 +55,11 @@ jobs:
         run: yarn test:coverage
 
       - name: Upload coverage
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: npm-coverage-${{ github.run_id }}-${{ github.run_attempt }}
           path: coverage/
+          archive: true
           if-no-files-found: error
 
   sonar:
@@ -68,13 +70,13 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Scan trusted revision
-        uses: ./.github/actions/npm-sonar
+        uses: $/.github/actions/npm-sonar
         with:
           artifact-name: npm-coverage-${{ github.run_id }}-${{ github.run_attempt }}
           restore-path: coverage
@@ -91,22 +93,23 @@ jobs:
       cancel-in-progress: false
       queue: max
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: '22.14.0'
+          package-manager-cache: false
       - name: Create scoped GitHub App token
         id: app-token
-        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
+        uses: actions/create-github-app-token@v3.3.0
         with:
           app-id: ${{ secrets.FULCRUM_CI_APP_ID }}
           private-key: ${{ secrets.FULCRUM_CI_APP_PRIVATE_KEY }}
           permission-contents: write
       - name: Create release-only commit and tag
-        uses: ./.github/actions/npm-create-tag
+        uses: $/.github/actions/npm-create-tag
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           CHECK_NPMJS: 'true'
