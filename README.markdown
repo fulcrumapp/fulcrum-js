@@ -2005,6 +2005,11 @@ the other.
   the package is built before `npm pack --ignore-scripts`. This avoids running
   publish lifecycle scripts implicitly and lets the workflows check the
   actual tarball's identity before publishing.
+- **Centralize publishing.** There are no manual `publish:npm`,
+  `publish:github` or `publish:all` scripts. The `prepublishOnly` hook rejects
+  ordinary local publishes; the release workflows build explicitly and publish
+  their verified tarballs with lifecycle scripts disabled. This hook is a
+  guardrail, not an access control: `--ignore-scripts` can bypass it.
 
 The current public workflow uploads `ci/config.yaml` as an artifact but does
 not use it to enable or disable tests, lint or Sonar. Honoring those settings
@@ -2024,6 +2029,11 @@ artifacts rather than the Tekton S3 result paths.
   Configure an npm trusted publisher for `fulcrumapp/fulcrum-js`, workflow
   `publish-npmjs.yml`, and environment `CI: Deploy Public NPM Package`, with
   direct `npm publish` allowed. Any environment approval rules must also pass.
+- Enforce workflow-only publishing at the registries: restrict GitHub Packages
+  write access and remove unnecessary publishing credentials; on npmjs.org,
+  restrict token-based publishing and remove any other trusted publishers that
+  should not publish this package. Removing repository scripts alone cannot
+  prevent someone with registry credentials from publishing outside Actions.
 - Reconcile Git tags and versions already published to npmjs.org before
   enabling releases. If the proposed version is not newer than the public
   registry, tagging fails; do not overwrite or move an existing release tag.
