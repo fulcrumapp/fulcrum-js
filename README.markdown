@@ -1960,7 +1960,9 @@ the other.
 - **Validate before releasing.** PRs, merge-queue candidates and main pushes
   run validation, but only a successful main push can create a release. This
   avoids publishing an unmerged change or a failed build. Merge-queue branch
-  protection and required checks must also be configured in GitHub.
+  protection and required checks must also be configured in GitHub. A newer
+  PR run cancels older validation for that PR; main pushes use separate
+  concurrency groups so they cannot interrupt one another's release work.
 - **Keep public CI isolated.** This public repository uses self-contained
   workflows on GitHub-hosted runners rather than the private `gh-workflows`
   reusable workflows. PR validation uses a read-only token; fork PRs do not
