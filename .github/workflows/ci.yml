@@ -20,7 +20,7 @@ concurrency:
 jobs:
   build-and-test:
     if: github.event_name != 'pull_request' || !github.event.pull_request.draft
-    runs-on: ubuntu-latest
+    runs-on: flcrm-gh-standard
     timeout-minutes: 10
     steps:
       - name: Checkout
@@ -30,6 +30,14 @@ jobs:
           persist-credentials: false
 
       - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22.14.0"
+
+      - name: Enable Yarn
+        run: corepack enable
+
+      - name: Restore Yarn cache
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "22.14.0"
@@ -67,7 +75,7 @@ jobs:
           NODE
 
       - name: Test release workflow contracts
-        run: ruby .github/tests/release-version-policy-test.rb
+        run: node --test .github/tests/release-version-policy-test.cjs
 
       - name: Preserve CI configuration
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -99,7 +107,7 @@ jobs:
     name: SonarQube analysis
     needs: build-and-test
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
-    runs-on: ubuntu-latest
+    runs-on: flcrm-gh-standard
     timeout-minutes: 15
     steps:
       - name: Checkout
@@ -120,7 +128,7 @@ jobs:
     name: Create npm release tag
     needs: [build-and-test, sonar]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: flcrm-gh-small
     concurrency:
       group: ${{ github.repository }}-npm-release-tag
       cancel-in-progress: false

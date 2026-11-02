@@ -21,6 +21,8 @@ jobs:
   publish:
     if: (github.event_name == 'create' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')) || github.event_name == 'workflow_dispatch'
     environment: "CI: Deploy Public NPM Package"
+    # npm trusted publishing does not support self-hosted runners.
+    # https://docs.npmjs.com/trusted-publishers/#supported-cicd-providers
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

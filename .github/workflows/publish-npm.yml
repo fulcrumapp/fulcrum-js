@@ -16,7 +16,7 @@ jobs:
   publish:
     name: Publish to GitHub Packages
     if: (github.event_name == 'create' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')) || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
+    runs-on: flcrm-gh-standard
     permissions:
       contents: read
       packages: write
@@ -35,7 +35,7 @@ jobs:
   release:
     name: Create GitHub release notes
     needs: publish
-    runs-on: ubuntu-latest
+    runs-on: flcrm-gh-small
     permissions:
       contents: write
     steps:

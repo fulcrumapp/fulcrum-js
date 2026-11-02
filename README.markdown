@@ -1971,9 +1971,15 @@ the other.
   protection and required checks must also be configured in GitHub. A newer
   PR run cancels older validation for that PR; main pushes use separate
   concurrency groups so they cannot interrupt one another's release work.
-- **Keep public CI isolated.** This public repository uses self-contained
-  workflows on GitHub-hosted runners rather than the private `gh-workflows`
-  reusable workflows. PR validation uses a read-only token; fork PRs and
+- **Protect public CI runners.** This public repository uses self-contained
+  workflows rather than the private `gh-workflows` reusable workflows.
+  Validation and GitHub Packages publishing use internal `flcrm-gh-*`
+  runners; npmjs.org publishing uses GitHub-hosted runners because npm
+  trusted publishing does not support self-hosted runners. Fork PRs can run
+  untrusted code on internal infrastructure, so runner isolation, network
+  access, ephemeral cleanup and repository approval settings must be
+  verified before enabling those runners for this public repository.
+  PR validation uses a read-only token; fork PRs and
   merge-queue candidates do not run the secret-backed Sonar job, because a
   merge group can contain fork-controlled code. Sonar runs on trusted
   same-repository PRs and main pushes. Required-check settings must not
