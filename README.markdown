@@ -113,9 +113,9 @@ client.forms.getAll().then(response => {
 });
 ```
 
-## Version History
+## Major Versions
 
-### Version 3.0 (Latest)
+### Version 3.x
 
 **Breaking Changes:**
 
