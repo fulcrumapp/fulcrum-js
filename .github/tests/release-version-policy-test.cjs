@@ -96,6 +96,13 @@ test("publish workflows use tag creation and appropriate runners", () => {
   }
 });
 
+test("GitHub Packages publishing installs npm 11 before packing without scripts", () => {
+  const action = readFileSync(path.join(__dirname, "../actions/npm-publish-github/action.yml"), "utf8");
+  const install = action.indexOf("npm install --global npm@11.5.1 --ignore-scripts");
+  const pack = action.indexOf("npm pack --ignore-scripts --json");
+  assert.ok(install >= 0 && pack > install, "npm 11 must be installed before packing");
+});
+
 test("manual npmjs dispatch requires the matching tag ref", () => {
   const publish = readFileSync(path.join(workflows, "publish-npmjs.yml"), "utf8");
   const block = publish.match(/      - name: Verify release tag and commit\n([\s\S]*?)(?=      - name:)/)?.[1];

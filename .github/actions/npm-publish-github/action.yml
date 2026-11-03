@@ -12,6 +12,9 @@ runs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: node "$GITHUB_ACTION_PATH/publish.js" verify
+    - name: Install npm for script-free packing
+      shell: bash
+      run: npm install --global npm@11.5.1 --ignore-scripts
     - name: Enable the configured Yarn version
       shell: bash
       run: |

@@ -2059,7 +2059,8 @@ flowchart TD
   unexpected responses or conflicting versions. Each registry is published
   independently, so a partial release needs recovery in the failed workflow.
 - **Build and pack explicitly.** Dependency installation uses the lockfile;
-  the package is built before `npm pack --ignore-scripts`. This avoids running
+  the package is built before `npm pack --ignore-scripts`, using npm 11.5.1
+  so that `prepare` is also skipped. This avoids running
   publish lifecycle scripts implicitly and lets the workflows check the
   actual tarball's identity before publishing.
 - **Centralize publishing.** There are no manual `publish:npm`,
