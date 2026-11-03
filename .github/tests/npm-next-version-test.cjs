@@ -83,7 +83,7 @@ test("uses the tested commit, not an uncommitted package version", () => {
 
 test("selects the highest stable tag, ignores prereleases, and analyzes the full range", () => {
   inRepository((git, directory) => {
-    commit(git, directory, "chore: initial");
+    commit(git, directory, "chore: initial", '{"version":"1.0.0"}');
     git("tag", "v1.9.9");
     git("tag", "v1.10.0");
     git("tag", "v99.0.0-rc.1");
@@ -96,9 +96,35 @@ test("selects the highest stable tag, ignores prereleases, and analyzes the full
   });
 });
 
+test("increments the committed package version when it is newer than the latest tag", () => {
+  for (const [message, expected] of [["fix: follow-up", "1.1.1"], ["feat: follow-up", "1.2.0"], ["feat!: change", "2.0.0"]]) {
+    inRepository((git, directory) => {
+      commit(git, directory, "chore: initial", '{"version":"1.0.0"}');
+      git("tag", "v1.0.0");
+      commit(git, directory, "chore(release): v1.1.0 [skip ci]", '{"version":"1.1.0"}');
+      const head = commit(git, directory, message);
+      const plan = calculateVersion(head);
+      assert.equal(plan.previousTag, "v1.0.0");
+      assert.equal(plan.version, expected);
+    });
+  }
+});
+
+test("does not reuse a higher untagged release version after a package version reset", () => {
+  for (const withTag of [false, true]) {
+    inRepository((git, directory) => {
+      commit(git, directory, "chore: initial", '{"version":"1.0.0"}');
+      if (withTag) git("tag", "v1.0.0");
+      commit(git, directory, "chore(release): v1.1.0 [skip ci]", '{"version":"1.1.0"}');
+      const head = commit(git, directory, "fix: follow-up", '{"version":"1.0.0"}');
+      assert.equal(calculateVersion(head).version, "1.1.1");
+    });
+  }
+});
+
 test("handles a release-only commit and recognizes a rerun", () => {
   inRepository((git, directory) => {
-    const releasedMain = commit(git, directory, "feat: first");
+    const releasedMain = commit(git, directory, "feat: first", '{"version":"0.9.0"}');
     commit(git, directory, "chore(release): v1.0.0");
     git("tag", "v1.0.0");
     git("checkout", "--quiet", "-b", "next", releasedMain);

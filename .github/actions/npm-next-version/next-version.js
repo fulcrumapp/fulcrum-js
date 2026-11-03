@@ -5,6 +5,7 @@ const { execFileSync, spawnSync } = require("node:child_process");
 const { appendFileSync } = require("node:fs");
 
 const stableTag = /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
+const releaseSubject = /^chore\(release\): (v(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)) \[skip ci\]$/;
 
 function git(...args) {
   return execFileSync("git", args, { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
@@ -79,17 +80,22 @@ function calculateVersion(revision) {
   if (messages.length === 0) throw new Error("No commits found to determine the next release version");
 
   const bump = classify(messages);
-  let parts = previous?.parts;
-  if (!parts) {
-    let manifest;
-    try {
-      manifest = JSON.parse(git("show", `${head}:package.json`));
-    } catch (error) {
-      throw new Error(`Cannot read package.json at the tested commit: ${error.message}`);
-    }
-    const match = typeof manifest?.version === "string" && stableTag.exec(`v${manifest.version}`);
-    if (!match) throw new Error("package.json must contain a stable SemVer version when no stable tag exists");
-    parts = match.slice(1).map(BigInt);
+  let manifest;
+  try {
+    manifest = JSON.parse(git("show", `${head}:package.json`));
+  } catch (error) {
+    throw new Error(`Cannot read package.json at the tested commit: ${error.message}`);
+  }
+  const match = typeof manifest?.version === "string" && stableTag.exec(`v${manifest.version}`);
+  if (!match) throw new Error("package.json must contain a stable SemVer version");
+  const packageParts = match.slice(1).map(BigInt);
+  let parts = previous && compareVersions(previous, { parts: packageParts }) < 0
+    ? previous.parts : packageParts;
+  for (const message of messages) {
+    const release = releaseSubject.exec(message.split(/\r?\n/, 1)[0]);
+    if (!release) continue;
+    const releaseParts = stableTag.exec(release[1]).slice(1).map(BigInt);
+    if (compareVersions({ parts: releaseParts }, { parts }) < 0) parts = releaseParts;
   }
   const [major, minor, patch] = parts;
   const version = bump === "major" ? `${major + 1n}.0.0`

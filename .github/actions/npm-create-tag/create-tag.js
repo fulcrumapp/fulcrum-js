@@ -141,7 +141,7 @@ function createReleaseTag(options) {
   }
   const range = plan.base ? `${plan.base}..${head}` : head;
   if (git("log", "--format=%s", range).split("\n").some((subject) => releaseMessage.test(subject))) {
-    throw new Error("An earlier release commit has no tag; rerun its original main CI workflow before releasing newer changes");
+    console.warn("::warning::An earlier release commit may be untagged; this validated release will supersede it.");
   }
 
   const packageJson = JSON.parse(git("show", `${head}:package.json`));

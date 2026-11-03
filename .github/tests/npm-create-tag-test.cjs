@@ -231,12 +231,13 @@ test("recovers a GitHub-signed release commit regardless of author", () => {
   assert.equal(calls.some((args) => args.includes("POST")), true);
 });
 
-test("blocks a later release when a previous version commit has not been tagged", () => {
+test("releases newer validated changes when an earlier release commit has no tag", () => {
   const { options } = fixture({ git: (...args) => {
     if (args[0] === "log") return "chore(release): v1.2.0 [skip ci]";
+    if (args[0] === "show") return '{"name":"@fulcrumapp/example","version":"1.2.0","packageManager":"yarn@1.22.22"}';
     return "";
   } });
-  assert.throws(() => createReleaseTag(options), /no tag/);
+  assert.equal(createReleaseTag(options).tag, "v1.2.3");
 });
 
 test("does not decrease or repeat the current package version", () => {

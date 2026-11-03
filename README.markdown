@@ -2028,10 +2028,11 @@ flowchart TD
   [version calculator](.github/actions/npm-next-version/next-version.js)
   uses the highest stable SemVer tag and the commit messages since its common
   ancestor with the validated commit. It ignores prerelease tags and applies
-  breaking-change, feature, then patch precedence. If no stable tag exists,
-  the tested commit's stable `package.json` version is the baseline, and the
-  bump uses all commit messages in its history. A missing or invalid baseline
-  fails. Full history and tags are required.
+  breaking-change, feature, then patch precedence. The baseline is the greatest
+  of the highest stable tag, the tested commit's stable `package.json` version,
+  and release-commit versions in the examined history. If no stable tag exists,
+  all commit messages in its history determine the bump. A missing or invalid
+  version fails. Full history and tags are required.
 - **Update main before tagging.** The App writes a signed child of the tested
   main commit, changing only the version, then tags that child. Publishing
   verifies that the tagged commit is on main, changes only the version, and
@@ -2104,8 +2105,9 @@ artifacts rather than the Tekton S3 result paths.
 If validation or tagging fails, inspect the failed `CI` run and correct the
 cause before rerunning it. A PR or merge-queue run does not publish or create
 a release tag. If the version commit reached `main` but tag creation failed,
-rerun the original main CI run; it verifies the commit and creates the
-missing tag. Newer releases stop until that tag is recovered.
+rerunning the original main CI run can recover it if that run's code supports
+recovery. Otherwise, a newer validated main run warns and supersedes it with
+a newer version; the abandoned version is not automatically published.
 
 If a tag exists but a registry publish fails, rerun the corresponding failed
 workflow run from GitHub Actions. For a new manual dispatch, use an existing
