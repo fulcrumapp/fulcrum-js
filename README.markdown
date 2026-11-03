@@ -2035,7 +2035,8 @@ flowchart TD
 - **Update main before tagging.** The App writes a signed child of the tested
   main commit, changing only the version, then tags that child. Publishing
   verifies that the tagged commit is on main, changes only the version, and
-  has a valid GitHub signature with `fulcrum-ci-public[bot]` as author.
+  has a valid GitHub signature. Branch and tag protections control who may
+  create release commits and tags; the workflow does not pin an App author.
   The tagged commit differs from the tested commit by that version change;
   it is not independently tested.
 - **Separate tagging from publication.** The requested release flow uses a

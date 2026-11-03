@@ -11,7 +11,7 @@ const releaseMessage = /^chore\(release\): (v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9
 const commitMutation = `
   mutation($input: CreateCommitOnBranchInput!) {
     createCommitOnBranch(input: $input) {
-      commit { oid author { user { databaseId login } } signature { isValid wasSignedByGitHub } }
+      commit { oid signature { isValid wasSignedByGitHub } }
     }
   }
 `;
@@ -82,7 +82,7 @@ function recoverRelease(options, currentHead) {
   if (!match) return null;
   if (!/^[0-9a-f]{40}$/i.test(child.sha || "")) throw new Error("Invalid release commit SHA");
   const detail = JSON.parse(gh(["api", `repos/${repository}/commits/${child.sha}`]));
-  if (detail.commit?.verification?.verified !== true || detail.author?.type !== "Bot" ||
+  if (detail.commit?.verification?.verified !== true ||
       detail.parents?.length !== 1 || detail.parents[0].sha !== head ||
       detail.files?.length !== 1 || detail.files[0].filename !== "package.json" ||
       detail.files[0].status !== "modified" || detail.commit.message !== child.commit.message) {
