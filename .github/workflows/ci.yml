@@ -20,7 +20,7 @@ concurrency:
 jobs:
   build-and-test:
     if: github.event_name != 'pull_request' || !github.event.pull_request.draft
-    runs-on: flcrm-gh-standard
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Checkout
@@ -107,7 +107,7 @@ jobs:
     name: SonarQube analysis
     needs: build-and-test
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
-    runs-on: flcrm-gh-standard
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - name: Checkout
@@ -128,7 +128,7 @@ jobs:
     name: Create npm release tag
     needs: [build-and-test, sonar]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: flcrm-gh-small
+    runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.repository }}-npm-release-tag
       cancel-in-progress: false

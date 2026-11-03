@@ -1965,10 +1965,9 @@ the other.
 
 ### Release flow
 
-The diagram shows the automated path for this repository. Fork approval and
-runner isolation are repository and organization prerequisites, not steps
-enforced by this workflow. Validation, scans and publishing must succeed
-before their downstream steps run.
+The diagram shows the automated path for this repository. Fork approval is a
+repository and organization prerequisite, not a step enforced by this workflow.
+Validation, scans and publishing must succeed before their downstream steps run.
 
 ```mermaid
 flowchart TD
@@ -1976,14 +1975,14 @@ flowchart TD
     Queue["Merge-queue candidate"] --> Validate
     Main["Push to main"] --> Validate
 
-    Validate["Check version policy; install, lint, build and test<br/>flcrm-gh-standard"]
+    Validate["Check version policy; install, lint, build and test<br/>ubuntu-latest"]
     Validate --> Artifacts["Upload CI configuration and coverage artifacts"]
     Artifacts --> SonarDecision{"Main push or<br/>same-repository PR?"}
-    SonarDecision -- Yes --> Sonar["Sonar analysis<br/>flcrm-gh-standard"]
+    SonarDecision -- Yes --> Sonar["Sonar analysis<br/>ubuntu-latest"]
     SonarDecision -- No --> ChecksOnly["Validation only; no release"]
     Sonar --> MainDecision{"Main push?"}
     MainDecision -- No --> ChecksOnly
-    MainDecision -- Yes --> Serialize["Queue release tagging<br/>flcrm-gh-small"]
+    MainDecision -- Yes --> Serialize["Queue release tagging<br/>ubuntu-latest"]
 
     Serialize --> Current{"Is main still the<br/>validated commit?"}
     Current -- Yes --> Version["Calculate SemVer from tags and commits;<br/>check npmjs.org version history"]
@@ -1993,10 +1992,10 @@ flowchart TD
     Recovery -- "Recovered version commit" --> Tag
     Recovery -- "Newer merge" --> Wait["Newer validated main run releases combined changes"]
 
-    Tag --> GitHubPublish["Verify tag and release commit;<br/>build and pack<br/>flcrm-gh-standard"]
+    Tag --> GitHubPublish["Verify tag and release commit;<br/>build and pack<br/>ubuntu-latest"]
     Tag --> NpmPublish["Verify tag and release commit;<br/>build and pack<br/>GitHub-hosted runner"]
     GitHubPublish --> GitHubPackages["Publish or confirm matching<br/>GitHub Packages version"]
-    GitHubPackages --> Notes["Create GitHub Release notes<br/>flcrm-gh-small"]
+    GitHubPackages --> Notes["Create GitHub Release notes<br/>ubuntu-latest"]
     NpmPublish --> NpmRegistry["Publish with provenance or confirm<br/>matching npmjs.org version"]
 ```
 
@@ -2010,12 +2009,8 @@ flowchart TD
   concurrency groups so they cannot interrupt one another's release work.
 - **Protect public CI runners.** This public repository uses self-contained
   workflows rather than the private `gh-workflows` reusable workflows.
-  Validation and GitHub Packages publishing use internal `flcrm-gh-*`
-  runners; npmjs.org publishing uses GitHub-hosted runners because npm
-  trusted publishing does not support self-hosted runners. Fork PRs can run
-  untrusted code on internal infrastructure, so runner isolation, network
-  access, ephemeral cleanup and repository approval settings must be
-  verified before enabling those runners for this public repository.
+  Validation, release and publication jobs use GitHub-hosted `ubuntu-latest`
+  runners. npm trusted publishing does not support self-hosted runners.
   PR validation uses a read-only token; fork PRs and
   merge-queue candidates do not run the secret-backed Sonar job, because a
   merge group can contain fork-controlled code. Sonar runs on trusted

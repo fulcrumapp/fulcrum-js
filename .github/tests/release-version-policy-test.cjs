@@ -1,6 +1,6 @@
 const assert = require("node:assert/strict");
 const { spawnSync } = require("node:child_process");
-const { mkdtempSync, readFileSync, rmSync, writeFileSync } = require("node:fs");
+const { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 const { test } = require("node:test");
@@ -33,15 +33,24 @@ esac
   }
 }
 
-test("event bases, checkout and internal runners are configured", () => {
+test("event bases, checkout and GitHub-hosted runners are configured", () => {
   for (const field of ["pull_request.base.sha", "merge_group.base_sha", "event.before"]) {
     assert.ok(buildJob.includes(field), field);
   }
   assert.match(buildJob, /fetch-depth:\s*0/);
-  assert.match(buildJob, /runs-on:\s*flcrm-gh-standard/);
-  assert.match(workflow, /^  tag:[\s\S]*?runs-on:\s*flcrm-gh-small/m);
+  assert.match(buildJob, /runs-on:\s*ubuntu-latest/);
+  assert.match(workflow, /^  tag:[\s\S]*?runs-on:\s*ubuntu-latest/m);
   assert.match(workflow, /node --test \.github\/tests\/\*\.cjs/);
-  if (/^  sonar:/m.test(workflow)) assert.match(workflow, /^  sonar:[\s\S]*?runs-on:\s*flcrm-gh-standard/m);
+  if (/^  sonar:/m.test(workflow)) assert.match(workflow, /^  sonar:[\s\S]*?runs-on:\s*ubuntu-latest/m);
+});
+
+test("all workflow jobs use GitHub-hosted Ubuntu runners", () => {
+  for (const name of readdirSync(workflows).filter((file) => /\.ya?ml$/.test(file))) {
+    const contents = readFileSync(path.join(workflows, name), "utf8");
+    for (const line of contents.match(/^\s+runs-on:.*$/gm) || []) {
+      assert.match(line, /^\s+runs-on:\s*ubuntu-latest\s*$/, `${name}: ${line}`);
+    }
+  }
 });
 
 test("the version guard accepts unchanged versions and rejects invalid changes", () => {
@@ -73,8 +82,8 @@ test("publish workflows use tag creation and appropriate runners", () => {
     assert.doesNotMatch(publish, /^  push:/m);
     assert.match(publish, /github\.ref_type == 'tag'/);
     if (name === "publish-npm") {
-      assert.match(publish, /^  publish:[\s\S]*?runs-on:\s*flcrm-gh-standard/m);
-      assert.match(publish, /^  release:[\s\S]*?runs-on:\s*flcrm-gh-small/m);
+      assert.match(publish, /^  publish:[\s\S]*?runs-on:\s*ubuntu-latest/m);
+      assert.match(publish, /^  release:[\s\S]*?runs-on:\s*ubuntu-latest/m);
     } else {
       assert.match(publish, /runs-on:\s*ubuntu-latest/);
       assert.match(publish, /npm trusted publishing does not support self-hosted runners/);
