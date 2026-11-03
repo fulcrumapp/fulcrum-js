@@ -63,7 +63,7 @@ runs:
         fi
         docker run --rm \
           --user "$(id -u):$(id -g)" \
-          --tmpfs /tmp:rw,nosuid,nodev,mode=1777 \
+          --tmpfs /tmp:rw,exec,nosuid,nodev,mode=1777 \
           --env SONAR_TOKEN --env SONAR_HOST_URL --env SONAR_USER_HOME --env HOME \
           --volume "$GITHUB_WORKSPACE:/usr/src" \
           sonarsource/sonar-scanner-cli@sha256:46341f2c2dc560381414e90347885f5cddc716db080adcbafc1cac13e1473094 \

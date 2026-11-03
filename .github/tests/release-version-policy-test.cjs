@@ -53,9 +53,9 @@ test("all workflow jobs use GitHub-hosted Ubuntu runners", () => {
   }
 });
 
-test("the Sonar container has a writable temporary directory", () => {
+test("the Sonar container has a writable, executable temporary directory", () => {
   const action = readFileSync(path.resolve(__dirname, "../actions/npm-sonar/action.yml"), "utf8");
-  assert.match(action, /--tmpfs \/tmp:rw,nosuid,nodev,mode=1777/);
+  assert.match(action, /--tmpfs \/tmp:rw,exec,nosuid,nodev,mode=1777/);
 });
 
 test("the version guard accepts unchanged versions and rejects invalid changes", () => {
