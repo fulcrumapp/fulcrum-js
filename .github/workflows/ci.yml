@@ -75,7 +75,7 @@ jobs:
           NODE
 
       - name: Test release workflow contracts
-        run: node --test .github/tests/release-version-policy-test.cjs
+        run: node --test .github/tests/*.cjs
 
       - name: Preserve CI configuration
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2

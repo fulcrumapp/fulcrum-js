@@ -40,7 +40,7 @@ test("event bases, checkout and internal runners are configured", () => {
   assert.match(buildJob, /fetch-depth:\s*0/);
   assert.match(buildJob, /runs-on:\s*flcrm-gh-standard/);
   assert.match(workflow, /^  tag:[\s\S]*?runs-on:\s*flcrm-gh-small/m);
-  assert.match(workflow, /node --test \.github\/tests\/release-version-policy-test\.cjs/);
+  assert.match(workflow, /node --test \.github\/tests\/\*\.cjs/);
   if (/^  sonar:/m.test(workflow)) assert.match(workflow, /^  sonar:[\s\S]*?runs-on:\s*flcrm-gh-standard/m);
 });
 

@@ -2029,8 +2029,9 @@ flowchart TD
   uses the highest stable SemVer tag and the commit messages since its common
   ancestor with the validated commit. It ignores prerelease tags and applies
   breaking-change, feature, then patch precedence. If no stable tag exists,
-  the initial major, minor and patch versions are `1.0.0`, `0.1.0` and
-  `0.0.1`. Full history and tags are required.
+  the tested commit's stable `package.json` version is the baseline, and the
+  bump uses all commit messages in its history. A missing or invalid baseline
+  fails. Full history and tags are required.
 - **Update main before tagging.** The App writes a signed child of the tested
   main commit, changing only the version, then tags that child. Publishing
   verifies that the tagged commit is on main, changes only the version, and

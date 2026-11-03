@@ -79,15 +79,22 @@ function calculateVersion(revision) {
   if (messages.length === 0) throw new Error("No commits found to determine the next release version");
 
   const bump = classify(messages);
-  let version;
-  if (!previous) {
-    version = bump === "major" ? "1.0.0" : bump === "minor" ? "0.1.0" : "0.0.1";
-  } else {
-    const [major, minor, patch] = previous.parts;
-    version = bump === "major" ? `${major + 1n}.0.0`
-      : bump === "minor" ? `${major}.${minor + 1n}.0`
-      : `${major}.${minor}.${patch + 1n}`;
+  let parts = previous?.parts;
+  if (!parts) {
+    let manifest;
+    try {
+      manifest = JSON.parse(git("show", `${head}:package.json`));
+    } catch (error) {
+      throw new Error(`Cannot read package.json at the tested commit: ${error.message}`);
+    }
+    const match = typeof manifest?.version === "string" && stableTag.exec(`v${manifest.version}`);
+    if (!match) throw new Error("package.json must contain a stable SemVer version when no stable tag exists");
+    parts = match.slice(1).map(BigInt);
   }
+  const [major, minor, patch] = parts;
+  const version = bump === "major" ? `${major + 1n}.0.0`
+    : bump === "minor" ? `${major}.${minor + 1n}.0`
+    : `${major}.${minor}.${patch + 1n}`;
   return { head, previousTag: previous ? previous.tag : "", base, bump, version, tag: `v${version}`, alreadyReleased: false };
 }
 
