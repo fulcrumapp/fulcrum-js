@@ -6,31 +6,83 @@ on:
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened, ready_for_review]
+  merge_group:
+    types: [checks_requested]
 
-# Read-only token; no secrets are used. Never switch to pull_request_target.
+# PR validation uses a read-only token. Never switch to pull_request_target.
 permissions:
   contents: read
 
 concurrency:
-  group: ci-${{ github.event.pull_request.number || github.ref }}
+  group: ci-${{ github.event.pull_request.number || github.ref }}-${{ github.event_name == 'push' && github.run_id || github.event_name }}
   cancel-in-progress: true
 
 jobs:
   build-and-test:
-    if: github.event_name == 'push' || !github.event.pull_request.draft
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22.14.0"
+
+      - name: Enable Yarn
+        run: corepack enable
+
+      - name: Restore Yarn cache
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "22.14.0"
           cache: yarn
+
+      - name: Protect release-managed version
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha || github.event.before }}
+        run: |
+          node <<'NODE'
+          const { execFileSync } = require('node:child_process');
+          const base = process.env.BASE_SHA || '';
+          if (!/^[0-9a-f]{40,64}$/.test(base) || /^0+$/.test(base)) {
+            console.error('::error::Cannot determine the base commit for the release version check.');
+            process.exit(1);
+          }
+          function version(ref) {
+            let manifest;
+            try {
+              manifest = JSON.parse(execFileSync('git', ['show', `${ref}:package.json`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }));
+            } catch (error) {
+              console.error(`::error::Cannot read or parse package.json at ${ref}: ${error.message}`);
+              process.exit(1);
+            }
+            if (!manifest || typeof manifest.version !== 'string' || !manifest.version.trim()) {
+              console.error(`::error::package.json at ${ref} must have a nonempty version string.`);
+              process.exit(1);
+            }
+            return manifest.version;
+          }
+          if (version(base) !== version('HEAD')) {
+            console.error('::error file=package.json::Do not manually change the root package.json version. Revert that version change; GitHub Actions manages release versions.');
+            process.exit(1);
+          }
+          NODE
+
+      - name: Test release workflow contracts
+        run: node --test .github/tests/*.cjs
+
+      - name: Preserve CI configuration
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: npm-ci-config-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ci/config.yaml
+          if-no-files-found: error
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile --ignore-scripts
@@ -43,3 +95,61 @@ jobs:
 
       - name: Test with coverage
         run: yarn test:coverage
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: npm-coverage-${{ github.run_id }}-${{ github.run_attempt }}
+          path: coverage/
+          if-no-files-found: error
+
+  sonar:
+    name: SonarQube analysis
+    needs: build-and-test
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Scan trusted revision
+        uses: ./.github/actions/npm-sonar
+        with:
+          artifact-name: npm-coverage-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-path: coverage
+          token: ${{ secrets.ACTIONS_SONAR_TOKEN }}
+          host-url: ${{ secrets.ACTIONS_SONAR_URL || 'https://sonarcloud.io' }}
+
+  tag:
+    name: Create npm release tag
+    needs: [build-and-test, sonar]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.repository }}-npm-release-tag
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22.14.0'
+      - name: Create scoped GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
+        with:
+          app-id: ${{ secrets.FULCRUM_CI_APP_ID_PUBLIC }}
+          private-key: ${{ secrets.FULCRUM_CI_APP_PRIVATE_KEY_PUBLIC }}
+          permission-contents: write
+      - name: Commit release version to main and tag it
+        uses: ./.github/actions/npm-create-tag
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          CHECK_NPMJS: 'true'
