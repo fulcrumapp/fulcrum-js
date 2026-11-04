@@ -12,6 +12,12 @@ assert.ok(buildJob, "build-and-test job is present");
 const guard = buildJob.match(/node <<'NODE'\n([\s\S]*?)^\s*NODE$/m)?.[1];
 assert.ok(guard, "version guard is present");
 
+test("release tagging uses the public CI App secrets", () => {
+  assert.match(workflow, /app-id:\s*\$\{\{\s*secrets\.FULCRUM_CI_APP_ID_PUBLIC\s*\}\}/);
+  assert.match(workflow, /private-key:\s*\$\{\{\s*secrets\.FULCRUM_CI_APP_PRIVATE_KEY_PUBLIC\s*\}\}/);
+  assert.doesNotMatch(workflow, /secrets\.FULCRUM_CI_APP_(?:ID|PRIVATE_KEY)\s*\}\}/);
+});
+
 function runCheck(base, head, sha = "a".repeat(40)) {
   const dir = mkdtempSync(path.join(os.tmpdir(), "version-policy-"));
   try {
