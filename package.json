@@ -61,11 +61,7 @@
   "resolutions": {
     "@istanbuljs/load-nyc-config/js-yaml": "3.15.0",
     "**/test-exclude/minimatch": "3.1.4",
-    "anymatch/picomatch": "2.3.2",
-    "jest-haste-map/picomatch": "4.0.4",
-    "jest-message-util/picomatch": "4.0.4",
-    "jest-util/picomatch": "4.0.4",
-    "tinyglobby/picomatch": "4.0.4"
+    "anymatch/picomatch": "2.3.2"
   },
   "packageManager": "yarn@1.22.22"
 }
