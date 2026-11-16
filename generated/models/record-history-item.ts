@@ -18,6 +18,9 @@
 import type { AuditLocation } from './audit-location.js';
 // May contain unused imports in some cases
 // @ts-ignore
+import type { GpsDeviceCaptureBase } from './gps-device-capture-base.js';
+// May contain unused imports in some cases
+// @ts-ignore
 import type { RecordHistoryItemGeometry } from './record-history-item-geometry.js';
 
 export interface RecordHistoryItem {
@@ -110,6 +113,10 @@ export interface RecordHistoryItem {
      */
     'altitude'?: number;
     'geometry'?: RecordHistoryItemGeometry;
+    /**
+     * Flexible GPS device metadata captured with the record.
+     */
+    'gps_device_capture'?: GpsDeviceCaptureBase;
     /**
      * Speed at time of record creation in m/s
      */

@@ -19,6 +19,9 @@ import type { AuditLocation } from './audit-location.js';
 // May contain unused imports in some cases
 // @ts-ignore
 import type { Geometry } from './geometry.js';
+// May contain unused imports in some cases
+// @ts-ignore
+import type { GpsDeviceCaptureBase } from './gps-device-capture-base.js';
 
 export interface ModelRecord {
     'status'?: string;
@@ -50,6 +53,10 @@ export interface ModelRecord {
     'longitude'?: number;
     'altitude'?: number;
     'geometry'?: Geometry;
+    /**
+     * Flexible GPS device metadata captured with the record.
+     */
+    'gps_device_capture'?: GpsDeviceCaptureBase;
     'speed'?: number;
     'course'?: number;
     'horizontal_accuracy'?: number;

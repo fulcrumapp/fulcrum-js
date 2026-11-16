@@ -15,9 +15,16 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import type { AttachmentTrackRequestAttachment } from './attachment-track-request-attachment.js';
+import type { AttachmentTrackRequestOwnersInner } from './attachment-track-request-owners-inner.js';
 
 export interface AttachmentTrackRequest {
-    'attachment': AttachmentTrackRequestAttachment;
+    /**
+     * Identifier of the attachment
+     */
+    'id': string;
+    /**
+     * Array of owner objects for the attachment
+     */
+    'owners'?: Array<AttachmentTrackRequestOwnersInner>;
 }
 

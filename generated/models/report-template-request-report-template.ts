@@ -13,9 +13,6 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { ReportTemplateRequestReportTemplateConfig } from './report-template-request-report-template-config.js';
 
 export interface ReportTemplateRequestReportTemplate {
     /**
@@ -62,7 +59,10 @@ export interface ReportTemplateRequestReportTemplate {
      * Pattern for generating report filenames
      */
     'filename_pattern'?: string;
-    'config': ReportTemplateRequestReportTemplateConfig;
+    /**
+     * JSON-encoded string containing report configuration settings. The API accepts a JSON string that will be parsed server-side. After parsing, the JSON object contains page size, orientation, margins, output format, and optional parameters.
+     */
+    'config': string;
 }
 
 export enum ReportTemplateRequestReportTemplateStatusEnum {
@@ -71,7 +71,7 @@ export enum ReportTemplateRequestReportTemplateStatusEnum {
 }
 export enum ReportTemplateRequestReportTemplateTypeEnum {
     Advanced = 'advanced',
-    Simple = 'simple'
+    Basic = 'basic'
 }
 
 

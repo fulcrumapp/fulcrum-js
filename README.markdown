@@ -113,9 +113,9 @@ client.forms.getAll().then(response => {
 });
 ```
 
-## Version History
+## Major Versions
 
-### Version 3.0 (Latest)
+### Version 3.x
 
 **Breaking Changes:**
 
@@ -1926,36 +1926,197 @@ describe('Forms', () => {
 
 ## Publishing
 
-### Automated Deployment
+### Automated releases
 
-Normal releases are automated after a merge to `main`:
+After a change is merged to `main`, the [CI workflow](.github/workflows/ci.yml)
+runs lint, build, tests and Sonar analysis. If all succeed, it calculates the
+next stable version from Git tags and commit messages: a Conventional Commit
+breaking change takes precedence over `feat`, which takes precedence over a
+patch release.
 
-1. The Tekton pipeline determines and writes the next package version, publishes it to GitHub Packages, and pushes a matching `vX.Y.Z` tag.
-2. The `Publish to npmjs.org` GitHub Actions workflow runs for that tag, verifies that the tag and `package.json` versions match, builds the package, and publishes it to public npm with provenance.
+The workflow uses a GitHub App to create a signed version-only commit on
+`main`, with the validated commit as its parent. It changes only the version
+in `package.json` and uses `[skip ci]` to avoid rerunning CI for that commit.
+The App then creates a `vX.Y.Z` tag on it. Before creating the commit, CI
+checks that the proposed version is newer than every stable version on
+npmjs.org.
 
-The public npm workflow skips a version that is already published, so it is safe for both tag and GitHub Release events to trigger it.
-When manually dispatching the workflow, provide the exact `vX.Y.Z` tag; publishing from a branch is rejected.
+Do not manually change the root `package.json` version. PR, merge-queue and
+main validation compare it with the event's base commit and fail if it
+changes; revert only that field if the check fails. The automated version
+commit skips CI and is not subject to this check. Configure the CI
+check as required and protect workflow changes with trusted review: a PR can
+otherwise alter or remove its own workflow check.
 
-### Manual Publishing
+The tag starts two independent workflows:
 
-Use these commands only for a deliberate manual recovery:
+- [Publish npm package to GitHub Packages](.github/workflows/publish-npm.yml)
+  verifies the tag and release commit, builds and publishes the package, then
+  creates a GitHub Release with generated notes.
+- [Publish to npmjs.org](.github/workflows/publish-npmjs.yml) verifies the
+  same tag and release commit, builds and publishes the public package with
+  provenance.
+
+Both workflows verify that the packaged version matches the tag. A published
+version is considered successfully recovered only if its registry integrity
+matches the newly built tarball; a mismatch fails rather than overwriting it.
+Check both workflow runs: success in one registry does not imply success in
+the other.
+
+### Release flow
+
+The diagram shows the automated path for this repository. Fork approval is a
+repository and organization prerequisite, not a step enforced by this workflow.
+Validation, scans and publishing must succeed before their downstream steps run.
+
+```mermaid
+flowchart TD
+    PR["Ready pull request"] --> Validate
+    Queue["Merge-queue candidate"] --> Validate
+    Main["Push to main"] --> Validate
+
+    Validate["Check version policy; install, lint, build and test<br/>ubuntu-latest"]
+    Validate --> Artifacts["Upload CI configuration and coverage artifacts"]
+    Artifacts --> SonarDecision{"Main push or<br/>same-repository PR?"}
+    SonarDecision -- Yes --> Sonar["Sonar analysis<br/>ubuntu-latest"]
+    SonarDecision -- No --> ChecksOnly["Validation only; no release"]
+    Sonar --> MainDecision{"Main push?"}
+    MainDecision -- No --> ChecksOnly
+    MainDecision -- Yes --> Serialize["Queue release tagging<br/>ubuntu-latest"]
+
+    Serialize --> Current{"Is main still the<br/>validated commit?"}
+    Current -- Yes --> Version["Calculate SemVer from tags and commits;<br/>check npmjs.org version history"]
+    Version --> Commit["App creates signed version-only commit on main<br/>with [skip ci]"]
+    Commit --> Tag["App creates vX.Y.Z tag"]
+    Current -- No --> Recovery["Supersede older run or recover<br/>a verified missing release tag"]
+    Recovery -- "Recovered version commit" --> Tag
+    Recovery -- "Newer merge" --> Wait["Newer validated main run releases combined changes"]
+
+    Tag --> GitHubPublish["Verify tag and release commit;<br/>build and pack<br/>ubuntu-latest"]
+    Tag --> NpmPublish["Verify tag and release commit;<br/>build and pack<br/>GitHub-hosted runner"]
+    GitHubPublish --> GitHubPackages["Publish or confirm matching<br/>GitHub Packages version"]
+    GitHubPackages --> Notes["Create GitHub Release notes<br/>ubuntu-latest"]
+    NpmPublish --> NpmRegistry["Publish with provenance or confirm<br/>matching npmjs.org version"]
+```
+
+### Release design and tradeoffs
+
+- **Validate before releasing.** PRs, merge-queue candidates and main pushes
+  run validation, but only a successful main push can create a release. This
+  avoids publishing an unmerged change or a failed build. Merge-queue branch
+  protection and required checks must also be configured in GitHub. A newer
+  PR run cancels older validation for that PR; main pushes use separate
+  concurrency groups so they cannot interrupt one another's release work.
+- **Protect public CI runners.** This public repository uses self-contained
+  workflows rather than the private `gh-workflows` reusable workflows.
+  Validation, release and publication jobs use GitHub-hosted `ubuntu-latest`
+  runners. npm trusted publishing does not support self-hosted runners.
+  PR validation uses a read-only token; fork PRs and
+  merge-queue candidates do not run the secret-backed Sonar job, because a
+  merge group can contain fork-controlled code. Sonar runs on trusted
+  same-repository PRs and main pushes. Required-check settings must not
+  require Sonar to run on merge groups. GitHub's fork-approval settings and
+  repository rules are separate from this workflow. The desired requirement
+  for write-authorized approval before public PR CI is not fully enforced by
+  this workflow and must be addressed before relying on it.
+- **Choose versions from Git history.** The
+  [version calculator](.github/actions/npm-next-version/next-version.js)
+  uses the highest stable SemVer tag and the commit messages since its common
+  ancestor with the validated commit. It ignores prerelease tags and applies
+  breaking-change, feature, then patch precedence. The baseline is the greatest
+  of the highest stable tag, the tested commit's stable `package.json` version,
+  and release-commit versions in the examined history. If no stable tag exists,
+  all commit messages in its history determine the bump. A missing or invalid
+  version fails. Full history and tags are required.
+- **Update main before tagging.** The App writes a signed child of the tested
+  main commit, changing only the version, then tags that child. Publishing
+  verifies that the tagged commit is on main, changes only the version, and
+  has a valid GitHub signature. Branch and tag protections control who may
+  create release commits and tags; the workflow does not pin an App author.
+  The tagged commit differs from the tested commit by that version change;
+  it is not independently tested.
+- **Separate tagging from publication.** The requested release flow uses a
+  stable tag as the handoff to independent GitHub Packages and npmjs.org
+  workflows. This makes a failed publication independently retryable and
+  supports publishing public packages to both registries. GitHub Release
+  notes are generated after GitHub Packages publication; they are not the
+  same commit-by-commit notes generated by Tekton. The workflows listen for
+  tag `create` events, which are not suppressed by `[skip ci]`; using tag
+  `push` events could suppress publication of the version commit.
+- **Use scoped publishing credentials.** A GitHub App creates the tag
+  because events created with the default `GITHUB_TOKEN` generally do not
+  trigger another workflow. GitHub Packages uses the workflow token with
+  package write permission; npmjs.org uses OIDC trusted publishing rather
+  than a long-lived npm publish token. Tag protection and App access must be
+  configured outside the workflow.
+- **Protect retries and concurrent releases.** Non-canceling concurrency
+  queues retain up to 100 pending runs instead of replacing a pending release.
+  Queue order is not guaranteed to match merge order; when `main` advances,
+  the older run is superseded and the newer successfully validated run
+  releases the combined changes. A failed newer validation does not release
+  untested changes. Registry lookups,
+  tag/version checks and tarball integrity comparisons fail visibly on
+  unexpected responses or conflicting versions. Each registry is published
+  independently, so a partial release needs recovery in the failed workflow.
+- **Build and pack explicitly.** Dependency installation uses the lockfile;
+  the package is built before `npm pack --ignore-scripts`, using npm 11.5.1
+  so that `prepare` is also skipped. This avoids running
+  publish lifecycle scripts implicitly and lets the workflows check the
+  actual tarball's identity before publishing.
+- **Centralize publishing.** There are no manual `publish:npm`,
+  `publish:github` or `publish:all` scripts. The `prepublishOnly` hook rejects
+  ordinary local publishes; the release workflows build explicitly and publish
+  their verified tarballs with lifecycle scripts disabled. This hook is a
+  guardrail, not an access control: `--ignore-scripts` can bypass it.
+
+The current public workflow uploads `ci/config.yaml` as an artifact but does
+not use it to enable or disable tests, lint or Sonar. Honoring those settings
+remains an outstanding requirement; do not assume changing that file alters
+the GitHub Actions checks. Configuration and coverage are retained as Actions
+artifacts rather than the Tekton S3 result paths.
+
+### Release prerequisites
+
+- Disable the Tekton release path before enabling this one so only one system
+  creates releases.
+- Configure `FULCRUM_CI_APP_ID` and `FULCRUM_CI_APP_PRIVATE_KEY` for the
+  repository. The installed App needs contents write access and permission to
+  bypass the rules protecting `main` and create protected tags. Configure
+  `ACTIONS_SONAR_TOKEN` for validation; `ACTIONS_SONAR_URL` is optional.
+- Give the workflow token permission to publish the package to GitHub Packages.
+  Configure an npm trusted publisher for `fulcrumapp/fulcrum-js`, workflow
+  `publish-npmjs.yml`, and environment `CI: Deploy Public NPM Package`, with
+  direct `npm publish` allowed. Any environment approval rules must also pass.
+- Enforce workflow-only publishing at the registries: restrict GitHub Packages
+  write access and remove unnecessary publishing credentials; on npmjs.org,
+  restrict token-based publishing and remove any other trusted publishers that
+  should not publish this package. Removing repository scripts alone cannot
+  prevent someone with registry credentials from publishing outside Actions.
+- Reconcile Git tags and versions already published to npmjs.org before
+  enabling releases. If the proposed version is not newer than the public
+  registry, tagging fails; do not overwrite or move an existing release tag.
+
+### Recovery
+
+If validation or tagging fails, inspect the failed `CI` run and correct the
+cause before rerunning it. A PR or merge-queue run does not publish or create
+a release tag. If the version commit reached `main` but tag creation failed,
+rerunning the original main CI run can recover it if that run's code supports
+recovery. Otherwise, a newer validated main run warns and supersedes it with
+a newer version; the abandoned version is not automatically published.
+
+If a tag exists but a registry publish fails, rerun the corresponding failed
+workflow run from GitHub Actions. For a new manual dispatch, use an existing
+stable release tag created by this release process:
 
 ```bash
-# Ensure all tests pass
-yarn test
-
-# Update version in package.json
-yarn version --patch  # or --minor/--major
-
-# Build the project
-yarn build
-
-# Publish to public npm
-yarn publish:npm
-
-# Publish to GitHub Packages
-yarn publish:github
-
-# Alternatively, publish to both registries
-yarn publish:all
+gh workflow run publish-npm.yml --repo fulcrumapp/fulcrum-js --ref vX.Y.Z
+gh workflow run publish-npmjs.yml --repo fulcrumapp/fulcrum-js --ref vX.Y.Z -f tag=vX.Y.Z
 ```
+
+The GitHub Packages dispatch must use the tag as its ref; a branch ref fails
+verification. For npmjs.org, use the same tag as both the workflow ref and
+the required input so the run and its provenance correspond to the release.
+Both paths verify the release commit and the package version.
+If an existing package has a different integrity, investigate the existing
+release and build before retrying; do not attempt to replace the version.

@@ -15,9 +15,12 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
-import type { FormRequestForm } from './form-request-form.js';
+import type { FormBody } from './form-body.js';
 
+/**
+ * Request body for creating or updating a form
+ */
 export interface FormRequest {
-    'form': FormRequestForm;
+    'form': FormBody;
 }
 
