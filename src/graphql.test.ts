@@ -1,12 +1,20 @@
-import axios, { AxiosError, AxiosHeaders, type AxiosResponse } from 'axios';
 import { SpanStatusCode, trace, type Span } from '@opentelemetry/api';
 import {
+  buildSchema,
+  getIntrospectionQuery,
+  graphqlSync,
+  parse,
+  validate,
+  type IntrospectionQuery,
+} from 'graphql';
+import {
+  ClientError,
   FulcrumClient,
-  FulcrumGraphQLError,
   FulcrumRegion,
+  gql,
   resolveGraphQLUrl,
+  type TypedDocumentString,
 } from './index.js';
-import { INTROSPECTION_QUERY } from './graphql.js';
 
 // Mock the generated REST API client so FulcrumClient constructor does not hit the network
 jest.mock('../generated/dist/index.js', () => ({
@@ -14,13 +22,55 @@ jest.mock('../generated/dist/index.js', () => ({
   Configuration: jest.fn().mockImplementation(() => ({})),
 }));
 
-function makeAxiosResponse<T>(data: T, status = 200): AxiosResponse<T> {
-  return {
-    data,
+const SAMPLE_SCHEMA = buildSchema(`
+  type Query {
+    siteInspections(status: String): [SiteInspection!]!
+  }
+
+  type SiteInspection {
+    id: ID!
+    status: String
+    asset: Asset
+  }
+
+  type Asset {
+    id: ID!
+    assetTag: String
+  }
+`);
+
+const SAMPLE_INTROSPECTION = graphqlSync({
+  schema: SAMPLE_SCHEMA,
+  source: getIntrospectionQuery(),
+}).data as unknown as IntrospectionQuery;
+
+function makeJsonResponse(
+  body: unknown,
+  status = 200,
+  contentType = 'application/json',
+): Response {
+  const text = typeof body === 'string' ? body : JSON.stringify(body);
+  return new Response(text, {
     status,
-    statusText: 'OK',
-    headers: {},
-    config: { headers: new AxiosHeaders() },
+    headers: { 'content-type': contentType },
+  });
+}
+
+function getLastFetchCall(fetchSpy: jest.SpyInstance): {
+  url: string;
+  headers: Headers;
+  body: Record<string, unknown>;
+  signal: AbortSignal | null | undefined;
+} {
+  const [urlArg, init] = fetchSpy.mock.calls[fetchSpy.mock.calls.length - 1] as [
+    URL | string,
+    RequestInit,
+  ];
+  return {
+    url: urlArg.toString(),
+    headers: new Headers(init.headers),
+    body: JSON.parse(String(init.body)) as Record<string, unknown>,
+    signal: init.signal,
   };
 }
 
@@ -68,16 +118,13 @@ describe('resolveGraphQLUrl', () => {
     );
   });
 
-  it('should prefer explicit graphqlUrl override when provided', () => {
+  it('should prefer explicit graphqlUrl override and fall back when blank', () => {
     expect(
       resolveGraphQLUrl(FulcrumRegion.US, 'https://graphql.internal.example.com/v1/graphql'),
     ).toBe('https://graphql.internal.example.com/v1/graphql');
     expect(
       resolveGraphQLUrl(FulcrumRegion.EU, '  https://override.example.com/query/graphql  '),
     ).toBe('https://override.example.com/query/graphql');
-  });
-
-  it('should fall back to region derivation when graphqlUrl is blank', () => {
     expect(resolveGraphQLUrl(FulcrumRegion.CA, '   ')).toBe(
       'https://api.fulcrumapp-ca.com/query/graphql',
     );
@@ -85,10 +132,10 @@ describe('resolveGraphQLUrl', () => {
 });
 
 describe('FulcrumClient.graphql', () => {
-  let postSpy: jest.SpyInstance;
+  let fetchSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    postSpy = jest.spyOn(axios, 'post');
+    fetchSpy = jest.spyOn(globalThis, 'fetch');
   });
 
   afterEach(() => {
@@ -102,27 +149,21 @@ describe('FulcrumClient.graphql', () => {
       [FulcrumRegion.CA, 'https://api.fulcrumapp-ca.com/query/graphql'],
       [FulcrumRegion.EU, 'https://api.fulcrumapp-eu.com/query/graphql'],
     ])('should post to the derived endpoint for %s', async (region, expectedUrl) => {
-      postSpy.mockResolvedValueOnce(makeAxiosResponse({ data: { ping: true } }));
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: { ping: true } }));
       const client = new FulcrumClient({ apiKey: 'token-123', region });
 
       const data = await client.graphql.query<{ ping: boolean }>('{ ping }');
 
       expect(data).toEqual({ ping: true });
-      expect(postSpy).toHaveBeenCalledWith(
-        expectedUrl,
-        { query: '{ ping }' },
-        expect.objectContaining({
-          headers: expect.objectContaining({
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'X-ApiToken': 'token-123',
-          }),
-        }),
-      );
+      const call = getLastFetchCall(fetchSpy);
+      expect(call.url).toBe(expectedUrl);
+      expect(call.headers.get('x-apitoken')).toBe('token-123');
+      expect(call.headers.get('content-type')).toBe('application/json');
+      expect(call.body).toEqual({ query: '{ ping }' });
     });
 
     it('should use custom graphqlUrl override when configured on FulcrumClientOptions', async () => {
-      postSpy.mockResolvedValueOnce(makeAxiosResponse({ data: { ok: true } }));
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: { ok: true } }));
       const client = new FulcrumClient({
         apiKey: 'token-123',
         region: FulcrumRegion.US,
@@ -131,64 +172,57 @@ describe('FulcrumClient.graphql', () => {
 
       await client.graphql.query('{ ok }');
 
-      expect(postSpy).toHaveBeenCalledWith(
-        'https://edge.example.com/custom/graphql',
-        { query: '{ ok }' },
-        expect.any(Object),
-      );
+      expect(getLastFetchCall(fetchSpy).url).toBe('https://edge.example.com/custom/graphql');
     });
   });
 
-  describe('headers and request options', () => {
-    it('should include X-ApiToken, User-Agent, custom headers, variables, operationName, timeout, and signal', async () => {
-      postSpy.mockResolvedValueOnce(
-        makeAxiosResponse({ data: { inspections: [{ id: 'rec-1' }] } }),
+  describe('documents, headers, signals, and options', () => {
+    it('should support gql templates, DocumentNode, variables, headers, User-Agent, and explicit operationName', async () => {
+      fetchSpy.mockResolvedValueOnce(
+        makeJsonResponse({ data: { siteInspections: [{ id: 'rec-1' }] } }),
       );
-      const controller = new AbortController();
       const client = new FulcrumClient({
         apiKey: 'secret-token',
         region: FulcrumRegion.US,
         userAgent: 'TestApp/2.0',
       });
 
+      const doc = parse(gql`
+        query FirstOp($status: String) {
+          siteInspections(status: $status) {
+            id
+          }
+        }
+        query SecondOp {
+          siteInspections {
+            status
+          }
+        }
+      `);
+
       const result = await client.graphql.query<
-        { inspections: Array<{ id: string }> },
+        { siteInspections: Array<{ id: string }> },
         { status: string }
       >(
-        'query GetInspections($status: String) { inspections(status: $status) { id } }',
+        doc,
         { status: 'open' },
         {
-          operationName: 'GetInspections',
+          operationName: 'FirstOp',
           headers: { 'X-Request-Id': 'req-42' },
-          timeout: 5000,
-          signal: controller.signal,
         },
       );
 
-      expect(result).toEqual({ inspections: [{ id: 'rec-1' }] });
-      expect(postSpy).toHaveBeenCalledWith(
-        'https://api.fulcrumapp.com/query/graphql',
-        {
-          query: 'query GetInspections($status: String) { inspections(status: $status) { id } }',
-          variables: { status: 'open' },
-          operationName: 'GetInspections',
-        },
-        {
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'X-ApiToken': 'secret-token',
-            'User-Agent': 'TestApp/2.0',
-            'X-Request-Id': 'req-42',
-          },
-          timeout: 5000,
-          signal: controller.signal,
-        },
-      );
+      expect(result).toEqual({ siteInspections: [{ id: 'rec-1' }] });
+      const call = getLastFetchCall(fetchSpy);
+      expect(call.headers.get('x-apitoken')).toBe('secret-token');
+      expect(call.headers.get('user-agent')).toBe('TestApp/2.0');
+      expect(call.headers.get('x-request-id')).toBe('req-42');
+      expect(call.body.operationName).toBe('FirstOp');
+      expect(call.body.variables).toEqual({ status: 'open' });
     });
 
     it('should omit User-Agent header when userAgent option is not provided', async () => {
-      postSpy.mockResolvedValueOnce(makeAxiosResponse({ data: { ok: true } }));
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: { ok: true } }));
       const client = new FulcrumClient({
         apiKey: 'secret-token',
         region: FulcrumRegion.US,
@@ -196,86 +230,69 @@ describe('FulcrumClient.graphql', () => {
 
       await client.graphql.query('{ ok }');
 
-      const config = postSpy.mock.calls[0][2];
-      expect(config.headers['User-Agent']).toBeUndefined();
-      expect(config.headers['X-ApiToken']).toBe('secret-token');
+      const call = getLastFetchCall(fetchSpy);
+      expect(call.headers.get('user-agent')).toBeNull();
+      expect(call.headers.get('x-apitoken')).toBe('secret-token');
+    });
+
+    it('should forward AbortSignal, timeout, and combined signal+timeout', async () => {
+      const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
+
+      const controller = new AbortController();
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: { a: 1 } }));
+      await client.graphql.query('{ a }', undefined, { signal: controller.signal });
+      expect(getLastFetchCall(fetchSpy).signal).toBe(controller.signal);
+
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: { b: 2 } }));
+      await client.graphql.query('{ b }', undefined, { timeout: 5000 });
+      expect(getLastFetchCall(fetchSpy).signal).toBeInstanceOf(AbortSignal);
+
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: { c: 3 } }));
+      await client.graphql.query('{ c }', undefined, {
+        timeout: 5000,
+        signal: controller.signal,
+      });
+      const combinedSignal = getLastFetchCall(fetchSpy).signal;
+      expect(combinedSignal).toBeInstanceOf(AbortSignal);
+      expect(combinedSignal).not.toBe(controller.signal);
     });
   });
 
-  describe('query error handling', () => {
-    it('should throw FulcrumGraphQLError with errors, partial data, and statusCode when GraphQL errors are returned', async () => {
-      const partialData = { inspections: null };
+  describe('error handling', () => {
+    it('should throw ClientError with errors, partial data, and status on GraphQL errors', async () => {
+      const partialData = { siteInspections: null };
       const errors = [
         {
           message: 'Cannot query field "unknownField"',
           locations: [{ line: 1, column: 10 }],
-          path: ['inspections'],
+          path: ['siteInspections'],
           extensions: { code: 'GRAPHQL_VALIDATION_FAILED' },
         },
-        { message: 'Secondary error' },
       ];
-      postSpy.mockResolvedValueOnce(makeAxiosResponse({ data: partialData, errors }, 200));
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: partialData, errors }, 200));
       const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
 
       let caught: unknown;
       try {
-        await client.graphql.query('{ inspections { unknownField } }');
+        await client.graphql.query('{ siteInspections { unknownField } }');
       } catch (err) {
         caught = err;
       }
 
-      expect(caught).toBeInstanceOf(FulcrumGraphQLError);
-      const gqlErr = caught as FulcrumGraphQLError;
-      expect(gqlErr.name).toBe('FulcrumGraphQLError');
-      expect(gqlErr.message).toBe('Cannot query field "unknownField"; Secondary error');
-      expect(gqlErr.errors).toEqual(errors);
-      expect(gqlErr.data).toEqual(partialData);
-      expect(gqlErr.statusCode).toBe(200);
+      expect(caught).toBeInstanceOf(ClientError);
+      const clientErr = caught as ClientError;
+      expect(clientErr.response.status).toBe(200);
+      expect(clientErr.response.data).toEqual(partialData);
+      expect(clientErr.response.errors).toEqual(errors);
     });
 
-    it('should use fallback message when GraphQL errors contain empty messages', async () => {
-      postSpy.mockResolvedValueOnce(makeAxiosResponse({ errors: [{ message: '' }] }, 200));
-      const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
-
-      await expect(client.graphql.query('{ test }')).rejects.toMatchObject({
-        name: 'FulcrumGraphQLError',
-        message: 'GraphQL request returned errors',
-        statusCode: 200,
-      });
-    });
-
-    it('should throw FulcrumGraphQLError when response has no data and no errors', async () => {
-      postSpy.mockResolvedValueOnce(makeAxiosResponse({ data: null }, 200));
-      const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
-
-      await expect(client.graphql.query('{ empty }')).rejects.toMatchObject({
-        name: 'FulcrumGraphQLError',
-        message: 'GraphQL response contained no data',
-        data: null,
-        statusCode: 200,
-      });
-    });
-
-    it('should handle non-object response bodies cleanly', async () => {
-      postSpy.mockResolvedValueOnce(makeAxiosResponse('' as unknown as Record<string, unknown>, 200));
-      const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
-
-      await expect(client.graphql.query('{ empty }')).rejects.toThrow(FulcrumGraphQLError);
-    });
-
-    it('should surface HTTP status and GraphQL payload from AxiosError responses', async () => {
-      const responsePayload = {
-        data: null,
-        errors: [{ message: 'Invalid API token', extensions: { code: 'UNAUTHENTICATED' } }],
-      };
-      const axiosError = new AxiosError(
-        'Request failed with status code 401',
-        'ERR_BAD_REQUEST',
-        { headers: new AxiosHeaders() },
-        undefined,
-        makeAxiosResponse(responsePayload, 401),
+    it('should throw ClientError with HTTP status on non-2xx responses', async () => {
+      fetchSpy.mockResolvedValueOnce(
+        makeJsonResponse(
+          { data: null, errors: [{ message: 'Invalid API token' }] },
+          401,
+        ),
       );
-      postSpy.mockRejectedValueOnce(axiosError);
       const client = new FulcrumClient({ apiKey: 'bad-token', region: FulcrumRegion.US });
 
       let caught: unknown;
@@ -285,24 +302,14 @@ describe('FulcrumClient.graphql', () => {
         caught = err;
       }
 
-      expect(caught).toBeInstanceOf(FulcrumGraphQLError);
-      const gqlErr = caught as FulcrumGraphQLError;
-      expect(gqlErr.message).toBe('Invalid API token');
-      expect(gqlErr.statusCode).toBe(401);
-      expect(gqlErr.errors).toEqual(responsePayload.errors);
-      expect(gqlErr.data).toBeNull();
-      expect((gqlErr as Error & { cause?: unknown }).cause).toBe(axiosError);
+      expect(caught).toBeInstanceOf(ClientError);
+      const clientErr = caught as ClientError;
+      expect(clientErr.response.status).toBe(401);
+      expect(clientErr.response.errors?.[0]?.message).toBe('Invalid API token');
     });
 
-    it('should wrap non-GraphQL HTTP AxiosError responses with statusCode', async () => {
-      const axiosError = new AxiosError(
-        'Request failed with status code 502',
-        'ERR_BAD_RESPONSE',
-        { headers: new AxiosHeaders() },
-        undefined,
-        makeAxiosResponse('Bad Gateway', 502),
-      );
-      postSpy.mockRejectedValueOnce(axiosError);
+    it('should throw ClientError on non-JSON HTTP error responses', async () => {
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse('Bad Gateway', 502, 'text/plain'));
       const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
 
       let caught: unknown;
@@ -312,90 +319,72 @@ describe('FulcrumClient.graphql', () => {
         caught = err;
       }
 
-      expect(caught).toBeInstanceOf(FulcrumGraphQLError);
-      const gqlErr = caught as FulcrumGraphQLError;
-      expect(gqlErr.message).toContain('502');
-      expect(gqlErr.statusCode).toBe(502);
-      expect(gqlErr.errors).toEqual([]);
-      expect(gqlErr.data).toBeUndefined();
-    });
-
-    it('should wrap network AxiosError without HTTP response', async () => {
-      const axiosError = new AxiosError('Network Error', 'ERR_NETWORK');
-      postSpy.mockRejectedValueOnce(axiosError);
-      const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
-
-      await expect(client.graphql.query('{ test }')).rejects.toMatchObject({
-        name: 'FulcrumGraphQLError',
-        message: 'Network Error',
-        statusCode: undefined,
-        errors: [],
-      });
-    });
-
-    it('should wrap non-Axios Error and non-Error rejections in FulcrumGraphQLError', async () => {
-      const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
-
-      postSpy.mockRejectedValueOnce(new Error('Socket hang up'));
-      await expect(client.graphql.query('{ test }')).rejects.toMatchObject({
-        name: 'FulcrumGraphQLError',
-        message: 'Socket hang up',
-      });
-
-      postSpy.mockRejectedValueOnce('unexpected failure');
-      await expect(client.graphql.query('{ test }')).rejects.toMatchObject({
-        name: 'FulcrumGraphQLError',
-        message: 'unexpected failure',
-      });
+      expect(caught).toBeInstanceOf(ClientError);
+      const clientErr = caught as ClientError;
+      expect(clientErr.response.status).toBe(502);
+      expect(clientErr.response.body).toBe('Bad Gateway');
     });
   });
 
   describe('raw', () => {
-    it('should return full { data, errors, extensions } envelope without throwing on GraphQL errors', async () => {
-      const envelope = {
-        data: { inspections: [{ id: '1' }] },
-        errors: [{ message: 'Partial permission denied', path: ['inspections', 0, 'secret'] }],
+    it('should return data, errors, extensions, headers, and status without throwing on GraphQL errors', async () => {
+      const payload = {
+        data: { siteInspections: [{ id: '1' }] },
+        errors: [{ message: 'Partial permission denied', path: ['siteInspections', 0, 'secret'] }],
         extensions: { complexity: 12 },
       };
-      postSpy.mockResolvedValueOnce(makeAxiosResponse(envelope, 200));
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse(payload, 200));
       const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
 
       const result = await client.graphql.raw(
-        'query Partial { inspections { id secret } }',
+        'query Partial { siteInspections { id secret } }',
         undefined,
         { operationName: 'Partial' },
       );
 
-      expect(result).toEqual(envelope);
+      expect(result.status).toBe(200);
+      expect(result.data).toEqual(payload.data);
+      expect(result.errors).toEqual(payload.errors);
+      expect(result.extensions).toEqual(payload.extensions);
+      expect(result.headers).toBeInstanceOf(Headers);
     });
 
-    it('should still throw FulcrumGraphQLError on HTTP transport failure', async () => {
-      const axiosError = new AxiosError(
-        'Request failed with status code 500',
-        'ERR_BAD_RESPONSE',
-        { headers: new AxiosHeaders() },
-        undefined,
-        makeAxiosResponse({ message: 'Internal Server Error' }, 500),
-      );
-      postSpy.mockRejectedValueOnce(axiosError);
+    it('should accept DocumentNode and boxed TypedDocumentString in raw()', async () => {
       const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
 
-      await expect(client.graphql.raw('{ test }')).rejects.toMatchObject({
-        name: 'FulcrumGraphQLError',
-        statusCode: 500,
-      });
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: { ok: true } }, 200));
+      const astResult = await client.graphql.raw<{ ok: boolean }>(parse('{ ok }'));
+      expect(astResult.data).toEqual({ ok: true });
+
+      const boxed = {
+        toString: () => '{ ok }',
+      } as unknown as TypedDocumentString<{ ok: boolean }, Record<string, never>>;
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: { ok: true } }, 200));
+      const boxedResult = await client.graphql.raw(boxed);
+      expect(boxedResult.data).toEqual({ ok: true });
+    });
+
+    it('should still throw ClientError on HTTP 500 responses', async () => {
+      fetchSpy.mockResolvedValueOnce(
+        makeJsonResponse({ message: 'Internal Server Error' }, 500),
+      );
+      const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
+
+      let caught: unknown;
+      try {
+        await client.graphql.raw('{ test }');
+      } catch (err) {
+        caught = err;
+      }
+
+      expect(caught).toBeInstanceOf(ClientError);
+      expect((caught as ClientError).response.status).toBe(500);
     });
   });
 
-  describe('introspect', () => {
-    it('should execute standard GraphQL introspection query and return __schema data', async () => {
-      const schemaData = {
-        __schema: {
-          queryType: { name: 'Query' },
-          types: [{ kind: 'OBJECT', name: 'Query' }],
-        },
-      };
-      postSpy.mockResolvedValueOnce(makeAxiosResponse({ data: schemaData }, 200));
+  describe('introspection helpers', () => {
+    it('should run getIntrospectionQuery() in introspect() and return IntrospectionQuery', async () => {
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: SAMPLE_INTROSPECTION }, 200));
       const client = new FulcrumClient({
         apiKey: 'token',
         region: FulcrumRegion.EU,
@@ -404,49 +393,45 @@ describe('FulcrumClient.graphql', () => {
 
       const result = await client.graphql.introspect({ headers: { 'X-Caller': 'mcp' } });
 
-      expect(result).toEqual(schemaData);
-      expect(postSpy).toHaveBeenCalledWith(
-        'https://api.fulcrumapp-eu.com/query/graphql',
-        {
-          query: INTROSPECTION_QUERY,
-          operationName: 'IntrospectionQuery',
-        },
-        expect.objectContaining({
-          headers: expect.objectContaining({
-            'X-ApiToken': 'token',
-            'User-Agent': 'Agent/1.0',
-            'X-Caller': 'mcp',
-          }),
-        }),
-      );
+      expect(result).toEqual(SAMPLE_INTROSPECTION);
+      const call = getLastFetchCall(fetchSpy);
+      expect(call.url).toBe('https://api.fulcrumapp-eu.com/query/graphql');
+      expect(call.body.query).toBe(getIntrospectionQuery());
+      expect(call.body.operationName).toBe('IntrospectionQuery');
+      expect(call.headers.get('x-apitoken')).toBe('token');
+      expect(call.headers.get('user-agent')).toBe('Agent/1.0');
+      expect(call.headers.get('x-caller')).toBe('mcp');
     });
 
-    it('should allow overriding operationName on introspect and propagate GraphQL errors', async () => {
-      postSpy.mockResolvedValueOnce(
-        makeAxiosResponse({ errors: [{ message: 'Introspection disabled' }] }, 200),
-      );
+    it('should build a client GraphQLSchema in introspectSchema() usable with validate()', async () => {
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: SAMPLE_INTROSPECTION }, 200));
       const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
 
-      await expect(
-        client.graphql.introspect({ operationName: 'CustomIntrospect' }),
-      ).rejects.toMatchObject({
-        name: 'FulcrumGraphQLError',
-        message: 'Introspection disabled',
-      });
+      const schema = await client.graphql.introspectSchema();
 
-      expect(postSpy).toHaveBeenCalledWith(
-        'https://api.fulcrumapp.com/query/graphql',
-        {
-          query: INTROSPECTION_QUERY,
-          operationName: 'CustomIntrospect',
-        },
-        expect.any(Object),
-      );
+      expect(
+        validate(schema, parse('{ siteInspections(status: "open") { id asset { assetTag } } }')),
+      ).toEqual([]);
+      expect(
+        validate(schema, parse('{ siteInspections { nonExistentField } }')),
+      ).toHaveLength(1);
+    });
+
+    it('should return compact GraphQL SDL from introspectSDL()', async () => {
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: SAMPLE_INTROSPECTION }, 200));
+      const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
+
+      const sdl = await client.graphql.introspectSDL({ operationName: 'CustomIntrospect' });
+
+      expect(sdl).toContain('type SiteInspection');
+      expect(sdl).toContain('asset: Asset');
+      expect(sdl).toContain('assetTag: String');
+      expect(getLastFetchCall(fetchSpy).body.operationName).toBe('CustomIntrospect');
     });
   });
 
   describe('OpenTelemetry instrumentation', () => {
-    it('should create spans with graphql.operation.name for query, raw, and introspect', async () => {
+    it('should create spans with graphql.operation.name for all graphql helpers', async () => {
       const spans: Array<{
         name: string;
         attributes: Record<string, unknown>;
@@ -483,46 +468,69 @@ describe('FulcrumClient.graphql', () => {
         }),
       };
 
-      jest.spyOn(trace, 'getTracer').mockReturnValue(mockTracer as unknown as ReturnType<typeof trace.getTracer>);
+      jest
+        .spyOn(trace, 'getTracer')
+        .mockReturnValue(mockTracer as unknown as ReturnType<typeof trace.getTracer>);
 
       const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
 
-      postSpy.mockResolvedValueOnce(makeAxiosResponse({ data: { a: 1 } }));
-      await client.graphql.query('{ a }', undefined, { operationName: 'FetchA' });
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: { a: 1 } }));
+      await client.graphql.query('query InferredOp { a }');
 
-      postSpy.mockResolvedValueOnce(makeAxiosResponse({ data: { b: 2 } }));
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: { b: 2 } }));
       await client.graphql.raw('{ b }');
 
-      postSpy.mockResolvedValueOnce(makeAxiosResponse({ data: { __schema: {} } }));
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: SAMPLE_INTROSPECTION }));
       await client.graphql.introspect();
 
-      postSpy.mockResolvedValueOnce(makeAxiosResponse({ errors: [{ message: 'Boom' }] }));
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: SAMPLE_INTROSPECTION }));
+      await client.graphql.introspectSchema({ operationName: 'SchemaCheck' });
+
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: SAMPLE_INTROSPECTION }));
+      await client.graphql.introspectSDL();
+
+      fetchSpy.mockResolvedValueOnce(makeJsonResponse({ errors: [{ message: 'Boom' }] }));
       await expect(
         client.graphql.query('{ fail }', undefined, { operationName: 'FailOp' }),
-      ).rejects.toThrow(FulcrumGraphQLError);
+      ).rejects.toThrow(ClientError);
 
-      expect(spans).toHaveLength(4);
+      expect(spans).toHaveLength(6);
 
-      expect(spans[0].name).toBe('GraphQL.query');
-      expect(spans[0].attributes).toEqual({ 'graphql.operation.name': 'FetchA' });
-      expect(spans[0].statuses).toEqual([{ code: SpanStatusCode.OK }]);
-      expect(spans[0].ended).toBe(true);
-
-      expect(spans[1].name).toBe('GraphQL.raw');
-      expect(spans[1].attributes).toEqual({});
-      expect(spans[1].statuses).toEqual([{ code: SpanStatusCode.OK }]);
-      expect(spans[1].ended).toBe(true);
-
-      expect(spans[2].name).toBe('GraphQL.introspect');
-      expect(spans[2].attributes).toEqual({ 'graphql.operation.name': 'IntrospectionQuery' });
-      expect(spans[2].statuses).toEqual([{ code: SpanStatusCode.OK }]);
-      expect(spans[2].ended).toBe(true);
-
-      expect(spans[3].name).toBe('GraphQL.query');
-      expect(spans[3].attributes).toEqual({ 'graphql.operation.name': 'FailOp' });
-      expect(spans[3].statuses).toEqual([{ code: SpanStatusCode.ERROR, message: 'Boom' }]);
-      expect(spans[3].exceptions).toHaveLength(1);
-      expect(spans[3].ended).toBe(true);
+      expect(spans[0]).toMatchObject({
+        name: 'GraphQL.query',
+        attributes: { 'graphql.operation.name': 'InferredOp' },
+        statuses: [{ code: SpanStatusCode.OK }],
+        ended: true,
+      });
+      expect(spans[1]).toMatchObject({
+        name: 'GraphQL.raw',
+        attributes: {},
+        statuses: [{ code: SpanStatusCode.OK }],
+        ended: true,
+      });
+      expect(spans[2]).toMatchObject({
+        name: 'GraphQL.introspect',
+        attributes: { 'graphql.operation.name': 'IntrospectionQuery' },
+        statuses: [{ code: SpanStatusCode.OK }],
+        ended: true,
+      });
+      expect(spans[3]).toMatchObject({
+        name: 'GraphQL.introspectSchema',
+        attributes: { 'graphql.operation.name': 'SchemaCheck' },
+        statuses: [{ code: SpanStatusCode.OK }],
+        ended: true,
+      });
+      expect(spans[4]).toMatchObject({
+        name: 'GraphQL.introspectSDL',
+        attributes: { 'graphql.operation.name': 'IntrospectionQuery' },
+        statuses: [{ code: SpanStatusCode.OK }],
+        ended: true,
+      });
+      expect(spans[5].name).toBe('GraphQL.query');
+      expect(spans[5].attributes).toEqual({ 'graphql.operation.name': 'FailOp' });
+      expect(spans[5].statuses[0]).toMatchObject({ code: SpanStatusCode.ERROR });
+      expect(spans[5].exceptions).toHaveLength(1);
+      expect(spans[5].ended).toBe(true);
     });
   });
 });

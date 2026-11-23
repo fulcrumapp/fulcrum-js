@@ -1,30 +1,53 @@
-import axios, { isAxiosError, type AxiosRequestConfig } from 'axios';
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core';
+import {
+  buildClientSchema,
+  getIntrospectionQuery,
+  print,
+  printSchema,
+  type GraphQLError,
+  type GraphQLSchema,
+  type IntrospectionQuery,
+} from 'graphql';
+import {
+  ClientError,
+  GraphQLClient as RequestGraphQLClient,
+  analyzeDocument,
+  gql,
+  type RequestDocument,
+  type RequestMiddleware,
+  type TypedDocumentString,
+  type Variables,
+} from 'graphql-request';
+
+export { ClientError, gql };
+export type {
+  GraphQLError,
+  GraphQLSchema,
+  IntrospectionQuery,
+  RequestDocument,
+  TypedDocumentNode,
+  TypedDocumentString,
+  Variables,
+};
 
 /**
- * Location in a GraphQL document associated with an error.
+ * Any GraphQL document accepted by `client.graphql.query()` and `client.graphql.raw()`.
  */
-export interface GraphQLErrorLocation {
-  line: number;
-  column: number;
-}
+export type GraphQLDocument<TData = unknown, TVariables extends Variables = Variables> =
+  | RequestDocument
+  | TypedDocumentNode<TData, TVariables>
+  | TypedDocumentString<TData, TVariables>;
 
 /**
- * Individual GraphQL error entry returned in a GraphQL response `errors` array.
+ * Raw response returned by `client.graphql.raw()` (via `graphql-request`'s `rawRequest`).
  */
-export interface GraphQLErrorItem {
-  message: string;
-  locations?: GraphQLErrorLocation[];
-  path?: Array<string | number>;
-  extensions?: Record<string, unknown>;
-}
-
-/**
- * Standard GraphQL-over-HTTP JSON response envelope.
- */
-export interface GraphQLResponse<TData = Record<string, unknown>> {
-  data?: TData | null;
-  errors?: GraphQLErrorItem[];
-  extensions?: Record<string, unknown>;
+export interface GraphQLRawResponse<TData = Record<string, unknown>> {
+  data: TData;
+  errors?: GraphQLError[];
+  extensions?: unknown;
+  headers: Headers;
+  status: number;
+  body: string;
 }
 
 /**
@@ -34,7 +57,7 @@ export interface GraphQLRequestOptions {
   /** Optional GraphQL operation name when the document contains multiple operations. */
   operationName?: string;
   /** Additional HTTP headers to include on this request. */
-  headers?: Record<string, string>;
+  headers?: Record<string, string> | Headers | [string, string][];
   /** Optional request timeout in milliseconds. */
   timeout?: number;
   /** Optional AbortSignal to cancel the request. */
@@ -42,166 +65,64 @@ export interface GraphQLRequestOptions {
 }
 
 /**
- * Structured error thrown when a Fulcrum GraphQL request fails at the HTTP layer
- * or returns one or more GraphQL errors.
- */
-export class FulcrumGraphQLError extends Error {
-  readonly errors: GraphQLErrorItem[];
-  readonly data?: unknown;
-  readonly statusCode?: number;
-
-  constructor(
-    message: string,
-    options?: {
-      errors?: GraphQLErrorItem[];
-      data?: unknown;
-      statusCode?: number;
-      cause?: unknown;
-    },
-  ) {
-    super(message);
-    this.name = 'FulcrumGraphQLError';
-    this.errors = options?.errors ?? [];
-    this.data = options?.data;
-    this.statusCode = options?.statusCode;
-    if (options?.cause !== undefined) {
-      (this as Error & { cause?: unknown }).cause = options.cause;
-    }
-    Object.setPrototypeOf(this, new.target.prototype);
-  }
-}
-
-/**
  * Public GraphQL handle exposed as `client.graphql`.
  */
 export interface GraphQLClient {
   /**
-   * Execute a GraphQL query and return `response.data`.
-   * Throws `FulcrumGraphQLError` on HTTP/transport failures, non-empty GraphQL `errors`,
-   * or missing `data`.
+   * Execute a GraphQL document (`string`, `gql` template, `DocumentNode`, or `TypedDocumentNode`)
+   * and return `data`. Throws `ClientError` on HTTP failures or GraphQL errors.
    */
-  query<TData = Record<string, unknown>, TVariables = Record<string, unknown>>(
-    document: string,
+  query<TData = Record<string, unknown>, TVariables extends Variables = Variables>(
+    document: GraphQLDocument<TData, TVariables>,
     variables?: TVariables,
     options?: GraphQLRequestOptions,
   ): Promise<TData>;
 
   /**
-   * Execute a GraphQL query and return the full `{ data, errors, extensions }` envelope
-   * without throwing on GraphQL-level errors. Still throws `FulcrumGraphQLError` on
-   * transport or non-2xx HTTP errors.
+   * Execute a GraphQL document with `errorPolicy: 'all'` and return
+   * `{ data, errors, extensions, headers, status, body }` without throwing on
+   * GraphQL-level errors. Still throws `ClientError` on non-2xx HTTP errors.
    */
-  raw<TData = Record<string, unknown>, TVariables = Record<string, unknown>>(
-    document: string,
+  raw<TData = Record<string, unknown>, TVariables extends Variables = Variables>(
+    document: GraphQLDocument<TData, TVariables>,
     variables?: TVariables,
     options?: GraphQLRequestOptions,
-  ): Promise<GraphQLResponse<TData>>;
+  ): Promise<GraphQLRawResponse<TData>>;
 
   /**
-   * Execute the standard GraphQL introspection query (`__schema`) to discover the
-   * caller's membership-scoped dynamic schema.
+   * Execute the standard GraphQL introspection query (`getIntrospectionQuery()`)
+   * to discover the caller's membership-scoped dynamic schema.
    */
-  introspect(options?: GraphQLRequestOptions): Promise<Record<string, unknown>>;
+  introspect(options?: GraphQLRequestOptions): Promise<IntrospectionQuery>;
+
+  /**
+   * Introspect the caller's membership-scoped schema and return an executable
+   * client `GraphQLSchema` suitable for local `validate(schema, parse(doc))` checks.
+   */
+  introspectSchema(options?: GraphQLRequestOptions): Promise<GraphQLSchema>;
+
+  /**
+   * Introspect the caller's membership-scoped schema and return compact GraphQL SDL
+   * via `printSchema()`, ideal for AI agents and MCP tooling.
+   */
+  introspectSDL(options?: GraphQLRequestOptions): Promise<string>;
 }
 
 /**
- * Standard GraphQL introspection query for discovering membership-scoped schemas.
+ * Callback signature for wrapping GraphQL calls in OpenTelemetry spans.
  */
-export const INTROSPECTION_QUERY = `
-  query IntrospectionQuery {
-    __schema {
-      queryType { name }
-      mutationType { name }
-      subscriptionType { name }
-      types {
-        ...FullType
-      }
-      directives {
-        name
-        description
-        locations
-        args {
-          ...InputValue
-        }
-      }
-    }
-  }
+export type SpanRunner = <T>(
+  name: string,
+  fn: () => Promise<T>,
+  attributes?: Record<string, string | number | boolean>,
+) => Promise<T>;
 
-  fragment FullType on __Type {
-    kind
-    name
-    description
-    fields(includeDeprecated: true) {
-      name
-      description
-      args {
-        ...InputValue
-      }
-      type {
-        ...TypeRef
-      }
-      isDeprecated
-      deprecationReason
-    }
-    inputFields {
-      ...InputValue
-    }
-    interfaces {
-      ...TypeRef
-    }
-    enumValues(includeDeprecated: true) {
-      name
-      description
-      isDeprecated
-      deprecationReason
-    }
-    possibleTypes {
-      ...TypeRef
-    }
-  }
-
-  fragment InputValue on __InputValue {
-    name
-    description
-    type {
-      ...TypeRef
-    }
-    defaultValue
-  }
-
-  fragment TypeRef on __Type {
-    kind
-    name
-    ofType {
-      kind
-      name
-      ofType {
-        kind
-        name
-        ofType {
-          kind
-          name
-          ofType {
-            kind
-            name
-            ofType {
-              kind
-              name
-              ofType {
-                kind
-                name
-                ofType {
-                  kind
-                  name
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
+export interface GraphQLHandleOptions {
+  apiKey: string;
+  region: string;
+  userAgent?: string;
+  graphqlUrl?: string;
+}
 
 function stripTrailingSlashes(pathname: string): string {
   let end = pathname.length;
@@ -241,176 +162,129 @@ export function resolveGraphQLUrl(region: string, graphqlUrl?: string): string {
   return `${parsed.origin}${basePath}/query/graphql`;
 }
 
-function formatGraphQLErrors(errors: GraphQLErrorItem[]): string {
-  const messages = errors
-    .map((err) => err.message)
-    .filter((message): message is string => typeof message === 'string' && message.length > 0);
-
-  if (messages.length === 0) {
-    return 'GraphQL request returned errors';
+function buildSignal(timeout?: number, signal?: AbortSignal): AbortSignal | undefined {
+  if (timeout === undefined) {
+    return signal;
   }
-
-  return messages.join('; ');
+  const timeoutSignal = AbortSignal.timeout(timeout);
+  return signal ? AbortSignal.any([signal, timeoutSignal]) : timeoutSignal;
 }
 
-function extractGraphQLErrors(payload: unknown): GraphQLErrorItem[] {
-  if (
-    payload !== null &&
-    typeof payload === 'object' &&
-    'errors' in payload &&
-    Array.isArray((payload as { errors?: unknown }).errors)
-  ) {
-    return (payload as { errors: GraphQLErrorItem[] }).errors;
+function toQueryString<TData, TVariables extends Variables>(
+  document: GraphQLDocument<TData, TVariables>,
+): string {
+  if (typeof document === 'string') {
+    return document;
   }
-  return [];
-}
-
-function extractGraphQLData(payload: unknown): unknown {
-  if (payload !== null && typeof payload === 'object' && 'data' in payload) {
-    return (payload as { data?: unknown }).data;
+  if ('kind' in document) {
+    return print(document);
   }
-  return undefined;
+  return String(document);
 }
 
-export interface ExecuteGraphQLRequestParams<TVariables> {
-  url: string;
-  apiKey: string;
-  userAgent?: string;
-  document: string;
-  variables?: TVariables;
-  options?: GraphQLRequestOptions;
+function createOperationNameMiddleware(operationName: string): RequestMiddleware {
+  return (request) => {
+    const parsedBody = JSON.parse(String(request.body)) as Record<string, unknown>;
+    return {
+      ...request,
+      operationName,
+      body: JSON.stringify({ ...parsedBody, operationName }),
+    };
+  };
 }
 
-export interface ExecuteGraphQLResult<TData> {
-  envelope: GraphQLResponse<TData>;
-  statusCode: number;
-}
-
-function buildGraphQLPayload<TVariables>(
-  document: string,
-  variables?: TVariables,
+function resolveSpanAttributes(
+  document: GraphQLDocument,
   operationName?: string,
-): { query: string; variables?: TVariables; operationName?: string } {
-  const payload: {
-    query: string;
-    variables?: TVariables;
-    operationName?: string;
-  } = { query: document };
-
-  if (variables !== undefined) {
-    payload.variables = variables;
-  }
-  if (operationName !== undefined) {
-    payload.operationName = operationName;
-  }
-
-  return payload;
+): Record<string, string> | undefined {
+  const resolvedName = operationName ?? analyzeDocument(document).operationName;
+  return resolvedName ? { 'graphql.operation.name': resolvedName } : undefined;
 }
 
-function buildGraphQLRequestConfig(
-  apiKey: string,
-  userAgent?: string,
-  options?: GraphQLRequestOptions,
-): AxiosRequestConfig {
-  const headers: Record<string, string> = {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-    'X-ApiToken': apiKey,
-    ...(userAgent ? { 'User-Agent': userAgent } : {}),
-    ...options?.headers,
+/**
+ * Build the `client.graphql` handle backed by `graphql-request` and `graphql`.
+ */
+export function createGraphQLHandle(
+  handleOptions: GraphQLHandleOptions,
+  withSpan: SpanRunner,
+): GraphQLClient {
+  const endpoint = resolveGraphQLUrl(handleOptions.region, handleOptions.graphqlUrl);
+  const baseHeaders: Record<string, string> = {
+    'X-ApiToken': handleOptions.apiKey,
+    ...(handleOptions.userAgent ? { 'User-Agent': handleOptions.userAgent } : {}),
   };
 
-  const config: AxiosRequestConfig = { headers };
-  if (options?.timeout !== undefined) {
-    config.timeout = options.timeout;
-  }
-  if (options?.signal !== undefined) {
-    config.signal = options.signal;
-  }
-
-  return config;
-}
-
-function formatAxiosErrorMessage(
-  errors: GraphQLErrorItem[],
-  statusCode: number | undefined,
-  fallbackMessage: string,
-): string {
-  if (errors.length > 0) {
-    return formatGraphQLErrors(errors);
-  }
-  if (statusCode !== undefined) {
-    return `GraphQL request failed with status ${statusCode}: ${fallbackMessage}`;
-  }
-  return fallbackMessage;
-}
-
-function toFulcrumGraphQLError(error: unknown): FulcrumGraphQLError {
-  if (isAxiosError(error)) {
-    const statusCode = error.response?.status;
-    const responseData = error.response?.data;
-    const errors = extractGraphQLErrors(responseData);
-    const data = extractGraphQLData(responseData);
-    const message = formatAxiosErrorMessage(errors, statusCode, error.message);
-
-    return new FulcrumGraphQLError(message, {
-      errors,
-      data,
-      statusCode,
-      cause: error,
+  const makeClient = (
+    errorPolicy: 'none' | 'all',
+    operationName?: string,
+  ): RequestGraphQLClient =>
+    new RequestGraphQLClient(endpoint, {
+      headers: baseHeaders,
+      errorPolicy,
+      ...(operationName ? { requestMiddleware: createOperationNameMiddleware(operationName) } : {}),
     });
-  }
 
-  return new FulcrumGraphQLError(error instanceof Error ? error.message : String(error), {
-    cause: error,
-  });
-}
-
-/**
- * Low-level HTTP transport for Fulcrum GraphQL requests using axios.
- */
-export async function executeGraphQLRequest<TData, TVariables>(
-  params: ExecuteGraphQLRequestParams<TVariables>,
-): Promise<ExecuteGraphQLResult<TData>> {
-  const { url, apiKey, userAgent, document, variables, options } = params;
-  const payload = buildGraphQLPayload(document, variables, options?.operationName);
-  const config = buildGraphQLRequestConfig(apiKey, userAgent, options);
-
-  try {
-    const response = await axios.post<GraphQLResponse<TData>>(url, payload, config);
-    const envelope: GraphQLResponse<TData> =
-      response.data && typeof response.data === 'object' ? response.data : {};
-
-    return {
-      envelope,
-      statusCode: response.status,
-    };
-  } catch (error) {
-    throw toFulcrumGraphQLError(error);
-  }
-}
-
-/**
- * Unwrap a GraphQL response envelope for `query()` / `introspect()`,
- * throwing `FulcrumGraphQLError` when GraphQL errors are present or `data` is absent.
- */
-export function unwrapGraphQLResult<TData>(result: ExecuteGraphQLResult<TData>): TData {
-  const { envelope, statusCode } = result;
-
-  if (Array.isArray(envelope.errors) && envelope.errors.length > 0) {
-    throw new FulcrumGraphQLError(formatGraphQLErrors(envelope.errors), {
-      errors: envelope.errors,
-      data: envelope.data,
-      statusCode,
+  const fetchIntrospection = (options?: GraphQLRequestOptions): Promise<IntrospectionQuery> => {
+    const operationName = options?.operationName ?? 'IntrospectionQuery';
+    return makeClient('none', operationName).request<IntrospectionQuery>({
+      document: getIntrospectionQuery(),
+      requestHeaders: options?.headers,
+      signal: buildSignal(options?.timeout, options?.signal),
     });
-  }
+  };
 
-  if (envelope.data === undefined || envelope.data === null) {
-    throw new FulcrumGraphQLError('GraphQL response contained no data', {
-      data: envelope.data,
-      statusCode,
-    });
-  }
+  return {
+    query: <TData = Record<string, unknown>, TVariables extends Variables = Variables>(
+      document: GraphQLDocument<TData, TVariables>,
+      variables?: TVariables,
+      options?: GraphQLRequestOptions,
+    ): Promise<TData> =>
+      withSpan(
+        'GraphQL.query',
+        () =>
+          makeClient('none', options?.operationName).request<TData>({
+            document,
+            variables,
+            requestHeaders: options?.headers,
+            signal: buildSignal(options?.timeout, options?.signal),
+          }),
+        resolveSpanAttributes(document, options?.operationName),
+      ),
 
-  return envelope.data;
+    raw: <TData = Record<string, unknown>, TVariables extends Variables = Variables>(
+      document: GraphQLDocument<TData, TVariables>,
+      variables?: TVariables,
+      options?: GraphQLRequestOptions,
+    ): Promise<GraphQLRawResponse<TData>> =>
+      withSpan(
+        'GraphQL.raw',
+        () =>
+          makeClient('all', options?.operationName).rawRequest<TData>({
+            query: toQueryString(document),
+            variables,
+            requestHeaders: options?.headers,
+            signal: buildSignal(options?.timeout, options?.signal),
+          }),
+        resolveSpanAttributes(document, options?.operationName),
+      ),
+
+    introspect: (options?: GraphQLRequestOptions): Promise<IntrospectionQuery> =>
+      withSpan('GraphQL.introspect', () => fetchIntrospection(options), {
+        'graphql.operation.name': options?.operationName ?? 'IntrospectionQuery',
+      }),
+
+    introspectSchema: (options?: GraphQLRequestOptions): Promise<GraphQLSchema> =>
+      withSpan(
+        'GraphQL.introspectSchema',
+        async () => buildClientSchema(await fetchIntrospection(options)),
+        { 'graphql.operation.name': options?.operationName ?? 'IntrospectionQuery' },
+      ),
+
+    introspectSDL: (options?: GraphQLRequestOptions): Promise<string> =>
+      withSpan(
+        'GraphQL.introspectSDL',
+        async () => printSchema(buildClientSchema(await fetchIntrospection(options))),
+        { 'graphql.operation.name': options?.operationName ?? 'IntrospectionQuery' },
+      ),
+  } as const;
 }

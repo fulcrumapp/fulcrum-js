@@ -1,14 +1,6 @@
 import { DefaultApi, Configuration } from '../generated/dist/index.js';
 import { trace, SpanStatusCode, type Span, type Tracer } from '@opentelemetry/api';
-import {
-  INTROSPECTION_QUERY,
-  executeGraphQLRequest,
-  resolveGraphQLUrl,
-  unwrapGraphQLResult,
-  type GraphQLClient,
-  type GraphQLRequestOptions,
-  type GraphQLResponse,
-} from './graphql.js';
+import { createGraphQLHandle, type GraphQLClient } from './graphql.js';
 import type {
   ConfigurationParameters,
   DefaultApiRecordsGetAllRequest,
@@ -638,82 +630,11 @@ export class FulcrumClient {
    * GraphQL Query API
    *
    * Targets `<region-origin>/query/graphql` (or `options.graphqlUrl` when provided)
-   * with automatic `X-ApiToken` authentication and OpenTelemetry tracing.
+   * with automatic `X-ApiToken` authentication, `graphql-request` + `graphql` helpers,
+   * and OpenTelemetry tracing.
    */
   get graphql(): GraphQLClient {
-    const endpoint = resolveGraphQLUrl(this.options.region, this.options.graphqlUrl);
-    const { apiKey, userAgent } = this.options;
-
-    return {
-      query: <TData = Record<string, unknown>, TVariables = Record<string, unknown>>(
-        document: string,
-        variables?: TVariables,
-        options?: GraphQLRequestOptions,
-      ): Promise<TData> =>
-        this.withSpan(
-          'GraphQL.query',
-          async () => {
-            const result = await executeGraphQLRequest<TData, TVariables>({
-              url: endpoint,
-              apiKey,
-              userAgent,
-              document,
-              variables,
-              options,
-            });
-            return unwrapGraphQLResult(result);
-          },
-          options?.operationName
-            ? { 'graphql.operation.name': options.operationName }
-            : undefined,
-        ),
-
-      raw: <TData = Record<string, unknown>, TVariables = Record<string, unknown>>(
-        document: string,
-        variables?: TVariables,
-        options?: GraphQLRequestOptions,
-      ): Promise<GraphQLResponse<TData>> =>
-        this.withSpan(
-          'GraphQL.raw',
-          async () => {
-            const result = await executeGraphQLRequest<TData, TVariables>({
-              url: endpoint,
-              apiKey,
-              userAgent,
-              document,
-              variables,
-              options,
-            });
-            return result.envelope;
-          },
-          options?.operationName
-            ? { 'graphql.operation.name': options.operationName }
-            : undefined,
-        ),
-
-      introspect: (options?: GraphQLRequestOptions): Promise<Record<string, unknown>> => {
-        const operationName = options?.operationName ?? 'IntrospectionQuery';
-        const requestOptions: GraphQLRequestOptions = {
-          ...options,
-          operationName,
-        };
-
-        return this.withSpan(
-          'GraphQL.introspect',
-          async () => {
-            const result = await executeGraphQLRequest<Record<string, unknown>, undefined>({
-              url: endpoint,
-              apiKey,
-              userAgent,
-              document: INTROSPECTION_QUERY,
-              options: requestOptions,
-            });
-            return unwrapGraphQLResult(result);
-          },
-          { 'graphql.operation.name': operationName },
-        );
-      },
-    } as const;
+    return createGraphQLHandle(this.options, this.withSpan.bind(this));
   }
 
   /**

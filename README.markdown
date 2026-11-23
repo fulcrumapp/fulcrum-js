@@ -311,10 +311,16 @@ const rows = queryResponse.data.rows;
 
 #### GraphQL Query API
 
-`client.graphql` targets `<region-origin>/query/graphql` automatically (or an explicit `graphqlUrl` override in `FulcrumClientOptions`), making it straightforward to traverse records, projects, repeatables, and linked records in a single request—and to discover membership-scoped schemas via introspection for AI agents and MCP tooling.
+`client.graphql` is built on [`graphql-request`](https://github.com/graffle-js/graffle) and [`graphql`](https://github.com/graphql/graphql-js) and automatically targets `<region-origin>/query/graphql` (or an explicit `graphqlUrl` override in `FulcrumClientOptions`). It makes traversing records, projects, repeatables, and linked records as straightforward as a single query—and provides schema introspection helpers (`introspect`, `introspectSchema`, `introspectSDL`) for TypeScript tooling and AI agents.
 
 ```typescript
-import { FulcrumClient, FulcrumGraphQLError, FulcrumRegion } from '@fulcrumapp/fulcrum-js';
+import {
+  ClientError,
+  FulcrumClient,
+  FulcrumRegion,
+  gql,
+} from '@fulcrumapp/fulcrum-js';
+import { parse, validate } from 'graphql';
 
 const client = new FulcrumClient({
   apiKey: 'your-api-token',
@@ -323,8 +329,8 @@ const client = new FulcrumClient({
 });
 
 // Traverse records, projects, repeatables, and linked records in one query
-const data = await client.graphql.query(
-  `query SiteInspections($status: String) {
+const SITE_INSPECTIONS = gql`
+  query SiteInspections($status: String) {
     siteInspections(status: $status) {
       id
       status
@@ -340,19 +346,24 @@ const data = await client.graphql.query(
         assetTag
       }
     }
-  }`,
-  { status: 'open' },
-  { operationName: 'SiteInspections' }
-);
+  }
+`;
 
-// Inspect partial data + GraphQL errors without throwing on GraphQL errors
-const envelope = await client.graphql.raw('{ siteInspections { id } }');
+const data = await client.graphql.query(SITE_INSPECTIONS, { status: 'open' });
 
-// Discover the caller's membership-scoped dynamic schema
-const schema = await client.graphql.introspect();
+// Inspect partial data + GraphQL errors without throwing on GraphQL-level errors
+const raw = await client.graphql.raw('{ siteInspections { id } }');
+console.log(raw.status, raw.data, raw.errors);
+
+// Discover compact GraphQL SDL (5–10x fewer tokens than raw introspection JSON for AI agents/MCP)
+const sdl = await client.graphql.introspectSDL();
+
+// Or build an executable client GraphQLSchema for local preflight query validation
+const schema = await client.graphql.introspectSchema();
+const validationErrors = validate(schema, parse(SITE_INSPECTIONS));
 ```
 
-`client.graphql.query()` throws a `FulcrumGraphQLError` (with `errors`, `data`, and `statusCode`) on HTTP failures or non-empty GraphQL `errors`. `client.graphql.raw()` returns `{ data, errors, extensions }` without throwing on GraphQL-level errors while still throwing `FulcrumGraphQLError` on transport/HTTP failures.
+`client.graphql.query()` accepts a query string, `gql` template, `DocumentNode`, or `TypedDocumentNode` and throws `ClientError` on HTTP failures or GraphQL errors. `client.graphql.raw()` executes with `errorPolicy: 'all'` and returns `{ data, errors, extensions, headers, status, body }` without throwing on GraphQL-level errors while still throwing `ClientError` on non-2xx HTTP responses.
 
 #### Accessing the Full API
 

@@ -61,7 +61,9 @@
   },
   "dependencies": {
     "@opentelemetry/api": "^1.9.1",
-    "axios": "1.21.1"
+    "axios": "1.21.1",
+    "graphql": "^16.15.0",
+    "graphql-request": "^7.4.0"
   },
   "resolutions": {
     "js-yaml": "3.15.2",
