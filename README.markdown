@@ -309,6 +309,51 @@ const queryResponse = await client.query.get({
 const rows = queryResponse.data.rows;
 ```
 
+#### GraphQL Query API
+
+`client.graphql` targets `<region-origin>/query/graphql` automatically (or an explicit `graphqlUrl` override in `FulcrumClientOptions`), making it straightforward to traverse records, projects, repeatables, and linked records in a single request—and to discover membership-scoped schemas via introspection for AI agents and MCP tooling.
+
+```typescript
+import { FulcrumClient, FulcrumGraphQLError, FulcrumRegion } from '@fulcrumapp/fulcrum-js';
+
+const client = new FulcrumClient({
+  apiKey: 'your-api-token',
+  region: FulcrumRegion.US,
+  userAgent: 'MyApp/1.0.0'
+});
+
+// Traverse records, projects, repeatables, and linked records in one query
+const data = await client.graphql.query(
+  `query SiteInspections($status: String) {
+    siteInspections(status: $status) {
+      id
+      status
+      project {
+        name
+      }
+      defects {          # Repeatable child items
+        severity
+        notes
+      }
+      asset {            # Linked record traversed just like a repeatable
+        id
+        assetTag
+      }
+    }
+  }`,
+  { status: 'open' },
+  { operationName: 'SiteInspections' }
+);
+
+// Inspect partial data + GraphQL errors without throwing on GraphQL errors
+const envelope = await client.graphql.raw('{ siteInspections { id } }');
+
+// Discover the caller's membership-scoped dynamic schema
+const schema = await client.graphql.introspect();
+```
+
+`client.graphql.query()` throws a `FulcrumGraphQLError` (with `errors`, `data`, and `statusCode`) on HTTP failures or non-empty GraphQL `errors`. `client.graphql.raw()` returns `{ data, errors, extensions }` without throwing on GraphQL-level errors while still throwing `FulcrumGraphQLError` on transport/HTTP failures.
+
 #### Accessing the Full API
 
 For API methods not yet wrapped, access the full underlying API client:
