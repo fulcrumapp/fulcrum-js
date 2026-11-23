@@ -203,6 +203,25 @@ export const INTROSPECTION_QUERY = `
   }
 `;
 
+function stripTrailingSlashes(pathname: string): string {
+  let end = pathname.length;
+  while (end > 0 && pathname.endsWith('/', end)) {
+    end -= 1;
+  }
+  return pathname.slice(0, end);
+}
+
+function stripApiSuffix(pathname: string): string {
+  const lower = pathname.toLowerCase();
+  if (lower.endsWith('/api/v2')) {
+    return pathname.slice(0, -'/api/v2'.length);
+  }
+  if (lower.endsWith('/api')) {
+    return pathname.slice(0, -'/api'.length);
+  }
+  return pathname;
+}
+
 /**
  * Derive the Fulcrum GraphQL endpoint URL from a configured region URL or explicit override.
  *
@@ -216,8 +235,8 @@ export function resolveGraphQLUrl(region: string, graphqlUrl?: string): string {
   }
 
   const parsed = new URL(region);
-  const trimmedPath = parsed.pathname.replace(/\/+$/, '');
-  const basePath = trimmedPath.replace(/\/api(?:\/v2)?$/i, '');
+  const trimmedPath = stripTrailingSlashes(parsed.pathname);
+  const basePath = stripApiSuffix(trimmedPath);
 
   return `${parsed.origin}${basePath}/query/graphql`;
 }
@@ -267,14 +286,11 @@ export interface ExecuteGraphQLResult<TData> {
   statusCode: number;
 }
 
-/**
- * Low-level HTTP transport for Fulcrum GraphQL requests using axios.
- */
-export async function executeGraphQLRequest<TData, TVariables>(
-  params: ExecuteGraphQLRequestParams<TVariables>,
-): Promise<ExecuteGraphQLResult<TData>> {
-  const { url, apiKey, userAgent, document, variables, options } = params;
-
+function buildGraphQLPayload<TVariables>(
+  document: string,
+  variables?: TVariables,
+  operationName?: string,
+): { query: string; variables?: TVariables; operationName?: string } {
   const payload: {
     query: string;
     variables?: TVariables;
@@ -284,10 +300,18 @@ export async function executeGraphQLRequest<TData, TVariables>(
   if (variables !== undefined) {
     payload.variables = variables;
   }
-  if (options?.operationName !== undefined) {
-    payload.operationName = options.operationName;
+  if (operationName !== undefined) {
+    payload.operationName = operationName;
   }
 
+  return payload;
+}
+
+function buildGraphQLRequestConfig(
+  apiKey: string,
+  userAgent?: string,
+  options?: GraphQLRequestOptions,
+): AxiosRequestConfig {
   const headers: Record<string, string> = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -296,11 +320,61 @@ export async function executeGraphQLRequest<TData, TVariables>(
     ...options?.headers,
   };
 
-  const config: AxiosRequestConfig = {
-    headers,
-    ...(options?.timeout !== undefined ? { timeout: options.timeout } : {}),
-    ...(options?.signal !== undefined ? { signal: options.signal } : {}),
-  };
+  const config: AxiosRequestConfig = { headers };
+  if (options?.timeout !== undefined) {
+    config.timeout = options.timeout;
+  }
+  if (options?.signal !== undefined) {
+    config.signal = options.signal;
+  }
+
+  return config;
+}
+
+function formatAxiosErrorMessage(
+  errors: GraphQLErrorItem[],
+  statusCode: number | undefined,
+  fallbackMessage: string,
+): string {
+  if (errors.length > 0) {
+    return formatGraphQLErrors(errors);
+  }
+  if (statusCode !== undefined) {
+    return `GraphQL request failed with status ${statusCode}: ${fallbackMessage}`;
+  }
+  return fallbackMessage;
+}
+
+function toFulcrumGraphQLError(error: unknown): FulcrumGraphQLError {
+  if (isAxiosError(error)) {
+    const statusCode = error.response?.status;
+    const responseData = error.response?.data;
+    const errors = extractGraphQLErrors(responseData);
+    const data = extractGraphQLData(responseData);
+    const message = formatAxiosErrorMessage(errors, statusCode, error.message);
+
+    return new FulcrumGraphQLError(message, {
+      errors,
+      data,
+      statusCode,
+      cause: error,
+    });
+  }
+
+  return new FulcrumGraphQLError(error instanceof Error ? error.message : String(error), {
+    cause: error,
+  });
+}
+
+/**
+ * Low-level HTTP transport for Fulcrum GraphQL requests using axios.
+ */
+export async function executeGraphQLRequest<TData, TVariables>(
+  params: ExecuteGraphQLRequestParams<TVariables>,
+): Promise<ExecuteGraphQLResult<TData>> {
+  const { url, apiKey, userAgent, document, variables, options } = params;
+  const payload = buildGraphQLPayload(document, variables, options?.operationName);
+  const config = buildGraphQLRequestConfig(apiKey, userAgent, options);
 
   try {
     const response = await axios.post<GraphQLResponse<TData>>(url, payload, config);
@@ -312,29 +386,7 @@ export async function executeGraphQLRequest<TData, TVariables>(
       statusCode: response.status,
     };
   } catch (error) {
-    if (isAxiosError(error)) {
-      const statusCode = error.response?.status;
-      const responseData = error.response?.data;
-      const errors = extractGraphQLErrors(responseData);
-      const data = extractGraphQLData(responseData);
-      const message =
-        errors.length > 0
-          ? formatGraphQLErrors(errors)
-          : statusCode
-            ? `GraphQL request failed with status ${statusCode}: ${error.message}`
-            : error.message;
-
-      throw new FulcrumGraphQLError(message, {
-        errors,
-        data,
-        statusCode,
-        cause: error,
-      });
-    }
-
-    throw new FulcrumGraphQLError(error instanceof Error ? error.message : String(error), {
-      cause: error,
-    });
+    throw toFulcrumGraphQLError(error);
   }
 }
 
