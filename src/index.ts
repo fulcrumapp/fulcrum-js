@@ -5,6 +5,7 @@ export type {
   GraphQLClient,
   GraphQLDocument,
   GraphQLError,
+  GraphQLIntrospectOptions,
   GraphQLRawResponse,
   GraphQLRequestOptions,
   GraphQLSchema,

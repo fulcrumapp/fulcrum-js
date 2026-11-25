@@ -417,16 +417,21 @@ describe('FulcrumClient.graphql', () => {
       ).toHaveLength(1);
     });
 
-    it('should return compact GraphQL SDL from introspectSDL()', async () => {
+    it('should return compact GraphQL SDL from introspectSDL() and keep operationName fixed to IntrospectionQuery', async () => {
       fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: SAMPLE_INTROSPECTION }, 200));
       const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
 
-      const sdl = await client.graphql.introspectSDL({ operationName: 'CustomIntrospect' });
+      const sdl = await client.graphql.introspectSDL({
+        headers: { 'X-Caller': 'agent' },
+        ...({ operationName: 'CustomIntrospect' } as Record<string, unknown>),
+      });
 
       expect(sdl).toContain('type SiteInspection');
       expect(sdl).toContain('asset: Asset');
       expect(sdl).toContain('assetTag: String');
-      expect(getLastFetchCall(fetchSpy).body.operationName).toBe('CustomIntrospect');
+      const call = getLastFetchCall(fetchSpy);
+      expect(call.body.operationName).toBe('IntrospectionQuery');
+      expect(call.headers.get('x-caller')).toBe('agent');
     });
   });
 
@@ -484,7 +489,7 @@ describe('FulcrumClient.graphql', () => {
       await client.graphql.introspect();
 
       fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: SAMPLE_INTROSPECTION }));
-      await client.graphql.introspectSchema({ operationName: 'SchemaCheck' });
+      await client.graphql.introspectSchema();
 
       fetchSpy.mockResolvedValueOnce(makeJsonResponse({ data: SAMPLE_INTROSPECTION }));
       await client.graphql.introspectSDL();
@@ -516,7 +521,7 @@ describe('FulcrumClient.graphql', () => {
       });
       expect(spans[3]).toMatchObject({
         name: 'GraphQL.introspectSchema',
-        attributes: { 'graphql.operation.name': 'SchemaCheck' },
+        attributes: { 'graphql.operation.name': 'IntrospectionQuery' },
         statuses: [{ code: SpanStatusCode.OK }],
         ended: true,
       });

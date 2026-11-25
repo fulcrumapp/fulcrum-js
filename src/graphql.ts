@@ -65,6 +65,13 @@ export interface GraphQLRequestOptions {
 }
 
 /**
+ * Per-request options for GraphQL introspection operations.
+ * `operationName` is omitted because `getIntrospectionQuery()` defines a single
+ * fixed `IntrospectionQuery` operation.
+ */
+export type GraphQLIntrospectOptions = Omit<GraphQLRequestOptions, 'operationName'>;
+
+/**
  * Public GraphQL handle exposed as `client.graphql`.
  */
 export interface GraphQLClient {
@@ -93,19 +100,19 @@ export interface GraphQLClient {
    * Execute the standard GraphQL introspection query (`getIntrospectionQuery()`)
    * to discover the caller's membership-scoped dynamic schema.
    */
-  introspect(options?: GraphQLRequestOptions): Promise<IntrospectionQuery>;
+  introspect(options?: GraphQLIntrospectOptions): Promise<IntrospectionQuery>;
 
   /**
    * Introspect the caller's membership-scoped schema and return an executable
    * client `GraphQLSchema` suitable for local `validate(schema, parse(doc))` checks.
    */
-  introspectSchema(options?: GraphQLRequestOptions): Promise<GraphQLSchema>;
+  introspectSchema(options?: GraphQLIntrospectOptions): Promise<GraphQLSchema>;
 
   /**
    * Introspect the caller's membership-scoped schema and return compact GraphQL SDL
    * via `printSchema()`, ideal for AI agents and MCP tooling.
    */
-  introspectSDL(options?: GraphQLRequestOptions): Promise<string>;
+  introspectSDL(options?: GraphQLIntrospectOptions): Promise<string>;
 }
 
 /**
@@ -224,14 +231,12 @@ export function createGraphQLHandle(
       ...(operationName ? { requestMiddleware: createOperationNameMiddleware(operationName) } : {}),
     });
 
-  const fetchIntrospection = (options?: GraphQLRequestOptions): Promise<IntrospectionQuery> => {
-    const operationName = options?.operationName ?? 'IntrospectionQuery';
-    return makeClient('none', operationName).request<IntrospectionQuery>({
+  const fetchIntrospection = (options?: GraphQLIntrospectOptions): Promise<IntrospectionQuery> =>
+    makeClient('none').request<IntrospectionQuery>({
       document: getIntrospectionQuery(),
       requestHeaders: options?.headers,
       signal: buildSignal(options?.timeout, options?.signal),
     });
-  };
 
   return {
     query: <TData = Record<string, unknown>, TVariables extends Variables = Variables>(
@@ -268,23 +273,23 @@ export function createGraphQLHandle(
         resolveSpanAttributes(document, options?.operationName),
       ),
 
-    introspect: (options?: GraphQLRequestOptions): Promise<IntrospectionQuery> =>
+    introspect: (options?: GraphQLIntrospectOptions): Promise<IntrospectionQuery> =>
       withSpan('GraphQL.introspect', () => fetchIntrospection(options), {
-        'graphql.operation.name': options?.operationName ?? 'IntrospectionQuery',
+        'graphql.operation.name': 'IntrospectionQuery',
       }),
 
-    introspectSchema: (options?: GraphQLRequestOptions): Promise<GraphQLSchema> =>
+    introspectSchema: (options?: GraphQLIntrospectOptions): Promise<GraphQLSchema> =>
       withSpan(
         'GraphQL.introspectSchema',
         async () => buildClientSchema(await fetchIntrospection(options)),
-        { 'graphql.operation.name': options?.operationName ?? 'IntrospectionQuery' },
+        { 'graphql.operation.name': 'IntrospectionQuery' },
       ),
 
-    introspectSDL: (options?: GraphQLRequestOptions): Promise<string> =>
+    introspectSDL: (options?: GraphQLIntrospectOptions): Promise<string> =>
       withSpan(
         'GraphQL.introspectSDL',
         async () => printSchema(buildClientSchema(await fetchIntrospection(options))),
-        { 'graphql.operation.name': options?.operationName ?? 'IntrospectionQuery' },
+        { 'graphql.operation.name': 'IntrospectionQuery' },
       ),
   } as const;
 }
