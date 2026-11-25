@@ -1,5 +1,6 @@
 import { DefaultApi, Configuration } from '../generated/dist/index.js';
 import { trace, SpanStatusCode, type Span, type Tracer } from '@opentelemetry/api';
+import { createGraphQLHandle, type GraphQLClient } from './graphql.js';
 import type {
   ConfigurationParameters,
   DefaultApiRecordsGetAllRequest,
@@ -163,6 +164,12 @@ export interface FulcrumClientOptions {
    */
   region: FulcrumRegion | string;
   userAgent?: string;
+  /**
+   * Optional explicit GraphQL endpoint URL override.
+   * When omitted, derived automatically from `region` as `<origin>/query/graphql`.
+   * @example 'https://api.fulcrumapp.com/query/graphql'
+   */
+  graphqlUrl?: string;
 }
 
 /**
@@ -617,6 +624,17 @@ export class FulcrumClient {
           },
         ),
     } as const;
+  }
+
+  /**
+   * GraphQL Query API
+   *
+   * Targets `<region-origin>/query/graphql` (or `options.graphqlUrl` when provided)
+   * with automatic `X-ApiToken` authentication, `graphql-request` + `graphql` helpers,
+   * and OpenTelemetry tracing.
+   */
+  get graphql(): GraphQLClient {
+    return createGraphQLHandle(this.options, this.withSpan.bind(this));
   }
 
   /**
