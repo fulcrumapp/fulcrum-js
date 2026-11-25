@@ -4,7 +4,7 @@ import {
   getIntrospectionQuery,
   print,
   printSchema,
-  type GraphQLError,
+  type GraphQLFormattedError,
   type GraphQLSchema,
   type IntrospectionQuery,
 } from 'graphql';
@@ -21,7 +21,7 @@ import {
 
 export { ClientError, gql };
 export type {
-  GraphQLError,
+  GraphQLFormattedError,
   GraphQLSchema,
   IntrospectionQuery,
   RequestDocument,
@@ -42,8 +42,8 @@ export type GraphQLDocument<TData = unknown, TVariables extends Variables = Vari
  * Raw response returned by `client.graphql.raw()` (via `graphql-request`'s `rawRequest`).
  */
 export interface GraphQLRawResponse<TData = Record<string, unknown>> {
-  data: TData;
-  errors?: GraphQLError[];
+  data?: TData | null;
+  errors?: GraphQLFormattedError[];
   extensions?: unknown;
   headers: Headers;
   status: number;

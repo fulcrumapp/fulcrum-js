@@ -60,6 +60,7 @@
     "typescript-eslint": "^8.71.0"
   },
   "dependencies": {
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@opentelemetry/api": "^1.9.1",
     "axios": "1.21.1",
     "graphql": "^16.15.0",

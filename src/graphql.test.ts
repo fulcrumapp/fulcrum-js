@@ -349,6 +349,27 @@ describe('FulcrumClient.graphql', () => {
       expect(result.headers).toBeInstanceOf(Headers);
     });
 
+    it('should handle raw() responses with missing or null data and formatted wire errors', async () => {
+      const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
+
+      fetchSpy.mockResolvedValueOnce(
+        makeJsonResponse(
+          { errors: [{ message: 'Cannot query field "missing"', locations: [{ line: 1, column: 3 }] }] },
+          200,
+        ),
+      );
+      const validationResult = await client.graphql.raw<{ id: string }>('{ missing }');
+      expect(validationResult.data).toBeUndefined();
+      expect(validationResult.errors?.[0]?.message).toBe('Cannot query field "missing"');
+
+      fetchSpy.mockResolvedValueOnce(
+        makeJsonResponse({ data: null, errors: [{ message: 'Root failure' }] }, 200),
+      );
+      const nullDataResult = await client.graphql.raw<{ id: string }>('{ failingRoot }');
+      expect(nullDataResult.data).toBeNull();
+      expect(nullDataResult.errors?.[0]?.message).toBe('Root failure');
+    });
+
     it('should accept DocumentNode and boxed TypedDocumentString in raw()', async () => {
       const client = new FulcrumClient({ apiKey: 'token', region: FulcrumRegion.US });
 

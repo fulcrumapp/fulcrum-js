@@ -4,7 +4,7 @@ export { ClientError, gql, resolveGraphQLUrl } from './graphql.js';
 export type {
   GraphQLClient,
   GraphQLDocument,
-  GraphQLError,
+  GraphQLFormattedError,
   GraphQLIntrospectOptions,
   GraphQLRawResponse,
   GraphQLRequestOptions,
